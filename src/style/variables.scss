@@ -1,10 +1,20 @@
 //Colors
 $fontColor: #ccc;
-$bodyBackgroundColor: #09010f;
+$bodyBackgroundColor: #121212;
+$borderColor: #5b045b;
+$borderColorFade: rgba(91, 4, 91, 0.67);
 
 //Measurements
 $borderRadius: 4px;
 $sidebarWidthExpand: 270px;
 $sidebarWidthCollapse: 80px;
-$trackingbarHeight: 80px;
+$trackingbarHeight: 70px;
 $paddingSize: 0.5rem;
+
+
+
+$bodyBackgroundColor: #09010f;
+$buttonBorderColor: #e6ca8f;
+$layoutBorderColor: #5b045b;
+$closeButtonColor: #af1111;
+$focusedColor: #790e5e;

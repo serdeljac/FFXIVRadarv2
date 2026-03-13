@@ -28,7 +28,7 @@ const router = createRouter({
         { path: '/privatePolicy', component: privatePolicy, props: true },
         { path: '/:pathMatch(.*)*', component: pageNotFound } //pathMatch can changeb to whatever
     ],
-    linkExactActiveClass: 'active-link'
+    linkExactActiveClass: 'currentPage'
 })
 
 createApp(App).use(router).mount('body')

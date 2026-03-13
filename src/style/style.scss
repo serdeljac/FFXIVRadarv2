@@ -5,6 +5,7 @@
     padding: 0;
     margin: 0;
     color: $fontColor;
+    text-decoration: none;
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -12,10 +13,19 @@ h1, h2, h3, h4, h5, h6 {
     font-weight: 600;
 }
 
-html {font-size: 18px;}
+li {list-style-type: none;}
+
+html {font-size: 16px;}
 
 body {
     font-family: "Lato", sans-serif;
     min-height: 100vh;
     background-color: $bodyBackgroundColor;
 }
+
+//Set sizes
+.icon {
+    width: 24px;
+    height: 24px;
+}
+

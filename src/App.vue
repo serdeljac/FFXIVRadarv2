@@ -1,17 +1,10 @@
 <template>
   <div :class="[`app_container`]" :data-screenMode="windowWidth">
-
+    <trackingBar />
     <sidebar />
-
-    <div class="app_content">
-      <trackingBar />
       <main>
-        <h1>Hello World!</h1>
-        <p>{{ windowWidth }}</p>
+        <router-view />
       </main>
-    </div>
-
-
   </div>
 </template>
 
@@ -55,45 +48,54 @@ export default {
 <style scoped lang="scss">
   .app_container {
     display: flex;
-
-    &[data-screenMode='desktop-large'] {
-      .sidebar, .sidebar .wrapper {width: $sidebarWidthExpand;}
-    }
-
-    &[data-screenMode='desktop-small'] {
-      .sidebar, .sidebar .wrapper  {width: $sidebarWidthCollapse;}
-    }
-
-    &[data-screenMode='tablet'] {
-      .sidebar {width: 0;} 
-      .sidebar .wrapper {width: $sidebarWidthExpand;}
-    }
-
-    &[data-screenMode='mobile'] {
-      .sidebar {width: 0;} 
-      .sidebar .wrapper {width: $sidebarWidthExpand;}
-    }
-
-
-
-
-
-
-    min-height: 100vh;
-
-    .sidebar {
-      overflow: hidden;
-      height: 100vh;
-      transition: width .23s ease;
-    }
-
-    .app_content {
-      width: 100%;
-    }
-
+    flex-wrap: wrap;
+    grid-template-columns: auto auto;
+    .trackingbar {width: 100%; grid-column: 1 / span 2;}
     main {
-      padding: $paddingSize;
+      padding: 1rem $paddingSize $paddingSize 2rem;
     }
+
+
+    // display: flex;
+
+    // &[data-screenMode='desktop-large'] {
+    //   .sidebar, .sidebar .wrapper {width: $sidebarWidthExpand;}
+    // }
+
+    // &[data-screenMode='desktop-small'] {
+    //   .sidebar, .sidebar .wrapper  {width: $sidebarWidthCollapse;}
+    // }
+
+    // &[data-screenMode='tablet'] {
+    //   .sidebar {width: 0;} 
+    //   .sidebar .wrapper {width: $sidebarWidthExpand;}
+    // }
+
+    // &[data-screenMode='mobile'] {
+    //   .sidebar {width: 0;} 
+    //   .sidebar .wrapper {width: $sidebarWidthExpand;}
+    // }
+
+
+
+
+
+
+    // min-height: 100vh;
+
+    // .sidebar {
+    //   overflow: hidden;
+    //   height: 100vh;
+    //   transition: width .23s ease;
+    // }
+
+    // .app_content {
+    //   width: 100%;
+    // }
+
+    // main {
+    //   padding: $paddingSize;
+    // }
 
 
   }
