@@ -1,7 +1,9 @@
 <template>
     <div class="trackingbar">
         <div class="trackingbar_header">
-            <img class="btn_menu" :src="`../../assets/icons/menu.svg`" />
+            <menuButton 
+            :class="['sidebar_menuBtn']"
+            @menuCondition="toggledMenu"/>
             <h1>FFXIV Radar</h1>
         </div>
         <div class="trackingbar_items">
@@ -11,9 +13,20 @@
 </template>
 
 <script lang="ts">
+import menuButton from '../ui/ButtonMenu.vue';
+
     export default {
         name: 'Tracking Bar',
+        emits: ['menuCondition'],
+        components: {
+            menuButton
+        },
+        methods: {
+            toggledMenu(menuCondition: boolean) {
+                this.$emit('menuCondition', menuCondition);
+        }
     }
+}
 </script>
 
 <style scoped lang="scss">

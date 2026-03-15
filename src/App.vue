@@ -1,7 +1,7 @@
 <template>
   <div :class="[`app_container`]" :data-screenMode="windowWidth">
-    <trackingBar />
-    <sidebar />
+    <trackingBar @menuCondition="toggledMenu"/>
+    <sidebar :windowWidth="windowWidth" :menuCondition="menuCondition"/>
       <main>
         <router-view />
       </main>
@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       windowWidth: '' as String,
+      menuCondition: true as Boolean,
     }
   },
   created() {
@@ -39,8 +40,11 @@ export default {
         else if (curWidth >= desktopWidthSm && curWidth < desktopWidthLg) {this.windowWidth = 'desktop-small'}
         else if (curWidth >= tabletWidth && curWidth < desktopWidthSm) {this.windowWidth = 'tablet'}
         else if (curWidth < tabletWidth) {this.windowWidth = 'mobile'}
-        else {console.error('Cannot get Window Width!'); this.windowWidth = 'desktop'}
+        else {console.error('Cannot get Window Width!'); this.windowWidth = 'desktop-large'}
       },
+      toggledMenu(menuCondition: boolean) {
+        this.menuCondition = menuCondition;
+      }
   }
 }
 </script>
@@ -50,6 +54,7 @@ export default {
     display: flex;
     flex-wrap: wrap;
     grid-template-columns: auto auto;
+
     .trackingbar {width: 100%; grid-column: 1 / span 2;}
     main {
       padding: 1rem $paddingSize $paddingSize 2rem;

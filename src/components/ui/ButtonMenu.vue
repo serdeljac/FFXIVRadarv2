@@ -1,21 +1,19 @@
 <template>
     <div 
+        @click="menuBtn = !menuBtn; $emit('menuCondition', menuBtn)"
         class="btn_menu"
         :style="`background-image:url('../../assets/icons/menu.svg')`">
-        <!-- <img class="btn_menu" :src="`../../assets/icons/menu.svg`" /> -->
     </div>
 </template>
 
 <script lang="ts">
-// import SOMETHING from '../../components/something.vue';
 
     export default {
         name: "Title",
-        props: ['propname'],
-        emits: ['eventname'],
+        emits: ['menuCondition'],
         data() {
             return {
-                key: 'value' as String,
+                menuBtn: true,
             }
         },
     }
