@@ -1,9 +1,9 @@
 <template>
     <div class="trackingbar">
         <div class="trackingbar_header">
-            <menuButton 
+            <!-- <menuButton 
             :class="['sidebar_menuBtn']"
-            @menuCondition="toggledMenu"/>
+            @menuCondition="toggledMenu"/> -->
             <h1>FFXIV Radar</h1>
         </div>
         <div class="trackingbar_items">
@@ -32,7 +32,7 @@ import menuButton from '../ui/ButtonMenu.vue';
 <style scoped lang="scss">
     .trackingbar {
 
-        height: $trackingbarHeight;
+        background-color: $bodyBackgroundColor;
         display: inline-flex;
         align-items: center;
         width: 100%;

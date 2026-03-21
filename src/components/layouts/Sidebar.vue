@@ -1,22 +1,12 @@
 <template>
-    <aside 
-        :class="['sidebar',
-        // {'mode-extended': forceExpanded },
-        // {'mode-compact': !forceExpanded || windowWidth == 'desktop-small'},
-        {'mode-extended hidden': windowWidth == 'tablet'},
-        {'mode-extended hidden': windowWidth == 'mobile'}
-        ]">
+    <aside :class="['sidebar', menuState]">
 
-        <menuButton 
-            :class="['sidebar_menuBtn']"
-            @menuCondition="toggledMenu"/>
-
-        <div class="sidebar_clockdisplay extended">
+        <div v-if="menuState === 'extended' || menuState === 'overlay-extended'" class="sidebar_clockdisplay extended">
             <p>Erozean Clock:</p>
             <h2>12:45</h2>
         </div>
 
-        <div class="sidebar_clockdisplay collapsed">
+        <div v-else class="sidebar_clockdisplay collapsed">
             <h2>12</h2>
             <h2>45</h2>
         </div>
@@ -35,19 +25,13 @@
         <footer>
             <p>&copy; 2023 FFXIV Radar. All rights reserved.</p>
         </footer>
-
     </aside>
 </template>
 
 <script lang="ts">
-import menuButton from '../ui/ButtonMenu.vue';
-
     export default {
         name: 'Sidebar',
-        props: ['windowWidth', 'menuCondition'],
-        components: {
-            menuButton
-        },
+        props: ['windowWidth', 'menuState'],
         data() {
             return {
                 forceExpanded: true,
@@ -111,32 +95,25 @@ import menuButton from '../ui/ButtonMenu.vue';
                 ],
             }
         },
-        created() {
-            this.forceExpanded = this.windowWidth !== 'desktop-small' ? true : false
-        },
-        methods: {
-            toggleMenu(menuCondition: boolean) {
-                this.menuCondition = menuCondition;
-            }
-        }
     }
 </script>
 
 <style scoped lang="scss">
     .sidebar {
-        width: $sidebarWidthExpand;
         height: calc(100vh - $trackingbarHeight);
         border-right: 1px solid $borderColor;
         transition: all .23s ease;
         display: grid;
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
-        position: relative;
+        position: fixed;
+        top: $trackingbarHeight;
+        background-color: $bodyBackgroundColor;
+
         
         //Collapsed Sidebar Adjustments Only
-        &.mode-compact {
+        &.compact {
             width: $sidebarWidthCollapse;
             grid-template-columns: $sidebarWidthCollapse;
-            .sidebar_menuBtn {left: $sidebarWidthCollapse - 16px;}
             .sidebar_clockdisplay {
                 &.expanded {display: none;}
                 &.collapsed {display: block;}
@@ -150,10 +127,17 @@ import menuButton from '../ui/ButtonMenu.vue';
             }
         }
 
-        &.hidden {
-            left: -$sidebarWidthExpand + 1px;
-            .sidebar_menuBtn {display: none;}
-        }
+        // &.overlay-extended {
+        //     position: absolute;
+        //     left: 0;
+        //     top: 0;
+        // }
+
+        // &.hidden-extended {
+        //     position: absolute;
+        //     left: -$sidebarWidthExpand + 1px;
+        //     top: 0;
+        // }
 
         &_clockdisplay {
             align-self: center;
@@ -163,14 +147,6 @@ import menuButton from '../ui/ButtonMenu.vue';
             h2 {font-size: 3rem;}
             &.expanded {display: block;}
             &.collapsed {display: none;}
-        }
-
-        &_menuBtn {
-            position: absolute;
-            left: $sidebarWidthExpand - 16px;
-            top: 100px;
-            transition: all .23s ease;
-            grid-row: 1 / span 2;
         }
 
         &_items {

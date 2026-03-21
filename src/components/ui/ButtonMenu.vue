@@ -1,6 +1,5 @@
 <template>
     <div 
-        @click="menuBtn = !menuBtn; $emit('menuCondition', menuBtn)"
         class="btn_menu"
         :style="`background-image:url('../../assets/icons/menu.svg')`">
     </div>
