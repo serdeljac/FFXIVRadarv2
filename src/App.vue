@@ -1,9 +1,8 @@
 <template>
-  <div :class="[`app_container`, `menuState_${menuState}`]" :data-screenMode="windowWidth">
+  <div :class="[`app_container`, `menustate_${menuState}`]" :data-screenMode="windowWidth">
     <trackingBar :class="[`tracking_bar`]"/>
-    <menuButton :class="[`menu_Btn`, windowWidth]" @click="menuToggle()"/>
-
-    <sidebar :class="[`sidebar`]" :windowWidth="windowWidth" :menuState="menuState"/>
+    <menuButton :class="[`menu_Btn`, {'tracking_pos' : menuState == 'hidden-extended' || menuState == 'mobile-extended'}]" @click="menuToggle()"/>
+    <sidebar :class="[`sidebar`]" :menuState="menuState"/>
     <main :class="[`main_content`]">
       <router-view />
     </main>
@@ -70,10 +69,10 @@ export default {
           this.menuState = this.menuState == 'compact' ? 'overlay-extended' : 'compact';
         }
         else if (this.windowWidth == 'tablet') {
-          this.menuState = this.menuState == 'hidden-extended' ? 'overlay-extended' : 'hidden-extended';
+          this.menuState = this.menuState == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
         }
         else if (this.windowWidth == 'mobile') {
-          this.menuState = this.menuState == 'hidden-extended' ? 'overlay-extended' : 'hidden-extended';
+          this.menuState = this.menuState == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
         }
       }
   }
@@ -85,33 +84,49 @@ export default {
     display: flex;
     flex-wrap: wrap;
 
-    &.menuState_extended, &.menuState_overlay-extended, &.menuState_hidden-extended {
-      .menu_Btn {left: $sidebarWidthExpand - 16px;}
+    &.menustate_extended {
+      .tracking_bar {padding-left: 1rem;}
       .sidebar {width: $sidebarWidthExpand; left: 0;}
+      .menu_Btn {left: $sidebarWidthExpand - 16px;}
       .main_content {
         width: calc(100% - #{$sidebarWidthExpand});
         margin-left: $sidebarWidthExpand;
-      } 
+      }
     }
 
-    &.menuState_compact {
+    &.menustate_compact {
+      .tracking_bar {padding-left: 1rem;}
       .menu_Btn {left: $sidebarWidthCollapse - 16px;}
-      .sidebar {width: $sidebarWidthCollapse;}
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
         margin-left: $sidebarWidthCollapse;
       } 
     }
 
-    &.menuState_overlay-extended {
+    &.menustate_overlay-extended {
+      .tracking_bar {padding-left: 1rem;}
+      .sidebar {width: $sidebarWidthExpand; left: 0;}
+      .menu_Btn {left: $sidebarWidthExpand - 16px;}
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
         margin-left: $sidebarWidthCollapse;
       } 
     }
 
-    &.menuState_hidden-extended {
+    &.menustate_hidden-extended {
+      .tracking_bar {padding-left: 30px;}
       .sidebar {left: -$sidebarWidthExpand + 1px;}
+      .menu_Btn {left: 1.5rem;}
+      .main_content {
+        width: 100%;
+        margin-left: 0;
+      } 
+    }
+
+    &.menustate_mobile-extended {
+      .tracking_bar {padding-left: 30px;}
+      .sidebar {width: $sidebarWidthExpand;}
+      .menu_Btn {left: 1.5rem;}
       .main_content {
         width: 100%;
         margin-left: 0;
@@ -127,75 +142,26 @@ export default {
     height: $trackingbarHeight;
     z-index: 100;
   }
-    
 
-
+  .sidebar {
+    position: fixed;
+    top: $trackingbarHeight;
+    left: 0;
+    height: calc(100vh - $trackingbarHeight);
+  }
 
   .menu_Btn {
     position: fixed;
-    left: $sidebarWidthExpand - 16px;
     top: 100px;
     transition: all .23s ease;
     z-index: 101;
-    &.compact {left: $sidebarWidthCollapse - 16px;}
-    &.mobile, &.tablet {top: 10px; left: 16px !important;}
-    // &.hidden-extended {display: none;}
-    // &.overlay-extended {display: block;}
+    &.tracking_pos {top: 17px}
   }
 
-
-    // display: flex;
-
-    // &[data-screenMode='desktop-large'] {
-    //   .sidebar, .sidebar .wrapper {width: $sidebarWidthExpand;}
-    // }
-
-    // &[data-screenMode='desktop-small'] {
-    //   .sidebar, .sidebar .wrapper  {width: $sidebarWidthCollapse;}
-    // }
-
-    // &[data-screenMode='tablet'] {
-    //   .sidebar {width: 0;} 
-    //   .sidebar .wrapper {width: $sidebarWidthExpand;}
-    // }
-
-    // &[data-screenMode='mobile'] {
-    //   .sidebar {width: 0;} 
-    //   .sidebar .wrapper {width: $sidebarWidthExpand;}
-    // }
-
-
-
-
-
-
-    // min-height: 100vh;
-
-    // .sidebar {
-    //   overflow: hidden;
-    //   height: 100vh;
-    //   transition: width .23s ease;
-    // }
-
-    // .app_content {
-    //   width: 100%;
-    // }
-
-    // main {
-    //   padding: $paddingSize;
-    // }
-
-
-
-
-    main {
-      padding: 1rem $paddingSize $paddingSize 2rem;
-      min-height: 100vh;
-      margin-top: $trackingbarHeight;
-      margin-left: $sidebarWidthExpand;
-    }
-
-
-
-
+  main {
+    padding: 1rem $paddingSize $paddingSize 2rem;
+    min-height: 100vh;
+    margin-top: $trackingbarHeight;
+    margin-left: $sidebarWidthExpand;
+  }
 </style>

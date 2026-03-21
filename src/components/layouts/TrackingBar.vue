@@ -1,9 +1,6 @@
 <template>
     <div class="trackingbar">
         <div class="trackingbar_header">
-            <!-- <menuButton 
-            :class="['sidebar_menuBtn']"
-            @menuCondition="toggledMenu"/> -->
             <h1>FFXIV Radar</h1>
         </div>
         <div class="trackingbar_items">
@@ -17,21 +14,12 @@ import menuButton from '../ui/ButtonMenu.vue';
 
     export default {
         name: 'Tracking Bar',
-        emits: ['menuCondition'],
-        components: {
-            menuButton
-        },
-        methods: {
-            toggledMenu(menuCondition: boolean) {
-                this.$emit('menuCondition', menuCondition);
-        }
+        components: {menuButton},
     }
-}
 </script>
 
 <style scoped lang="scss">
     .trackingbar {
-
         background-color: $bodyBackgroundColor;
         display: inline-flex;
         align-items: center;
@@ -53,9 +41,7 @@ import menuButton from '../ui/ButtonMenu.vue';
             }
         }
 
-        &_items {
-            padding: $paddingSize;
-        }
+        &_items {padding: $paddingSize;}
     }
 
 </style>

@@ -1,25 +1,15 @@
 <template>
-    <div 
-        class="btn_menu"
-        :style="`background-image:url('../../assets/icons/menu.svg')`">
-    </div>
+    <div class="menu" :style="`background-image:url('../../assets/icons/menu.svg')`"></div>
 </template>
 
 <script lang="ts">
-
     export default {
-        name: "Title",
-        emits: ['menuCondition'],
-        data() {
-            return {
-                menuBtn: true,
-            }
-        },
+        name: "Menu Button",
     }
 </script>
 
 <style scoped lang="scss">
-.btn_menu {
+.menu {
     width: 32px;
     aspect-ratio: 1/1;
     cursor: pointer;
@@ -27,9 +17,6 @@
     border-radius: 100%;
     background-size: 32px;
     background-position: center;
-
-    &:hover {
-        border: 2px solid $borderColor;
-    }
+    &:hover {border: 2px solid $borderColor;}
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
     <aside :class="['sidebar', menuState]">
 
-        <div v-if="menuState === 'extended' || menuState === 'overlay-extended'" class="sidebar_clockdisplay extended">
+        <div v-if="menuState !== 'compact'" class="sidebar_clockdisplay extended">
             <p>Erozean Clock:</p>
             <h2>12:45</h2>
         </div>
@@ -31,7 +31,7 @@
 <script lang="ts">
     export default {
         name: 'Sidebar',
-        props: ['windowWidth', 'menuState'],
+        props: ['menuState'],
         data() {
             return {
                 forceExpanded: true,
@@ -100,16 +100,12 @@
 
 <style scoped lang="scss">
     .sidebar {
-        height: calc(100vh - $trackingbarHeight);
         border-right: 1px solid $borderColor;
         transition: all .23s ease;
         display: grid;
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
-        position: fixed;
-        top: $trackingbarHeight;
         background-color: $bodyBackgroundColor;
 
-        
         //Collapsed Sidebar Adjustments Only
         &.compact {
             width: $sidebarWidthCollapse;
@@ -126,18 +122,6 @@
                 p {display: none;}
             }
         }
-
-        // &.overlay-extended {
-        //     position: absolute;
-        //     left: 0;
-        //     top: 0;
-        // }
-
-        // &.hidden-extended {
-        //     position: absolute;
-        //     left: -$sidebarWidthExpand + 1px;
-        //     top: 0;
-        // }
 
         &_clockdisplay {
             align-self: center;
@@ -170,9 +154,5 @@
             font-size: 0.75rem;
             text-align: center;
         }
-
-
     }
-
-
 </style>
