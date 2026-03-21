@@ -1,7 +1,9 @@
 <template>
     <div class="trackingbar">
         <div class="trackingbar_header">
+            <router-link :to="`/`">
             <h1>FFXIV Radar</h1>
+            </router-link>
         </div>
         <div class="trackingbar_items">
             <p>Tracking Bar</p>

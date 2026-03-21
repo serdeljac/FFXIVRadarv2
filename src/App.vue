@@ -5,30 +5,49 @@
     <sidebar :class="[`sidebar`]" :menuState="menuState"/>
     <main :class="[`main_content`]">
       <router-view />
+      {{ ffxivData }}
     </main>
   </div>
 </template>
 
 <script lang="ts">
-import sidebar from './components/layouts/Sidebar.vue';
-import trackingBar from './components/layouts/TrackingBar.vue';
-import menuButton from './components/ui/ButtonMenu.vue';
+  //API's
+  // import EorzeaTime from 'eorzea-time';
+  // import EorzeaWeather from 'eorzea-weather';
+
+  //Components
+  import sidebar from './components/layouts/Sidebar.vue';
+  import trackingBar from './components/layouts/TrackingBar.vue';
+  import menuButton from './components/ui/ButtonMenu.vue';
+
+  //JSON Data
+  import areaRaw from '../assets/json/area.json';
+  import expansionsRaw from '../assets/json/data_expansions.json';
+  import miningRaw from '../assets/json/nodes_mining.json';
+  import botanyRaw from '../assets/json/nodes_botany.json';
+  // import aetheryteRaw from '../assets/json/nodes_aetheryte.json';
+  // import aetherCurrentRaw from '../assets/json/nodes_aethercurrent.json';
+  // import sightseeingRaw from '../assets/json/nodes_sightseeing.json';
+  // import huntsElite from '../assets/json/data_hunts.json'
+  // import fatesRaw from '../assets/json/nodes_fates.json'
+  // import blueMageRaw from '../assets/json/data_bluemage.json'
+  // import timerRaw from '../assets/json/data_timer.json';
+  import aetherialRaw from '../assets/json/data_aetherial.json';
+  // import huntsPointsRaw from '../assets/json/nodes_huntpoints.json'
 
 export default {
-  name: 'Root',
-  components: {
-    sidebar,
-    trackingBar,
-    menuButton
-  },
+  name: 'App Root',
+  components: {sidebar, trackingBar, menuButton},
   data() {
     return {
       windowWidth: '' as String,
       menuState: 'extended' as String,
+      ffxivData: {},
     }
   },
   created() {
     this.enabledWindowResizeResponse()
+    this.setupInitialFFXIVData()
   },
   methods: {
       enabledWindowResizeResponse() {
@@ -74,7 +93,55 @@ export default {
         else if (this.windowWidth == 'mobile') {
           this.menuState = this.menuState == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
         }
-      }
+      },
+      setupInitialFFXIVData() {
+        this.setAreaData()
+        this.ffxivData['expansionData'] = expansionsRaw
+        this.setMiningAndBotanyData(miningRaw)
+        this.setMiningAndBotanyData(botanyRaw)
+      },
+
+      setAreaData() {
+        this.ffxivData['areaData'] = areaRaw
+        for (const d in this.ffxivData['areaData']) {
+          this.ffxivData['areaData'][d]['isSubarea'] =  areaRaw[d]['isSubarea'] == 'TRUE' ? true : false
+          this.ffxivData['areaData'][d]['inOverview'] =  areaRaw[d]['inOverview'] == 'TRUE' ? true : false
+          this.ffxivData['areaData'][d]['weather'] = ''
+        }
+      },
+      setMiningAndBotanyData(arr: any) {
+        let type = arr[0].type  
+        this.ffxivData[type] = arr
+        for (const d in arr) {
+          this.ffxivData[type][d].time = arr[d].time == '' ? false : arr[d].time
+          this.ffxivData[type][d].usage = this.getUsageData(arr[d].usage, arr[d].info, arr[d].name)
+          this.ffxivData[type][d].area = this.getAreaData(arr[d].area)
+          this.ffxivData[type][d].tracked = false
+        }
+      },
+      getUsageData(usage: string, info: string, name: string) {
+        if (!usage) {return false}
+
+        let r = {
+          'usage': usage,
+          'info': usage != 'aetherial' ? info : name,
+          'details': usage == 'aetherial' ? getMaterials(name) : []
+        }
+
+        function getMaterials(name: string) {
+          let r = aetherialRaw.find( o => o.name == name)
+          return [r.result1, r.result2, r.result3]
+        }
+
+        return r
+      },
+      getAreaData(name: string) {
+        let r: any
+        r = areaRaw.find(o => o.zone == name || o.area == name || o.point == name)
+        if (!r) {return console.error(`Cannot find area: ${name}`)}
+        r.icon = expansionsRaw.find(o => o.expansion == r.expansion).icon
+        return r
+      },
   }
 }
 </script>
