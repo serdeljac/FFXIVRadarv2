@@ -2,6 +2,7 @@
   <div :class="[`app_container`, `menustate_${menuState}`]" :data-screenMode="windowWidth">
     <trackingBar 
       :class="[`tracking_bar_pos`]" 
+      :windowWidth="windowWidth"
       :trackinglist="trackinglist"/>
 
     <menuButton 
@@ -10,7 +11,7 @@
 
     <sidebar 
       :class="[`sidebar_pos`]" 
-      :menuState="menuState" 
+      :menuState="menuState"
       :eorzeaClock="eorzeaClock" 
       @toggleClock="toggleClock"/>
 
@@ -98,7 +99,7 @@ export default {
     
     this.enableClockIntervalCount()
     setInterval(() => {this.enableClockIntervalCount()}, 1000)
-    this.trackinglist = [this.ffxivData.miner[0]]
+    this.trackinglist = [this.ffxivData.miner[61], this.ffxivData.miner[61], this.ffxivData.miner[61], this.ffxivData.miner[61]]
   },
   methods: {
       enabledWindowResizeResponse() {

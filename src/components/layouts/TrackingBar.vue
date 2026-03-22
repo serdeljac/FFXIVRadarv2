@@ -2,15 +2,27 @@
     <div class="trackingbar">
         <div class="trackingbar_header">
             <router-link :to="`/`">
-            <h1>FFXIV Radar</h1>
+                <h1>FFXIV Radar</h1>
             </router-link>
         </div>
-        <div class="trackingbar_items">
-            <ul>
-                <li v-for="d in trackinglist" :key="d.ID">
-                    {{ d.name }}
+        <div :class="[`trackingbar_items`]">
+            <ul :class="[
+                {'grid4': windowWidth == 'desktop-large'},
+                {'grid3': windowWidth == 'desktop-small'},
+                {'grid2': windowWidth == 'tablet'},
+                {'grid1': windowWidth == 'mobile'}
+                ]">
+                <li v-for="d in trackinglist" :key="d.ID" class="trackingbar_item">
+                    <p>{{ d.name }}</p>
+                    <p>{{ d.job_sub }}</p>
+                    <p>{{ d.area.area }}</p>
+                    <p>{{ d.time }}</p>
                 </li>
             </ul>
+        </div>
+        <div :class="[`trackingbar_adjust`]">
+            <div>UP</div>
+            <div>DOWN</div>
         </div>
     </div>
 </template>
@@ -21,7 +33,7 @@ import menuButton from '../ui/ButtonMenu.vue';
     export default {
         name: 'Tracking Bar',
         components: {menuButton},
-        props: ['trackinglist']
+        props: ['windowWidth', 'trackinglist']
     }
 </script>
 
@@ -49,7 +61,33 @@ import menuButton from '../ui/ButtonMenu.vue';
             }
         }
 
-        &_items {padding: $paddingSize;}
+        &_items {
+            padding: $paddingSize;
+            width: 100%;
+            ul {
+                display: grid;
+                &.grid4 {grid-template-columns: 1fr 1fr 1fr 1fr;}
+                &.grid3 {grid-template-columns: 1fr 1fr 1fr;}
+                &.grid2 {grid-template-columns: 1fr 1fr;}
+                &.grid1 {grid-template-columns: 1fr;}
+                gap: 20px;
+            }
+            
+        }
+
+        &_item {
+            display: grid;
+            grid-template-columns: auto auto;
+            border: 1px solid $borderColor;
+            height: 100%;
+            width: 100%;
+            padding: 0.3rem;
+        }
+
+        &_adjust {
+            width: 50px;
+            margin-left: 1rem;
+        }
     }
 
 </style>
