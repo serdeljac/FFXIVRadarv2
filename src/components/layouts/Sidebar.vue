@@ -1,14 +1,9 @@
 <template>
     <aside :class="['sidebar', menuState]">
 
-        <div v-if="menuState !== 'compact'" class="sidebar_clockdisplay extended">
+        <div class="sidebar_clockdisplay extended" @click="$emit('toggleClock')">
             <p>Erozean Clock:</p>
-            <h2>12:45</h2>
-        </div>
-
-        <div v-else class="sidebar_clockdisplay collapsed">
-            <h2>12</h2>
-            <h2>45</h2>
+            <h2>{{ eorzeaClock.formatIs24Hour ? eorzeaClock.formatTime24Hour : eorzeaClock.formatTime12Hour }}</h2>
         </div>
 
         <ul class="sidebar_items">
@@ -31,7 +26,8 @@
 <script lang="ts">
     export default {
         name: 'Sidebar',
-        props: ['menuState'],
+        props: ['menuState', 'eorzeaClock'],
+        emits: ['toggleClock'],
         data() {
             return {
                 forceExpanded: true,
@@ -113,8 +109,9 @@
             .sidebar_clockdisplay {
                 &.expanded {display: none;}
                 &.collapsed {display: block;}
+                p {display: none;}
                 padding-left: 0.5rem;
-                h2 {font-size: 2rem;}
+                h2 {font-size: 1.5rem;}
             }
             .sidebar_items-link {
                 padding-left: 0;
@@ -128,6 +125,8 @@
             padding: $paddingSize;
             padding-left: 2rem;
             text-align: center;
+            user-select: none;
+            cursor: pointer;
             h2 {font-size: 3rem;}
             &.expanded {display: block;}
             &.collapsed {display: none;}
@@ -141,6 +140,7 @@
                 display: inline-flex;
                 align-items: center;
                 gap: 7px;
+                user-select: none;
                 width: 100%;
                 transition: background-color 0.05s linear;
                 &:hover {

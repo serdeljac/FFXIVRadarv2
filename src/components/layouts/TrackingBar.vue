@@ -6,7 +6,11 @@
             </router-link>
         </div>
         <div class="trackingbar_items">
-            <p>Tracking Bar</p>
+            <ul>
+                <li v-for="d in trackinglist" :key="d.ID">
+                    {{ d.name }}
+                </li>
+            </ul>
         </div>
     </div>
 </template>
@@ -17,6 +21,7 @@ import menuButton from '../ui/ButtonMenu.vue';
     export default {
         name: 'Tracking Bar',
         components: {menuButton},
+        props: ['trackinglist']
     }
 </script>
 
@@ -33,6 +38,7 @@ import menuButton from '../ui/ButtonMenu.vue';
             padding-left: 2rem;
             display: inline-flex;
             align-items: center;
+            width: $sidebarWidthExpand;
             h1 {
                 font-size: 1.5rem;
                 margin-left: 0.5rem;
