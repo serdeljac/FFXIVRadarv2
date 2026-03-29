@@ -13,10 +13,10 @@
                 {'grid1': windowWidth == 'mobile'}
                 ]">
                 <li v-for="d in trackinglist" :key="d.ID" class="trackingbar_item">
-                    <p>{{ d.name }}</p>
-                    <p>{{ d.job_sub }}</p>
-                    <p>{{ d.area.area }}</p>
-                    <p>{{ d.time }}</p>
+                    <p class="itemname">{{ d.name }}</p>
+                    <p class="jobicon">{{ d.job_sub }}</p>
+                    <p class="areaname">{{ d.area.area }}</p>
+                    <p class="timer">{{ d.time }}</p>
                 </li>
             </ul>
         </div>
@@ -72,16 +72,16 @@ import menuButton from '../ui/ButtonMenu.vue';
                 &.grid1 {grid-template-columns: 1fr;}
                 gap: 20px;
             }
-            
         }
 
         &_item {
             display: grid;
-            grid-template-columns: auto auto;
+            grid-template-columns: 1.5fr 0.5fr;
             border: 1px solid $borderColor;
             height: 100%;
             width: 100%;
             padding: 0.3rem;
+            p {font-size: 0.9rem;}
         }
 
         &_adjust {
