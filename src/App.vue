@@ -3,6 +3,7 @@
     <trackingBar 
       :class="[`tracking_bar_pos`]" 
       :windowWidth="windowWidth"
+      :timerList="timerList"
       :trackinglist="trackinglist"/>
 
     <menuButton 
@@ -83,7 +84,7 @@ export default {
         minutes: '' as String,
         active: false as boolean,
       },
-      timer: [] as any,
+      timerList: [] as any,
       intervalTicks: 0 as number,
       detailsPanel: {} as any,
       trackinglist: [] as any,
@@ -125,7 +126,7 @@ export default {
         else if (curWidth < tabletWidth) {
           this.windowWidth = 'mobile'
           this.menuState = 'hidden-extended';
-        }
+        } 
         else {
           console.error('Cannot get Window Width!');
           this.windowWidth = 'desktop-large';
@@ -242,7 +243,7 @@ export default {
           let obj = this.ffxivData.eliteHunts[d]
           this.ffxivData.eliteHunts[d].job = 'hunts'
           this.ffxivData.eliteHunts[d].job_sub = 'hunts'
-          this.ffxivData.eliteHunts[d].rank = obj.group == 'SS' ? 'SS' : obj.group.slice(0,1)
+          this.ffxivData.eliteHunts[d].rank = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
 
           let myAreaData = this.ffxivData.areas.find(o => o.area == obj.area)
           this.ffxivData.eliteHunts[d].area = myAreaData
@@ -378,7 +379,7 @@ export default {
             "minutes": 0 as number,
             "countdown": '' as String,
           }
-          this.timer[d] = myTimerData
+          this.timerList[d] = myTimerData
         }
       },
       getRangeTimes(format12Hr: boolean, s: any, e: any) {
@@ -425,73 +426,73 @@ export default {
 
           if (obj.sets == 1) {
             if (currentMinutes <= startArr[0]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[0] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[0] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[0] - currentMinutes
             } else {
-              this.timer[d].active = false
-              this.timer[d].minutes = (1440 - currentMinutes) + startArr[0]
+              this.timerList[d].active = false
+              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }
 
           else if (obj.sets == 2) {
             if (currentMinutes <= startArr[0]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[0] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[0] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[1] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[1] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[1] - currentMinutes
             } else {
-              this.timer[d].active = false
-              this.timer[d].minutes = (1440 - currentMinutes) + startArr[0]
+              this.timerList[d].active = false
+              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }
 
           else if (obj.sets == 3) {
             if (currentMinutes <= startArr[0]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[0] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[0] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[1] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[1] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= startArr[2]) {
-              this.timer[d].active = false
-              this.timer[d].minutes = startArr[2] - currentMinutes
+              this.timerList[d].active = false
+              this.timerList[d].minutes = startArr[2] - currentMinutes
             } else if (currentMinutes > startArr[2] && currentMinutes <= endArr[2]) {
-              this.timer[d].active = true
-              this.timer[d].minutes = endArr[2] - currentMinutes
+              this.timerList[d].active = true
+              this.timerList[d].minutes = endArr[2] - currentMinutes
             } else {
-              this.timer[d].active = false
-              this.timer[d].minutes = (1440 - currentMinutes) + startArr[0]
+              this.timerList[d].active = false
+              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }
 
-          this.timer[d].minutes = this.timer[d].minutes * 3
-          this.timer[d].countdown = this.formatTimeRemaining(this.timer[d].minutes)
+          this.timerList[d].minutes = this.timerList[d].minutes * 3
+          this.timerList[d].countdown = this.formatTimeRemaining(this.timerList[d].minutes)
         }
       },
       enableClockIntervalCount() {
         //Every 1 tick
         this.intervalTicks = this.intervalTicks >= 30 ? 0 : this.intervalTicks + 1
         this.setGoldSaucerClockState();
-        for (const d in this.timer) {
-          this.timer[d].minutes = this.timer[d].minutes - 1
-          if (this.timer[d].minutes <= 0) {this.getTimerCountdown(); break;}
-          this.timer[d].countdown = this.formatTimeRemaining(this.timer[d].minutes)
+        for (const d in this.timerList) {
+          this.timerList[d].minutes = this.timerList[d].minutes - 1
+          if (this.timerList[d].minutes <= 0) {this.getTimerCountdown(); break;}
+          this.timerList[d].countdown = this.formatTimeRemaining(this.timerList[d].minutes)
         }
 
         //Every 3 ticks
@@ -501,7 +502,6 @@ export default {
         }
 
         //Update weather conditions
-        let currentHour = Math.floor(this.eorzeaClock.minutes / 60)
         if (this.eorzeaClock.minutes == 0 && this.eorzeaClock.minutes < 2) {this.getWeatherData()}
         if (this.eorzeaClock.minutes == 480 && this.eorzeaClock.minutes < 482) {this.getWeatherData()}
         if (this.eorzeaClock.minutes == 960 && this.eorzeaClock.minutes < 962) {this.getWeatherData()}

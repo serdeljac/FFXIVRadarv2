@@ -13,10 +13,9 @@
                 {'grid1': windowWidth == 'mobile'}
                 ]">
                 <li v-for="d in trackinglist" :key="d.ID" class="trackingbar_item">
-                    <p class="itemname">{{ d.name }}</p>
-                    <p class="jobicon">{{ d.job_sub }}</p>
-                    <p class="areaname">{{ d.area.area }}</p>
-                    <p class="timer">{{ d.time }}</p>
+                    <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
+                    <displayTimer class="timer" :timerID="d.time" :timerList="timerList"/>
+                    <displayAreaText class="areaname" :areaObj="d"/>
                 </li>
             </ul>
         </div>
@@ -29,11 +28,14 @@
 
 <script lang="ts">
 import menuButton from '../ui/ButtonMenu.vue';
+import iconAndText from '../ui/iconAndText.vue';
+import displayAreaText from '../ui/displayAreaText.vue';
+import displayTimer from '../ui/displayTimer.vue';
 
     export default {
         name: 'Tracking Bar',
-        components: {menuButton},
-        props: ['windowWidth', 'trackinglist']
+        components: {menuButton, iconAndText, displayAreaText, displayTimer},
+        props: ['windowWidth', 'trackinglist', 'timerList']
     }
 </script>
 
@@ -64,6 +66,7 @@ import menuButton from '../ui/ButtonMenu.vue';
         &_items {
             padding: $paddingSize;
             width: 100%;
+            
             ul {
                 display: grid;
                 &.grid4 {grid-template-columns: 1fr 1fr 1fr 1fr;}
@@ -78,10 +81,14 @@ import menuButton from '../ui/ButtonMenu.vue';
             display: grid;
             grid-template-columns: 1.5fr 0.5fr;
             border: 1px solid $borderColor;
+            border-radius: $borderRadius;
             height: 100%;
             width: 100%;
             padding: 0.3rem;
-            p {font-size: 0.9rem;}
+            .areaname {
+                grid-column: 1 / span 2;
+                justify-self: center;
+            }
         }
 
         &_adjust {
