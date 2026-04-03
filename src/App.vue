@@ -4,7 +4,10 @@
       :class="[`tracking_bar_pos`]" 
       :windowWidth="windowWidth"
       :timerList="timerList"
-      :trackinglist="trackinglist"/>
+      :trackinglist="trackinglist"
+      @openDetails="(e) => detailsPanel = e"
+      @removeTrackingNode="(e) => trackinglist = trackinglist.filter(o => o.ID != e.ID)"
+      />
 
     <menuButton 
       :class="[`menu_Btn`, {'tracking_pos' : menuState == 'hidden-extended' || menuState == 'mobile-extended'}]" 
@@ -100,7 +103,6 @@ export default {
     
     this.enableClockIntervalCount()
     setInterval(() => {this.enableClockIntervalCount()}, 1000)
-    this.trackinglist = [this.ffxivData.miner[61], this.ffxivData.miner[61], this.ffxivData.miner[61], this.ffxivData.miner[61]]
   },
   methods: {
       enabledWindowResizeResponse() {
@@ -311,7 +313,6 @@ export default {
                   }
                 } else {
                   let location = []
-                  console.log()
                   for (const i in category) {
                     let areaFound = areaData.find(o => o.zone == data[i])
                     location = areaFound ? {
@@ -426,57 +427,57 @@ export default {
 
           if (obj.sets == 1) {
             if (currentMinutes <= startArr[0]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[0] - currentMinutes
             } else {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }
 
           else if (obj.sets == 2) {
             if (currentMinutes <= startArr[0]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[1] - currentMinutes
             } else {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }
 
           else if (obj.sets == 3) {
             if (currentMinutes <= startArr[0]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[0] - currentMinutes
             } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[1] - currentMinutes
             } else if (currentMinutes > startArr[1] && currentMinutes <= startArr[2]) {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = startArr[2] - currentMinutes
             } else if (currentMinutes > startArr[2] && currentMinutes <= endArr[2]) {
-              this.timerList[d].active = true
+              this.timerList[d].stateActive = true
               this.timerList[d].minutes = endArr[2] - currentMinutes
             } else {
-              this.timerList[d].active = false
+              this.timerList[d].stateActive = false
               this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
             }
           }

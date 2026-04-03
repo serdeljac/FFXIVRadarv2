@@ -19,8 +19,15 @@ html {font-size: 16px;}
 
 body {
     font-family: "Lato", sans-serif;
-    min-height: 100vh;
+    height: 100vh;
     background-color: $bodyBackgroundColor;
+    overflow: hidden;;
+}
+
+main {
+    height: calc($trackingbarHeight + 200px - 100vh);
+    overflow: hidden;
+    overflow-y: auto;
 }
 
 //Set sizes
@@ -29,3 +36,14 @@ body {
     height: 24px;
 }
 
+@keyframes activeStateAnimation {
+    0% {background-color: #692168;}
+    50% {background-color: #3e0d3d;}
+    100% {background-color: #692168;}
+}
+
+*[data-activeNodeAnimation] {
+    // background-color: purple;
+    background-color: #5b045b;
+    animation: activeStateAnimation 0.7s linear infinite;
+}
