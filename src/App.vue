@@ -22,7 +22,11 @@
     <main 
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
-      <router-view />
+      <router-view 
+      :ffxivData="ffxivData"
+      :windowWidth="windowWidth"
+      :timerList="timerList"
+      />
     </main>
 
     <aside 
