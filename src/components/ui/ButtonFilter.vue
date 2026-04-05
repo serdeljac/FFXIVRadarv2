@@ -11,7 +11,7 @@
         methods: {
             fetchProperNameDisplay(rawName: string) {
                 if (rawName == 'miner') {return 'Miner'}
-                if (rawName == 'botanist') {return 'Botanist'}
+                if (rawName == 'botany') {return 'Botanist'}
                 if (rawName == 'purple') {return 'Purple Scripts'}
                 if (rawName == 'orange') {return 'Orange Scripts'}
                 if (rawName == 'aetherial') {return 'Aetherial'}

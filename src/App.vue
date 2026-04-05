@@ -207,8 +207,9 @@ export default {
           if (!myAreaData && !myPointData) {console.error(`Cannot find area in App.JS: ${this.ffxivData[type][d].ID}`, this.ffxivData[type][d].area)}
           this.ffxivData[type][d].area = myAreaData ? myAreaData : myPointData
           
-          let myUsageData = obj.usage ? [obj.usage, getSpecificUsageData(obj)] : false
-          this.ffxivData[type][d].usage = myUsageData
+
+          this.ffxivData[type][d].usage = obj.usage ? obj.usage : false
+          this.ffxivData[type][d].usage_info = obj.usage ? getSpecificUsageData(obj) : false
         }
 
         function getSpecificUsageData(arr: any) {

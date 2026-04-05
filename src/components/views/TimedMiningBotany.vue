@@ -13,32 +13,20 @@
                 :name="'Reset'" 
                 :state="true"
                 @click="resetFilters()"/>
-            <!-- <ul>
-                <li>Miner</li>
-                <li>Botanist</li>
-                <li>Purple Scripts</li>
-                <li>Orange Scripts</li>
-                <li>Aetherial</li>
-                <li>Custom Delivery</li>
-                <li>A Realm Reborn</li>
-                <li>Heavensward</li>
-                <li>Stormblood</li>
-                <li>Shadowbringers</li>
-                <li>Endwalker</li>
-                <li>Dawntrail</li>
-                <li>Search</li>
-            </ul> -->
         </div>
 
         <div class="main_content">
             <div>
-
                 <div class="pagenation">
                     <div v-for="(d, index) in compiledDataForTable" :key="index" 
                         @click="arraySet = Number(index)"
                         :class="{'pageActive': arraySet == Number(index)}">
                         {{ Number(index) + 1 }}
                     </div>
+                </div>
+
+                <div class="stats">
+                    {{ `Total Items found: ${compiledDataForTable.flat().length}` }}
                 </div>
 
                 <ul class="rdrTable header">
@@ -64,7 +52,7 @@
                             <img :src="`../../assets/icons/${d.job_sub}.webp`"  />
                         </span>
 
-                        <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage)">
+                        <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
                             <img :src="`../../assets/icons/${fetchUsageImgName(d.usage)}.webp`" />
                         </span>
                         <!-- CHANGE THIS INTO FOLKLORE IMG -->
@@ -111,17 +99,17 @@ import buttonFilter from '../ui/ButtonFilter.vue';
                 arraySet: 0 as number,
                 filters: {
                     miner: ['job', true],
-                    botanist: ['job', true],
-                    purple: ['usage', true],
-                    orange: ['usage', true],
+                    botany: ['job', true],
+                    purple: ['usage_info', true],
+                    orange: ['usage_info', true],
                     aetherial: ['usage', true],
                     customdelivery: ['usage', true],
-                    arr: ['expansion', true],
-                    hwd: ['expansion', true],
-                    sbd: ['expansion', true],
-                    sbs: ['expansion', true],
-                    ewr: ['expansion', true],
-                    dtl: ['expansion', true]
+                    "A Realm Reborn": ['expansion', true],
+                    "Heavensward": ['expansion', true],
+                    "Stormblood": ['expansion', true],
+                    "Shadowbringers": ['expansion', true],
+                    "Endwalker": ['expansion', true],
+                    "Dawntrail": ['expansion', true]
                 }
             }
         },
@@ -141,22 +129,20 @@ import buttonFilter from '../ui/ButtonFilter.vue';
                 this.compiledDataForTable = result;
             },
             appendFilters(d: any) {
-                let hold = this.allTimedNodes.filter((o: any) => {
-                    for (const f in this.filters) {
-                        if (this.filters[f][1] == false) {
-                            if (o[this.filters[f][0]] == f) {
-                                return false
-                            }
-                        }
+                console.log(d)
+                this.filters[d[1]] = !this.filters[d[1]]
+                let allArr = this.allTimedNodes
+
+                for (const f in this.filters) {
+                    if (this.filters[f][1] == false) {
+                        allArr = allArr.filter(o => o[this.filters[f][0]] != f)
                     }
-                    return true
-                })
-                // this.compiledDataForTable = hold
-                console.log(hold)
+                }
+                this.sortNodesIntoGroup(allArr)
             },
             resetFilters() {
                 for (const n in this.filters) {
-                    this.filters[n] = true;
+                    this.filters[n][1] = true;
                 }
                 this.sortNodesIntoGroup(this.allTimedNodes)
             },
@@ -164,14 +150,14 @@ import buttonFilter from '../ui/ButtonFilter.vue';
                 return this.timerList.find(o => o.ID === timerID).stateActive ? true : null;
             },
             fetchUsageImgName(usage: any) {
-                if (usage[0] == 'aetherial' || usage[0] == 'customdelivery') {return usage[0]}
-                if (usage[0] == 'scripts') {return `${usage[1]}gatherscripts`}
+                if (usage == 'aetherial' || usage == 'customdelivery') {return usage}
+                if (usage == 'scripts') {return `${usage}gatherscripts`}
                 console.error(`Unknown usage type: ${usage}`)
             },
-            fetchUsageAttrName(usage: any) {
-                if (usage[0] == 'aetherial') {return `${usage[0].charAt(0).toUpperCase() + usage[0].slice(1)}`}
-                if (usage[0] == 'customdelivery') {return `Deliver to ${usage[1]}`}
-                if (usage[0] == 'scripts') {return `${usage[1].charAt(0).toUpperCase() + usage[1].slice(1)} Gather Scripts`}
+            fetchUsageAttrName(usage: string, info: string) {
+                if (usage == 'aetherial') {return `${usage.charAt(0).toUpperCase() + usage.slice(1)}`}
+                if (usage == 'customdelivery') {return `Deliver to ${info}`}
+                if (usage == 'scripts') {return `${info.charAt(0).toUpperCase() + info.slice(1)} Gather Scripts`}
                 console.error(`Unknown usage type: ${usage}`)
             }
         }

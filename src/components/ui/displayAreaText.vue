@@ -1,8 +1,11 @@
 <template>
     <p>
-        <img :src="`../../assets/icons/${areaObj.area.icon}.webp`"/>
+        <span class="hasContext" :data-context="`${areaObj.expansion.charAt(0).toUpperCase() + areaObj.expansion.slice(1)} > ${areaObj.area.zone}`">
+            <img :src="`../../assets/icons/${areaObj.area.icon}.webp`"/>
+        
         {{ `${areaObj.area.area}` }}
-        <span>{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
+        <span class="cord">{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
+        </span>
     </p>
 </template>
 
@@ -23,7 +26,7 @@
             width: 20px;
             aspect-ratio: 1/1;
         }
-        span {
+        .cord {
             color: rgb(123, 123, 238);
             margin-left: 4px;
         }
