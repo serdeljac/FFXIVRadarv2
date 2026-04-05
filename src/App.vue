@@ -9,7 +9,7 @@
       @changeTracked="changeTracked"
       />
 
-    <menuButton 
+    <buttonMenu 
       :class="[`menu_Btn`, {'tracking_pos' : menuState == 'hidden-extended' || menuState == 'mobile-extended'}]" 
       @click="toggleMenu()"/>
 
@@ -44,7 +44,7 @@
   //Components
   import sidebar from './components/layouts/Sidebar.vue';
   import trackingBar from './components/layouts/TrackingBar.vue';
-  import menuButton from './components/ui/ButtonMenu.vue';
+  import buttonMenu from './components/ui/ButtonMenu.vue';
 
   //JSON Data
   import areaRaw from '../assets/json/area.json';
@@ -64,7 +64,7 @@
 
 export default {
   name: 'App Root',
-  components: {sidebar, trackingBar, menuButton}, 
+  components: {sidebar, trackingBar, buttonMenu}, 
   data() {
     return {
       windowWidth: '' as String,
