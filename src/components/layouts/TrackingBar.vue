@@ -22,7 +22,7 @@
                         <div class="view"  @click="$emit('openDetails', d)">
                             <p>View</p>
                         </div>
-                        <div class="remove" @click="$emit('removeTrackingNode', d)">
+                        <div class="remove" @click="$emit('changeTracked', d)">
                             <p>Remove</p>
                         </div>
                     </div>
@@ -42,10 +42,10 @@ import displayTimer from '../ui/displayTimer.vue';
         name: 'Tracking Bar',
         components: {menuButton, iconAndText, displayAreaText, displayTimer},
         props: ['windowWidth', 'trackinglist', 'timerList'],
-        emits: ['openDetails','removeTrackingNode'],
+        emits: ['openDetails','changeTracked'],
         methods: {
             checkActiveState(timerID: string) {
-                return this.timerList.find(o=> o.ID === timerID).stateActive ? true : false;
+                return this.timerList.find(o=> o.ID === timerID).stateActive ? true : null;
             }
         }
     }
@@ -114,7 +114,10 @@ import displayTimer from '../ui/displayTimer.vue';
                 height: 55px;
                 width: 100%;
                 padding: 0.3rem;
-                .areaname {grid-column: 1 / span 2;}
+                .areaname {
+                    grid-column: 1 / span 2;
+                    margin-top: 4px;
+                }
                 .timer {justify-self: center;}
             }
 

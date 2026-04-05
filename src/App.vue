@@ -6,7 +6,7 @@
       :timerList="timerList"
       :trackinglist="trackinglist"
       @openDetails="(e) => detailsPanel = e"
-      @removeTrackingNode="(e) => trackinglist = trackinglist.filter(o => o.ID != e.ID)"
+      @changeTracked="changeTracked"
       />
 
     <menuButton 
@@ -22,11 +22,11 @@
     <main 
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
-      <router-view 
-      :ffxivData="ffxivData"
-      :windowWidth="windowWidth"
-      :timerList="timerList"
-      />
+        <router-view 
+        :ffxivData="ffxivData"
+        :windowWidth="windowWidth"
+        :timerList="timerList"
+        @changeTracked="changeTracked"/>
     </main>
 
     <aside 
@@ -186,9 +186,11 @@ export default {
         this.ffxivData.areas = areaRaw
         for (const d in this.ffxivData.areas) {
           let obj = this.ffxivData.areas[d]
+          let getIcon = expansionsRaw.find(o => o.expansion == obj.expansion).icon
           this.ffxivData.areas[d].isSubarea = obj.isSubarea == 'TRUE' ? true : false
           this.ffxivData.areas[d].inOverview = obj.inOverview == 'TRUE' ? true : false
           this.ffxivData.areas[d].weather = obj.mapcode ? EorzeaWeather.getWeather(obj.mapcode, new Date()) : false
+          this.ffxivData.areas[d].icon = getIcon
         }
       },
       setMiningAndBotanyData(arr: any) {
@@ -201,18 +203,16 @@ export default {
           this.ffxivData[type][d].time = obj.time == '' ? false : obj.time
 
           let myAreaData = this.ffxivData.areas.find(o => o.area == obj.area)
-          this.ffxivData[type][d].area = myAreaData
+          let myPointData = this.ffxivData.areas.find(o => o.point == obj.area)
+          if (!myAreaData && !myPointData) {console.error(`Cannot find area in App.JS: ${this.ffxivData[type][d].ID}`, this.ffxivData[type][d].area)}
+          this.ffxivData[type][d].area = myAreaData ? myAreaData : myPointData
           
           let myUsageData = obj.usage ? [obj.usage, getSpecificUsageData(obj)] : false
           this.ffxivData[type][d].usage = myUsageData
         }
 
         function getSpecificUsageData(arr: any) {
-          if (arr.usage == 'customdelivery') {return arr.usage_info}
-          else if (arr.usage == 'scripts') {
-            let n = `${arr.usage_info}gatheringscripts`
-            return n
-          }
+          if (arr.usage == 'customdelivery' || arr.usage == 'scripts') {return arr.usage_info}
           else if (arr.usage == 'aetherial') {
             let r = aetherialRaw.find( o => o.name == arr.name)
             return r
@@ -528,6 +528,17 @@ export default {
           }
         });
       },
+      changeTracked(e: any) {
+        console.log(e)
+        let index = this.ffxivData[e.job].findIndex(o => o.ID == e.ID)
+        this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
+
+        if (this.ffxivData[e.job][index].tracked) {
+          this.trackinglist.push(this.ffxivData[e.job][index])
+        } else {
+          this.trackinglist = this.trackinglist.filter(o => o.ID != e.ID)
+        }
+      },
   }
 }
 </script>
@@ -612,7 +623,7 @@ export default {
   }
 
   main {
-    padding: 1rem $paddingSize $paddingSize 2rem;
+    padding: 1rem 1.5rem $paddingSize 1.5rem;
     min-height: 100vh;
     margin-top: $trackingbarHeight;
     margin-left: $sidebarWidthExpand;
