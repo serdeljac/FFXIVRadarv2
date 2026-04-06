@@ -148,7 +148,6 @@ import seachBar from '../ui/searchBar.vue';
                 arraySet: 0 as number,
                 displayNoNodesFound: false as boolean,
                 searchName: '' as string,
-                showDetails: '' as string,
                 showOnlyActive: false as boolean,
                 filters: {
                     "Class": {

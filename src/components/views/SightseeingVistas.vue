@@ -18,14 +18,48 @@
                 <li>No</li>
                 <li>Name</li>
                 <li>Area</li>
+                <li>Time</li>
                 <li>Weather</li>
                 <li>Emote</li>
             </ul>
 
             <hr class="rdrTable split"/>
 
-            <ul :class="[`rdrTable body`]" v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time)">
+            <ul :class="[`rdrTable body`]" v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time, d.weather1, d.weather2)">
+                <!-- TRACKING -->
+                <li class="rdrTable_col-tracking">
+                    <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                </li>
 
+                <!-- NO -->
+                <li>
+                    <p>{{ d.no }}</p>
+                </li>
+
+                <!-- NAME -->
+                <li class="rdrTable_col-name" @click="copyToClipboard(d.name)">
+                    {{ d.name }}
+                </li>
+
+                <!-- AREA -->
+                <li>
+                    <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+                </li>
+
+                <!-- TIMER -->
+                <li>
+                    <displayTimer :timerID="d.time" :timerList="timerList"/>
+                </li>
+
+                <!-- WEATHER -->
+                <li>
+                    {{ d.weather1 }} {{ d.weather2  }}
+                </li>
+
+                <!-- EMOTE -->
+                <li>
+                    {{ d.emote }}
+                </li>
             </ul>
         </div>
 
@@ -47,45 +81,66 @@ import seachBar from '../ui/searchBar.vue';
         data() {
             return {
                 compiledDataForTable: [] as any,
-                allTimedNodes: [] as any,
-                totalArraySets: 0 as number,
-                arraySet: 0 as number,
-                displayNoNodesFound: false as boolean,
-                searchName: '' as string,
+                allVistaNodes: {} as any,
                 showDetails: '' as string,
                 showOnlyActive: false as boolean,
-                filters: {
-                    "Expansion": {
-                        "A Realm Reborn": ['expansion', true],
-                        "Heavensward": ['expansion', false],
-                        "Stormblood": ['expansion', false],
-                        "Shadowbringers": ['expansion', false],
-                        "Endwalker": ['expansion', false],
-                        "Dawntrail": ['expansion', false]
-                    },
-                }
+                filters: {} as any
             }
         },
         created() {
-            this.sortNodesIntoGroup(this.ffxivData.sightseeing)
+            this.createFilterList()
+            this.compileData()
+            this.appendData()
         },
         methods: {
-            appendFilters(filterType: string, arrayIndex: string) {
-                let filt = this.filters[filterType]
-
-                //Set All Filters to false
-                for (const n in filt) {filt[n][1] = false}
-                
-                //Switch Values
-                filt[arrayIndex][1] = true
+            createFilterList() {
+                //Create Filter Group
+                let vistaList = this.ffxivData.sightseeing
+                this.filters['Expansion'] = {}
+                //Search for all Expansion names
+                const expansionList = vistaList.filter((obj: any, index: any) => 
+                    index === vistaList.findIndex((o: any) => obj.expansion === o.expansion)
+                );
+                //Append and set default filter list
+                for (const d in expansionList) {
+                    this.filters['Expansion'][expansionList[d].expansion] = ['expansion', false]
+                }
+                this.filters['Expansion'][expansionList[0].expansion][1] = true
             },
-            sortNodesIntoGroup(array: any) {
-                
-            }
+            compileData() {
+                let vistaList = this.ffxivData.sightseeing
+                const expansionList = vistaList.filter((obj: any, index: any) => 
+                    index === vistaList.findIndex((o: any) => obj.expansion === o.expansion)
+                );
+
+                for (const d in expansionList) {
+                    this.allVistaNodes[expansionList[d].expansion] = vistaList.filter((o: any) => o.expansion == expansionList[d].expansion)
+                }
+            },
+            appendData() {
+                for (const d in this.filters['Expansion']) {
+                    if (this.filters['Expansion'][d][1]) {
+                        this.compiledDataForTable = this.allVistaNodes[d]
+                    }
+                }
+            },
+            appendFilters(filterType: string, arrayIndex: string) {
+                this.compiledDataForTable = this.allVistaNodes[arrayIndex]
+                for (const d in this.filters['Expansion']) {this.filters['Expansion'][d][1] = false}
+                this.filters['Expansion'][arrayIndex][1] = !this.filters['Expansion'][arrayIndex][1]
+            },
+            async copyToClipboard(text: string) {
+                try {
+                    await navigator.clipboard.writeText(text);
+                } catch (err) {console.error('cannot copy: ', err)}
+            },
+            checkActiveState(timerID: string, weather1: string, weather2: string) {
+                return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
+            },
         }
     }
 </script>
 
 <style scoped lang="scss">
-    .rdrTable {grid-template-columns: 80px 80px 400px auto 200px 200px;}
+    .rdrTable {grid-template-columns: 80px 80px 400px auto  100px 200px 200px;}
 </style>
