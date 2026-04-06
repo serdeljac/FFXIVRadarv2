@@ -43,11 +43,9 @@ main {
 }
 
 *[data-activeNodeAnimation] {
-    // background-color: purple;
     background-color: #5b045b;
     animation: activeStateAnimation 0.7s linear infinite;
 }
-
 
 .main_content {
     margin: 1rem 0 5rem;
@@ -71,18 +69,9 @@ main {
         background-color: $listOddRowColor;
     }
 
-    // &.body {
-    //     border: 1px solid transparent;
-    //     cursor: pointer;
-    //     &:hover {
-    //         // border: 1px solid $borderColor;
-    //     }
-    // }
-
-    &.header {
-        border-bottom: 3px solid $borderColor;
-        padding-bottom: 10px;
-        margin-bottom: 10px;
+    &.split {
+        border: 1px solid $borderColor;
+        margin: 10px 0;
     }
 
     &_col-tracking {
@@ -125,4 +114,38 @@ main {
             opacity: 1;
         }
     }
+
+    // @keyframes popUpText {
+    //     0% {opacity: 0}
+    //     70% {transform: translateX(-50%); opacity: 1;}
+    //     90% {transform: translateX(-50%); opacity: 1;}
+    //     100% {transform: translateX(-50%); opacity: 0}
+    // }
+
+    // .hasContextAnimation {
+    //     position: relative;
+    //     cursor: pointer;
+    //     &::before {
+    //         content: attr(data-context);
+    //         position: absolute;
+    //         bottom: 2rem;
+    //         left: 50%;
+    //         transform: translateX(-50%);
+    //         background-color: $borderColor;
+    //         color: white;
+    //         padding: 2px 6px;
+    //         border-radius: $borderRadius;
+    //         box-shadow: 3px 3px 4px #000;
+    //         font-size: 0.75rem;
+    //         white-space: nowrap;
+    //         opacity: 0;
+    //         z-index:999;
+    //         pointer-events: none;
+    //         transition: opacity 0.3s ease-in-out;
+    //         animation: popUpText 1.5s once;
+    //         &::first-letter {
+    //             text-transform: uppercase;
+    //         }
+    //     }
+    // }
 }

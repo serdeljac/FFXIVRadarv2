@@ -1,6 +1,6 @@
 <template>
-    <div :class="[`btn`, {'inactive': !state}]">
-        {{ fetchProperNameDisplay(name) }}
+    <div :class="[`btn`, {'active': !state}]">
+        {{ name.charAt(0).toUpperCase() + name.slice(1) }}
     </div>
 </template>
 
@@ -34,13 +34,17 @@
         align-items: center;
         padding: 4px 8px;
         border-radius: 4px;
-        background-color: $bodyBackgroundColor;
-        border: 1px solid $borderColor;
+        background-color: $borderColor;
         cursor: pointer;
         user-select: none;
+        margin: 0.5rem;
+        &:hover {
+            background-color: $borderColorHover;
+        }
 
-        &.inactive {
-            opacity: 0.5;
+        &.active {
+            opacity: 0.3;
+            
         }
 
         img {

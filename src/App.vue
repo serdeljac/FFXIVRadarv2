@@ -26,6 +26,7 @@
         :ffxivData="ffxivData"
         :windowWidth="windowWidth"
         :timerList="timerList"
+        @sendToDetails="(e: any) => detailsPanel = e"
         @changeTracked="changeTracked"/>
     </main>
 
@@ -112,7 +113,6 @@ export default {
       enabledWindowResizeResponse() {
         window.addEventListener('resize', this.enabledWindowResizeResponse);
         let curWidth: number = window.innerWidth;
-        
         let desktopWidthLg: number = 1700;
         let desktopWidthSm: number = 1260;
         let tabletWidth: number = 800;
@@ -206,10 +206,9 @@ export default {
           let myPointData = this.ffxivData.areas.find(o => o.point == obj.area)
           if (!myAreaData && !myPointData) {console.error(`Cannot find area in App.JS: ${this.ffxivData[type][d].ID}`, this.ffxivData[type][d].area)}
           this.ffxivData[type][d].area = myAreaData ? myAreaData : myPointData
-          
 
-          this.ffxivData[type][d].usage = obj.usage ? obj.usage : false
-          this.ffxivData[type][d].usage_info = obj.usage ? getSpecificUsageData(obj) : false
+          this.ffxivData[type][d].usage = obj.usage ? obj.usage : 'crafting'
+          this.ffxivData[type][d].usage_info = obj.usage ? getSpecificUsageData(obj) : 'crafting'
         }
 
         function getSpecificUsageData(arr: any) {
