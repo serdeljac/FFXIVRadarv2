@@ -48,12 +48,12 @@
 
                 <!-- TIMER -->
                 <li>
-                    <displayTimer :timerID="d.time" :timerList="timerList"/>
+                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
                 </li>
 
                 <!-- WEATHER -->
                 <li>
-                    {{ d.weather1 }} {{ d.weather2  }}
+                    <displayTimer :type="'weather'" :node="d" :timerList="timerList"/>
                 </li>
 
                 <!-- EMOTE -->
@@ -135,7 +135,7 @@ import seachBar from '../ui/searchBar.vue';
                 } catch (err) {console.error('cannot copy: ', err)}
             },
             checkActiveState(timerID: string, weather1: string, weather2: string) {
-                return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
+                // return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
             },
         }
     }

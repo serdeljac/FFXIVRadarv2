@@ -108,7 +108,7 @@
 
                 <!-- TIMER -->
                 <li>
-                    <displayTimer :timerID="d.time" :timerList="timerList"/>
+                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
                 </li>
             </ul>
 
