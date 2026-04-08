@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="sightseeVistas">
         <promotionBanner length="wide"/>
 
         <div class="filterbar">
@@ -12,81 +12,48 @@
             </div>
         </div>
 
-        <div class="main_content">
+        <div class="body_content">
+
             <ul class="rdrTable header">
                 <li>
-                    <p>Tracker</p>
-                    <p>No</p>
-                    <p>Name</p>
-                    <p>Area</p>
-                    <p>Time</p>
-                    <p>Weather</p>
-                    <p>Emote</p>
+                    <p v-if="responsive.tracking">Tracker</p>
+                    <p v-if="responsive.no">No</p>
+                    <p v-if="responsive.name">Name</p>
+                    <p v-if="responsive.area">Area</p>
+                    <p v-if="responsive.timer">Time</p>
+                    <p v-if="responsive.weather">Weather</p>
+                    <p v-if="responsive.emote">Emote</p>
                 </li>
             </ul>
 
             <hr class="rdrTable split"/>
 
-            <ul :class="[`rdrTable body`]">
-                <li v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time, d.weather1, d.weather2)">
+            <ul :class="[`rdrTable body`, windowWidth]">
+                <li v-for="d in compiledDataForTable" :key="d.ID" 
+                    :data-activeTableRowAnimation="timerState[d.ID] && weatherState[d.ID] ? true : null">
 
-                    <div class="rdrTable_col-tracking">
+                    <div v-if="responsive.tracking" class="rdrTable_col-tracking" >
                         <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NO -->
-                    <p>{{ d.no }}</p>
+                    <p v-if="responsive.no" class="rdrTable_col-no">{{ d.no }}</p>
 
                     <!-- NAME -->
-                    <p class="rdrTable_col-name" @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                    <p v-if="responsive.name" class="rdrTable_col-name" @click="copyToClipboard(d.name)">{{ d.name }}</p>
 
                     <!-- AREA -->
-                    <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+                    <displayAreaText v-if="responsive.area" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
 
                     <!-- TIMER -->
-                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
+                    <displayTimer v-if="responsive.timer" :type="'timer'" :node="d" :timerList="timerList" @timerState="(e: boolean) => timerState[d.ID] = e"/>
 
                     <!-- WEATHER -->
-                    <displayTimer :type="'weather'" :node="d" :timerList="timerList"/>
+                    <displayTimer v-if="responsive.weather" :type="'weather'" :node="d" @weatherState="(e: boolean) => weatherState[d.ID] = e"/>
 
                     <!-- EMOTE -->
-                    <p>{{ d.emote }}</p>
-                </li>
-            </ul>
-            <ul :class="[`rdrTable body`]" v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time, d.weather1, d.weather2)">
-                <!-- TRACKING -->
-                <li class="rdrTable_col-tracking">
-                    <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
-                </li>
+                    <iconAndText v-if="responsive.emote" :icon="d.emote" :text="d.emote"/>
 
-                <!-- NO -->
-                <li>
-                    <p>{{ d.no }}</p>
-                </li>
-
-                <!-- NAME -->
-                <li class="rdrTable_col-name" @click="copyToClipboard(d.name)">
-                    {{ d.name }}
-                </li>
-
-                <!-- AREA -->
-                <li>
-                    <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
-                </li>
-
-                <!-- TIMER -->
-                <li>
-                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
-                </li>
-
-                <!-- WEATHER -->
-                <li>
-                    <displayTimer :type="'weather'" :node="d" :timerList="timerList"/>
-                </li>
-
-                <!-- EMOTE -->
-                <li>
-                    {{ d.emote }}
                 </li>
             </ul>
         </div>
@@ -100,10 +67,11 @@ import displayTimer from '../ui/displayTimer.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
+import iconAndText from '../ui/iconAndText.vue';
 
     export default {
         name: "Sightseeing Vistas",
-        components: {promotionBanner, displayTimer, displayAreaText, buttonFilter, seachBar},
+        components: {promotionBanner, displayTimer, displayAreaText, buttonFilter, seachBar, iconAndText},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
@@ -112,13 +80,44 @@ import seachBar from '../ui/searchBar.vue';
                 allVistaNodes: {} as any,
                 showDetails: '' as string,
                 showOnlyActive: false as boolean,
-                filters: {} as any
+                filters: {} as any,
+                timerState: {} as any,
+                weatherState: {} as any,
+                responsive: {
+                    "tracking": true,
+                    "no": true,
+                    "name": true,
+                    "area": true,
+                    "timer": true,
+                    "weather": true,
+                    "emote": true
+                }
             }
         },
+
         created() {
             this.createFilterList()
             this.compileData()
             this.appendData()
+        },
+        updated() {
+            // let size = this.windowWidth
+
+            // if (size == 'desktop-large' || size == 'desktop-small') {
+            //     this.responsive.no = true
+            //     this.responsive.emote = true
+            // }
+            
+
+            // if (size == 'tablet') {
+            //     this.responsive.no = false
+            //     this.responsive.emote = false
+            // }
+
+            // if (size == 'mobile') {
+            //     this.responsive.no = false
+            //     this.responsive.emote = false
+            // }
         },
         methods: {
             createFilterList() {
@@ -153,6 +152,8 @@ import seachBar from '../ui/searchBar.vue';
                 }
             },
             appendFilters(filterType: string, arrayIndex: string) {
+                this.timerState = {}
+                this.weatherState = {}
                 this.compiledDataForTable = this.allVistaNodes[arrayIndex]
                 for (const d in this.filters['Expansion']) {this.filters['Expansion'][d][1] = false}
                 this.filters['Expansion'][arrayIndex][1] = !this.filters['Expansion'][arrayIndex][1]
@@ -162,13 +163,10 @@ import seachBar from '../ui/searchBar.vue';
                     await navigator.clipboard.writeText(text);
                 } catch (err) {console.error('cannot copy: ', err)}
             },
-            checkActiveState(timerID: string, weather1: string, weather2: string) {
-                // return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
-            },
         }
     }
 </script>
 
 <style scoped lang="scss">
-    .rdrTable li {grid-template-columns: 80px 80px minmax(auto, 400px) auto  100px 200px 200px;}
+    .rdrTable li {grid-template-columns: 80px 80px minmax(auto, 400px) auto 100px 200px 200px;}
 </style>

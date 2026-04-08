@@ -21,7 +21,7 @@ body {
     font-family: "Lato", sans-serif;
     height: 100vh;
     background-color: $bodyBackgroundColor;
-    overflow: hidden;;
+    overflow: hidden;
 }
 
 main {
@@ -36,14 +36,33 @@ main {
     height: 24px;
 }
 
-@keyframes activeStateAnimation {
+@keyframes activeTimerStateAnimation {
     0% {background-color: #692168;}
     50% {background-color: #3e0d3d;}
     100% {background-color: #692168;}
 }
 
-*[data-activeNodeAnimation] {
-    background-color: #5b045b;
+@keyframes activeStateAnimation {
+    0% {background-color: $buttonBackgroundColorHover; box-shadow: 0px 0px 6px #fff, inset 0px 0px 6px #fff;}
+    100% {background-color: $buttonBackgroundColor}
+}
+
+*[data-activeTimerAnimation] {
+    background-color: $buttonBackgroundColor;
+}
+
+*[data-activeTimerAnimation] p {
+    opacity: 1 !important;
+    animation: activeStateAnimation 0.7s linear infinite;
+}
+
+*[data-activeWeatherAnimation="weather1"] p:first-of-type {
+    opacity: 1 !important;
+    animation: activeStateAnimation 0.7s linear infinite;
+}
+
+*[data-activeWeatherAnimation="weather2"] p:nth-of-type(2) {
+    opacity: 1 !important;
     animation: activeStateAnimation 0.7s linear infinite;
 }
 
@@ -51,22 +70,24 @@ main {
     margin: 1rem 0 5rem;
 }
 
+.body_content {
+    margin: 1rem 0 5rem;
+}
+
 .rdrTable {
     width: 100%;
-    display: grid;
-    gap: 10px;
-    border-radius: $borderRadius;
 
     li {
-        display: flex;
-        align-items: center;
-        padding-top: 6px;
-        padding-bottom: 6px;
-        img {width: 30px;}
+        width: 100%;
+        display: grid;
+        gap: 10px;
+        border-radius: $borderRadius;
+        padding: 6px 0;
     }
 
-    &.body:nth-of-type(odd) {
-        // background-color: $listOddRowColor;
+    img {
+        width: 24px;
+        cursor: pointer;
     }
 
     &.split {
@@ -76,7 +97,6 @@ main {
 
     &_col-tracking {
         padding-left: 1rem;
-        img {width: 30px; cursor: pointer;}
     }
 
     &_col-name {
@@ -114,38 +134,4 @@ main {
             opacity: 1;
         }
     }
-
-    // @keyframes popUpText {
-    //     0% {opacity: 0}
-    //     70% {transform: translateX(-50%); opacity: 1;}
-    //     90% {transform: translateX(-50%); opacity: 1;}
-    //     100% {transform: translateX(-50%); opacity: 0}
-    // }
-
-    // .hasContextAnimation {
-    //     position: relative;
-    //     cursor: pointer;
-    //     &::before {
-    //         content: attr(data-context);
-    //         position: absolute;
-    //         bottom: 2rem;
-    //         left: 50%;
-    //         transform: translateX(-50%);
-    //         background-color: $borderColor;
-    //         color: white;
-    //         padding: 2px 6px;
-    //         border-radius: $borderRadius;
-    //         box-shadow: 3px 3px 4px #000;
-    //         font-size: 0.75rem;
-    //         white-space: nowrap;
-    //         opacity: 0;
-    //         z-index:999;
-    //         pointer-events: none;
-    //         transition: opacity 0.3s ease-in-out;
-    //         animation: popUpText 1.5s once;
-    //         &::first-letter {
-    //             text-transform: uppercase;
-    //         }
-    //     }
-    // }
 }

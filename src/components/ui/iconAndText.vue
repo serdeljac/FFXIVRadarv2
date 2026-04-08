@@ -11,7 +11,6 @@
         props: ['icon', 'text'],
         methods: {
             checkImgName(name: string) {
-                console.log(name)
                 if (name == 'Crafting') {return `sq_${name}`}
                 return name
             }
