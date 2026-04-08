@@ -3,9 +3,9 @@
         <p>{{ getTimerCountdown() }}</p>
     </div>
     <div v-if="type == 'weather'" class="weatherDisplay">
-        <p v-if="this.node.weather1">{{ this.node.weather1 }}</p>
+        <p :class="[{'activeWeather': ismatch}]" v-if="this.node.weather1">{{ this.node.weather1 }}</p>
         <p v-if="this.node.weather2">{{ this.node.weather2 }}</p>
-        <p v-if="!this.node.weather1">None</p>
+        <p class="noWeather" v-if="!this.node.weather1">None</p>
     </div>
 </template>
 
@@ -19,6 +19,7 @@
         data() {
             return {
                 currentState: false,
+                ismatch: true
             }
         },
         methods: {
@@ -46,10 +47,10 @@
             transition: all .07s linear;
             border-radius: 4px;
             padding: 4px 8px;
+            opacity: 0.6;
+            &.activeWeather {color: rgb(43, 234, 113)}
+
             
-            // cursor: pointer;
-            background-color: $buttonBackgroundColor;
-            // &:hover {background-color: $buttonBackgroundColorHover;}
         }
     }
 </style>

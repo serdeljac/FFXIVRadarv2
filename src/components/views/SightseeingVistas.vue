@@ -14,17 +14,45 @@
 
         <div class="main_content">
             <ul class="rdrTable header">
-                <li>Tracker</li>
-                <li>No</li>
-                <li>Name</li>
-                <li>Area</li>
-                <li>Time</li>
-                <li>Weather</li>
-                <li>Emote</li>
+                <li>
+                    <p>Tracker</p>
+                    <p>No</p>
+                    <p>Name</p>
+                    <p>Area</p>
+                    <p>Time</p>
+                    <p>Weather</p>
+                    <p>Emote</p>
+                </li>
             </ul>
 
             <hr class="rdrTable split"/>
 
+            <ul :class="[`rdrTable body`]">
+                <li v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time, d.weather1, d.weather2)">
+
+                    <div class="rdrTable_col-tracking">
+                        <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                    </div>
+
+                    <!-- NO -->
+                    <p>{{ d.no }}</p>
+
+                    <!-- NAME -->
+                    <p class="rdrTable_col-name" @click="copyToClipboard(d.name)">{{ d.name }}</p>
+
+                    <!-- AREA -->
+                    <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+
+                    <!-- TIMER -->
+                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
+
+                    <!-- WEATHER -->
+                    <displayTimer :type="'weather'" :node="d" :timerList="timerList"/>
+
+                    <!-- EMOTE -->
+                    <p>{{ d.emote }}</p>
+                </li>
+            </ul>
             <ul :class="[`rdrTable body`]" v-for="d in compiledDataForTable" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time, d.weather1, d.weather2)">
                 <!-- TRACKING -->
                 <li class="rdrTable_col-tracking">
@@ -142,5 +170,5 @@ import seachBar from '../ui/searchBar.vue';
 </script>
 
 <style scoped lang="scss">
-    .rdrTable {grid-template-columns: 80px 80px 400px auto  100px 200px 200px;}
+    .rdrTable li {grid-template-columns: 80px 80px minmax(auto, 400px) auto  100px 200px 200px;}
 </style>
