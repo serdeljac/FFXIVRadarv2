@@ -5,10 +5,10 @@
         <div class="filterbar">
             <div class="filterbar_group group1">
                 <buttonFilter 
-                    v-for="(value, index) in filters['Expansion']" :key="index" 
-                    :name="`${index}`" 
-                    :state="filters['Expansion'][index][1]"
-                    @click="appendFilters('Expansion', index)"/>
+                    v-for="(d, index) in filters" :key="d[1]" 
+                    :name="`${d[1]}`" 
+                    :disabled="d[2]"
+                    @click="changeFilter(index)"/>
             </div>
         </div>
 
@@ -46,13 +46,13 @@
                     <displayAreaText v-if="responsive.area" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
 
                     <!-- TIMER -->
-                    <displayTimer v-if="responsive.timer" :type="'timer'" :node="d" :timerList="timerList" @timerState="(e: boolean) => timerState[d.ID] = e"/>
+                    <!-- <displayTimer v-if="responsive.timer" :type="'timer'" :node="d" :timerList="timerList" @timerState="(e: boolean) => timerState[d.ID] = e"/> -->
 
                     <!-- WEATHER -->
-                    <displayTimer v-if="responsive.weather" :type="'weather'" :node="d" @weatherState="(e: boolean) => weatherState[d.ID] = e"/>
+                    <!-- <displayTimer v-if="responsive.weather" :type="'weather'" :node="d" @weatherState="(e: boolean) => weatherState[d.ID] = e"/> -->
 
                     <!-- EMOTE -->
-                    <iconAndText v-if="responsive.emote" :icon="d.emote" :text="d.emote"/>
+                    <!-- <iconAndText v-if="responsive.emote" :icon="d.emote" :text="d.emote"/> -->
 
                 </li>
             </ul>
@@ -80,7 +80,7 @@ import iconAndText from '../ui/iconAndText.vue';
                 allVistaNodes: {} as any,
                 showDetails: '' as string,
                 showOnlyActive: false as boolean,
-                filters: {} as any,
+                filters: [] as any, //[Group, Name, State]
                 timerState: {} as any,
                 weatherState: {} as any,
                 responsive: {
@@ -96,67 +96,60 @@ import iconAndText from '../ui/iconAndText.vue';
         },
 
         created() {
-            this.createFilterList()
-            this.compileData()
-            this.appendData()
-        },
-        updated() {
-            // let size = this.windowWidth
-
-            // if (size == 'desktop-large' || size == 'desktop-small') {
-            //     this.responsive.no = true
-            //     this.responsive.emote = true
-            // }
-            
-
-            // if (size == 'tablet') {
-            //     this.responsive.no = false
-            //     this.responsive.emote = false
-            // }
-
-            // if (size == 'mobile') {
-            //     this.responsive.no = false
-            //     this.responsive.emote = false
-            // }
+            this.createFilterList() //Run Once
+            this.groupVistaLogsByExpansion() //Run Once
+            this.appendData() 
         },
         methods: {
             createFilterList() {
-                //Create Filter Group
-                let vistaList = this.ffxivData.sightseeing
-                this.filters['Expansion'] = {}
-                //Search for all Expansion names
-                const expansionList = vistaList.filter((obj: any, index: any) => 
-                    index === vistaList.findIndex((o: any) => obj.expansion === o.expansion)
+                //Search for all Expansion names within Sightseeing Logs
+                const expansionList = this.ffxivData.sightseeing.filter((obj: any, index: any) => 
+                    index === this.ffxivData.sightseeing.findIndex((o: any) => obj.expansion === o.expansion)
                 );
+
                 //Append and set default filter list
                 for (const d in expansionList) {
-                    this.filters['Expansion'][expansionList[d].expansion] = ['expansion', false]
+                    this.filters[d] = ['expansion', expansionList[d].expansion, true]
                 }
-                this.filters['Expansion'][expansionList[0].expansion][1] = true
+
+                //Set defaualt filer value
+                this.filters[0][2] = false
             },
-            compileData() {
+            groupVistaLogsByExpansion() {
+                //Create list of easch Expansion name
                 let vistaList = this.ffxivData.sightseeing
                 const expansionList = vistaList.filter((obj: any, index: any) => 
                     index === vistaList.findIndex((o: any) => obj.expansion === o.expansion)
                 );
 
+                //Group each vista by found expansion name
                 for (const d in expansionList) {
                     this.allVistaNodes[expansionList[d].expansion] = vistaList.filter((o: any) => o.expansion == expansionList[d].expansion)
                 }
             },
             appendData() {
-                for (const d in this.filters['Expansion']) {
-                    if (this.filters['Expansion'][d][1]) {
-                        this.compiledDataForTable = this.allVistaNodes[d]
+                //Search for the active filter
+                let activeFilterState = []
+                for (const d in this.filters) {
+                    if (!this.filters[d][2]) {
+                        activeFilterState = this.filters[d]
+                        break;
                     }
                 }
+
+                //Append filter to table
+                this.compiledDataForTable = this.allVistaNodes[activeFilterState[1]]
             },
-            appendFilters(filterType: string, arrayIndex: string) {
-                this.timerState = {}
-                this.weatherState = {}
-                this.compiledDataForTable = this.allVistaNodes[arrayIndex]
-                for (const d in this.filters['Expansion']) {this.filters['Expansion'][d][1] = false}
-                this.filters['Expansion'][arrayIndex][1] = !this.filters['Expansion'][arrayIndex][1]
+            changeFilter(arrayIndex: any) {
+                //Set all values to Disabled
+                for (const d in this.filters) {this.filters[d][2] = true}
+
+                //Set new filter to enable
+                this.filters[arrayIndex][2] = false
+
+                //Append 
+                this.compiledDataForTable = this.allVistaNodes[this.filters[arrayIndex][1]]
+
             },
             async copyToClipboard(text: string) {
                 try {

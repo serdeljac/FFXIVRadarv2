@@ -1,13 +1,20 @@
 <template>
-    <div :class="[`btn`, {'active': !state}]">
-        {{ name.charAt(0).toUpperCase() + name.slice(1) }}
+    <div :class="[`btn`, {'disable': disabled}]">
+        {{ fetchName }}
     </div>
 </template>
 
 <script lang="ts">
+
     export default {
         name: "Button Filter",
-        props: ['name', 'icon', 'state'],
+        props: ['name', 'icon', 'disabled'],
+        computed: {
+            fetchName() {
+                let properName = this.name.charAt(0).toUpperCase() + this.name.slice(1)
+                return properName
+            }
+        },
         methods: {
             fetchProperNameDisplay(rawName: string) {
                 if (rawName == 'miner') {return 'Miner'}
@@ -30,27 +37,24 @@
 
 <style scoped lang="scss">
     .btn {
+        position: relative;
+        text-decoration: none;
         display: inline-flex;
         align-items: center;
-        padding: 4px 8px;
+        border-width: 2px;
         border-radius: 4px;
-        background-color: $borderColor;
+        background-color: $buttonBackgroundColor;
+        padding: 8px 12px;
+        margin: 0.5rem;
         cursor: pointer;
         user-select: none;
-        margin: 0.5rem;
+        transition: background-color .07s linear;
+        letter-spacing: 2px;
+        font-style: italic;
+        &.disable {opacity: 0.5}
+
         &:hover {
-            background-color: $borderColorHover;
-        }
-
-        &.active {
-            opacity: 0.3;
-            
-        }
-
-        img {
-            width: 20px;
-            aspect-ratio: 1/1;
-            margin-right: 6px;
+            background-color: $buttonBackgroundColorHover;
         }
     }
 </style>
