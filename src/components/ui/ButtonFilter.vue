@@ -41,11 +41,13 @@
         text-decoration: none;
         display: inline-flex;
         align-items: center;
+        justify-content: center;
         border-width: 2px;
         border-radius: 4px;
         background-color: $buttonBackgroundColor;
         padding: 8px 12px;
         margin: 0.5rem;
+        min-width: 120px;
         cursor: pointer;
         user-select: none;
         transition: background-color .07s linear;

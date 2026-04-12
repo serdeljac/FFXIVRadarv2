@@ -4,44 +4,21 @@
 
         <div class="filterbar">
 
-            <div class="filterbar_group group1">
-                <p>Class: </p>
+            <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
+                <p class="filterbar_groupName">{{ d[0][0] }}</p>
                 <buttonFilter 
-                    v-for="(value, index) in filters['Class']" :key="index" 
-                    :name="`${index}`" 
-                    :state="filters['Class'][index][1]"
-                    @click="appendFilters('Class', index)"/>
+                    v-for="(e, index) in d" :key="e[1]"
+                    :name="e[1]" 
+                    :disabled="!e[2]"
+                    @click="changeFilter(index)"/>
             </div>
 
-            <div class="filterbar_group group2">
-                <p>Usage: </p>
-                <buttonFilter 
-                    v-for="(value, index) in filters['Usage']" :key="index" 
-                    :name="index == 'orange' || index == 'purple' ? `${index} Scripts` : `${index}`" 
-                    :state="filters['Usage'][index][1]"
-                    @click="appendFilters('Usage', index)"/>
-            </div>
-
-            <div class="filterbar_group group3">
-                <p>Expansion: </p>
-                <buttonFilter 
-                    v-for="(value, index) in filters['Expansion']" :key="index" 
-                    :name="`${index}`" 
-                    :state="filters['Expansion'][index][1]"
-                    @click="appendFilters('Expansion', index)"/>
-            </div>
-
-            <div class="filterbar_group group4">
-                <p>Search: </p>
+            <div :class="[`filterbar_group`]">
                 <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
                 <buttonFilter 
                     :name="'Reset'" 
                     :state="true"
                     @click="resetFilters()"/>
-                <buttonFilter 
-                    :name="'Active Only'" 
-                    :state="showOnlyActive"
-                    @click="showOnlyActive = !showOnlyActive"/>
             </div>
         </div>
 
@@ -157,37 +134,46 @@ import seachBar from '../ui/searchBar.vue';
                 displayNoNodesFound: false as boolean,
                 searchName: '' as string,
                 showOnlyActive: false as boolean,
-                filters: {
-                    "Class": {
-                        "miner": ['job', true],
-                        "botany": ['job', true],
-                    },
-                    "Usage": {
-                        "crafting": ['usage', true],
-                        "purple": ['usage_info', true],
-                        "orange": ['usage_info', true],
-                        "aetherial": ['usage', true],
-                    },
-                    "Expansion": {
-                        "A Realm Reborn": ['expansion', true],
-                        "Heavensward": ['expansion', true],
-                        "Stormblood": ['expansion', true],
-                        "Shadowbringers": ['expansion', true],
-                        "Endwalker": ['expansion', true],
-                        "Dawntrail": ['expansion', true]
-                    },
-                }
+                filters: [] as any, //[Group, Name, State]
             }
         },
         created() {
-            this.createFilterList() //Run Once
             let r = this.ffxivData.miner.filter((o: any) => o.time)
             let b = this.ffxivData.botany.filter((o: any) => o.time)
             this.allTimedNodes = [...r, ...b]
+            this.createFilterList() //Run Once
             this.sortNodesIntoGroup(this.allTimedNodes)
         },
         methods: {
-            createFilterList() {},
+            createFilterList() {
+                //Search for all Job names within AllTimedNodes
+                const jobList = this.allTimedNodes.filter((obj: any, index: any) => 
+                    index === this.allTimedNodes.findIndex((o: any) => obj.job === o.job)
+                );
+
+                //Search for all Job names within AllTimedNodes
+                const usageList = this.allTimedNodes.filter((obj: any, index: any) => 
+                    index === this.allTimedNodes.findIndex((o: any) => obj.usage === o.usage)
+                );
+
+                //Search for all Expansion names within AllTimedNodes
+                const expansionList = this.ffxivData.miner.filter((obj: any, index: any) => 
+                    index === this.ffxivData.miner.findIndex((o: any) => obj.expansion === o.expansion)
+                );
+
+                //Append and set default filter list
+                for (const d in jobList) {
+                    this.filters.push(['job', jobList[d].job, true])
+                }
+
+                for (const d in usageList) {
+                    this.filters.push(['usage', usageList[d].usage, true])
+                }
+                for (const d in expansionList) {
+                    this.filters.push(['expansion', expansionList[d].expansion, true])
+                }
+
+            },
             sortNodesIntoGroup(array: any) {
                 const result = [];
                 let arrayLength = array.length;
@@ -198,19 +184,26 @@ import seachBar from '../ui/searchBar.vue';
                 this.displayNoNodesFound = result.length == 0 ? true : false;
                 this.totalArraySets = this.compiledDataForTable.length
             },
-            appendFilters(filterType: string, arrayIndex: string) {
+            groupFilter() {
+                let newArr = []
+                let arr = this.filters
+                let jobBundle = arr.filter((o: any) => o[0] == 'job')
+                let usageBundle = arr.filter((o: any) => o[0] == 'usage')
+                let expansionBundle = arr.filter((o: any) => o[0] == 'expansion')
+                newArr = [jobBundle, usageBundle, expansionBundle]
+                return newArr
+            },
+            changeFilter(arrayIndex: any) {
 
                 let hold = this.allTimedNodes
-                let filt = this.filters
+                this.searchName = '';
                 
                 //Switch Values
-                filt[filterType][arrayIndex][1] = !filt[filterType][arrayIndex][1]
+                this.filters[arrayIndex][2] = !this.filters[arrayIndex][2]
 
                 for (const d in this.filters) {
-                    for (const n in this.filters[d]) {
-                        if (!filt[d][n][1]) {
-                            hold = hold.filter((o: any) => o[filt[d][n][0]] != n)
-                        }
+                    if (!this.filters[d][2]) {
+                        hold = hold.filter((o: any) => o[this.filters[d][0]] != this.filters[d][1])
                     }
                 }
                 this.sortNodesIntoGroup(hold)
@@ -218,11 +211,14 @@ import seachBar from '../ui/searchBar.vue';
             },
             resetFilters() {
                 for (const d in this.filters) {
-                    for (const n in this.filters[d]) {
-                        this.filters[d][n][1] = true
-                    }
+                    this.filters[d][2] = true
                 }
                 this.sortNodesIntoGroup(this.allTimedNodes)
+            },
+            checkIfNewGroup(index: number) {
+                if (index == 0) {return this.filters[0][0]}
+                let sendGroupName = this.filters[index][0] != this.filters[index - 1][0] ? this.filters[index][0] : null
+                return sendGroupName
             },
             checkActiveState(timerID: string) {
                 return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
@@ -258,6 +254,12 @@ import seachBar from '../ui/searchBar.vue';
                             if (usageGroup.result1.toLowerCase().includes(search)) {
                                 foundAetherial.push(aetherialList[d])
                             }
+                            if (usageGroup.result2.toLowerCase().includes(search)) {
+                                foundAetherial.push(aetherialList[d])
+                            }
+                            if (usageGroup.result3.toLowerCase().includes(search)) {
+                                foundAetherial.push(aetherialList[d])
+                            }
                         }
                     }
                     let hold = [...new Set([...foundName, ...foundAetherial])];
@@ -279,9 +281,7 @@ import seachBar from '../ui/searchBar.vue';
             checkTimeActive(type: string, arr: any) {
                 if (type == 'time' && arr.time) {
                     let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                   
                     results = results ? true : null
-                     console.log(results)
                     return results
                 }
                 return null
@@ -298,18 +298,21 @@ import seachBar from '../ui/searchBar.vue';
 <style scoped lang="scss">
     .main_content ul {margin-bottom: 6px;}
 
+
     .filterbar {
-        width: 100%;
+        display: flex;
+        gap: 0 3rem;
+        flex-wrap: wrap;
+        max-width: 1200px;
+        justify-content: center;
+        margin: auto;
 
         &_group {
-            border-radius: $borderRadius;
-            margin: 4px 0 0 ;
-            padding: 0px 6px;
+            display: flex;
             align-items: center;
-            margin-right: 2rem;
-            &.group1, &.group2 {display: inline-flex;}
-            &.group3, &.group4 {display: flex;}
         }
+
+        &_groupName::first-letter {text-transform: uppercase;}
     }
 
     .rdrTable li {grid-template-columns: 80px 400px 100px auto 100px 120px;}

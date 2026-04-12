@@ -80,7 +80,6 @@ import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
 import iconAndText from '../ui/iconAndText.vue';
-import EorzeaWeather from 'eorzea-weather';
 
     export default {
         name: "Sightseeing Vistas",
@@ -161,32 +160,39 @@ import EorzeaWeather from 'eorzea-weather';
                 return '--:--'
             },
             checkTimeActive(type: string, arr: any) {
-                if (type == 'weather1' && arr.area.mapcode) {
-                    let x = EorzeaWeather.getWeather(arr.area.mapcode, new Date());
-                    if (x == arr.weather1) {return true}
+
+                if (type == 'weather1' || type == 'weather2') {
+                    let x = arr.area.weather
+                    let y = arr[type]
+                    if (x == y) {return true}
                 }
-                if (type == 'weather2' && arr.area.mapcode) {
-                    let x = EorzeaWeather.getWeather(arr.area.mapcode, new Date());
-                    if (x == arr.weather2) {return true}
-                    return null
-                }
-                if (type == 'time') {
-                    if (arr.time) {
-                        let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                        results = results ? true : null
-                        return results
-                    }
-                    return null
+
+                if (type == 'time' && arr.time) {
+                    let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
+                    results = results ? true : null
+                    return results
                 }
                 return null
             },
             checkRowActive(arr: any) {
-                let currentWeather = arr.area.mapcode ? EorzeaWeather.getWeather(arr.area.mapcode, new Date()) : false
-                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).timerState : false
-                let weather1State = currentWeather && arr.weather1 == currentWeather ? true : false
-                let weather2State = currentWeather && arr.weather2 == currentWeather ? true : false
-                if (currentTime && weather1State || currentTime && weather2State) {return true}
-                return null
+                let match1: boolean
+                let match2: boolean
+
+                //Match1 - Get Time State
+                if (arr.time) {
+                    let currentTimeState = this.timerList.find((o: any) => o.ID == arr.time).timerState
+                    match1 = currentTimeState ? true : null
+                }
+
+                //Match2 - Get Weather State
+                if (arr.weather1 && arr.area.weather) {
+                    let condition1 = arr.weather1 == arr.area.weather ? true :  false
+                    let condition2 = (arr.weather2 == arr.area.weather) && arr.weather2 ? true :  false
+                    match2 = condition1 || condition2 ? true : false
+                }
+
+                if (!arr.weather1) {return match1}
+                return match1 == match2 ? true : null
             }
         }
     }

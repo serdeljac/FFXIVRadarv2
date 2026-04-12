@@ -21,7 +21,7 @@ body {
     font-family: "Lato", sans-serif;
     height: 100vh;
     background-color: $bodyBackgroundColor;
-    overflow: hidden;
+    
 }
 
 main {
@@ -50,8 +50,9 @@ main {
 
 
 
-*[data-timerActive] p{
+*[data-timerActive] {
     animation: timerActiveAnimation 0.7s linear infinite;
+    p {animation: timerActiveAnimation 0.7s linear infinite;}
 }
 
 *[data-rowActive] {
