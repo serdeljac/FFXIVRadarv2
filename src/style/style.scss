@@ -36,35 +36,29 @@ main {
     height: 24px;
 }
 
-@keyframes activeTimerStateAnimation {
+@keyframes timerActiveAnimation {
+    0% {color: limegreen;}
+    50% {color: rgb(255, 255, 255);}
+    100% {color: limegreen;}
+}
+
+@keyframes rowActiveAnimation {
     0% {background-color: #692168;}
     50% {background-color: #3e0d3d;}
     100% {background-color: #692168;}
 }
 
-@keyframes activeStateAnimation {
-    0% {background-color: $buttonBackgroundColorHover; box-shadow: 0px 0px 6px #fff, inset 0px 0px 6px #fff;}
-    100% {background-color: $buttonBackgroundColor}
+
+
+*[data-timerActive] p{
+    animation: timerActiveAnimation 0.7s linear infinite;
 }
 
-*[data-activeTimerAnimation] {
-    background-color: $buttonBackgroundColor;
+*[data-rowActive] {
+    animation: rowActiveAnimation 0.7s linear infinite;
 }
 
-*[data-activeTimerAnimation] p {
-    opacity: 1 !important;
-    animation: activeStateAnimation 0.7s linear infinite;
-}
 
-*[data-activeWeatherAnimation="weather1"] p:first-of-type {
-    opacity: 1 !important;
-    animation: activeStateAnimation 0.7s linear infinite;
-}
-
-*[data-activeWeatherAnimation="weather2"] p:nth-of-type(2) {
-    opacity: 1 !important;
-    animation: activeStateAnimation 0.7s linear infinite;
-}
 
 .main_content {
     margin: 1rem 0 5rem;
@@ -83,11 +77,20 @@ main {
         gap: 10px;
         border-radius: $borderRadius;
         padding: 6px 0;
+        & > div {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+        }
     }
 
     img {
         width: 24px;
         cursor: pointer;
+    }
+
+    &.body li:hover {
+        background-color: $borderColorFade;
     }
 
     &.split {
@@ -97,13 +100,28 @@ main {
 
     &_col-tracking {
         padding-left: 1rem;
+        position: relative;
+        z-index: 999;
     }
 
     &_col-name {
+        p {display: inline-flex}
         span {
             margin-left: 6px;
             color: grey;
         }
+    }
+
+    &_col-attributes {
+        p {display: inline-flex}
+    }
+
+    &_col-time {
+        p {color: grey;}
+    }
+
+    &_col-weather {
+        p {color: grey;}
     }
 
     .hasContext {

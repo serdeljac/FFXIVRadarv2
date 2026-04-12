@@ -15,7 +15,7 @@
                 <li v-for="d in trackinglist" :key="d.ID" :class="[`trackingbar_item`]" :data-activeNodeAnimation="checkActiveState(d.time)">
                     <div class="content">
                         <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
-                        <displayTimer class="timer" :timerID="d.time" :timerList="timerList"/>
+                        <!-- TIMER HERE -->
                         <displayAreaText class="areaname" :areaObj="d"/>
                     </div>
                     <div class="options">
@@ -36,11 +36,10 @@
 import menuButton from '../ui/ButtonMenu.vue';
 import iconAndText from '../ui/iconAndText.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
-import displayTimer from '../ui/displayTimer.vue';
 
     export default {
         name: 'Tracking Bar',
-        components: {menuButton, iconAndText, displayAreaText, displayTimer},
+        components: {menuButton, iconAndText, displayAreaText},
         props: ['windowWidth', 'trackinglist', 'timerList'],
         emits: ['openDetails','changeTracked'],
         methods: {

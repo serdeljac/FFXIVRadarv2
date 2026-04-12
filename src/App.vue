@@ -27,7 +27,7 @@
         :windowWidth="windowWidth"
         :timerList="timerList"
         @sendToDetails="(e: any) => detailsPanel = e"
-        @changeTracked="changeTracked"/>
+        @changeTracked="(e: any) => changeTracked(e)"/>
     </main>
 
     <aside 
@@ -529,7 +529,6 @@ export default {
         });
       },
       changeTracked(e: any) {
-        console.log(e)
         let index = this.ffxivData[e.job].findIndex(o => o.ID == e.ID)
         this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
 

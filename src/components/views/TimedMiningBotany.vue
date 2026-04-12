@@ -45,7 +45,8 @@
             </div>
         </div>
 
-        <div class="main_content">
+        <div class="body_content">
+
             <div class="pagenation" v-if="totalArraySets > 1">
                 <div v-for="(d, index) in compiledDataForTable" :key="d.ID" 
                     @click="arraySet = Number(index)"
@@ -55,60 +56,68 @@
             </div>
 
             <ul class="rdrTable header">
-                <li>Tracker</li>
-                <li>Name</li>
-                <li>Attributes</li>
-                <li>Area</li>
-                <li>Level</li>
-                <li>Timer</li>
+                <li>
+                    <p>Tracker</p>
+                    <p>Name</p>
+                    <p>Attributes</p>
+                    <p>Area</p>
+                    <p>Level</p>
+                    <p>Timer</p>
+                </li>
             </ul>
 
             <hr class="rdrTable split"/>
 
-            <ul :class="[`rdrTable body`, {'activeOnly': !checkActiveState(d.time) && showOnlyActive}]" v-for="d in compiledDataForTable[arraySet]" :key="d.ID" :data-activeNodeAnimation="checkActiveState(d.time)">
-                
-                <!-- TRACKING -->
-                <li class="rdrTable_col-tracking">
-                    <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
-                </li>
-                
-                <!-- NAME -->
-                <li class="rdrTable_col-name" @click="copyToClipboard(d.name)">
-                    <p>{{d.name}}</p>
-                    <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
-                </li>
+            <ul :class="[`rdrTable body`]">
+                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  :data-rowActive="checkRowActive(d)">
 
-                <!-- ATTRIBUTES -->
-                <li class="rdrTable_col-attributes">
-                    <!-- JOB NAME -->
-                    <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
-                        <img :src="`../../assets/icons/${d.job_sub}.webp`"  />
-                    </span>
-                    
-                    <!-- USAGE -->
-                    <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                        <img :src="`../../assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
-                    </span>
+                    <!-- TRACKER -->
+                    <div class="rdrTable_col-tracking" >
+                        <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                    </div>
 
-                    <!-- FOLKLORE -->
-                    <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
-                        <img :src="`../../assets/icons/folklore.webp`"/>
-                    </span>
-                </li>
+                    <!-- NAME -->
+                    <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
+                        <div>
+                            <p @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                            <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
+                        </div>
+                    </div>
 
-                <!-- AREA -->
-                <li>
-                    <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
-                </li>
+                    <!-- ATTRIBUTES -->
+                    <div class="rdrTable_col-attributes">
+                        <div>
+                            <!-- JOB NAME -->
+                            <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
+                                <img :src="`../../assets/icons/${d.job_sub}.webp`"  />
+                            </span>
+                            
+                            <!-- USAGE -->
+                            <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
+                                <img :src="`../../assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
+                            </span>
 
-                <!-- LEVEL -->
-                <li>
-                    {{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}
-                </li>
+                            <!-- FOLKLORE -->
+                            <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
+                                <img :src="`../../assets/icons/folklore.webp`"/>
+                            </span>
+                        </div>
+                    </div>
 
-                <!-- TIMER -->
-                <li>
-                    <displayTimer :type="'timer'" :node="d" :timerList="timerList"/>
+                    <!-- AREA -->
+                    <div>
+                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+                    </div>
+
+                    <!-- LEVEL -->
+                    <div>
+                        {{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}
+                    </div>
+
+                    <!-- TIMER -->
+                    <div class="rdrTable_col-time" :data-timerActive="checkRowActive(d)">
+                        <p>{{ fetchTimerCountdown(d.time) }}</p>
+                    </div>
                 </li>
             </ul>
 
@@ -130,14 +139,13 @@
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayTimer from '../ui/displayTimer.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
 
     export default {
         name: "Timed Mining/Botany",
-        components: {promotionBanner, displayTimer, displayAreaText, buttonFilter, seachBar},
+        components: {promotionBanner, displayAreaText, buttonFilter, seachBar},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
@@ -172,12 +180,14 @@ import seachBar from '../ui/searchBar.vue';
             }
         },
         created() {
+            this.createFilterList() //Run Once
             let r = this.ffxivData.miner.filter((o: any) => o.time)
             let b = this.ffxivData.botany.filter((o: any) => o.time)
             this.allTimedNodes = [...r, ...b]
             this.sortNodesIntoGroup(this.allTimedNodes)
         },
         methods: {
+            createFilterList() {},
             sortNodesIntoGroup(array: any) {
                 const result = [];
                 let arrayLength = array.length;
@@ -218,7 +228,6 @@ import seachBar from '../ui/searchBar.vue';
                 return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
             },
             fetchUsageImgName(usage: any, info: any) {
-                console.log(usage)
                 if (usage == 'scripts') {return `${info}gatherscripts`}
                 if (usage == 'crafting') {return `sq_crafting`}
                 return usage
@@ -259,6 +268,28 @@ import seachBar from '../ui/searchBar.vue';
                 try {
                     await navigator.clipboard.writeText(text);
                 } catch (err) {console.error('cannot copy: ', err)}
+            },
+            fetchTimerCountdown(time: string) {
+                if (time) {
+                    let results = this.timerList.find((o: any) => o.ID == time).countdown
+                    return results
+                }
+                return '--:--'
+            },
+            checkTimeActive(type: string, arr: any) {
+                if (type == 'time' && arr.time) {
+                    let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
+                   
+                    results = results ? true : null
+                     console.log(results)
+                    return results
+                }
+                return null
+            },
+            checkRowActive(arr: any) {
+                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
+                if (currentTime) {return true}
+                return null
             }
         }
     }
@@ -281,7 +312,7 @@ import seachBar from '../ui/searchBar.vue';
         }
     }
 
-    .rdrTable {grid-template-columns: 80px 400px 100px auto 100px 120px;}
+    .rdrTable li {grid-template-columns: 80px 400px 100px auto 100px 120px;}
     .activeOnly {display: none;}
     .rdrTable_col-name p {
         cursor: pointer;

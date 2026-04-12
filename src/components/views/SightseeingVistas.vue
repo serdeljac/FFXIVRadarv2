@@ -16,71 +16,84 @@
 
             <ul class="rdrTable header">
                 <li>
-                    <p v-if="responsive.tracking">Tracker</p>
-                    <p v-if="responsive.no">No</p>
-                    <p v-if="responsive.name">Name</p>
-                    <p v-if="responsive.area">Area</p>
-                    <p v-if="responsive.timer">Time</p>
-                    <p v-if="responsive.weather">Weather</p>
-                    <p v-if="responsive.emote">Emote</p>
+                    <p>Tracker</p>
+                    <p>No</p>
+                    <p>Name</p>
+                    <p>Area</p>
+                    <p>Time</p>
+                    <p>Weather</p>
+                    <p>Emote</p>
                 </li>
             </ul>
 
             <hr class="rdrTable split"/>
 
-            <ul :class="[`rdrTable body`, windowWidth]">
-                <li v-for="d in compiledDataForTable" :key="d.ID" 
-                    :data-activeTableRowAnimation="timerState[d.ID] && weatherState[d.ID] ? true : null">
+            <ul :class="[`rdrTable body`]">
+                <li v-for="d in allVistaNodes[filterSelected]" :key="d.ID" :data-rowActive="checkRowActive(d)">
 
-                    <div v-if="responsive.tracking" class="rdrTable_col-tracking" >
+                    <!-- TRACKER -->
+                    <div class="rdrTable_col-tracking" >
                         <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NO -->
-                    <p v-if="responsive.no" class="rdrTable_col-no">{{ d.no }}</p>
+                    <div class="rdrTable_col-no">
+                        <p >{{ d.no }}</p>
+                    </div>
 
                     <!-- NAME -->
-                    <p v-if="responsive.name" class="rdrTable_col-name" @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                    <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
+                        <p  @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                    </div>
 
                     <!-- AREA -->
-                    <displayAreaText v-if="responsive.area" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+                    <div>
+                        <displayAreaText @click="$emit('sendToDetails', d)" :areaObj="d" :excludeBackground="true" />
+                    </div>
 
                     <!-- TIMER -->
-                    <!-- <displayTimer v-if="responsive.timer" :type="'timer'" :node="d" :timerList="timerList" @timerState="(e: boolean) => timerState[d.ID] = e"/> -->
+                    <div class="rdrTable_col-time" :data-timerActive="checkTimeActive('time', d)">
+                        <p>{{ fetchTimerCountdown(d.time) }}</p>
+                    </div>
 
                     <!-- WEATHER -->
-                    <!-- <displayTimer v-if="responsive.weather" :type="'weather'" :node="d" @weatherState="(e: boolean) => weatherState[d.ID] = e"/> -->
+                    <div class="rdrTable_col-weather">
+                        <p :data-timerActive="checkTimeActive('weather1', d)">{{ d.weather1 }}</p>
+                        <p v-if="d.weather2" :data-timerActive="checkTimeActive('weather2', d)">{{ d.weather2 }}</p>
+                        <p v-if="!d.weather1">None</p>
+                    </div>
 
                     <!-- EMOTE -->
-                    <!-- <iconAndText v-if="responsive.emote" :icon="d.emote" :text="d.emote"/> -->
-
+                    <div>
+                        <iconAndText :icon="d.emote" :text="d.emote"/>
+                    </div>
                 </li>
             </ul>
+            
         </div>
-
     </div>
 </template>
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayTimer from '../ui/displayTimer.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
 import iconAndText from '../ui/iconAndText.vue';
+import EorzeaWeather from 'eorzea-weather';
 
     export default {
         name: "Sightseeing Vistas",
-        components: {promotionBanner, displayTimer, displayAreaText, buttonFilter, seachBar, iconAndText},
+        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
             return {
-                compiledDataForTable: [] as any,
                 allVistaNodes: {} as any,
                 showDetails: '' as string,
                 showOnlyActive: false as boolean,
                 filters: [] as any, //[Group, Name, State]
+                filterSelected: '' as string,
                 timerState: {} as any,
                 weatherState: {} as any,
                 responsive: {
@@ -94,11 +107,9 @@ import iconAndText from '../ui/iconAndText.vue';
                 }
             }
         },
-
         created() {
             this.createFilterList() //Run Once
             this.groupVistaLogsByExpansion() //Run Once
-            this.appendData() 
         },
         methods: {
             createFilterList() {
@@ -114,6 +125,7 @@ import iconAndText from '../ui/iconAndText.vue';
 
                 //Set defaualt filer value
                 this.filters[0][2] = false
+                this.filterSelected = this.filters[0][1]
             },
             groupVistaLogsByExpansion() {
                 //Create list of easch Expansion name
@@ -127,28 +139,13 @@ import iconAndText from '../ui/iconAndText.vue';
                     this.allVistaNodes[expansionList[d].expansion] = vistaList.filter((o: any) => o.expansion == expansionList[d].expansion)
                 }
             },
-            appendData() {
-                //Search for the active filter
-                let activeFilterState = []
-                for (const d in this.filters) {
-                    if (!this.filters[d][2]) {
-                        activeFilterState = this.filters[d]
-                        break;
-                    }
-                }
-
-                //Append filter to table
-                this.compiledDataForTable = this.allVistaNodes[activeFilterState[1]]
-            },
             changeFilter(arrayIndex: any) {
                 //Set all values to Disabled
                 for (const d in this.filters) {this.filters[d][2] = true}
 
                 //Set new filter to enable
                 this.filters[arrayIndex][2] = false
-
-                //Append 
-                this.compiledDataForTable = this.allVistaNodes[this.filters[arrayIndex][1]]
+                this.filterSelected = this.filters[arrayIndex][1]
 
             },
             async copyToClipboard(text: string) {
@@ -156,6 +153,41 @@ import iconAndText from '../ui/iconAndText.vue';
                     await navigator.clipboard.writeText(text);
                 } catch (err) {console.error('cannot copy: ', err)}
             },
+            fetchTimerCountdown(time: string) {
+                if (time) {
+                    let results = this.timerList.find((o: any) => o.ID == time).countdown
+                    return results
+                }
+                return '--:--'
+            },
+            checkTimeActive(type: string, arr: any) {
+                if (type == 'weather1' && arr.area.mapcode) {
+                    let x = EorzeaWeather.getWeather(arr.area.mapcode, new Date());
+                    if (x == arr.weather1) {return true}
+                }
+                if (type == 'weather2' && arr.area.mapcode) {
+                    let x = EorzeaWeather.getWeather(arr.area.mapcode, new Date());
+                    if (x == arr.weather2) {return true}
+                    return null
+                }
+                if (type == 'time') {
+                    if (arr.time) {
+                        let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
+                        results = results ? true : null
+                        return results
+                    }
+                    return null
+                }
+                return null
+            },
+            checkRowActive(arr: any) {
+                let currentWeather = arr.area.mapcode ? EorzeaWeather.getWeather(arr.area.mapcode, new Date()) : false
+                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).timerState : false
+                let weather1State = currentWeather && arr.weather1 == currentWeather ? true : false
+                let weather2State = currentWeather && arr.weather2 == currentWeather ? true : false
+                if (currentTime && weather1State || currentTime && weather2State) {return true}
+                return null
+            }
         }
     }
 </script>
