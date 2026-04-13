@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="TimedNodes">
         <promotionBanner length="wide"/>
 
         <div class="filterbar">
@@ -7,10 +7,10 @@
             <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
                 <p class="filterbar_groupName">{{ d[0][0] }}</p>
                 <buttonFilter 
-                    v-for="(e, index) in d" :key="e[1]"
+                    v-for="e in d" :key="e[1]"
                     :name="e[1]" 
                     :disabled="!e[2]"
-                    @click="changeFilter(index)"/>
+                    @click="changeFilter(e)"/>
             </div>
 
             <div :class="[`filterbar_group`]">
@@ -50,13 +50,13 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                        <img class="iconSize" :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NAME -->
                     <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
                         <div>
-                            <p @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                            <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
                         </div>
                     </div>
@@ -66,17 +66,17 @@
                         <div>
                             <!-- JOB NAME -->
                             <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
-                                <img :src="`/src/assets/icons/${d.job_sub}.webp`"  />
+                                <img class="iconSize" :src="`/src/assets/icons/${d.job_sub}.webp`"  />
                             </span>
                             
                             <!-- USAGE -->
                             <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                                <img :src="`/src/assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
+                                <img class="iconSize" :src="`/src/assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
                             </span>
 
                             <!-- FOLKLORE -->
                             <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
-                                <img :src="`/src/assets/icons/folklore.webp`"/>
+                                <img class="iconSize" :src="`/src/assets/icons/folklore.webp`"/>
                             </span>
                         </div>
                     </div>
@@ -157,8 +157,8 @@ import seachBar from '../ui/searchBar.vue';
                 );
 
                 //Search for all Expansion names within AllTimedNodes
-                const expansionList = this.ffxivData.miner.filter((obj: any, index: any) => 
-                    index === this.ffxivData.miner.findIndex((o: any) => obj.expansion === o.expansion)
+                const expansionList = this.ffxivData.expansionData.filter((obj: any, index: any) => 
+                    index === this.ffxivData.expansionData.findIndex((o: any) => obj.expansion === o.expansion)
                 );
 
                 //Append and set default filter list
@@ -193,13 +193,18 @@ import seachBar from '../ui/searchBar.vue';
                 newArr = [jobBundle, usageBundle, expansionBundle]
                 return newArr
             },
-            changeFilter(arrayIndex: any) {
+            changeFilter(filterArray: any) {
 
                 let hold = this.allTimedNodes
                 this.searchName = '';
+                for (const d in this.filters) {
+                    if (this.filters[d][1] == filterArray[1]) {
+                        this.filters[d][2] = !this.filters[d][2]
+                    }
+                }
                 
                 //Switch Values
-                this.filters[arrayIndex][2] = !this.filters[arrayIndex][2]
+                // this.filters[arrayIndex][2] = !this.filters[arrayIndex][2]
 
                 for (const d in this.filters) {
                     if (!this.filters[d][2]) {
@@ -266,11 +271,6 @@ import seachBar from '../ui/searchBar.vue';
                     this.sortNodesIntoGroup(hold)
                 }
             },
-            async copyToClipboard(text: string) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                } catch (err) {console.error('cannot copy: ', err)}
-            },
             fetchTimerCountdown(time: string) {
                 if (time) {
                     let results = this.timerList.find((o: any) => o.ID == time).countdown
@@ -296,43 +296,8 @@ import seachBar from '../ui/searchBar.vue';
 </script>
 
 <style scoped lang="scss">
-    .main_content ul {margin-bottom: 6px;}
-
-
-    .filterbar {
-        display: flex;
-        gap: 0 3rem;
-        flex-wrap: wrap;
-        max-width: 1200px;
-        justify-content: center;
-        margin: auto;
-
-        &_group {
-            display: flex;
-            align-items: center;
-        }
-
-        &_groupName::first-letter {text-transform: uppercase;}
-    }
-
     .rdrTable li {grid-template-columns: 80px 400px 100px auto 100px 120px;}
-    .activeOnly {display: none;}
-    .rdrTable_col-name p {
-        cursor: pointer;
-        &:hover {text-decoration: underline;}
-    }
-    .rdrTable_col-attributes {
-        img {margin-right: 4px;}
-    }
-    .details {
-        padding-left: 4rem;
-        grid-column: 1 / span all;
-        ul {
-            width: 100%;
-            display: flex;
-            li {margin-right: 20px;}
-        }
-    }
+    .filterbar_groupName::first-letter {text-transform: uppercase;}
 
     .pagenation {
         display: flex;

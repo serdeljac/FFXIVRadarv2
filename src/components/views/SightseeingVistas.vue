@@ -12,6 +12,15 @@
             </div>
         </div>
 
+        <div class="vistaNote">
+            <p v-if="filterSelected == 'A Realm Reborn'">To Unlock vista's 21-80, you MUST complete all 20 in the log.</p>
+            <br />
+            <p>
+                Each vista discovered will grant you <span class="expColor">{{ fetchVistaData('vista_exp') }}</span> <img class="iconSize" :src="getIconImageURL('exp')" />
+                when you're between levels <span class="levelColor">{{ fetchVistaData('vista_min') }}-{{ fetchVistaData('vista_max') }}</span>.
+            </p>
+        </div>
+
         <div class="body_content">
 
             <ul class="rdrTable header">
@@ -33,7 +42,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                        <img class="iconSize" :src="getIconImageURL(d.tracked ? 'remove' : 'add')" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NO -->
@@ -43,7 +52,7 @@
 
                     <!-- NAME -->
                     <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
-                        <p  @click="copyToClipboard(d.name)">{{ d.name }}</p>
+                        <p>{{ d.name }}</p>
                     </div>
 
                     <!-- AREA -->
@@ -73,6 +82,12 @@
         </div>
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
@@ -147,10 +162,9 @@ import iconAndText from '../ui/iconAndText.vue';
                 this.filterSelected = this.filters[arrayIndex][1]
 
             },
-            async copyToClipboard(text: string) {
-                try {
-                    await navigator.clipboard.writeText(text);
-                } catch (err) {console.error('cannot copy: ', err)}
+            fetchVistaData(type: string) {
+                let results = this.ffxivData.expansionData.find((o: any) => o.expansion == this.filterSelected)
+                return results[type]
             },
             fetchTimerCountdown(time: string) {
                 if (time) {
@@ -180,7 +194,7 @@ import iconAndText from '../ui/iconAndText.vue';
 
                 //Match1 - Get Time State
                 if (arr.time) {
-                    let currentTimeState = this.timerList.find((o: any) => o.ID == arr.time).timerState
+                    let currentTimeState = this.timerList.find((o: any) => o.ID == arr.time).stateActive
                     match1 = currentTimeState ? true : null
                 }
 
@@ -200,4 +214,13 @@ import iconAndText from '../ui/iconAndText.vue';
 
 <style scoped lang="scss">
     .rdrTable li {grid-template-columns: 80px 80px minmax(auto, 400px) auto 100px 200px 200px;}
+    .vistaNote {
+        text-align: center;
+        p {
+            display: inline-flex;
+            align-items: center;
+            span {margin-left: 4px;}
+            img {margin: 0 2px 0 2px;}
+        }
+    }
 </style>

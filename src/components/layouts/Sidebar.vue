@@ -10,7 +10,7 @@
             <li v-for="a in link_list" :key="a.id">
                 <router-link :to="`/${a.link}`" :class="[{'inactive': !a.active }]">
                     <div class="sidebar_items-link">
-                        <img class="icon" :src="getImageUrl(a.icon)" alt="icn" />
+                        <img class="iconSize" :src="getIconImageURL(a.icon)" alt="icn" />
                         <p>{{ a.name }}</p>
                     </div>
                 </router-link>
@@ -24,7 +24,7 @@
 </template>
 
 <script lang="ts" setup>
-    function getImageUrl(name: string) {
+    function getIconImageURL(name: string) {
         return new URL(`/src/assets/icons/sq_${name}.webp`, import.meta.url).href
     }
 </script>
@@ -105,11 +105,14 @@
 
 <style scoped lang="scss">
     .sidebar {
+        z-index: 100;
         border-right: 1px solid $borderColor;
         transition: all .23s ease;
         display: grid;
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
         background-color: $bodyBackgroundColor;
+
+       
 
         //Collapsed Sidebar Adjustments Only
         &.compact {

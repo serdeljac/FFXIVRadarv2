@@ -30,11 +30,8 @@ main {
     overflow-y: auto;
 }
 
-//Set sizes
-.icon {
-    width: 24px;
-    height: 24px;
-}
+.expColor {color: $expColor}
+.levelColor {color: $levelColor}
 
 @keyframes timerActiveAnimation {
     0% {color: limegreen;}
@@ -48,8 +45,6 @@ main {
     100% {background-color: #692168;}
 }
 
-
-
 *[data-timerActive] {
     animation: timerActiveAnimation 0.7s linear infinite;
     p {animation: timerActiveAnimation 0.7s linear infinite;}
@@ -61,34 +56,37 @@ main {
 
 
 
-.main_content {
-    margin: 1rem 0 5rem;
-}
+/*********************************************************
+Default Styles
+*********************************************************/
+.body_content {margin: 1rem 0 5rem;}
 
-.body_content {
-    margin: 1rem 0 5rem;
+.filterbar {
+    display: flex;
+    justify-content: center;
+    margin: 1rem auto;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    gap: 0 3rem;
+
+    &_group {
+        display: flex;
+        align-items: center;
+    }
 }
 
 .rdrTable {
-    width: 100%;
 
     li {
-        width: 100%;
         display: grid;
+        align-items: center;
         gap: 10px;
         border-radius: $borderRadius;
         padding: 6px 0;
-        & > div {
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-        }
+        margin: 2px 0;
     }
 
-    img {
-        width: 24px;
-        cursor: pointer;
-    }
+    img {cursor: pointer;}
 
     &.body li:hover {
         background-color: $borderColorFade;
@@ -99,31 +97,20 @@ main {
         margin: 10px 0;
     }
 
-    &_col-tracking {
-        padding-left: 1rem;
-        position: relative;
-        z-index: 999;
-    }
+    &_col-tracking {padding-left: 1rem;}
 
     &_col-name {
+        cursor: pointer;
         p {display: inline-flex}
         span {
-            margin-left: 6px;
+            margin-left: 2px;
             color: grey;
         }
     }
 
-    &_col-attributes {
-        p {display: inline-flex}
-    }
+    &_col-time p {color: grey;}
 
-    &_col-time {
-        p {color: grey;}
-    }
-
-    &_col-weather {
-        p {color: grey;}
-    }
+    &_col-weather {color: grey;}
 
     .hasContext {
         position: relative;
@@ -151,4 +138,11 @@ main {
             opacity: 1;
         }
     }
+}
+
+
+.iconSize {
+    width: 24px;
+    aspect-ratio: 1 / 1;
+    margin-right: 6px;
 }

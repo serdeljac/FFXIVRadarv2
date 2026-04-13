@@ -1,9 +1,15 @@
 <template>
-    <div class="itt">
-        <img :src="`/src/assets/icons/${fetchIconName}.webp`"/>
+    <div class="iconToText">
+        <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
         <p>{{ text }}</p>
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
     export default {
@@ -11,21 +17,17 @@
         props: ['icon', 'text'],
         computed: {
             fetchIconName() {
-                if (this.icon == 'Crafting') {return `sq_${this.text}`}
-                return this.icon
+                if (this.icon == 'Crafting') {return `sq_${this.icon}`}
+                let toLowerCaseName = this.icon.toLowerCase()
+                return toLowerCaseName
             }
         },
     }
 </script>
 
 <style scoped lang="scss">
-    .itt {
+    .iconToText {
         display: inline-flex;
         align-items: center;
-        img {
-            width: 20px;
-            margin-right: 6px;
-            aspect-ratio: 1 / 1;
-        }
     }
 </style>

@@ -1,6 +1,12 @@
 <template>
-    <div class="menu" :style="`background-image:url('/src/assets/icons/menu.svg')`"></div>
+    <img :src="getIconImageURL()" class="iconSize menu"></img>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL() {
+        return new URL(`/src/assets/icons/menu.svg`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
     export default {
@@ -11,7 +17,6 @@
 <style scoped lang="scss">
 .menu {
     width: 32px;
-    aspect-ratio: 1/1;
     cursor: pointer;
     border: 1px solid $borderColor;
     border-radius: 100%;

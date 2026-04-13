@@ -1,12 +1,18 @@
 <template>
     <div :class="[`btn_area hasContext`, {'hasBackground': excludeBackground}]" :data-context="`${areaObj.expansion.charAt(0).toUpperCase() + areaObj.expansion.slice(1)} > ${areaObj.area.zone}`">
-        <img :src="`/src/assets/icons/${areaObj.area.icon}.webp`"/>
+        <img class="iconSize" :src="getIconImageURL(areaObj.area.icon)"/>
         <p>{{ `${areaObj.area.area}` }}</p>
         <span class="cord">{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
     </div>
 </template>
 
-<script>
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
+
+<script lang="ts">
     export default {
         name: "Display Area in Text",
         props: ['areaObj', 'excludeBackground']

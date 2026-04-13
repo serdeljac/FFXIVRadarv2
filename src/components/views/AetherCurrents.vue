@@ -15,7 +15,7 @@
         <div class="body_content">
             <ul class="rdrTable header">
                 <li>
-                    <p>Icon</p>
+                    <p>Type</p>
                     <p>Location</p>
                     <p>Quest</p>
                     <p>Unlock Requirement</p>
@@ -28,8 +28,8 @@
                 <li v-for="d in allAetherNodes[filterSelected]" :key="d.ID" :class="[d.specialClass]">
 
                     <!-- ICON -->
-                    <div>
-                        <img :src="`/src/assets/icons/${d.name ? 'currentquest' : 'current'}.webp`" />
+                    <div class="rdrTable_type">
+                        <img class="iconSize" :src="getIconImageURL(d.name ? 'currentquest' : 'current')" />
                     </div>
 
                     <!-- AREA -->
@@ -52,6 +52,12 @@
 
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
@@ -120,5 +126,6 @@ import iconAndText from '../ui/iconAndText.vue';
 
 <style scoped lang="scss">
     .rdrTable li {grid-template-columns: 80px auto 400px 400px;}
+    .rdrTable_type {padding-left: 1rem}
     .breakspace {margin-bottom: 2rem;}
 </style>
