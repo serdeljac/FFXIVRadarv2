@@ -11,8 +11,8 @@
         props: ['icon', 'text'],
         computed: {
             fetchIconName() {
-                if (this.text == 'Crafting') {return `sq_${this.text}`}
-                return this.text
+                if (this.icon == 'Crafting') {return `sq_${this.text}`}
+                return this.icon
             }
         },
     }
