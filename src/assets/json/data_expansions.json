@@ -1,0 +1,50 @@
+[
+    {
+        "ID": "expa1",
+        "expansion": "A Realm Reborn",
+        "icon": "arr",
+        "vista_exp": 0,
+        "vista_min": 0,
+        "vista_max": 50
+    },
+    {
+        "ID": "expa2",
+        "expansion": "Heavensward",
+        "icon": "hwd",
+        "vista_exp": 8775,
+        "vista_min": 50,
+        "vista_max": 60
+    },
+    {
+        "ID": "expa3",
+        "expansion": "Stormblood",
+        "icon": "sbd",
+        "vista_exp": 18750,
+        "vista_min": 60,
+        "vista_max": 70
+    },
+    {
+        "ID": "expa4",
+        "expansion": "Shadowbringers",
+        "icon": "sbs",
+        "vista_exp": 40500,
+        "vista_min": 70,
+        "vista_max": 80
+    },
+    {
+        "ID": "expa5",
+        "expansion": "Endwalker",
+        "icon": "ewr",
+        "vista_exp": 84150,
+        "vista_min": 80,
+        "vista_max": 90
+    },
+    {
+        "ID": "expa6",
+        "expansion": "Dawntrail",
+        "icon": "dtl",
+        "vista_exp": 186480,
+        "vista_min": 90,
+        "vista_max": 100
+    }
+]

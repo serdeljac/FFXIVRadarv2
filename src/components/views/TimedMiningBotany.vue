@@ -50,7 +50,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                        <img :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NAME -->
@@ -66,17 +66,17 @@
                         <div>
                             <!-- JOB NAME -->
                             <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
-                                <img :src="`../../assets/icons/${d.job_sub}.webp`"  />
+                                <img :src="`/src/assets/icons/${d.job_sub}.webp`"  />
                             </span>
                             
                             <!-- USAGE -->
                             <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                                <img :src="`../../assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
+                                <img :src="`/src/assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
                             </span>
 
                             <!-- FOLKLORE -->
                             <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
-                                <img :src="`../../assets/icons/folklore.webp`"/>
+                                <img :src="`/src/assets/icons/folklore.webp`"/>
                             </span>
                         </div>
                     </div>

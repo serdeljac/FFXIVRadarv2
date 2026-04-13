@@ -1,6 +1,6 @@
 <template>
     <div :class="[`btn_area hasContext`, {'hasBackground': excludeBackground}]" :data-context="`${areaObj.expansion.charAt(0).toUpperCase() + areaObj.expansion.slice(1)} > ${areaObj.area.zone}`">
-        <img :src="`../../assets/icons/${areaObj.area.icon}.webp`"/>
+        <img :src="`/src/assets/icons/${areaObj.area.icon}.webp`"/>
         <p>{{ `${areaObj.area.area}` }}</p>
         <span class="cord">{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
     </div>

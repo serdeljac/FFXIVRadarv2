@@ -33,7 +33,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img :src="`../../assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                        <img :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NO -->

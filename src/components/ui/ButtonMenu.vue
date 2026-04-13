@@ -1,5 +1,5 @@
 <template>
-    <div class="menu" :style="`background-image:url('../../assets/icons/menu.svg')`"></div>
+    <div class="menu" :style="`background-image:url('/src/assets/icons/menu.svg')`"></div>
 </template>
 
 <script lang="ts">

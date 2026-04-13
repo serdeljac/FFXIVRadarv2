@@ -1,6 +1,6 @@
 <template>
     <div class="itt">
-        <img :src="`../../assets/icons/${fetchIconName}.webp`"/>
+        <img :src="`/src/assets/icons/${fetchIconName}.webp`"/>
         <p>{{ text }}</p>
     </div>
 </template>

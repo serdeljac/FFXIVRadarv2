@@ -145,9 +145,7 @@ main {
             z-index:999;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
-            &::first-letter {
-                text-transform: uppercase;
-            }
+
         }
         &:hover::before {
             opacity: 1;

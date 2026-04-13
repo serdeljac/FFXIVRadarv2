@@ -48,19 +48,19 @@
   import buttonMenu from './components/ui/ButtonMenu.vue';
 
   //JSON Data
-  import areaRaw from '../assets/json/area.json';
-  import expansionsRaw from '../assets/json/data_expansions.json';
-  import miningRaw from '../assets/json/nodes_mining.json';
-  import botanyRaw from '../assets/json/nodes_botany.json';
-  import aetherialRaw from '../assets/json/data_aetherial.json';
-  import aetheryteRaw from '../assets/json/nodes_aetheryte.json';
-  import sightseeingRaw from '../assets/json/nodes_sightseeing.json';
-  import huntsEliteRaw from '../assets/json/data_hunts.json'
-  import huntsPointsRaw from '../assets/json/nodes_huntpoints.json'
-  import aetherCurrentRaw from '../assets/json/nodes_aethercurrent.json';
-  import fatesRaw from '../assets/json/nodes_fates.json'
-  import blueMageRaw from '../assets/json/data_bluemage.json'
-  import timerRaw from '../assets/json/data_timer.json';
+  import areaRaw from './assets/json/area.json';
+  import expansionsRaw from './assets/json/data_expansions.json';
+  import miningRaw from './assets/json/nodes_mining.json';
+  import botanyRaw from './assets/json/nodes_botany.json';
+  import aetherialRaw from './assets/json/data_aetherial.json';
+  import aetheryteRaw from './assets/json/nodes_aetheryte.json';
+  import sightseeingRaw from './assets/json/nodes_sightseeing.json';
+  import huntsEliteRaw from './assets/json/data_hunts.json'
+  import huntsPointsRaw from './assets/json/nodes_huntpoints.json'
+  import aetherCurrentRaw from './assets/json/nodes_aethercurrent.json';
+  import fatesRaw from './assets/json/nodes_fates.json'
+  import blueMageRaw from './assets/json/data_bluemage.json'
+  import timerRaw from './assets/json/data_timer.json';
   
 
 export default {
@@ -80,6 +80,7 @@ export default {
         aethercurrents: [] as any,
         fates: [] as any,
         bluemageData: [] as any,
+        bluemageFilters: [] as any
       },
       eorzeaClock: {
         formatIs24Hour: true,
@@ -290,6 +291,16 @@ export default {
         }
       },
       setBlueMageData() {
+        
+        const typeList = blueMageRaw.filter((obj: any, index: any) => 
+            index === blueMageRaw.findIndex((o: any) => obj.type1 === o.type1)
+        );
+        for (const d in typeList) {
+            this.ffxivData.bluemageFilters[d] = ['type1', typeList[d].type1, false]
+        }
+        this.ffxivData.bluemageFilters.unshift(['type1', 'All', true])
+
+
         let areaData = this.ffxivData.areas
         let blueMageNo = blueMageRaw[Object.keys(blueMageRaw)[blueMageRaw.length-1]].no
         let bmAbility = []

@@ -10,7 +10,7 @@
             <li v-for="a in link_list" :key="a.id">
                 <router-link :to="`/${a.link}`" :class="[{'inactive': !a.active }]">
                     <div class="sidebar_items-link">
-                        <img class="icon" :src="`../../assets/icons/sq_${a.icon}.webp`" alt="icn" />
+                        <img class="icon" :src="`/src/assets/icons/sq_${a.icon}.webp`" alt="icn" />
                         <p>{{ a.name }}</p>
                     </div>
                 </router-link>

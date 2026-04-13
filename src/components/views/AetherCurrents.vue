@@ -29,7 +29,7 @@
 
                     <!-- ICON -->
                     <div>
-                        <img :src="`../assets/icons/${d.name ? 'currentquest' : 'current'}.webp`" />
+                        <img :src="`/src/assets/icons/${d.name ? 'currentquest' : 'current'}.webp`" />
                     </div>
 
                     <!-- AREA -->
