@@ -50,7 +50,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img class="iconSize" :src="`/src/assets/icons/${d.tracked ? 'remove' : 'add'}.webp`" @click="$emit('changeTracked', d)"/>
+                        <img class="iconSize" :src="getIconImageURL(d.tracked ? 'remove' : 'add')" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NAME -->
@@ -66,17 +66,17 @@
                         <div>
                             <!-- JOB NAME -->
                             <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
-                                <img class="iconSize" :src="`/src/assets/icons/${d.job_sub}.webp`"  />
+                                <img class="iconSize" :src="getIconImageURL(d.job_sub)"  />
                             </span>
                             
                             <!-- USAGE -->
                             <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                                <img class="iconSize" :src="`/src/assets/icons/${fetchUsageImgName(d.usage, d.usage_info)}.webp`" />
+                                <img class="iconSize" :src="getIconImageURL(fetchUsageImgName(d.usage, d.usage_info))" />
                             </span>
 
                             <!-- FOLKLORE -->
                             <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
-                                <img class="iconSize" :src="`/src/assets/icons/folklore.webp`"/>
+                                <img class="iconSize" :src="getIconImageURL('folklore')" />
                             </span>
                         </div>
                     </div>
@@ -113,6 +113,12 @@
         </div>
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
