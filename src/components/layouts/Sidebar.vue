@@ -10,7 +10,7 @@
             <li v-for="a in link_list" :key="a.id">
                 <router-link :to="`/${a.link}`" :class="[{'inactive': !a.active }]">
                     <div class="sidebar_items-link">
-                        <img class="icon" :src="`/src/assets/icons/sq_${a.icon}.webp`" alt="icn" />
+                        <img class="icon" :src="getImageUrl(a.icon)" alt="icn" />
                         <p>{{ a.name }}</p>
                     </div>
                 </router-link>
@@ -23,7 +23,15 @@
     </aside>
 </template>
 
+<script lang="ts" setup>
+    function getImageUrl(name: string) {
+        return new URL(`/src/assets/icons/sq_${name}.webp`, import.meta.url).href
+    }
+</script>
+
 <script lang="ts">
+
+
     export default {
         name: 'Sidebar',
         props: ['menuState', 'eorzeaClock'],
@@ -35,10 +43,11 @@
                     {
                         id: 1,
                         name: 'Eorzea Overview',
-                        icon: 'eorzeaMap',
+                        icon: 'eorzeamap',
                         link: 'EorzeaOverview',
                         active: true,
                     },
+                    
                     {
                         id: 2,
                         name: 'Timed Mining/Botany',
