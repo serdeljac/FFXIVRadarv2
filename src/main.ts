@@ -16,7 +16,7 @@ const pageNotFound = () => import('./components/views/Error404.vue')
 const router = createRouter({
     history: createWebHistory(),
     routes: [
-        { path: '/', redirect: '/eorzeaoverview' },
+        { path: '/', redirect: '/timedMiningBotany' },
         { path: '/eorzeaoverview', component: home },
         { path: '/timedMiningBotany', component: timedNodes, props: true },
         // { path: '/timedFishing', component: fishing, props: true },

@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@next/bundle-analyzer": "^16.2.3",
     "eorzea-time": "^3.0.0",
     "eorzea-weather": "^3.2.0",
     "sass": "^1.99.0",

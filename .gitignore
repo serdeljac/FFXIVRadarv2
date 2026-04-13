@@ -138,7 +138,6 @@ dist
 vite.config.js.timestamp-*
 vite.config.ts.timestamp-*
 
-/src/assets/icons
 /src/assets/maps
 /src/assets/sightseeing
 /src/assets/*.xlsx
