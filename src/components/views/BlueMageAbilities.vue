@@ -25,21 +25,31 @@
             </ul>
             <hr class="rdrTable split"/>
             <ul :class="[`rdrTable body`]">
-                <li v-for="d in allBlueMageSkills" :key="d.ID">
-                    <div>{{ d.name }}</div>
-                    <div>{{ d.level }} {{ d.stars }}</div>
-                    <div>
-                        <p v-for="e in d.npc" :key="e[1]" :class="[`filter_${e[0]}`]">
-                            {{ e[0] }}
-                        </p>
-                    </div>
-                    <div>{{ d.location }}</div>
-                    <div>{{ d.notes }}</div>
+                <li v-for="d in fetchBlueMageData()" :key="d.ID" >
+                        <div>{{ d.name }}</div>
+                        <div>{{ d.level }} {{ d.stars }}</div>
+                        <div>
+                            <p v-for="e in d.npc" :key="e[1]">
+                                {{ e[0] }}
+                            </p>
+                        </div>
+                        <div>
+                            <img class="iconSize" :src="getIconImageURL('dungeon')" />
+                            {{ d.location }}
+
+                        </div>
+                        <div>{{ d.notes }}</div>
                 </li>
             </ul>
         </div>
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
@@ -61,11 +71,12 @@ import seachBar from '../ui/searchBar.vue';
         },
         created() {
             this.createFilterList() //Run Once
-            this.allBlueMageSkills = this.ffxivData.bluemageData
+            this.fetchBlueMageData()
         },
         methods: {
             createFilterList() {
                 this.filters = this.ffxivData.bluemageFilters
+                this.filterSelected = 'All'
             },
             changeFilter(arrayIndex: any) {
                //Set all values to Disabled
@@ -74,6 +85,26 @@ import seachBar from '../ui/searchBar.vue';
                 //Set new filter to enable
                 this.filters[arrayIndex][2] = true
                 this.filterSelected = this.filters[arrayIndex][1]
+            },
+            fetchBlueMageData() {
+
+                let bmData = new Set(this.ffxivData.bluemageData)
+                let filt = this.filterSelected 
+                if (filt != 'All') {
+                    for (const d of bmData) {
+                        
+                        
+                        if (d['category'].indexOf(filt) == -1) {
+                            bmData.delete(d)
+                        }
+                        // if (d['category'].has(this.filterSelected)) {
+                        //     console.log('FOUND')
+                        // }
+                        // let results = this.filterSelected == 'All' ? true : !this.allBlueMageSkills[d].category.indexOf(this.filterSelected)
+                        // results ? this.allBlueMageSkills[d].delete() : false
+                    }
+                }
+                return bmData
             }
         }
     }
