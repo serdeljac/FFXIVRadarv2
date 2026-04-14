@@ -25,31 +25,43 @@
             </ul>
             <hr class="rdrTable split"/>
             <ul :class="[`rdrTable body`]">
-                <li v-for="d in fetchBlueMageData()" :key="d.ID" >
-                        <div>{{ d.name }}</div>
-                        <div>{{ d.level }} {{ d.stars }}</div>
-                        <div>
-                            <p v-for="e in d.npc" :key="e[1]">
-                                {{ e[0] }}
-                            </p>
-                        </div>
-                        <div>
-                            <img class="iconSize" :src="getIconImageURL('dungeon')" />
-                            {{ d.location }}
+                <li v-for="d in appendData" :key="d.ID" >
 
+                        <!-- NAME -->
+                        <div>{{ d.name }}</div>
+
+                        <!-- LEVEL -->
+                        <div>{{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}</div>
+
+                        <!-- ENEMY/NPC -->
+                        <div>
+                            <div v-for="e in d.npc" :key="e[1]">
+                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[0] }}</p>
+                            </div>
                         </div>
-                        <div>{{ d.notes }}</div>
+
+                        <div>
+                            <div v-for="e in d.location" :key="e[1]">
+                                {{ e }}
+                            </div>
+                        </div>
+
+                        <div>
+                            <div v-for="e in d.notes" :key="e[1]">
+                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[1] }}</p>
+                            </div>
+                        </div>
                 </li>
             </ul>
         </div>
     </div>
 </template>
 
-<script lang="ts" setup>
+<!-- <script lang="ts" setup>
     function getIconImageURL(name: string) {
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
-</script>
+</script> -->
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
@@ -66,7 +78,8 @@ import seachBar from '../ui/searchBar.vue';
             return {
                 filters: [] as any, //[Group, Name, State]
                 filterSelected: '' as string,
-                allBlueMageSkills: [] as any
+                allBlueMageSkills: [] as any,
+                appendData: [] as any
             }
         },
         created() {
@@ -85,26 +98,22 @@ import seachBar from '../ui/searchBar.vue';
                 //Set new filter to enable
                 this.filters[arrayIndex][2] = true
                 this.filterSelected = this.filters[arrayIndex][1]
+
+                this.fetchBlueMageData()
             },
             fetchBlueMageData() {
-
                 let bmData = new Set(this.ffxivData.bluemageData)
                 let filt = this.filterSelected 
                 if (filt != 'All') {
                     for (const d of bmData) {
                         
-                        
-                        if (d['category'].indexOf(filt) == -1) {
+                        let foundType = d['category'].indexOf(filt)
+                        if (foundType == -1) {
                             bmData.delete(d)
                         }
-                        // if (d['category'].has(this.filterSelected)) {
-                        //     console.log('FOUND')
-                        // }
-                        // let results = this.filterSelected == 'All' ? true : !this.allBlueMageSkills[d].category.indexOf(this.filterSelected)
-                        // results ? this.allBlueMageSkills[d].delete() : false
                     }
                 }
-                return bmData
+                this.appendData = bmData
             }
         }
     }
