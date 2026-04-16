@@ -57,12 +57,6 @@
     </div>
 </template>
 
-<!-- <script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script> -->
-
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
@@ -90,6 +84,8 @@ import iconAndTextBM from '../ui/iconAndTextBMage.vue';
         methods: {
             createFilterList() {
                 this.filters = this.ffxivData.bluemageFilters
+                for (const d in this.filters) {this.filters[d][2] = false}
+                this.filters[0][2] = true
                 this.filterSelected = 'All'
             },
             changeFilter(arrayIndex: any) {
