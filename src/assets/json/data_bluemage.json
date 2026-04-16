@@ -25,7 +25,7 @@
     "type2": "",
     "location": "Brayflox's Longstop (Hard)",
     "npc": "Gobmachine G-VI",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -40,7 +40,7 @@
     "type2": "",
     "location": "The Keeper of the Lake",
     "npc": "Magitek Gunship",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -55,7 +55,7 @@
     "type2": "",
     "location": "Alphascape V3.0",
     "npc": "Omega",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -70,7 +70,7 @@
     "type2": "",
     "location": "The Dragon's Neck",
     "npc": "Ultros",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -85,7 +85,7 @@
     "type2": "",
     "location": "The Whorleater (Hard/Extreme)",
     "npc": "Leviathan",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -175,7 +175,7 @@
     "type2": "openworld",
     "location": "Northern Thanalan",
     "npc": "Magitek Vanguard H-2",
-    "notes": "",
+    "notes": "-",
     "x": 16,
     "y": 15
   },
@@ -190,7 +190,7 @@
     "type2": "",
     "location": "Castrum Meridianum",
     "npc": "Magitek Vanguard / Magitek Vanguard H-1",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -205,7 +205,7 @@
     "type2": "",
     "location": "Brayflox's Longstop (Hard)",
     "npc": "Magitek Vangob G-III",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -220,7 +220,7 @@
     "type2": "",
     "location": "The Binding Coil of Bahamut (Turn 1/Turn 2)",
     "npc": "ADS",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -265,7 +265,7 @@
     "type2": "",
     "location": "The Tam-Tara Deepcroft (Hard)",
     "npc": "Dantalion / Phantom Knight",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -280,7 +280,7 @@
     "type2": "",
     "location": "The Lost City of Amdapor",
     "npc": "Baalzephon",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -295,7 +295,7 @@
     "type2": "openworld",
     "location": "Middle La Noscea",
     "npc": "Killer Wespe",
-    "notes": "",
+    "notes": "-",
     "x": 15,
     "y": 15
   },
@@ -310,7 +310,7 @@
     "type2": "",
     "location": "The Sunken Temple of Qarn",
     "npc": "Temple Bee",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -325,7 +325,7 @@
     "type2": "",
     "location": "Pharos Sirius",
     "npc": "Siren",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -355,7 +355,7 @@
     "type2": "",
     "location": "The Aurum Vale",
     "npc": "Coincounter",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -385,7 +385,7 @@
     "type2": "openworld",
     "location": "Heritage Found",
     "npc": "Eyeclops",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 33.7
   },
@@ -400,7 +400,7 @@
     "type2": "openworld",
     "location": "North Shroud",
     "npc": "Clay Golem",
-    "notes": "",
+    "notes": "-",
     "x": 19,
     "y": 29
   },
@@ -415,7 +415,7 @@
     "type2": "openworld",
     "location": "Southern Thanalan",
     "npc": "Sandstone Golem",
-    "notes": "",
+    "notes": "-",
     "x": 24,
     "y": 13
   },
@@ -445,7 +445,7 @@
     "type2": "openworld",
     "location": "Outer La Noscea",
     "npc": "Basalt Golem",
-    "notes": "",
+    "notes": "-",
     "x": 16,
     "y": 16
   },
@@ -460,7 +460,7 @@
     "type2": "",
     "location": "Copperbell Mines (Hard)",
     "npc": "Gogmagolem",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -475,7 +475,7 @@
     "type2": "",
     "location": "Masked Carnivale (Dirty Rotten Azulmagia)",
     "npc": "Azulmagia",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -520,7 +520,7 @@
     "type2": "openworld",
     "location": "East Shroud",
     "npc": "Wild Boar",
-    "notes": "",
+    "notes": "-",
     "x": 18,
     "y": 24
   },
@@ -550,7 +550,7 @@
     "type2": "",
     "location": "Battle in the Big Keep",
     "npc": "Enkidu",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -565,7 +565,7 @@
     "type2": "",
     "location": "Deltascape V3.0 (Savage)",
     "npc": "White Flame",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -580,7 +580,7 @@
     "type2": "",
     "location": "Haukke Manor",
     "npc": "Manor Sentry",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -610,7 +610,7 @@
     "type2": "",
     "location": "The Wanderer's Palace",
     "npc": "Tonberry King",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -625,7 +625,7 @@
     "type2": "openworld",
     "location": "Central Shroud",
     "npc": "Trickster Imp",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 24
   },
@@ -640,7 +640,7 @@
     "type2": "openworld",
     "location": "Eastern Thanalan",
     "npc": "Vandalous Imp",
-    "notes": "",
+    "notes": "-",
     "x": 15,
     "y": 19
   },
@@ -655,7 +655,7 @@
     "type2": "",
     "location": "Haukke Manor",
     "npc": "Manor Jester",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -685,7 +685,7 @@
     "type2": "openworld",
     "location": "Central Shroud",
     "npc": "Chigoe",
-    "notes": "",
+    "notes": "-",
     "x": 25,
     "y": 20
   },
@@ -700,7 +700,7 @@
     "type2": "openworld",
     "location": "Lower La Noscea",
     "npc": "Cave Bat",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 16
   },
@@ -715,7 +715,7 @@
     "type2": "openworld",
     "location": "Central Thanalan",
     "npc": "Central Thanalan",
-    "notes": "",
+    "notes": "-",
     "x": 26,
     "y": 18
   },
@@ -730,7 +730,7 @@
     "type2": "openworld",
     "location": "Western La Noscea",
     "npc": "Dusk Bat",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 24
   },
@@ -745,7 +745,7 @@
     "type2": "openworld",
     "location": "East Shroud",
     "npc": "Black Bat",
-    "notes": "",
+    "notes": "-",
     "x": 17,
     "y": 23
   },
@@ -775,7 +775,7 @@
     "type2": "",
     "location": "Haukke Manor",
     "npc": "Attic Bat",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -790,7 +790,7 @@
     "type2": "",
     "location": "Cutter's Cry",
     "npc": "Sand Bat",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -805,7 +805,7 @@
     "type2": "openworld",
     "location": "North Shroud",
     "npc": "Treant Sapling",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 28
   },
@@ -820,7 +820,7 @@
     "type2": "openworld",
     "location": "Central Shroud",
     "npc": "Treant Sapling",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 15
   },
@@ -835,7 +835,7 @@
     "type2": "openworld",
     "location": "East Shroud",
     "npc": "Treant Sapling",
-    "notes": "",
+    "notes": "-",
     "x": 13,
     "y": 25
   },
@@ -865,7 +865,7 @@
     "type2": "openworld",
     "location": "Middle La Noscea",
     "npc": "Goblin Fisher / Goblin Gambler",
-    "notes": "",
+    "notes": "-",
     "x": 23,
     "y": 21
   },
@@ -880,7 +880,7 @@
     "type2": "openworld",
     "location": "The Dravanian Hinterlands",
     "npc": "Goblin Glider / Goblin Brandisher",
-    "notes": "",
+    "notes": "-",
     "x": 29,
     "y": 23
   },
@@ -910,7 +910,7 @@
     "type2": "",
     "location": "Brayflox's Longstop (Hard)",
     "npc": "Illuminati Commander",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -940,7 +940,7 @@
     "type2": "openworld",
     "location": "Western Thanalan",
     "npc": "Glide Bomb",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 16
   },
@@ -955,7 +955,7 @@
     "type2": "",
     "location": "Copperbell Mines",
     "npc": "Blasting Cap",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -970,7 +970,7 @@
     "type2": "",
     "location": "Copperbell Mines",
     "npc": "Flambeau",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -985,7 +985,7 @@
     "type2": "",
     "location": "Gas Bomb",
     "npc": "Halatali",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -1000,7 +1000,7 @@
     "type2": "",
     "location": "Cutter's Cry",
     "npc": "Shrapnel",
-    "notes": "",
+    "notes": "-",
     "x": "",
     "y": ""
   },
@@ -1060,7 +1060,7 @@
     "type2": "openworld",
     "location": "Central Thanalan",
     "npc": "Qiqirn Shellsweeper",
-    "notes": "",
+    "notes": "-",
     "x": 16,
     "y": 19
   },
@@ -1075,7 +1075,7 @@
     "type2": "openworld",
     "location": "Lower La Noscea",
     "npc": "Qiqirn Eggdigger",
-    "notes": "",
+    "notes": "-",
     "x": 18,
     "y": 35
   },
@@ -1105,7 +1105,7 @@
     "type2": "openworld",
     "location": "Eastern La Noscea",
     "npc": "Qiqirn Gullroaster",
-    "notes": "",
+    "notes": "-",
     "x": 26,
     "y": 32
   },
@@ -1120,7 +1120,7 @@
     "type2": "openworld",
     "location": "Eastern La Noscea",
     "npc": "Apkallu",
-    "notes": "",
+    "notes": "-",
     "x": 27,
     "y": 35
   },
@@ -2438,7 +2438,7 @@
     "stars": 1,
     "type1": "openworld",
     "type2": "hunt",
-    "location": "The Sea of Clouds",
+    "location": "The Sea of Clouds",
     "npc": "Squonk",
     "notes": "Rank B Elite Mark",
     "x": "",

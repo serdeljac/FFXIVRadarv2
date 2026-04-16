@@ -291,7 +291,7 @@ export default {
         }
       },
       setBlueMageData() {
-        
+        //Create Filters for page
         const typeList = blueMageRaw.filter((obj: any, index: any) => 
             index === blueMageRaw.findIndex((o: any) => obj.type1 === o.type1)
         );
@@ -299,8 +299,16 @@ export default {
             this.ffxivData.bluemageFilters[d] = ['type1', typeList[d].type1, false]
         }
         this.ffxivData.bluemageFilters.unshift(['type1', 'All', true])
-
-
+        
+        //Fix Issues with Raw Data
+        for (const d in blueMageRaw) {
+          let data = blueMageRaw[d]
+          data.notes = data.notes ? data.notes : '-'
+          data.type2 = data.type2 ? data.type2 : '-'
+          data.x = data.x ? data.x : null
+          data.y = data.y ? data.y : null
+        }
+        
         let areaData = this.ffxivData.areas
         let blueMageNo = blueMageRaw[Object.keys(blueMageRaw)[blueMageRaw.length-1]].no
         let bmAbility = []
@@ -314,34 +322,52 @@ export default {
                 'level': bmAbility[0].level,
                 'stars': bmAbility[0].stars,
                 'category': bmAbility.map(o => o.type1),
-                'type': sortDataRows(bmAbility.map(o => o.type1), bmAbility.map(o => o.type2), false),
-                'location': sortDataRows(bmAbility.map(o => o.type1), bmAbility.map(o => o.location), true, bmAbility.map(o => o.x), bmAbility.map(o => o.y)),
-                'npc': sortDataRows(bmAbility.map(o => o.type1), bmAbility.map(o => o.npc), false),
-                'notes':sortDataRows(bmAbility.map(o => o.type1), bmAbility.map(o => o.notes), false),
+                'location': groupData(
+                  bmAbility.map(o => o.type1), 
+                  [bmAbility.map(o => o.location), bmAbility.map(o => o.x), bmAbility.map(o => o.x)],
+                  true,
+                  bmAbility.map(o => o.type2)
+                ),
+                'npc': groupData(
+                  bmAbility.map(o => o.type1), 
+                  bmAbility.map(o => o.npc),
+                  false
+                ),
+                'notes':groupData(
+                  bmAbility.map(o => o.type1), 
+                  bmAbility.map(o => o.notes),
+                  false
+                ),
             }
 
-            function sortDataRows(category: any, data: any, isLoc: boolean, x?: any, y?: any) {
-                let results = []
-                if (!isLoc) {
-                  for (const i in category) {
-                      results[i] = [category[i], data[i] ? data[i] : '-']
-                  }
-                } else {
-                  let location = []
-                  for (const i in category) {
-                    let areaFound = areaData.find(o => o.zone == data[i])
-                    location = areaFound ? {
-                        'area': {
-                            'zone': areaFound.zone,
-                            'icon': areaFound.icon,
-                            },
-                        'x': x[i] ? x[i] : null,
-                        'y': y[i] ? y[i] : null,
-                    } : data[i]
-                    results[i] = [category[i], location]
-                  }
+            function groupData(types: Array<string>[], dataList: Array<string>[], searchLocation: boolean, typesSub?: Array<string>[]) {
+
+              let results: any = []
+              let holdData: any = []
+              results[0] = [...types]
+              
+              if (searchLocation) {
+                for (const d in dataList) {
+                  let zoneFound = areaData.find((o: any) => o.zone == dataList[0][d])
+                  holdData[d] = zoneFound? zoneFound : dataList[0][d]
                 }
-                return results
+                results[1] = [...holdData]
+                results[2] = [...typesSub]
+              } else {
+                results[1] = [...dataList]
+              }
+              // for (const i in types) {
+
+              //   if (!searchLocation) {
+              //     hold[i] = [types[i], dataList[i] ? dataList[i] : '-']
+              //   } else {
+              //     let areaFound = areaData.find((o: any) => o.zone == dataList[i])
+              //     hold[i] = [types[i], areaFound ? areaFound : dataList[i]]
+              //   }
+        
+                
+              // }
+              return results
             }
 
         }

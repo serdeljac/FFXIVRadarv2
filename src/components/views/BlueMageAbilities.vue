@@ -36,7 +36,7 @@
                         <!-- ENEMY/NPC -->
                         <div>
                             <div v-for="e in d.npc" :key="e[1]">
-                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[0] }}</p>
+                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[1] }}</p>
                             </div>
                         </div>
 
