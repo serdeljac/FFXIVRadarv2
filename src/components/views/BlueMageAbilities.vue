@@ -42,7 +42,7 @@
 
                         <div>
                             <div v-for="e in d.location" :key="e[1]">
-                                {{ e }}
+                                <iconAndTextBM v-if="filterSelected == 'All' || filterSelected == e[0]" :bmData="[e]" />
                             </div>
                         </div>
 
@@ -68,10 +68,11 @@ import promotionBanner from '../layouts/PromotionBanner.vue';
 import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
+import iconAndTextBM from '../ui/iconAndTextBMage.vue';
 
     export default {
         name: "Blue Mage Abilities",
-        components: {promotionBanner, displayAreaText, buttonFilter, seachBar},
+        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndTextBM},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
