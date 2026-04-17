@@ -291,6 +291,7 @@ export default {
         }
       },
       setBlueMageData() {
+
         //Create Filters for page
         const typeList = blueMageRaw.filter((obj: any, index: any) => 
             index === blueMageRaw.findIndex((o: any) => obj.type1 === o.type1)
@@ -299,17 +300,7 @@ export default {
             this.ffxivData.bluemageFilters[d] = ['type1', typeList[d].type1, false]
         }
         this.ffxivData.bluemageFilters.unshift(['type1', 'All', true])
-        
-        //Fix Issues with Raw Data
-        for (const d in blueMageRaw) {
-          let data = blueMageRaw[d]
-          data.notes = data.notes ? data.notes : '-'
-          data.type2 = data.type2 ? data.type2 : '-'
-          data.x = data.x ? data.x : null
-          data.y = data.y ? data.y : null
-        }
-        
-        let areaData = this.ffxivData.areas
+
         let blueMageNo = blueMageRaw[Object.keys(blueMageRaw)[blueMageRaw.length-1]].no
         let bmAbility = []
         for (let i=0; i<blueMageNo; i++)  {
@@ -324,52 +315,43 @@ export default {
                 'category': bmAbility.map(o => o.type1),
                 'location': groupData(
                   bmAbility.map(o => o.type1), 
-                  [bmAbility.map(o => o.location), bmAbility.map(o => o.x), bmAbility.map(o => o.x)],
-                  true,
-                  bmAbility.map(o => o.type2)
+                  bmAbility.map(o => o.type2),
+                  bmAbility.map(o => o),
+                  true
                 ),
                 'npc': groupData(
-                  bmAbility.map(o => o.type1), 
-                  bmAbility.map(o => o.npc),
-                  false
+                  bmAbility.map(o => o.type1),
+                  bmAbility.map(o => o.type2),
+                  bmAbility.map(o => o.npc)
                 ),
                 'notes':groupData(
-                  bmAbility.map(o => o.type1), 
-                  bmAbility.map(o => o.notes),
-                  false
+                  bmAbility.map(o => o.type1),
+                  bmAbility.map(o => o.type2),
+                  bmAbility.map(o => o.notes)
                 ),
             }
 
-            function groupData(types: Array<string>[], dataList: Array<string>[], searchLocation: boolean, typesSub?: Array<string>[]) {
+            function groupData(types: Array<string>[], typesSub: Array<string>[], dataList: any[], searchLocation?: boolean, ) {
+              if (!types) {console.error('No Type assigned to BlueMage Data, check Data', dataList); return false}
 
-              let results: any = []
-              let holdData: any = []
-              results[0] = [...types]
-              
-              if (searchLocation) {
-                for (const d in dataList) {
-                  let zoneFound = areaData.find((o: any) => o.zone == dataList[0][d])
-                  holdData[d] = zoneFound? zoneFound : dataList[0][d]
+              let results: Array<any> = []
+              for (const d in types) {
+                let hold: Array<any> = []
+                hold[0] = types[d]
+                hold[1] = typesSub[d] ? typesSub[d] : false
+
+                if (!searchLocation) {
+                  hold[2] = dataList[d]
+                } else {
+                  let correctX = dataList[d].x ? dataList[d].x : false
+                  let correctY = dataList[d].y ? dataList[d].y : false
+                  hold[2] = [dataList[d].location, correctX, correctY]
                 }
-                results[1] = [...holdData]
-                results[2] = [...typesSub]
-              } else {
-                results[1] = [...dataList]
+                results.push(hold)
               }
-              // for (const i in types) {
 
-              //   if (!searchLocation) {
-              //     hold[i] = [types[i], dataList[i] ? dataList[i] : '-']
-              //   } else {
-              //     let areaFound = areaData.find((o: any) => o.zone == dataList[i])
-              //     hold[i] = [types[i], areaFound ? areaFound : dataList[i]]
-              //   }
-        
-                
-              // }
               return results
             }
-
         }
       },
       setEorzeaClock() {

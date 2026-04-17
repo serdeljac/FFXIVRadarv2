@@ -27,30 +27,32 @@
             <ul :class="[`rdrTable body`]">
                 <li v-for="d in appendData" :key="d.ID" >
 
-                        <!-- NAME -->
-                        <div>{{ d.name }}</div>
+                    <!-- NAME -->
+                    <div>{{ d.name }}</div>
 
-                        <!-- LEVEL -->
-                        <div>{{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}</div>
+                    <!-- LEVEL -->
+                    <div>{{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}</div>
 
-                        <!-- ENEMY/NPC -->
-                        <div>
-                            <div v-for="e in d.npc" :key="e[1]">
-                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[1] }}</p>
-                            </div>
+                    <!-- ENEMY/NPC -->
+                    <div>
+                        <div v-for="e in d.npc" :key="e[1]">
+                            <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[2] }}</p>
                         </div>
+                    </div>
 
-                        <div>
-                            <div v-for="e in d.location" :key="e[1]">
-                                <iconAndTextBM v-if="filterSelected == 'All' || filterSelected == e[0]" :bmData="[e]" />
-                            </div>
+                    <div>
+                        <div v-for="e in d.location" :key="e[1]">
+                            <!-- <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[2] }}</p> -->
+                            <iconAndTextBM v-if="filterSelected == 'All' || filterSelected == e[0]" :bmData="e" />
                         </div>
+                    </div>
 
-                        <div>
-                            <div v-for="e in d.notes" :key="e[1]">
-                                <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[1] }}</p>
-                            </div>
+                    <div>
+                        <div v-for="e in d.notes" :key="e[1]">
+                            <p v-if="filterSelected == 'All' || filterSelected == e[0]">
+                                {{ e[2] ? e[2] : '-' }}</p>
                         </div>
+                    </div>
                 </li>
             </ul>
         </div>
@@ -117,5 +119,5 @@ import iconAndTextBM from '../ui/iconAndTextBMage.vue';
 </script>
 
 <style scoped lang="scss">
-    .rdrTable li {grid-template-columns: 140px 100px auto 320px 240px;}
+    .rdrTable li {grid-template-columns: 140px 100px auto 420px 340px;}
 </style>
