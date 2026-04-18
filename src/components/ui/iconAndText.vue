@@ -1,7 +1,7 @@
 <template>
-    <div class="iconToText">
+    <div class="iconAndText">
         <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
-        <p>{{ text }}</p>
+        <p v-if="text">{{ text }}</p>
     </div>
 </template>
 
@@ -26,7 +26,7 @@
 </script>
 
 <style scoped lang="scss">
-    .iconToText {
+    .iconAndText {
         display: inline-flex;
         align-items: center;
     }
