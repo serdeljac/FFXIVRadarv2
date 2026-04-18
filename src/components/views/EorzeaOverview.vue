@@ -11,23 +11,32 @@
                     <h2>{{ filterAreaSelected.zone }}</h2>
                     <h3>{{ filterAreaSelected.expansion }}</h3>
                     <div class="group">
-                        <buttonFilter 
-                        :name="`Change Zone`" 
-                        @click="openChangeZoneMenu()"/>
+                        <buttonFilter :name="`Change Zone`" @click="changeZoneMenu = true"/>
                         <iconAndText class="searchIcon" :icon="'sq_search'" @click="openSearchMenu()"/>
                     </div>
                 </div>
 
                 <div class="filterbar isTabBar">
                     <div :class="[`filterbar-tab`, {'disabled': d[3].length == 0}]" 
-                        v-for="(d, index) in filtersByType" :key="d[1]" >
-                        <iconAndText :icon="d[1]" @click="changeFilter(Number(index))"/>
+                        v-for="d in filtersByType" :key="d[1]"
+                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false;">
+                        <iconAndText :icon="d[1]" />
                     </div>
                 </div>
-                {{ ffxivData.areas[0] }}
+
+                <ul>
+                    <li v-for="d in appendTabSelectedArray" :key="d">
+                        {{ d.ID }}
+                    </li>
+                </ul>
             </div>
         </div>
-        <zoneSelect :zoneList="filtersByZone" :windowWidth="windowWidth"/>
+        <zoneSelect 
+            v-if="changeZoneMenu" 
+            :zoneList="filtersByZone" 
+            :windowWidth="windowWidth" 
+            @zoneSelected="newZoneSelected"
+            @closeMenu="(e: any) => changeZoneMenu = e"/>
     </div>
 </template>
 
@@ -47,13 +56,12 @@ import zoneSelect from '../layouts/zoneSelection.vue'
             return {
                 filtersByZone: [] as any, 
                 filtersByType: [
-                    ['type', 'all', true, 1], //[Group, Name, State, Data]
                     ['type', 'miner', false, []],
                     ['type', 'botany', false, []],
                     ['type', 'sightseeing', false, []],
                     ['type', 'fates', false, []],
-                    ['type', 'hunts', false, []],
-                    ['type', 'current', false, []],
+                    ['type', 'eliteHunts', false, []],
+                    ['type', 'aethercurrents', false, []],
                 ] as any,
                 filterAreaSelected: {} as any,
                 filterTypeSelected: '' as string,
@@ -61,10 +69,24 @@ import zoneSelect from '../layouts/zoneSelection.vue'
                 searchMenu: false as boolean,
             }
         },
+        computed: {
+            appendTabSelectedArray() {
+                let tabSelected = this.filterTypeSelected
+                for (const d in this.filtersByType) {
+                    let tabName = this.filtersByType[d][1]
+                    if (tabSelected == tabName) {return this.filtersByType[d][3]}
+                }
+            },
+        },
         created() {
             this.createFilterListForZone() //Run Once
-            this.filterAreaSelected = this.filtersByZone['A Realm Reborn']['La Noscea'][0]
-            this.createFilterListForType() //Run Once
+
+            let regions = this.filtersByZone[Object.keys(this.filtersByZone)[0]]
+            let zone = regions[Object.keys(regions)[0]]
+            this.filterAreaSelected = zone[0]
+
+            this.createFilterListForType()
+            this.selectTabWithData()
         },
         methods: {
             createFilterListForZone() {
@@ -96,24 +118,46 @@ import zoneSelect from '../layouts/zoneSelection.vue'
                 this.filtersByZone = finalList
             },
             createFilterListForType() {
-                // for (const d in this.filtersByType) {
-                //     let f[d] = this.filtersByType
-                //     let data = this.ffxivData
-                //     f[d][3] = data.miner.filter((o: any) => o.job == 'miner')
-                // }
-                // this.filtersByType
+                for (const d in this.filtersByType) {
+                    let searchtype = this.filtersByType[d][1]
+                    let results: any = []
+                    if (searchtype == 'miner' || searchtype == 'botany') {
+                        results = this.ffxivData[searchtype].filter((o: any) => o.area.zone == this.filterAreaSelected.zone)
+                    } else {
+                        results = this.ffxivData[searchtype].filter((o: any) => o.zone == this.filterAreaSelected.zone)
+                    }
+                    
+                    this.filtersByType[d][3] = results
+                }
             },
-            openChangeZoneMenu() {
-                console.log('open: openChangeZoneMenu')
-                this.changeZoneMenu = true
+            newZoneSelected(e: any) {
+                this.changeZoneMenu = false;
+                this.filterAreaSelected = e;
+                this.createFilterListForType()
+                this.selectTabWithData()
             },
+            selectTabWithData() {
+                //Select the first tab that contains data
+                for (const d in this.filtersByType) {
+                    if (this.filtersByType[d][3].length != 0) {
+                        this.filterTypeSelected = this.filtersByType[d][1]
+                        break;
+                    }
+                }
+            },
+
+
+
+
+
+
+
+
             openSearchMenu() {
                 console.log('open: openSearchMenu')
                 this.searchMenu = true
             },
-            changeFilter(index: number) {
-                console.log('open: changeFilter', index)
-            }
+
         }
     }
 </script>
@@ -128,6 +172,4 @@ import zoneSelect from '../layouts/zoneSelection.vue'
         width: 100%;
     }
 }
-
-
 </style>

@@ -18,6 +18,7 @@
         computed: {
             fetchIconName() {
                 if (this.icon == 'Crafting') {return `sq_${this.icon}`}
+                else if (this.icon == 'eliteHunts') {return 'hunts'}
                 let toLowerCaseName = this.icon.toLowerCase()
                 return toLowerCaseName
             }
