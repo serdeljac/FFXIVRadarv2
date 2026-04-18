@@ -27,6 +27,7 @@
                 {{ ffxivData.areas[0] }}
             </div>
         </div>
+        <zoneSelect :zoneList="filtersByZone" :windowWidth="windowWidth"/>
     </div>
 </template>
 
@@ -36,10 +37,11 @@ import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
 import iconAndText from '../ui/iconAndText.vue';
+import zoneSelect from '../layouts/zoneSelection.vue'
 
     export default {
         name: "Eorzea Overview",
-        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText},
+        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText, zoneSelect},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         data() {
             return {
