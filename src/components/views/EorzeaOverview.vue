@@ -110,7 +110,7 @@ import iconAndText from '../ui/iconAndText.vue';
                 this.searchMenu = true
             },
             changeFilter(index: number) {
-                console.log('open: changeFilter')
+                console.log('open: changeFilter', index)
             }
         }
     }
