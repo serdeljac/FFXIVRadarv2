@@ -69,7 +69,7 @@
                     <div class="rdrTable_col-weather">
                         <p :data-timerActive="checkTimeActive('weather1', d)">{{ d.weather1 }}</p>
                         <p v-if="d.weather2" :data-timerActive="checkTimeActive('weather2', d)">{{ d.weather2 }}</p>
-                        <p v-if="!d.weather1">None</p>
+                        <p v-if="!d.weather1">Any Weather</p>
                     </div>
 
                     <!-- EMOTE -->
@@ -171,7 +171,7 @@ import iconAndText from '../ui/iconAndText.vue';
                     let results = this.timerList.find((o: any) => o.ID == time).countdown
                     return results
                 }
-                return '--:--'
+                return 'Any Time'
             },
             checkTimeActive(type: string, arr: any) {
 

@@ -36,15 +36,22 @@
                     v-if="filterTypeSelected == filtersByType[0][1]" 
                     :data="filtersByType[0][3]" 
                     :timerList="timerList"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e[0]"/>
 
                 <gatheringList 
                     v-if="filterTypeSelected == filtersByType[1][1]" 
                     :data="filtersByType[1][3]" 
                     :timerList="timerList"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e[0]"/>
                     
-                <sightseeingList v-if="filterTypeSelected == filtersByType[2][1]" :data="filtersByType[2][3]" :timerList="timerList"/>
+                <sightseeingList 
+                    v-if="filterTypeSelected == filtersByType[2][1]" 
+                    :data="filtersByType[2][3]" 
+                    :timerList="timerList"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
+                    @focusNode="(e: any) => focusNode = e"/>
 
             </div>
         </div>
@@ -70,6 +77,7 @@ import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
         name: "Eorzea Overview",
         components: {promotionBanner, buttonFilter, seachBar, iconAndText, zoneSelect, gatheringList, sightseeingList},
         props: ['ffxivData', 'timerList', 'windowWidth'],
+        emits: ['changeTracked'],
         data() {
             return {
                 filtersByZone: [] as any, 
@@ -164,19 +172,10 @@ import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
                     }
                 }
             },
-
-
-
-
-
-
-
-
             openSearchMenu() {
                 console.log('open: openSearchMenu')
                 this.searchMenu = true
             },
-
         }
     }
 </script>
