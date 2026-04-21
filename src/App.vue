@@ -202,6 +202,7 @@ export default {
           
           this.ffxivData[type][d].tracked = false
           this.ffxivData[type][d].time = obj.time == '' ? false : obj.time
+          this.ffxivData[type][d].isshard = obj.isshard == 'TRUE' ? true : false
 
           let myAreaData = this.ffxivData.areas.find(o => o.area == obj.area)
           let myPointData = this.ffxivData.areas.find(o => o.point == obj.area)

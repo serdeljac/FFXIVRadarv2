@@ -3,9 +3,12 @@
         <promotionBanner length="wide"/>
 
         <div class="body_content">
+
             <div class="mapDisplay">
                 PLACE MAP HERE
+                {{ focusNode }}
             </div>
+
             <div class="mapContext">
                 <div class="filterbar isZoneSelect">
                     <h2>{{ filterAreaSelected.zone }}</h2>
@@ -17,18 +20,32 @@
                 </div>
 
                 <div class="filterbar isTabBar">
-                    <div :class="[`filterbar-tab`, {'disabled': d[3].length == 0}]" 
+                    <div 
+                        :class="[
+                            `filterbar-tab`, 
+                            {'disabled': d[3].length == 0},
+                            {'activeTab': filterTypeSelected == d[1]}
+                            ]" 
                         v-for="d in filtersByType" :key="d[1]"
                         @click="d[3].length != 0 ? filterTypeSelected = d[1] : false;">
                         <iconAndText :icon="d[1]" />
                     </div>
                 </div>
 
-                <ul>
-                    <li v-for="d in appendTabSelectedArray" :key="d">
-                        {{ d.ID }}
-                    </li>
-                </ul>
+                <gatheringList 
+                    v-if="filterTypeSelected == filtersByType[0][1]" 
+                    :data="filtersByType[0][3]" 
+                    :timerList="timerList"
+                    @focusNode="(e: any) => focusNode = e[0]"/>
+
+                <gatheringList 
+                    v-if="filterTypeSelected == filtersByType[1][1]" 
+                    :data="filtersByType[1][3]" 
+                    :timerList="timerList"
+                    @focusNode="(e: any) => focusNode = e[0]"/>
+                    
+                <sightseeingList v-if="filterTypeSelected == filtersByType[2][1]" :data="filtersByType[2][3]" :timerList="timerList"/>
+
             </div>
         </div>
         <zoneSelect 
@@ -42,15 +59,16 @@
 
 <script lang="ts">
 import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayAreaText from '../ui/displayAreaText.vue';
 import buttonFilter from '../ui/ButtonFilter.vue';
 import seachBar from '../ui/searchBar.vue';
 import iconAndText from '../ui/iconAndText.vue';
-import zoneSelect from '../layouts/zoneSelection.vue'
+import zoneSelect from '../layouts/zoneSelection.vue';
+import gatheringList from '../ui/overviewListItem/gathering.vue';
+import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
 
     export default {
         name: "Eorzea Overview",
-        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText, zoneSelect},
+        components: {promotionBanner, buttonFilter, seachBar, iconAndText, zoneSelect, gatheringList, sightseeingList},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         data() {
             return {
@@ -67,6 +85,7 @@ import zoneSelect from '../layouts/zoneSelection.vue'
                 filterTypeSelected: '' as string,
                 changeZoneMenu: false as boolean,
                 searchMenu: false as boolean,
+                focusNode: [] as Array<object>,
             }
         },
         computed: {
@@ -83,7 +102,7 @@ import zoneSelect from '../layouts/zoneSelection.vue'
 
             let regions = this.filtersByZone[Object.keys(this.filtersByZone)[0]]
             let zone = regions[Object.keys(regions)[0]]
-            this.filterAreaSelected = zone[0]
+            this.filterAreaSelected = zone[3]
 
             this.createFilterListForType()
             this.selectTabWithData()
@@ -171,5 +190,10 @@ import zoneSelect from '../layouts/zoneSelection.vue'
         max-width: 800px;
         width: 100%;
     }
+
+    .mapContext {
+        width: 90%;
+    }
+
 }
 </style>

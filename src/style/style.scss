@@ -104,9 +104,12 @@ Default Styles
         img {margin: 0;}
         &.disabled {
             cursor: not-allowed;
-            opacity: 0.5;
+            opacity: 0.1;
             filter: grayscale(1);
-            
+        }
+        &.activeTab {
+            border: 1px solid #cae436;
+            background-color: #cae4364a;
         }
     }
 }
@@ -120,12 +123,16 @@ Default Styles
         border-radius: $borderRadius;
         padding: 6px 0;
         margin: 2px 0;
+        
     }
 
     img {cursor: pointer;}
 
-    &.body li:hover {
-        background-color: $borderColorFade;
+    &.body {
+        li {
+            background-color: $listBackgroundColor;
+            &:hover {background-color: $borderColorFade;}
+        }
     }
 
     &.split {
