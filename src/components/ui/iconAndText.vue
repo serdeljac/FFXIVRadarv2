@@ -1,5 +1,5 @@
 <template>
-    <div class="iconAndText">
+    <div :class="[`iconAndText`, addClass]">
         <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
         <p v-if="text">{{ text }}</p>
     </div>
@@ -14,7 +14,7 @@
 <script lang="ts">
     export default {
         name: "Icon & Text",
-        props: ['icon', 'text'],
+        props: ['icon', 'text', 'addClass'],
         computed: {
             fetchIconName() {
                 if (this.icon == 'Crafting') {return `sq_${this.icon}`}
@@ -30,5 +30,9 @@
     .iconAndText {
         display: inline-flex;
         align-items: center;
+        &.rewards {
+            img {margin-right: 2px;}
+            p {margin-right: 6px;}
+        }
     }
 </style>

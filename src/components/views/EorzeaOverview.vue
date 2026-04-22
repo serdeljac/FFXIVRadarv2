@@ -5,8 +5,7 @@
         <div class="body_content">
 
             <div class="mapDisplay">
-                PLACE MAP HERE
-                {{ focusNode }}
+                {{ focusNode.length == 0 ? filterAreaSelected: focusNode }}
             </div>
 
             <div class="mapContext">
@@ -53,6 +52,11 @@
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e"/>
 
+                <fatesList 
+                    v-if="filterTypeSelected == filtersByType[3][1]" 
+                    :data="filtersByType[3][3]" 
+                    @focusNode="(e: any) => focusNode = e"/>
+
             </div>
         </div>
         <zoneSelect 
@@ -72,10 +76,19 @@ import iconAndText from '../ui/iconAndText.vue';
 import zoneSelect from '../layouts/zoneSelection.vue';
 import gatheringList from '../ui/overviewListItem/gathering.vue';
 import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
+import fatesList from '../ui/overviewListItem/fates.vue';
 
     export default {
         name: "Eorzea Overview",
-        components: {promotionBanner, buttonFilter, seachBar, iconAndText, zoneSelect, gatheringList, sightseeingList},
+        components: {
+            promotionBanner, 
+            buttonFilter, 
+            seachBar, 
+            iconAndText, 
+            zoneSelect, 
+            gatheringList, 
+            sightseeingList, 
+            fatesList},
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked'],
         data() {

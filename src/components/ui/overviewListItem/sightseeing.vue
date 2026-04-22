@@ -1,6 +1,6 @@
 <template>
     <ul>
-        <li class="overviewListItem" v-for="node in groupNodes()" :key="node.ID" @click="$emit('focusNode', node)" :data-rowActive="checkRowActive(node)">
+        <li class="overviewListItem" v-for="node in data" :key="node.ID" @click="$emit('focusNode', node)" :data-rowActive="checkRowActive(node)">
 
             <div class="overviewListItem_header">
                 <iconAndText :text="`Sightseeing Log #${node.no} - ${node.name}`" :icon="`${node.job_sub}`"/>
@@ -32,7 +32,7 @@
                     
                     <div class="notes">
                         <p>
-                            <span v-if="node.mount">[Mount Required]</span>
+                            <span v-if="node.mount">[Flying Mount Required]</span>
                             {{ node.notes }}
                         </p>
                     </div>
@@ -70,23 +70,6 @@ import iconAndText from '../../ui/iconAndText.vue'
                     return results
                 }
                 return 'Any Time'
-            },
-            groupNodes() {
-                
-                let fetchNodeCodes = this.data.filter((obj: any, index: any) => 
-                    index === this.data.findIndex((o: any) => obj.node_code === o.node_code)
-                );
-
-                let groupedNodes = []
-
-                for (const d in fetchNodeCodes) {
-                    let node_code = fetchNodeCodes[d].node_code
-                    let results = this.data.filter((o: any) => o.node_code == node_code)
-                    results.sort((a, b) => b.isshard + a.isshard);
-                    groupedNodes.push(results)
-                }
-                    groupedNodes = this.data
-                return this.data
             },
             checkTimeActive(type: string, arr: any) {
 
@@ -177,6 +160,8 @@ import iconAndText from '../../ui/iconAndText.vue'
             gap: 20px;
             width: 100%;
             margin-top: 6px;
+            height: 100px;
+            justify-content: center;
             .weatherAndEmote {
                 display: grid;
                 justify-items: center;

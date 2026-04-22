@@ -21,13 +21,11 @@ body {
     font-family: "Lato", sans-serif;
     height: 100vh;
     background-color: $bodyBackgroundColor;
-    
 }
 
 main {
     height: calc($trackingbarHeight + 200px - 100vh);
-    overflow: hidden;
-    overflow-y: auto;
+    
 }
 
 .expColor {color: $expColor}
@@ -121,7 +119,7 @@ Default Styles
         align-items: center;
         gap: 10px;
         border-radius: $borderRadius;
-        padding: 6px 0;
+        padding: 6px 0 6px 10px;
         margin: 2px 0;
         
     }
