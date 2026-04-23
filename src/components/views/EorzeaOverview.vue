@@ -56,6 +56,11 @@
                     v-if="filterTypeSelected == filtersByType[3][1]" 
                     :data="filtersByType[3][3]" 
                     @focusNode="(e: any) => focusNode = e"/>
+                
+                <huntsList 
+                    v-if="filterTypeSelected == filtersByType[4][1]" 
+                    :data="filtersByType[4][3]" 
+                    @focusNode="(e: any) => focusNode = e"/>
 
             </div>
         </div>
@@ -77,6 +82,7 @@ import zoneSelect from '../layouts/zoneSelection.vue';
 import gatheringList from '../ui/overviewListItem/gathering.vue';
 import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
 import fatesList from '../ui/overviewListItem/fates.vue';
+import huntsList from '../ui/overviewListItem/hunts.vue';
 
     export default {
         name: "Eorzea Overview",
@@ -88,7 +94,9 @@ import fatesList from '../ui/overviewListItem/fates.vue';
             zoneSelect, 
             gatheringList, 
             sightseeingList, 
-            fatesList},
+            fatesList,
+            huntsList
+        },
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked'],
         data() {

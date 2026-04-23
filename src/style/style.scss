@@ -181,9 +181,53 @@ Default Styles
     }
 }
 
-
 .iconSize {
     width: 24px;
     aspect-ratio: 1 / 1;
     margin-right: 6px;
+}
+
+.overviewListItem {
+    max-width: 600px;
+    background-color: $listBackgroundColor;
+    border-radius: $borderRadius;
+    cursor: pointer;
+    transition: all .07s linear;
+    margin: 2px auto;
+    padding: 4px;
+    &:hover {background-color: $listBackgroundColorHover}
+
+    &_header {
+        padding: 5px 0.5rem;
+        display: grid;
+        grid-template-columns: 1.5fr 0.5fr;
+        justify-content: space-between;
+        .forceright {
+            justify-self: end;
+            display: flex;
+            align-items: center;
+        }
+    }
+
+    hr {
+        width: 94%;
+        margin: 4px auto;
+    }
+
+    &_body {
+        padding: 5px 0.5rem;
+    }
+
+    &_list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        
+        justify-content: center;
+        li {
+            padding: 3px 2px;
+            text-align: center;
+        }
+    }
+
+    
 }

@@ -10,7 +10,7 @@
     "node_code": "huntskmiddleb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -25,7 +25,7 @@
     "node_code": "huntbalowerlb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -40,7 +40,7 @@
     "node_code": "huntdawesterb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -55,7 +55,7 @@
     "node_code": "huntbleasterb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -70,7 +70,7 @@
     "node_code": "huntmyupperlb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -85,7 +85,7 @@
     "node_code": "huntvuouterlb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -100,7 +100,7 @@
     "node_code": "huntovcentrab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -115,7 +115,7 @@
     "node_code": "huntsewesterb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -130,7 +130,7 @@
     "node_code": "huntgaeasterb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -145,7 +145,7 @@
     "node_code": "huntalsoutheb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -160,7 +160,7 @@
     "node_code": "huntflnortheb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -175,7 +175,7 @@
     "node_code": "huntwhcentrab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -190,7 +190,7 @@
     "node_code": "huntmosouthsb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -205,7 +205,7 @@
     "node_code": "huntsteastshb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -220,7 +220,7 @@
     "node_code": "huntphnorthsb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -235,7 +235,7 @@
     "node_code": "huntnacoerthb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -250,7 +250,7 @@
     "node_code": "huntlemordhob1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -265,7 +265,7 @@
     "node_code": "huntvomiddlea1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -280,7 +280,7 @@
     "node_code": "huntunlowerla1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -295,7 +295,7 @@
     "node_code": "huntnawestera1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -310,7 +310,7 @@
     "node_code": "huntheeastera1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -325,7 +325,7 @@
     "node_code": "huntmaupperla1",
     "respawn": "4-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -340,7 +340,7 @@
     "node_code": "huntcoouterla1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -355,7 +355,7 @@
     "node_code": "huntsacentraa1",
     "respawn": "4-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -370,7 +370,7 @@
     "node_code": "huntalwestera1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -385,7 +385,7 @@
     "node_code": "huntmaeastera1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -400,7 +400,7 @@
     "node_code": "huntzasouthea1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -415,7 +415,7 @@
     "node_code": "huntdanorthea1",
     "respawn": "4-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -430,7 +430,7 @@
     "node_code": "huntfocentraa1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -445,7 +445,7 @@
     "node_code": "huntghsouthsa1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -460,7 +460,7 @@
     "node_code": "huntmeeastsha1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -475,7 +475,7 @@
     "node_code": "huntginorthsa1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -490,7 +490,7 @@
     "node_code": "huntmacoertha1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -505,7 +505,7 @@
     "node_code": "huntkumordhoa1",
     "respawn": "3.5-5 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -520,7 +520,7 @@
     "node_code": "huntcrmiddles1",
     "respawn": "65-75 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-45 hrs",
     "trigger": "Mine 'Grade 3 La Noscean Topsoil'."
   },
@@ -535,7 +535,7 @@
     "node_code": "huntcrlowerls1",
     "respawn": "50 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "30 hrs",
     "trigger": "Traverse spawn points during a Full Moon."
   },
@@ -550,7 +550,7 @@
     "node_code": "huntbowesters1",
     "respawn": "65-75 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-45 hrs",
     "trigger": "Harvest 'La Noscean Leeks'."
   },
@@ -565,7 +565,7 @@
     "node_code": "hunttheasters1",
     "respawn": "42-48 hrs",
     "weather1": "Rain",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "21-29 hrs",
     "trigger": "Spawns after its random timer expires. Rain puts it to sleep, ensuring it won't spawn for 3 hours 20 minutes."
   },
@@ -580,7 +580,7 @@
     "node_code": "huntnaupperls1",
     "respawn": "47-53 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "28-32 hrs",
     "trigger": "Traverse spawn points with a minion."
   },
@@ -595,7 +595,7 @@
     "node_code": "huntchouterls1",
     "respawn": "65-71 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-43 hrs",
     "trigger": "A player dying."
   },
@@ -610,7 +610,7 @@
     "node_code": "huntbrcentras1",
     "respawn": "66-78 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-47 hrs",
     "trigger": "Eat food at spawn points."
   },
@@ -625,7 +625,7 @@
     "node_code": "huntzowesters1",
     "respawn": "57-63 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "34-38 hrs",
     "trigger": "Catch a 'Glimmerscale'."
   },
@@ -640,7 +640,7 @@
     "node_code": "huntlaeasters1",
     "respawn": "66-78 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-47 hrs",
     "trigger": "Initiate a Battlecraft Leves."
   },
@@ -655,7 +655,7 @@
     "node_code": "huntnusouthes1",
     "respawn": "44-54 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "26-33 hrs",
     "trigger": "Ensure all FATEs succeed for exactly 1 hour straight."
   },
@@ -670,7 +670,7 @@
     "node_code": "huntminorthes1",
     "respawn": "57-63 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "34-38 hrs",
     "trigger": "Kill 100 Earth Sprites."
   },
@@ -685,7 +685,7 @@
     "node_code": "huntlacentras1",
     "respawn": "42-48 hrs",
     "weather1": "Rain",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "25-29 hrs",
     "trigger": "Spawns 6 minutes into the second of a double Rain."
   },
@@ -700,7 +700,7 @@
     "node_code": "huntmisouthss1",
     "respawn": "50 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "30 hrs",
     "trigger": "Traverse spawn points at 00:00 during a New Moon."
   },
@@ -715,7 +715,7 @@
     "node_code": "huntwueastshs1",
     "respawn": "66-78 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "39-47 hrs",
     "trigger": "Initiate Battlecraft Leves."
   },
@@ -730,7 +730,7 @@
     "node_code": "huntthnorthss1",
     "respawn": "57-63 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "34-38 hrs",
     "trigger": "Fish a 'Judgeray' at 5-9pm."
   },
@@ -745,7 +745,7 @@
     "node_code": "huntsacoerths1",
     "respawn": "60-84 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "36-51 hrs",
     "trigger": "Fall off cliffs to 1 HP."
   },
@@ -760,7 +760,7 @@
     "node_code": "huntagmordhos1",
     "respawn": "60-84 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "36-51 hrs",
     "trigger": "Complete Treasure Maps."
   },
@@ -775,7 +775,7 @@
     "node_code": "huntalcoerthb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -790,7 +790,7 @@
     "node_code": "huntkrcoerthb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -805,7 +805,7 @@
     "node_code": "huntgnthedrab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -820,7 +820,7 @@
     "node_code": "huntththedrab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -835,7 +835,7 @@
     "node_code": "huntscthechub1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -850,7 +850,7 @@
     "node_code": "huntththechub2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -865,7 +865,7 @@
     "node_code": "huntsqtheseab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -880,7 +880,7 @@
     "node_code": "huntsatheseab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -895,7 +895,7 @@
     "node_code": "huntptthedrab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -910,7 +910,7 @@
     "node_code": "huntfathedrab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -925,7 +925,7 @@
     "node_code": "huntlyazysllb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -940,7 +940,7 @@
     "node_code": "huntomazysllb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -955,7 +955,7 @@
     "node_code": "huntmicoertha1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -970,7 +970,7 @@
     "node_code": "huntlycoertha2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -985,7 +985,7 @@
     "node_code": "huntpythedraa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1000,7 +1000,7 @@
     "node_code": "huntlothedraa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1015,7 +1015,7 @@
     "node_code": "huntbuthechua1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1030,7 +1030,7 @@
     "node_code": "huntagthechua2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1045,7 +1045,7 @@
     "node_code": "huntentheseaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1060,7 +1060,7 @@
     "node_code": "huntsitheseaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1075,7 +1075,7 @@
     "node_code": "huntslthedraa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1090,7 +1090,7 @@
     "node_code": "huntstthedraa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1105,7 +1105,7 @@
     "node_code": "huntcaazyslla1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1120,7 +1120,7 @@
     "node_code": "huntstazyslla2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1135,7 +1135,7 @@
     "node_code": "huntkacoerths1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Fly over spawn points with Behemoth Heir."
   },
@@ -1150,7 +1150,7 @@
     "node_code": "huntsethedras1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Complete the \"Cerf's Up\" FATE 5 times in a row."
   },
@@ -1165,7 +1165,7 @@
     "node_code": "huntgathechus1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Harvest 'Seventh Heaven' or mine 'Aurum Regis Ore'."
   },
@@ -1180,7 +1180,7 @@
     "node_code": "huntbitheseas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Squonk's Chirp AOE has a chance to spawn it."
   },
@@ -1195,7 +1195,7 @@
     "node_code": "huntththedras1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Open treasure coffers from 'Timeworn Wyvernskin Maps'."
   },
@@ -1210,7 +1210,7 @@
     "node_code": "huntleazyslls1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 50 'Allagan Chimera', 50 'Meracydian Vouivre' and 50 'Lesser Hydra'."
   },
@@ -1225,7 +1225,7 @@
     "node_code": "huntshthefrib1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1240,7 +1240,7 @@
     "node_code": "huntouthefrib2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1255,7 +1255,7 @@
     "node_code": "huntdeyanxiab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1270,7 +1270,7 @@
     "node_code": "huntgyyanxiab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1285,7 +1285,7 @@
     "node_code": "huntgutherubb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1300,7 +1300,7 @@
     "node_code": "huntgatherubb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1315,7 +1315,7 @@
     "node_code": "huntgwthepeab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1330,7 +1330,7 @@
     "node_code": "huntbuthepeab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1345,7 +1345,7 @@
     "node_code": "huntastheazib1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1360,7 +1360,7 @@
     "node_code": "huntkutheazib2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1375,7 +1375,7 @@
     "node_code": "huntkithelocb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1390,7 +1390,7 @@
     "node_code": "huntmathelocb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1405,7 +1405,7 @@
     "node_code": "huntorthefria1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1420,7 +1420,7 @@
     "node_code": "hunterthefria2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1435,7 +1435,7 @@
     "node_code": "huntgayanxiaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1450,7 +1450,7 @@
     "node_code": "huntanyanxiaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1465,7 +1465,7 @@
     "node_code": "huntfutheruba1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1480,7 +1480,7 @@
     "node_code": "huntontheruba2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1495,7 +1495,7 @@
     "node_code": "huntvothepeaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1510,7 +1510,7 @@
     "node_code": "huntaqthepeaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1525,7 +1525,7 @@
     "node_code": "huntgitheazia1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1540,7 +1540,7 @@
     "node_code": "huntsutheazia2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1555,7 +1555,7 @@
     "node_code": "huntmatheloca1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1570,7 +1570,7 @@
     "node_code": "huntlutheloca2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1585,7 +1585,7 @@
     "node_code": "huntudthefris1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 100 'Leshy' & 100 'Diakka'."
   },
@@ -1600,7 +1600,7 @@
     "node_code": "huntgayanxias1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Fly over spawn points with the 'Toy Alexander' minion."
   },
@@ -1615,7 +1615,7 @@
     "node_code": "huntoktherubs1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 100 'Yumemi' and 100 'Naked Yumemi'. Spawns from 12pm during a Full Moon."
   },
@@ -1630,7 +1630,7 @@
     "node_code": "huntbothepeas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Travel via chocobo porter."
   },
@@ -1645,7 +1645,7 @@
     "node_code": "huntortheazis1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Complete \"Not Just a Tribute\" FATE, then fly over spawn points."
   },
@@ -1660,7 +1660,7 @@
     "node_code": "huntsathelocs1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Discard items 50 times."
   },
@@ -1675,7 +1675,7 @@
     "node_code": "huntlalakelab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1690,7 +1690,7 @@
     "node_code": "huntitlakelab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1705,7 +1705,7 @@
     "node_code": "huntdoilmhegb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1720,7 +1720,7 @@
     "node_code": "huntvuilmhegb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1735,7 +1735,7 @@
     "node_code": "huntcokholusb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1750,7 +1750,7 @@
     "node_code": "huntinkholusb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1765,7 +1765,7 @@
     "node_code": "huntwoamharab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1780,7 +1780,7 @@
     "node_code": "huntjuamharab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1795,7 +1795,7 @@
     "node_code": "huntmitherakb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1810,7 +1810,7 @@
     "node_code": "huntpatherakb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1825,7 +1825,7 @@
     "node_code": "huntdethetemb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1840,7 +1840,7 @@
     "node_code": "huntgithetemb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1855,7 +1855,7 @@
     "node_code": "huntnalakelaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1870,7 +1870,7 @@
     "node_code": "huntnulakelaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1885,7 +1885,7 @@
     "node_code": "huntopilmhega1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1900,7 +1900,7 @@
     "node_code": "huntthilmhega2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1915,7 +1915,7 @@
     "node_code": "huntlikholusa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1930,7 +1930,7 @@
     "node_code": "hunthukholusa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1945,7 +1945,7 @@
     "node_code": "huntmaamharaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1960,7 +1960,7 @@
     "node_code": "huntsuamharaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1975,7 +1975,7 @@
     "node_code": "huntgrtheraka1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -1990,7 +1990,7 @@
     "node_code": "huntsutheraka2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2005,7 +2005,7 @@
     "node_code": "huntbathetema1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2020,7 +2020,7 @@
     "node_code": "huntruthetema2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2035,7 +2035,7 @@
     "node_code": "hunttylakelas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Discard a 'Rail Tenderloin'."
   },
@@ -2050,7 +2050,7 @@
     "node_code": "huntagilmhegs1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Travel over spawn points with the 'Scarlet Peacock' minion out."
   },
@@ -2065,7 +2065,7 @@
     "node_code": "huntfokholuss1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Gather 50 'Dwarven Cotton Bolls'."
   },
@@ -2080,7 +2080,7 @@
     "node_code": "hunttaamharas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Cast the blue mage action 'Self-destruct' on spawn points."
   },
@@ -2095,7 +2095,7 @@
     "node_code": "huntixtheraks1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 100 'Cracked Ronkan Dolls', 100 'Cracked Ronkan Thorns' and 100 'Cracked Ronkan Vessels'."
   },
@@ -2110,7 +2110,7 @@
     "node_code": "huntguthetems1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Drag 3 'Deep-sea Leeches' to a Clionid and get hit by its attack \"Buccal Cones\"."
   },
@@ -2125,7 +2125,7 @@
     "node_code": "huntfolakelass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2140,7 +2140,7 @@
     "node_code": "huntfokholusss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2155,7 +2155,7 @@
     "node_code": "huntfotherakss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2170,7 +2170,7 @@
     "node_code": "huntfoamharass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2185,7 +2185,7 @@
     "node_code": "huntfoilmhegss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2200,7 +2200,7 @@
     "node_code": "huntfothetemss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "When an S rank dies in Norvrandt, it has a chance to spawn Forgiven Gossips which spawn Forgiven Rebellion when killed."
   },
@@ -2215,7 +2215,7 @@
     "node_code": "huntü-labyrib1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2230,7 +2230,7 @@
     "node_code": "huntgrlabyrib2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2245,7 +2245,7 @@
     "node_code": "huntirthavnab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2260,7 +2260,7 @@
     "node_code": "huntvathavnab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2275,7 +2275,7 @@
     "node_code": "huntemgarlemb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2290,7 +2290,7 @@
     "node_code": "huntwagarlemb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2305,7 +2305,7 @@
     "node_code": "huntgemarelab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2320,7 +2320,7 @@
     "node_code": "huntdamarelab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2335,7 +2335,7 @@
     "node_code": "huntshelpisb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2350,7 +2350,7 @@
     "node_code": "huntyuelpisb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2365,7 +2365,7 @@
     "node_code": "huntosultimab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2380,7 +2380,7 @@
     "node_code": "huntleultimab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2395,7 +2395,7 @@
     "node_code": "hunthulabyria1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2410,7 +2410,7 @@
     "node_code": "huntstlabyria2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2425,7 +2425,7 @@
     "node_code": "huntsuthavnaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2440,7 +2440,7 @@
     "node_code": "huntyithavnaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2455,7 +2455,7 @@
     "node_code": "huntaegarlema1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2470,7 +2470,7 @@
     "node_code": "huntmigarlema2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2485,7 +2485,7 @@
     "node_code": "huntmomarelaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2500,7 +2500,7 @@
     "node_code": "huntlumarelaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2515,7 +2515,7 @@
     "node_code": "huntpeelpisa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2530,7 +2530,7 @@
     "node_code": "huntguelpisa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2545,7 +2545,7 @@
     "node_code": "huntarultimaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2560,7 +2560,7 @@
     "node_code": "huntfaultimaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2575,7 +2575,7 @@
     "node_code": "huntbulabyris1",
     "respawn": "84-132 hrs",
     "weather1": "Clear Skies",
-    "weather 2": "Fair Skies",
+    "weather2": "Fair Skies",
     "maintenance": "50-80 hrs",
     "trigger": "Use a 'Tiny Troll' minion on spawn points in Clear Skies / Fair Skies daytime."
   },
@@ -2590,7 +2590,7 @@
     "node_code": "huntspthavnas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 100 'Vajralangula', 100 'Pisaca' and 100 'Asvattha'."
   },
@@ -2605,7 +2605,7 @@
     "node_code": "huntargarlems1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Wear 'Mended Imperial Pot Helm' and 'Mended Imperial Short Robe' and die on spawn points."
   },
@@ -2620,7 +2620,7 @@
     "node_code": "huntrumarelas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill 100 'Thinkers', 100 'Weepers', and 100 'Wanderers'."
   },
@@ -2635,7 +2635,7 @@
     "node_code": "huntopelpiss1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Discard a stack of 5 'Egg of Elpis'."
   },
@@ -2650,7 +2650,7 @@
     "node_code": "huntnaultimas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Have 10 people travel over spawn points with the 'Wee Ea' minion summoned."
   },
@@ -2665,7 +2665,7 @@
     "node_code": "huntkelabyriss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2680,7 +2680,7 @@
     "node_code": "huntkethavnass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2695,7 +2695,7 @@
     "node_code": "huntkegarlemss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2710,7 +2710,7 @@
     "node_code": "huntkemarelass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2725,7 +2725,7 @@
     "node_code": "huntkeultimass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2740,7 +2740,7 @@
     "node_code": "huntkeelpisss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Ker Shroud which have a chance to appear after killing an S rank."
   },
@@ -2755,7 +2755,7 @@
     "node_code": "huntgokozamab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2770,7 +2770,7 @@
     "node_code": "huntthkozamab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2785,7 +2785,7 @@
     "node_code": "huntchurqopab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2800,7 +2800,7 @@
     "node_code": "huntmaurqopab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2815,7 +2815,7 @@
     "node_code": "huntleyaktelb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2830,7 +2830,7 @@
     "node_code": "huntxtyaktelb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2845,7 +2845,7 @@
     "node_code": "huntnoshaalob1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2860,7 +2860,7 @@
     "node_code": "huntukshaalob2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2875,7 +2875,7 @@
     "node_code": "huntgaheritab1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2890,7 +2890,7 @@
     "node_code": "huntgaheritab2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2905,7 +2905,7 @@
     "node_code": "hunt13livingb1",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2920,7 +2920,7 @@
     "node_code": "huntjelivingb2",
     "respawn": "5 Seconds",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2935,7 +2935,7 @@
     "node_code": "huntpkkozamaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2950,7 +2950,7 @@
     "node_code": "huntthkozamaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2965,7 +2965,7 @@
     "node_code": "huntneurqopaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2980,7 +2980,7 @@
     "node_code": "huntquurqopaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -2995,7 +2995,7 @@
     "node_code": "huntrryaktela1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3010,7 +3010,7 @@
     "node_code": "huntstyaktela2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3025,7 +3025,7 @@
     "node_code": "huntkeshaaloa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3040,7 +3040,7 @@
     "node_code": "huntyeshaaloa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3055,7 +3055,7 @@
     "node_code": "huntheheritaa1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3070,7 +3070,7 @@
     "node_code": "hunturheritaa2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3085,7 +3085,7 @@
     "node_code": "huntcalivinga1",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3100,7 +3100,7 @@
     "node_code": "huntsalivinga2",
     "respawn": "4-6 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "",
     "trigger": ""
   },
@@ -3115,7 +3115,7 @@
     "node_code": "huntihkozamas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Use the 'Morpho' minion on spawn points."
   },
@@ -3130,7 +3130,7 @@
     "node_code": "huntkiurqopas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Be on a spawn point during fog and a new moon."
   },
@@ -3145,7 +3145,7 @@
     "node_code": "huntneyaktels1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Discard a stack of at least 50 'Fish Meal'."
   },
@@ -3160,7 +3160,7 @@
     "node_code": "huntsashaalos1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Complete \"You Are What You Drink\" FATE at three times in a row."
   },
@@ -3175,7 +3175,7 @@
     "node_code": "huntatheritas1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Craft HQ 'Rroneek Steak'."
   },
@@ -3190,7 +3190,7 @@
     "node_code": "huntthlivings1",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Cast the blue mage action 'Northerlies' on spawn points."
   },
@@ -3205,7 +3205,7 @@
     "node_code": "huntarurqopass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   },
@@ -3220,7 +3220,7 @@
     "node_code": "huntarkozamass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   },
@@ -3235,7 +3235,7 @@
     "node_code": "huntaryaktelss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   },
@@ -3250,7 +3250,7 @@
     "node_code": "huntarshaaloss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   },
@@ -3265,7 +3265,7 @@
     "node_code": "huntarheritass",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   },
@@ -3280,7 +3280,7 @@
     "node_code": "huntarlivingss",
     "respawn": "84-132 hrs",
     "weather1": "",
-    "weather 2": "",
+    "weather2": "",
     "maintenance": "50-80 hrs",
     "trigger": "Kill the Crystal Incarnation which have a chance to appear after killing an S rank."
   }

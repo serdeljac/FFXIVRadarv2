@@ -1,7 +1,6 @@
 <template>
     <ul>
-        <li 
-            class="overviewListItem" 
+        <li class="overviewListItem" 
             v-for="node in groupNodes()" :key="node[0]" 
             @click="$emit('focusNode', node)" 
             :data-rowActive="checkRowActive(node[0])">
@@ -13,7 +12,7 @@
                     Node
                     - Lv.${node[0].node_level}`" :icon="node[0].job_sub"/>
 
-                <div class="overviewListItem_timer">
+                <div class="forceright">
                     <img 
                         class="iconSize"
                         v-if="node[0].time" 
@@ -24,12 +23,18 @@
             </div>
             
             <hr/>
-            <ul class="overviewListItem_list">
-                <li v-for="d in node" :key="d.ID">
-                    {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
-                </li>
-            </ul>
-            <p class="tombRequire" v-if="node[0].tomb">{{ `Requires ${node[0].tomb}` }}</p>
+
+            <div class="overviewListItem_body">
+
+                <ul class="overviewListItem_list">
+                    <li v-for="d in node" :key="d.ID">
+                        {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
+                    </li>
+                </ul>
+
+                <p class="tombRequire" v-if="node[0].tomb">{{ `Requires ${node[0].tomb}` }}</p>
+            </div>
+
         </li>
     </ul>
 </template>
@@ -41,11 +46,11 @@
 </script>
 
 <script lang="ts">
-import displayAreaText from '../../ui/displayAreaText.vue';
-import iconAndText from '../../ui/iconAndText.vue'
+    import displayAreaText from '../../ui/displayAreaText.vue';
+    import iconAndText from '../../ui/iconAndText.vue'
 
     export default {
-        name: 'List Item Gathering',
+        name: 'List Item - Gathering',
         components: {displayAreaText, iconAndText},
         props: ['data', 'timerList'],
         emits: ['focusNode', 'changeTracked'],
@@ -84,46 +89,6 @@ import iconAndText from '../../ui/iconAndText.vue'
 
 <style scoped lang="scss">
     .overviewListItem {
-        max-width: 600px;
-        background-color: $listBackgroundColor;
-        border-radius: $borderRadius;
-        border: 1px solid $listBackgroundColor;
-        padding: 6px 4px;
-        margin: 2px auto;
-        cursor: pointer;
-        transition: all .07s linear;
-        &:hover {
-            border: 1px solid $fontColor;
-        }
-
-        &_header {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            padding: 5px 0.5rem;
-        }
-
-        &_timer {
-            display: flex;
-            align-items: center;
-        }
-
-        hr {
-            width: 94%;
-            margin: 4px auto;
-        }
-
-        &_list {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            margin-top: 5px;
-            
-            justify-content: center;
-            li {
-                padding: 3px 2px;
-                text-align: center;
-            }
-        }
 
         .tombRequire {
             width: 100%;

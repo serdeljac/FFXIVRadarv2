@@ -1,12 +1,17 @@
 <template>
     <ul>
-        <li class="overviewListItem" v-for="node in data" :key="node.ID" @click="$emit('focusNode', node)" :data-rowActive="checkRowActive(node)">
+        <li class="overviewListItem" 
+            v-for="node in breakArray()" :key="node.ID" 
+            @click="$emit('focusNode', node)" 
+            :data-rowActive="checkRowActive(node)">
 
             <div class="overviewListItem_header">
-                <iconAndText :text="`Sightseeing Log #${node.no} - ${node.name}`" :icon="`${node.job_sub}`"/>
-                <div class="overviewListItem_timer">
-                    <img 
-                        class="iconSize"
+                <iconAndText 
+                    :text="`Sightseeing Log #${node.no} - ${node.name}`" 
+                    :icon="`${node.job_sub}`"/>
+
+                <div class="forceright">
+                    <img class="iconSize"
                         v-if="node.time" 
                         :src="getIconImg(node.tracked ? 'remove' : 'add')" 
                         @click="$emit('changeTracked', node)"/>
@@ -17,15 +22,20 @@
             <hr/>
 
             <div class="overviewListItem_body">
-                <img class="previewImg" :src="getVistaPreviewImgSmall(node.area.icon, node.no)" :alt="`IMG`"/>
+
+                <div class="previewImg">
+                    <img v-if="checkImgAvailable(node.area.icon, node.no)" :src="getVistaPreviewImgSmall(node.area.icon, node.no)" />
+                </div>
+
                 <div class="overviewListItem_contents">
+
                     <div class="weatherAndEmote">
                         <div>
                             <p :data-timerActive="checkTimeActive('weather1', node)">{{ node.weather1 }}</p>
                             <p v-if="node.weather2" :data-timerActive="checkTimeActive('weather2', node)">{{ node.weather2 }}</p>
                             <p v-if="!node.weather1">Any Weather</p>
                         </div>
-                        <div class="emote">
+                        <div>
                             <iconAndText :text="`${node.emote}`" :icon="`${node.emote}`"/>
                         </div>
                     </div>
@@ -43,6 +53,11 @@
 </template>
 
 <script lang="ts" setup>
+    function checkImgAvailable(expansion: string, no: number) {
+        let results = new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
+        let state = results.split("/").pop() == 'undefined' ? null : true
+        return state
+    };
     function getVistaPreviewImgSmall(expansion: string, no: number) {
         return new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
     }
@@ -59,11 +74,15 @@ import displayAreaText from '../../ui/displayAreaText.vue';
 import iconAndText from '../../ui/iconAndText.vue'
 
     export default {
-        name: 'List Item Gathering',
+        name: 'List Item - Sightseeing',
         components: {displayAreaText, iconAndText},
         props: ['data', 'timerList'],
         emits: ['focusNode', 'changeTracked'],
         methods: {
+            breakArray() {
+                let results = this.data.map(o => o)
+                return results
+            },
             fetchTimerCountdowns(time: string) {
                 if (time) {
                     let results = this.timerList.find((o: any) => o.ID == time).countdown
@@ -112,46 +131,43 @@ import iconAndText from '../../ui/iconAndText.vue'
 </script>
 
 <style scoped lang="scss">
+    @keyframes pulse {
+        0% {transform: scale(1)}
+        50% {transform: scale(1.1)}
+        100% {transform: scale(1)}
+    }
 
-    .overviewListItem {
-        max-width: 600px;
-        background-color: $listBackgroundColor;
+    .previewImg {
+        width: 100px;
+        height: 100px;
+        aspect-ratio: 1/1;
+
+        border: 1px solid #fff;
         border-radius: $borderRadius;
-        border: 1px solid $listBackgroundColor;
-        padding: 6px 4px;
-        margin: 2px auto;
-        cursor: pointer;
-        transition: all .07s linear;
-        &:hover {
-            border: 1px solid $fontColor;
-        }
-
-        &_header {
-            display: flex;
-            width: 100%;
-            justify-content: space-between;
-            padding: 5px 0.5rem;
-        }
-
-        &_timer {
+        &::before {
             display: flex;
             align-items: center;
+            justify-content: center;
+            content: 'Loading...';
+            position: absolute;
+            z-index: 9;
+            width: 100px;
+            height: 100px;
+            color: grey;
+            animation: pulse 1s linear infinite;
         }
+        img {
+            width: 100%;
+            position: relative;
+            z-index: 10
+        }
+    }
 
-        hr {
-            width: 94%;
-            margin: 4px auto;
-        }
+    .overviewListItem {
 
         &_body {
             display: flex;
-            gap: 10px;
-            .previewImg {
-                width: 100px;
-                height: 100px;
-                aspect-ratio: 1/1;
-                margin: 6px;
-            }
+            gap: 20px;
         }
 
         &_contents {
@@ -178,7 +194,6 @@ import iconAndText from '../../ui/iconAndText.vue'
                 span {font-weight: bold;}
             }
         }
-        
     }
 
 </style>

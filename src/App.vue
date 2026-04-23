@@ -253,7 +253,7 @@ export default {
           this.ffxivData.eliteHunts[d].job_sub = 'hunts'
           this.ffxivData.eliteHunts[d].rank = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
 
-          let myAreaData = this.ffxivData.areas.find(o => o.area == obj.area)
+          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
           this.ffxivData.eliteHunts[d].area = myAreaData
 
           let myPointData = getPointsData(obj.zone, obj.rank)

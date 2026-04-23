@@ -1,5 +1,5 @@
 <template>
-    <div :class="[`iconAndText`, addClass]">
+    <div :class="[`iconAndText`, addClass]" :chainNo="chainNo ? chainNo : null">
         <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
         <p v-if="text">{{ text }}</p>
     </div>
@@ -14,7 +14,7 @@
 <script lang="ts">
     export default {
         name: "Icon & Text",
-        props: ['icon', 'text', 'addClass'],
+        props: ['icon', 'text', 'addClass', 'chainNo'],
         computed: {
             fetchIconName() {
                 if (this.icon == 'Crafting') {return `sq_${this.icon}`}
@@ -34,5 +34,14 @@
             img {margin-right: 2px;}
             p {margin-right: 6px;}
         }
+
+        &[chainno] {
+            img {opacity: 0.7;}
+            &::before {
+                @extend .inheritChainNo;
+            }
+        }
+
+        
     }
 </style>
