@@ -16,7 +16,7 @@
         </li>
 
         <li class="overviewListItem" 
-            v-for="(nodeSet, index) in fetchChainSet()" :key="nodeSet[index].ID"
+            v-for="nodeSet in fetchChainSet()" :key="nodeSet.ID"
             @click="$emit('focusNode', nodeSet[0])">
 
             <div :class="[`overviewListItem_header set`]" v-for="(node, index) in nodeSet" :key="node.ID">
@@ -61,10 +61,12 @@ import iconAndText from '../../ui/iconAndText.vue'
                 let fetchChainSets = this.data.filter((obj: any, index: any) => 
                     index === this.data.findIndex((o: any) => obj.chain_set === o.chain_set)
                 );
+
                 fetchChainSets.shift()
                 
                 let groupedChainSet = []
                 for (const d in fetchChainSets) {
+                    console.log(fetchChainSets[d].ID)
                     let curChainSet = fetchChainSets[d].chain_set
                     let results = this.data.filter((o:any) => o.chain_set == curChainSet)
                     groupedChainSet.push(results)
@@ -79,26 +81,12 @@ import iconAndText from '../../ui/iconAndText.vue'
 <style scoped lang="scss">
     .overviewListItem {
 
-
-
-
-
         &_header {
-            
-
             &.set {
-                &:not(:last-of-type) {
-                    padding-bottom: 0px;
-                }
-                &:not(:first-of-type) {
-                    padding-top: 0px;
-                }
-                
-                
+                &:not(:last-of-type) {padding-bottom: 0px}
+                &:not(:first-of-type) {padding-top: 0px}
             }
         }
-
-
 
         .chainArrow {
             grid-column: 1 / span 2;

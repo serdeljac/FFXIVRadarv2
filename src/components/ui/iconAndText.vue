@@ -1,6 +1,7 @@
 <template>
     <div :class="[`iconAndText`, addClass]" :chainNo="chainNo ? chainNo : null">
         <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
+        <img v-if="secIcon" class="iconSize" :src="getIconImageURL(secIcon)"/>
         <p v-if="text">{{ text }}</p>
     </div>
 </template>
@@ -14,12 +15,18 @@
 <script lang="ts">
     export default {
         name: "Icon & Text",
-        props: ['icon', 'text', 'addClass', 'chainNo'],
+        props: ['icon', 'text', 'addClass', 'chainNo', 'secIcon'],
         computed: {
             fetchIconName() {
                 if (this.icon == 'Crafting') {return `sq_${this.icon}`}
                 else if (this.icon == 'eliteHunts') {return 'hunts'}
                 let toLowerCaseName = this.icon.toLowerCase()
+                return toLowerCaseName
+            },
+            fetchOtherIconName() {
+                if (this.secIcon == 'Crafting') {return `sq_${this.secIcon}`}
+                else if (this.secIcon == 'eliteHunts') {return 'hunts'}
+                let toLowerCaseName = this.secIcon.toLowerCase()
                 return toLowerCaseName
             }
         },

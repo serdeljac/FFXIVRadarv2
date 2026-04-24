@@ -62,6 +62,11 @@
                     :data="filtersByType[4][3]" 
                     @focusNode="(e: any) => focusNode = e"/>
 
+                <aethercurrentList 
+                    v-if="filterTypeSelected == filtersByType[5][1]" 
+                    :data="filtersByType[5][3]" 
+                    @focusNode="(e: any) => focusNode = e"/>
+
             </div>
         </div>
         <zoneSelect 
@@ -83,6 +88,7 @@ import gatheringList from '../ui/overviewListItem/gathering.vue';
 import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
 import fatesList from '../ui/overviewListItem/fates.vue';
 import huntsList from '../ui/overviewListItem/hunts.vue';
+import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue'
 
     export default {
         name: "Eorzea Overview",
@@ -95,7 +101,8 @@ import huntsList from '../ui/overviewListItem/hunts.vue';
             gatheringList, 
             sightseeingList, 
             fatesList,
-            huntsList
+            huntsList,
+            aethercurrentList
         },
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked'],

@@ -90,6 +90,7 @@ import iconAndText from '../../ui/iconAndText.vue'
         .points {
             grid-column: 1 / span 2;
             width: 100%;
+            margin-top: 10px;
             ul {
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr 1fr;
