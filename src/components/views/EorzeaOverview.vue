@@ -5,7 +5,7 @@
         <div class="body_content">
 
             <div class="mapDisplay">
-                {{ focusNode.length == 0 ? filterAreaSelected: focusNode }}
+                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode"/>
             </div>
 
             <div class="mapContext">
@@ -89,6 +89,7 @@ import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
 import fatesList from '../ui/overviewListItem/fates.vue';
 import huntsList from '../ui/overviewListItem/hunts.vue';
 import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue'
+import mapDisplay from '../layouts/MapDisplay.vue'
 
     export default {
         name: "Eorzea Overview",
@@ -102,7 +103,8 @@ import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue'
             sightseeingList, 
             fatesList,
             huntsList,
-            aethercurrentList
+            aethercurrentList,
+            mapDisplay
         },
         props: ['ffxivData', 'timerList', 'windowWidth'],
         emits: ['changeTracked'],
