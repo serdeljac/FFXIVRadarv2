@@ -66,7 +66,6 @@ import iconAndText from '../../ui/iconAndText.vue'
                 
                 let groupedChainSet = []
                 for (const d in fetchChainSets) {
-                    console.log(fetchChainSets[d].ID)
                     let curChainSet = fetchChainSets[d].chain_set
                     let results = this.data.filter((o:any) => o.chain_set == curChainSet)
                     groupedChainSet.push(results)

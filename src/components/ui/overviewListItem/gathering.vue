@@ -2,7 +2,8 @@
     <ul>
         <li class="overviewListItem" 
             v-for="node in groupNodes()" :key="node[0]" 
-            @click="$emit('focusNode', node)" 
+            @click="changeFocusNode(node[0])"
+            :data-rowFocused="node[0].node_code == nodeCode ? true : null" 
             :data-rowActive="checkRowActive(node[0])">
 
             <div class="overviewListItem_header">
@@ -54,7 +55,11 @@
         components: {displayAreaText, iconAndText},
         props: ['data', 'timerList'],
         emits: ['focusNode', 'changeTracked'],
-        
+        data() {
+            return {
+                nodeCode: '' as string
+            }
+        },
         methods: {
             fetchTimerCountdowns(time: string) {
                 if (time) {
@@ -75,14 +80,18 @@
                     results.sort((a, b) => b.isshard + a.isshard);
                     groupedNodes[d] = results
                 }
-                
+                this.nodeCode = groupedNodes[0].node_code
                 return groupedNodes
             },
             checkRowActive(arr: any) {
                 let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
                 if (currentTime) {return true}
                 return null
-            }  
+            },
+            changeFocusNode(arr: any) {
+                this.$emit('focusNode', arr)
+                this.nodeCode = arr.node_code
+            },
         },
     }
 </script>

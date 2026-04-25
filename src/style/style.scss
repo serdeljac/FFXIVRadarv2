@@ -25,7 +25,6 @@ body {
 
 main {
     height: calc($trackingbarHeight + 200px - 100vh);
-    
 }
 
 .expColor {color: $expColor}
@@ -43,6 +42,12 @@ main {
     100% {background-color: #692168;}
 }
 
+@keyframes mapIconActiveAnimation {
+    0% {filter: brightness(1);}
+    50% {filter: brightness(2);}
+    100% {filter: brightness(1);}
+}
+
 *[data-timerActive] {
     animation: timerActiveAnimation 0.7s linear infinite;
     p {animation: timerActiveAnimation 0.7s linear infinite;}
@@ -52,6 +57,13 @@ main {
     animation: rowActiveAnimation 0.7s linear infinite;
 }
 
+*[data-mapIconActive] {
+    animation: mapIconActiveAnimation 0.7s linear infinite;
+}
+
+*[data-rowFocused] {
+    border-left: 4px solid rgb(96, 96, 231);
+}
 
 
 /*********************************************************
@@ -129,7 +141,7 @@ Default Styles
     &.body {
         li {
             background-color: $listBackgroundColor;
-            &:hover {background-color: $borderColorFade;}
+            &:hover {background-color: $listBackgroundColorHover;}
         }
     }
 

@@ -57,9 +57,9 @@
         &_foreground {
             @extend .zoneSelect_background;
             z-index: 999;
-            margin: 5rem 8rem;
+            margin: 2rem 8rem;
             width: calc(100vw - 16rem);
-            height: calc(100vh - 10rem);
+            height: calc(100vh - 4rem);
             background-color: $buttonBackgroundColor;
             border-radius: $borderRadius;
             overflow: hidden;

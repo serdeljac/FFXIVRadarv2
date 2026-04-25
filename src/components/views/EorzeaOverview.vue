@@ -26,7 +26,7 @@
                             {'activeTab': filterTypeSelected == d[1]}
                             ]" 
                         v-for="d in filtersByType" :key="d[1]"
-                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false;">
+                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false; focusNode = d[3][0]">
                         <iconAndText :icon="d[1]" />
                     </div>
                 </div>
@@ -198,6 +198,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 for (const d in this.filtersByType) {
                     if (this.filtersByType[d][3].length != 0) {
                         this.filterTypeSelected = this.filtersByType[d][1]
+                        this.focusNode = this.filtersByType[d][3][0]
                         break;
                     }
                 }
