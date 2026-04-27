@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li class="overviewListItem" 
-            v-for="node in groupNodes()" :key="node[0]" 
+            v-for="node in nodeList" :key="node[0]" 
             @click="changeFocusNode(node[0])"
             :data-rowFocused="node[0].node_code == nodeCode ? true : null" 
             :data-rowActive="checkRowActive(node[0])">
@@ -10,8 +10,7 @@
                 <iconAndText :text="`
                     ${node[0].node_name} 
                     ${node[0].job_sub.charAt(0).toUpperCase() + node[0].job_sub.slice(1)} 
-                    Node
-                    - Lv.${node[0].node_level}`" :icon="node[0].job_sub"/>
+                    Node - Lv.${node[0].node_level}`" :icon="node[0].job_sub"/>
 
                 <div class="forceright">
                     <img 
@@ -57,8 +56,15 @@
         emits: ['focusNode', 'changeTracked'],
         data() {
             return {
+                nodeList: [] as any,
                 nodeCode: '' as string
             }
+        },
+        created() {
+            
+            this.nodeList = this.groupNodes()
+            this.nodeCode = this.nodeList[0][0].node_code
+            this.$emit('focusNode', this.nodeList[0][0])
         },
         methods: {
             fetchTimerCountdowns(time: string) {
@@ -80,7 +86,7 @@
                     results.sort((a, b) => b.isshard + a.isshard);
                     groupedNodes[d] = results
                 }
-                this.nodeCode = groupedNodes[0].node_code
+
                 return groupedNodes
             },
             checkRowActive(arr: any) {
@@ -89,8 +95,10 @@
                 return null
             },
             changeFocusNode(arr: any) {
+                
                 this.$emit('focusNode', arr)
-                this.nodeCode = arr.node_code
+                // this.nodeCode = arr.node_code
+
             },
         },
     }

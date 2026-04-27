@@ -26,7 +26,7 @@
                             {'activeTab': filterTypeSelected == d[1]}
                             ]" 
                         v-for="d in filtersByType" :key="d[1]"
-                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false; focusNode = d[3][0]">
+                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false;">
                         <iconAndText :icon="d[1]" />
                     </div>
                 </div>
@@ -36,14 +36,14 @@
                     :data="filtersByType[0][3]" 
                     :timerList="timerList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e[0]"/>
+                    @focusNode="(e: any) => focusNode = e"/>
 
                 <gatheringList 
                     v-if="filterTypeSelected == filtersByType[1][1]" 
                     :data="filtersByType[1][3]" 
                     :timerList="timerList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e[0]"/>
+                    @focusNode="(e: any) => focusNode = e"/>
                     
                 <sightseeingList 
                     v-if="filterTypeSelected == filtersByType[2][1]" 

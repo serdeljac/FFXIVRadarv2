@@ -52,7 +52,7 @@
                 // return r
             },
             fetchMiningNodes() {
-                console.log(this.focusNode)
+                // console.log(this.focusNode)
                 // if (this.focusNode.job == 'miner') {
                 // let r = this.ffxivData.miner.filter((o: any) => o.area.zone == this.focusNode.area.zone)
                 // return r
