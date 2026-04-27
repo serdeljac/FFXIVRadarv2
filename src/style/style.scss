@@ -58,11 +58,13 @@ main {
 }
 
 *[data-mapIconActive] {
+    z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
 }
 
 *[data-rowFocused] {
-    border-left: 4px solid rgb(96, 96, 231);
+    transition: border-left 0.7s ease;
+    border-left: 4px solid rgb(96, 96, 231) !important;
 }
 
 
@@ -185,11 +187,8 @@ Default Styles
             z-index:999;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
-
         }
-        &:hover::before {
-            opacity: 1;
-        }
+        &:hover::before {opacity: 1;}
     }
 }
 
@@ -207,6 +206,7 @@ Default Styles
     transition: all .07s linear;
     margin: 2px auto;
     padding: 4px;
+    border-left: 4px solid transparent;
     &:hover {background-color: $listBackgroundColorHover}
 
     &_header {
@@ -233,7 +233,6 @@ Default Styles
     &_list {
         display: grid;
         grid-template-columns: 1fr 1fr;
-        
         justify-content: center;
         li {
             padding: 3px 2px;

@@ -2,7 +2,8 @@
     <ul>
         <li class="overviewListItem" 
             v-for="node in fetchNoChainSet()" :key="node.ID" 
-            @click="$emit('focusNode', node)" >
+            @click="focusNode = [node]; emitFocusNode"
+            :data-rowFocused="node.node_code == focusNode[0].node_code ? true : null">
 
             <div class="overviewListItem_header">
                 <iconAndText :text="`${node.name} - Lv.${node.level}`" :icon="`fate_${node.job_sub}`"/>
@@ -17,7 +18,8 @@
 
         <li class="overviewListItem" 
             v-for="nodeSet in fetchChainSet()" :key="nodeSet.ID"
-            @click="$emit('focusNode', nodeSet[0])">
+            @click="focusNode = nodeSet; emitFocusNode"
+            :data-rowFocused="nodeSet[0].node_code == focusNode[0].node_code ? true : null">
 
             <div :class="[`overviewListItem_header set`]" v-for="(node, index) in nodeSet" :key="node.ID">
                 <div class="chainArrow" v-if="index != 0">
@@ -52,6 +54,20 @@ import iconAndText from '../../ui/iconAndText.vue'
         components: {displayAreaText, iconAndText},
         props: ['data'],
         emits: ['focusNode'],
+        data() {
+            return {
+                focusNode: [] as any,
+            }
+        },
+        computed: {
+            emitFocusNode() {
+                this.$emit('focusNode', this.focusNode)
+            }
+        },
+        created() {
+            this.focusNode = [this.data[0]] //Set first found item as the focus (on tab select)
+            this.emitFocusNode
+        },
         methods: {
             fetchNoChainSet() {
                 let noChainList = this.data.filter((o: any) => !o.chain_set)
@@ -72,6 +88,9 @@ import iconAndText from '../../ui/iconAndText.vue'
                 }
 
                 return groupedChainSet
+            },
+            checkNodeSetFocus(arr: any) {
+                console.log(arr)
             },
         },
     }

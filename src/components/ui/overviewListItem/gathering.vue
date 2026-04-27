@@ -2,8 +2,8 @@
     <ul>
         <li class="overviewListItem" 
             v-for="node in nodeList" :key="node[0]" 
-            @click="changeFocusNode(node[0])"
-            :data-rowFocused="node[0].node_code == nodeCode ? true : null" 
+            @click="focusNode = [node[0]]; emitFocusNode"
+            :data-rowFocused="node[0].node_code == focusNode[0].node_code ? true : null" 
             :data-rowActive="checkRowActive(node[0])">
 
             <div class="overviewListItem_header">
@@ -57,14 +57,18 @@
         data() {
             return {
                 nodeList: [] as any,
-                nodeCode: '' as string
+                focusNode: [] as any,
             }
         },
         created() {
-            
-            this.nodeList = this.groupNodes()
-            this.nodeCode = this.nodeList[0][0].node_code
-            this.$emit('focusNode', this.nodeList[0][0])
+            this.nodeList = this.groupNodes() //Create the list based on current zone
+            this.focusNode = [this.nodeList[0][0]] //Set first found item as the focus (on tab select)
+            this.emitFocusNode
+        },
+        computed: {
+            emitFocusNode() {
+                this.$emit('focusNode', this.focusNode)
+            }
         },
         methods: {
             fetchTimerCountdowns(time: string) {
@@ -93,12 +97,6 @@
                 let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
                 if (currentTime) {return true}
                 return null
-            },
-            changeFocusNode(arr: any) {
-                
-                this.$emit('focusNode', arr)
-                // this.nodeCode = arr.node_code
-
             },
         },
     }

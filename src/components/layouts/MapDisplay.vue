@@ -1,26 +1,65 @@
 <template>
     <div class="mapDisplay">
-        <!-- {{ focusNode.length == 0 ? null : focusNode }} -->
         <div class="mapDisplay_background"
-            :style="`background-image: url('${getMapImg(focusNode.area.zone)}')`">
+            :style="`background-image: url('${getMapImg(focusNode[0].area.zone)}')`">
         </div>
         <div class="mapDisplay_overlay">
 
-            <img v-for="d in fetchAetheryteNodes" :key="d.ID"
-                :src="getIconImg('aetheryte')" 
+            <div 
+                v-for="d in fetchAetheryteNodes" :key="d.ID"
                 class="mapIcon"
-                :style="`transform: translate(${getCoordinates(d)})`"/>
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg('aetheryte')" />
+            </div>
             
-            <img v-for="d in fetchMiningNodes" :key="d.ID"
-                :src="getIconImg(d.job_sub)" 
+            <div 
+                v-for="d in fetchGatheringNodes" :key="d.ID"
                 class="mapIcon"
-                :data-mapIconActive="d.ID == focusNode.ID ? true : null"
-                :style="`transform: translate(${getCoordinates(d)})`"/>
+                :data-mapIconActive="d.node_code == focusNode[0].node_code ? true : null"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg(d.job_sub)" />
+            </div>
             
-            <img v-for="d in fetchVistaNodes" :key="d.ID"
-                :src="getIconImg('sightseeing')" 
+            <div
+                v-for="d in fetchVistaNodes" :key="d.ID"
                 class="mapIcon"
-                :style="`transform: translate(${getCoordinates(d)})`"/>
+                :data-mapIconActive="d.node_code == focusNode[0].node_code ? true : null"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg('sightseeing')" />
+            </div>
+            
+            <div
+                v-for="d in fetchFateNodesSingle" :key="d.ID"
+                class="mapIcon"
+                :data-mapIconActive="d.node_code == focusNode[0].node_code ? true : null"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg(`fate_${d.job_sub}`)" />
+            </div>
+            
+            <div 
+                v-for="d in fetchFateNodesSet" :key="d.ID" 
+                class="mapIcon chain"
+                :style="`transform: translate(${getCoordinates(d)})`"
+                :data-chainNo="d.chain_no" 
+                :data-mapIconActive="d.chain_set == focusNode[0].chain_set ? true : null">
+                <img :src="getIconImg(`fate_${d.job_sub}`)" />
+            </div>
+
+            <div 
+                v-for="d in fetchHuntNodes" :key="d.ID" 
+                class="mapIcon chain"
+                :style="`transform: translate(${getCoordinates(d)})`" 
+                :data-mapIconActive="checkRank(d.ranks)">
+                <img :src="getIconImg(`hunts`)" />
+            </div>
+
+            <div
+                v-for="d in fetchAetherNodes" :key="d.ID"
+                class="mapIcon"
+                :data-mapIconActive="d.node_code == focusNode[0].node_code ? true : null"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg(d.job_sub)" />
+            </div>
 
         </div>
     </div>
@@ -31,9 +70,12 @@
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 
-    function getMapImg(name: string) {
-        let convertName = name.replace(/[-,',\s]/g, '').toLowerCase()
-        return new URL(`/src/assets/maps/${convertName}.webp`, import.meta.url).href
+    function getMapImg(zone: string) {
+        let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
+        return new URL(`/src/assets/maps/${convert_name}.webp`, import.meta.url).href
+        
+
+        
     }
 </script>
 
@@ -48,37 +90,60 @@
         },
         computed: {
             fetchAetheryteNodes() {
-                // let r = this.ffxivData.aetheryte.filter((o: any) => o.zone == this.focusNode.area.zone)
-                // return r
+                if (!this.focusNode[0]) {return []}
+                let r = this.ffxivData.aetheryte.filter((o: any) => o.zone == this.focusNode[0].area.zone)
+                return r
             },
-            fetchMiningNodes() {
-                // console.log(this.focusNode)
-                // if (this.focusNode.job == 'miner') {
-                // let r = this.ffxivData.miner.filter((o: any) => o.area.zone == this.focusNode.area.zone)
-                // return r
-                // }
+            fetchGatheringNodes() {
+                if (this.focusNode[0].job != 'miner' && this.focusNode[0].job != 'botany') {return []}
+                let miningList = this.ffxivData.miner.filter((o: any) => o.area.zone == this.focusNode[0].area.zone)
+                let botanyList = this.ffxivData.botany.filter((o: any) => o.area.zone == this.focusNode[0].area.zone)
+                return [...miningList, ...botanyList]
             },
             fetchVistaNodes() {
-                // let r = this.ffxivData.sightseeing.filter((o: any) => o.zone == this.focusNode.area.zone)
-                // return r
-            }
+                if (this.focusNode[0].job != 'sightseeing') {return []}
+                let r = this.ffxivData.sightseeing.filter((o: any) => o.zone == this.focusNode[0].area.zone)
+                return r
+            },
+            fetchFateNodesSingle() {
+                if (this.focusNode[0].job != 'fates') {return []}
+                let r = this.ffxivData.fates.filter((o: any) => o.zone == this.focusNode[0].area.zone && !o.chain_set)
+                return r
+            },
+            fetchFateNodesSet() {
+                if (this.focusNode[0].job != 'fates') {return []}
+                let r = this.ffxivData.fates.filter((o: any) => o.zone == this.focusNode[0].area.zone && o.chain_set)
+                return r
+            },
+            fetchHuntNodes() {
+                if (this.focusNode[0].job != 'hunts') {return []}
+                let r = this.ffxivData.eliteHunts.filter((o: any) => o.zone == this.focusNode[0].area.zone).map(o => o.points).flat()
+
+                let allPoints = r.filter((obj: any, index: any) => 
+                    index === r.findIndex((o: any) => obj.transx === o.transx && obj.transy === o.transy)
+                );
+
+                return allPoints
+            },
+            fetchAetherNodes() {
+                if (this.focusNode[0].job != 'aethercurrents') {return []}
+                let r = this.ffxivData.aethercurrents.filter((o: any) => o.zone == this.focusNode[0].area.zone)
+                return r
+            },
         },
         methods: {
-            fetchAllIcons() {
-                // Miner, Botany, Sightseeing, Fates, Hunts, AetherCurrents, Aetheryte
-
-            },
             getCoordinates(arr: any) {
-
-                 if (!arr.transx) {
-                    // let mapsize = this.currentMapData.map[0].mapsize
-                    let x = Math.floor((arr.x/800)*800)
-                    let y = Math.floor((arr.y/800)*800)
+                if (arr.transx) {return `${arr.transx}px, ${arr.transy}px`}
+                    let mapsize = arr.area.mapsize
+                    let x = Math.floor((arr.x/mapsize)*800)
+                    let y = Math.floor((arr.y/mapsize)*800)
                     return `${x}px, ${y}px`
-                }
-
-                return `${arr.transx}px, ${arr.transy}px`
-            }
+            },
+            checkRank(rank: string) {
+                let current_rank = this.focusNode[0].rank
+                let results = rank.includes(current_rank) ? true : null
+                return results
+            },
         }
     }
 </script>
@@ -93,16 +158,22 @@
         }
 
         .mapIcon {
-            width: $iconSize;
-            margin-left: calc($iconSize / -2);
-            margin-top: calc($iconSize / -2);
             z-index: 10;
             position: absolute;
+            img {
+                width: $iconSize;
+                margin-left: calc($iconSize / -2);
+                margin-top: calc($iconSize / -2);
+            }
+            &:before {
+                @extend .inheritChainNo;
+                content: attr(data-chainNo);
+                transform: translate(2px, -1px);
+            }
         }
 
-        // &_overlay {
-        //     position: absolute;
-        // }
+        
+
     }
 
 </style>

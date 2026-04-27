@@ -1,8 +1,9 @@
 <template>
     <ul>
         <li class="overviewListItem" 
-            v-for="node in breakArray()" :key="node.ID" 
-            @click="$emit('focusNode', node)" 
+            v-for="node in data" :key="node.ID" 
+            @click="focusNode = [node]; emitFocusNode" 
+            :data-rowFocused="node.node_code == focusNode[0].node_code ? true : null" 
             :data-rowActive="checkRowActive(node)">
 
             <div class="overviewListItem_header">
@@ -78,11 +79,21 @@ import iconAndText from '../../ui/iconAndText.vue'
         components: {displayAreaText, iconAndText},
         props: ['data', 'timerList'],
         emits: ['focusNode', 'changeTracked'],
+        data() {
+            return {
+                focusNode: [] as any,
+            }
+        },
+        computed: {
+            emitFocusNode() {
+                this.$emit('focusNode', this.focusNode)
+            }
+        },
+        created() {
+            this.focusNode = [this.data[0]] //Set first found item as the focus (on tab select)
+            this.emitFocusNode
+        },
         methods: {
-            breakArray() {
-                let results = this.data.map(o => o)
-                return results
-            },
             fetchTimerCountdowns(time: string) {
                 if (time) {
                     let results = this.timerList.find((o: any) => o.ID == time).countdown

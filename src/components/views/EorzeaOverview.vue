@@ -5,7 +5,7 @@
         <div class="body_content">
 
             <div class="mapDisplay">
-                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode"/>
+                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" />
             </div>
 
             <div class="mapContext">
@@ -123,7 +123,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 filterTypeSelected: '' as string,
                 changeZoneMenu: false as boolean,
                 searchMenu: false as boolean,
-                focusNode: [] as Array<object>,
+                focusNode: [] as any,
             }
         },
         computed: {
@@ -198,7 +198,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 for (const d in this.filtersByType) {
                     if (this.filtersByType[d][3].length != 0) {
                         this.filterTypeSelected = this.filtersByType[d][1]
-                        this.focusNode = this.filtersByType[d][3][0]
+                        this.focusNode = [this.filtersByType[d][3][0]]
                         break;
                     }
                 }

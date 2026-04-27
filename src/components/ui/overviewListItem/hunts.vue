@@ -2,7 +2,8 @@
     <ul>
         <li class="overviewListItem" 
             v-for="node in data" :key="node.ID" 
-            @click="$emit('focusNode', node)" >
+            @click="focusNode = [node]; emitFocusNode"
+            :data-rowFocused="node.node_code == focusNode[0].node_code ? true : null">
             
             <div class="overviewListItem_header">
                 <iconAndText :text="`${node.name} - Lv.${node.level}`" :icon="`hunts${node.rank == 'SS' ? '_ss' : ''}`"/>
@@ -49,27 +50,20 @@ import iconAndText from '../../ui/iconAndText.vue'
         components: {displayAreaText, iconAndText},
         props: ['data'],
         emits: ['focusNode'],
-        methods: {
-            fetchNoChainSet() {
-                let noChainList = this.data.filter((o: any) => !o.chain_set)
-                return noChainList
-            },
-            fetchChainSet() {
-                let fetchChainSets = this.data.filter((obj: any, index: any) => 
-                    index === this.data.findIndex((o: any) => obj.chain_set === o.chain_set)
-                );
-                fetchChainSets.shift()
-                
-                let groupedChainSet = []
-                for (const d in fetchChainSets) {
-                    let curChainSet = fetchChainSets[d].chain_set
-                    let results = this.data.filter((o:any) => o.chain_set == curChainSet)
-                    groupedChainSet.push(results)
-                }
-
-                return groupedChainSet
-            },
+        data() {
+            return {
+                focusNode: [] as any,
+            }
         },
+        computed: {
+            emitFocusNode() {
+                this.$emit('focusNode', this.focusNode)
+            }
+        },
+        created() {
+            this.focusNode = [this.data[0]] //Set first found item as the focus (on tab select)
+            this.emitFocusNode
+        }
     }
 </script>
 
