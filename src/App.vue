@@ -255,18 +255,15 @@ export default {
 
           let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
           this.ffxivData.eliteHunts[d].area = myAreaData
-
-          let myPointData = getPointsData(obj.zone, obj.rank)
+          
+          let myPointData = getPointsData(obj.zone, this.ffxivData.eliteHunts[d].rank)
           this.ffxivData.eliteHunts[d].points = myPointData
         }
 
         function getPointsData(zone: string, rank: string) {
           let zonesArr = huntsPointsRaw.filter(o => o.zone == zone)
-          let results:any = []
-          for (const i in zonesArr) {
-            let r = zonesArr[i].ranks.includes(rank)
-            if (r) {results.push(zonesArr[i])}}
-          return results
+          let narrowPoints = zonesArr.filter(o => o.ranks.includes(rank))
+          return narrowPoints
         }
       },
       setAetherCurrentData() {

@@ -89,6 +89,7 @@ import iconAndText from '../../ui/iconAndText.vue'
                 display: grid;
                 grid-template-columns: 1fr 1fr 1fr 1fr;
                 justify-items: center;
+                font-size: 14px;
                 li {color: $levelColor}
             }
         }

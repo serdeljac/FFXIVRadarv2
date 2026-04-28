@@ -48,6 +48,12 @@ main {
     100% {filter: brightness(1);}
 }
 
+@keyframes mapIconActiveAnimation2 {
+    0% {width: 26px; margin: -13px 0 0 -13px;}
+    50% {width: 36px; margin: -18px 0 0 -18px;}
+    100% {width: 26px;  margin: -13px 0 0 -13px;}
+}
+
 *[data-timerActive] {
     animation: timerActiveAnimation 0.7s linear infinite;
     p {animation: timerActiveAnimation 0.7s linear infinite;}
@@ -60,6 +66,9 @@ main {
 *[data-mapIconActive] {
     z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
+    img {
+        animation: mapIconActiveAnimation2 0.7s linear infinite;
+    }
 }
 
 *[data-rowFocused] {

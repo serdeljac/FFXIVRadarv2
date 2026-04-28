@@ -7,7 +7,7 @@
 
             <div 
                 v-for="d in fetchAetheryteNodes" :key="d.ID"
-                class="mapIcon"
+                class="mapIcon aetheryte"
                 :style="`transform: translate(${getCoordinates(d)})`">
                 <img :src="getIconImg('aetheryte')" />
             </div>
@@ -73,9 +73,6 @@
     function getMapImg(zone: string) {
         let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
         return new URL(`/src/assets/maps/${convert_name}.webp`, import.meta.url).href
-        
-
-        
     }
 </script>
 
@@ -164,11 +161,15 @@
                 width: $iconSize;
                 margin-left: calc($iconSize / -2);
                 margin-top: calc($iconSize / -2);
+                filter: drop-shadow(0px 0px 2px #000);
             }
             &:before {
                 @extend .inheritChainNo;
                 content: attr(data-chainNo);
                 transform: translate(2px, -1px);
+            }
+            &:not([data-mapIconActive]):not(.aetheryte) {
+                filter: brightness(0.7);
             }
         }
 
