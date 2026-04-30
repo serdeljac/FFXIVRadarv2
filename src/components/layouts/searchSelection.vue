@@ -6,20 +6,20 @@
                 <!-- Flex All six expansions -->
                 <div class="zoneSelect_wrapper">
                     <!-- List -->
-                    <div class="zoneSelect_group" v-for="(regions, expansionIndex) in zoneSelectList" :key="expansionIndex">
+                    <div class="zoneSelect_group" v-for="(regions, expansionIndex) in zoneList" :key="expansionIndex">
                         <h3 class="zoneSelect_list-expansion">
-                            <img class="iconSize" :src="getIconImageURL(expansionIndex.toString(), zoneList)" />
+                            <img class="iconSize" :src="getIconImageURL(regions[Object.keys(regions)[0]][0].icon)" />
                             {{ expansionIndex }}
                         </h3>
                         <hr />
                         <div class="zoneSelect_list">
-                            <ul v-for="zones in regions" :key="zones.ID">
-                                <li @click="$emit('zoneSelected', zones)">
-                                    <img :src="getIconImageURL('arr')" v-if="zones.type == 'town'"/>
-                                    {{ zones.zone }} 
+                            <ul v-for="(zones, regionsIndex) in regions" :key="regionsIndex">
+                                <li v-for="(d, zonesIndex) in zones" :key="zonesIndex" @click="$emit('zoneSelected', d)">
+                                    {{ d.zone }}
                                 </li>
                             </ul>
                         </div>
+                    
                 </div>
             </div>
 
@@ -28,11 +28,7 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImageURL(name: string, searchForIcon?: any) {
-        if (searchForIcon) {
-            let newName = searchForIcon.find((o: any) => o.expansion == name).icon
-            return new URL(`/src/assets/icons/${newName}.webp`, import.meta.url).href
-        }
+    function getIconImageURL(name: string) {
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
@@ -42,28 +38,6 @@
         name: 'Zone Select',
         props: ['zoneList', 'windowWidth'],
         emits: ['zoneSelected', 'closeMenu'],
-        data() {
-            return {
-                zoneSelectList: {} as any,
-            }
-        },
-        created() {
-            let fetchExpansions = this.zoneList.filter((obj: any, index: any) => 
-                index ===  this.zoneList.findIndex((o: any) => obj.expansion === o.expansion)
-            );
-
-            for (const i in fetchExpansions) {
-                let currentExpansion =  fetchExpansions[i].expansion
-                let foundZones = this.zoneList.filter((o: any) => o.expansion == currentExpansion && o.inOverview)
-
-                let removeDupeZones = foundZones.filter((obj: any, index: any) => 
-                    index ===  foundZones.findIndex((o: any) => obj.zone === o.zone)
-                );
-
-                removeDupeZones.sort((a, b) => a.type - b.type);
-                this.zoneSelectList[currentExpansion] = removeDupeZones
-            }
-        }
     }
 </script>
 

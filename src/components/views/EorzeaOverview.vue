@@ -71,7 +71,7 @@
         </div>
         <zoneSelect 
             v-if="changeZoneMenu" 
-            :zoneList="filtersByZone" 
+            :zoneList="ffxivData.areas" 
             :windowWidth="windowWidth" 
             @zoneSelected="newZoneSelected"
             @closeMenu="(e: any) => changeZoneMenu = e"/>
