@@ -163,8 +163,8 @@ import seachBar from '../ui/searchBar.vue';
                 );
 
                 //Search for all Expansion names within AllTimedNodes
-                const expansionList = this.ffxivData.expansionData.filter((obj: any, index: any) => 
-                    index === this.ffxivData.expansionData.findIndex((o: any) => obj.expansion === o.expansion)
+                const expansionList = this.ffxivData.expansion.filter((obj: any, index: any) => 
+                    index === this.ffxivData.expansion.findIndex((o: any) => obj.expansion === o.expansion)
                 );
 
                 //Append and set default filter list

@@ -26,6 +26,7 @@
         :ffxivData="ffxivData"
         :windowWidth="windowWidth"
         :timerList="timerList"
+        :weatherList="weatherList"
         @sendToDetails="(e: any) => detailsPanel = e"
         @changeTracked="(e: any) => changeTracked(e)"/>
     </main>
@@ -48,9 +49,9 @@
   import buttonMenu from './components/ui/ButtonMenu.vue';
 
   //JSON Data
-  import areaRaw from './assets/json/area.json';
+  import areaRaw from './assets/json/areas.json';
   import expansionsRaw from './assets/json/data_expansions.json';
-  import miningRaw from './assets/json/nodes_mining.json';
+  import miningRaw from './assets/json/nodes_miner.json';
   import botanyRaw from './assets/json/nodes_botany.json';
   import aetherialRaw from './assets/json/data_aetherial.json';
   import aetheryteRaw from './assets/json/nodes_aetheryte.json';
@@ -94,6 +95,7 @@ export default {
         active: false as boolean,
       },
       timerList: [] as any,
+      weatherList: {} as any,
       intervalTicks: 0 as number,
       detailsPanel: {} as any,
       trackinglist: [] as any,
@@ -167,115 +169,135 @@ export default {
         this.eorzeaClock.formatIs24Hour = !this.eorzeaClock.formatIs24Hour;
       },
       setupInitialFFXIVData() {
-        this.setAreaData()
-        this.ffxivData['expansionData'] = expansionsRaw
-        this.setMiningAndBotanyData(miningRaw)
-        this.setMiningAndBotanyData(botanyRaw)
-        this.setAetheryteData()
-        this.setSightseeingData()
-        this.setEliteHuntsData()
-        this.setAetherCurrentData()
-        this.setFatesData()
-        this.setBlueMageData()
-
-        this.setEorzeaClock()
-        this.setGoldSaucerClockState()
-        this.setTimerData()
-        this.getTimerCountdown()
+        // Run these once on web load
+        this.setAreaData();
+        this.ffxivData['expansion'] = expansionsRaw;
+        this.setMiningAndBotanyData(miningRaw, 'miner');
+        this.setMiningAndBotanyData(botanyRaw, 'botany');
+        this.setAetheryteData();
+        this.setSightseeingData();
+        this.setEliteHuntsData();
+        this.setAetherCurrentData();
+        this.setFatesData();
+        this.setBlueMageData();
+        this.createWeatherList();
+        this.setEorzeaClock();
+        this.setGoldSaucerClockState();
+        this.setTimerData();
+        this.getTimerCountdown();
       },
       setAreaData() {
-        this.ffxivData.areas = areaRaw
-        for (const d in this.ffxivData.areas) {
-          let obj = this.ffxivData.areas[d]
-          let getIcon = expansionsRaw.find(o => o.expansion == obj.expansion).icon
-          this.ffxivData.areas[d].isSubarea = obj.isSubarea == 'TRUE' ? true : false
-          this.ffxivData.areas[d].inOverview = obj.inOverview == 'TRUE' ? true : false
-          this.ffxivData.areas[d].weather = obj.mapcode ? EorzeaWeather.getWeather(obj.mapcode, new Date()) : false
-          this.ffxivData.areas[d].icon = getIcon
-        }
+        for (const i in areaRaw) {
+          let obj: any = areaRaw[i];
+          obj.issubarea = obj.issubarea == 1 ? true : false;
+          obj.inoverview = obj.inoverview == 1 ? true : false;
+          obj.type = obj.type ? obj.type : false;
+          obj.icon = expansionsRaw.find((o: any) => o.expansion == obj.expansion).icon;
+        };
+        this.ffxivData['areas'] = areaRaw;
       },
-      setMiningAndBotanyData(arr: any) {
-        let type = arr[0].job
-        this.ffxivData[type] = arr
-        for (const d in this.ffxivData[type]) {
-          let obj = this.ffxivData[type][d]
-          
-          this.ffxivData[type][d].tracked = false
-          this.ffxivData[type][d].time = obj.time == '' ? false : obj.time
-          this.ffxivData[type][d].isshard = obj.isshard == 'TRUE' ? true : false
+      createWeatherList() {
+        const areaList = this.ffxivData.areas.filter((obj: any, index: any) => 
+            index === this.ffxivData.areas.findIndex((o: any) => obj.mapcode === o.mapcode)
+        );
+        
+        areaList.forEach((o: any) => {
+          if (o.mapcode) {
+            let x = EorzeaWeather.getWeather(o.mapcode, new Date());
+            this.weatherList[o.mapcode] = x ? x : false;
+          }
+        });
+      },
+      setMiningAndBotanyData(arr: any, job: string) {
+        for (const i in arr) {
+          let obj: any = arr[i];
+          obj.tracked = false;
+          obj.time = obj.time ? obj.time : false;
+          obj.isshard = obj.isshard == 1 ? true : false;
+          obj.tomb = obj.tomb ? true : false;
+          obj.perception = obj.perception ? true : false;
+          obj.attribute = obj.attribute ? true : false;
+          obj.usage = obj.usage ? obj.usage : 'crafting';
+          obj.usage_info = getSpecificUsageData(obj);
+          obj.area = getSpecificAreaData(obj.area, this.ffxivData.areas);
+        };
 
-          let myAreaData = this.ffxivData.areas.find(o => o.area == obj.area)
-          let myPointData = this.ffxivData.areas.find(o => o.point == obj.area)
-          if (!myAreaData && !myPointData) {console.error(`Cannot find area in App.JS: ${this.ffxivData[type][d].ID}`, this.ffxivData[type][d].area)}
-          this.ffxivData[type][d].area = myAreaData ? myAreaData : myPointData
-
-          this.ffxivData[type][d].usage = obj.usage ? obj.usage : 'crafting'
-          this.ffxivData[type][d].usage_info = obj.usage ? getSpecificUsageData(obj) : 'crafting'
-        }
+        this.ffxivData[job] = arr;
 
         function getSpecificUsageData(arr: any) {
-          if (arr.usage == 'customdelivery' || arr.usage == 'scripts') {return arr.usage_info}
-          else if (arr.usage == 'aetherial') {
-            let r = aetherialRaw.find( o => o.name == arr.name)
-            return r
+          if (arr.usage == 'customdelivery' || arr.usage == 'scripts') {
+            return arr.usage_info;
           }
-          return false
-        }
+          else if (arr.usage == 'aetherial') {
+            let r = aetherialRaw.find((o: any) => o.name == arr.name);
+            return r;
+          };
+          return false;
+        };
+
+        function getSpecificAreaData(area: string, areas: any[]) {
+          let results = areas.find((o: any) => o.area == area);
+          if (!results) {results = areas.find((o: any) => o.point == area);}
+          if (!results) {console.error(`Cannot find area in App.JS: ${area}`); return area;}
+          return results;
+        };
       },
       setAetheryteData() {
-        this.ffxivData.aetheryte = aetheryteRaw
-        for (const d in this.ffxivData.aetheryte) {
-          let obj = this.ffxivData.aetheryte[d]
-          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
-          this.ffxivData.aetheryte[d].area = myAreaData
-        }
+        for (const i in aetheryteRaw) {
+          let obj: any = aetheryteRaw[i];
+          obj.point = obj.point ? obj.point : false;
+          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
+        };
+
+        this.ffxivData.aetheryte = aetheryteRaw;
       },
       setSightseeingData() {
-        this.ffxivData.sightseeing = sightseeingRaw
-        for (const d in this.ffxivData.sightseeing) {
-          let obj = this.ffxivData.sightseeing[d]
+        for (const i in sightseeingRaw) {
+          let obj: any = sightseeingRaw[i];
+          obj.job = 'sightseeing';
+          obj.job_sub = 'sightseeing';
+          obj.tracked = false;
+          obj.point = obj.point ? obj.point : false;
+          obj.type = obj.type ? obj.type : false;
+          obj.weather1 = obj.weather1 ? obj.weather1 : false;
+          obj.weather2 = obj.weather2 ? obj.weather2 : false;
+          obj.time = obj.time ? obj.time : false;
+          obj.mount = obj.mount == 'TRUE' ? true : false;
+          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
+        };
 
-          this.ffxivData.sightseeing[d].job = 'sightseeing'
-          this.ffxivData.sightseeing[d].job_sub = 'sightseeing'
-          this.ffxivData.sightseeing[d].tracked = false
-          this.ffxivData.sightseeing[d].time = obj.time == '' ? false : obj.time
-          this.ffxivData.sightseeing[d].mount = obj.mount == 'TRUE' ? true : false
-
-          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
-          this.ffxivData.sightseeing[d].area = myAreaData
-        }
+        this.ffxivData.sightseeing = sightseeingRaw;
       },
       setEliteHuntsData() {
-        this.ffxivData.eliteHunts = huntsEliteRaw
-        for (const d in this.ffxivData.eliteHunts) {
-          let obj = this.ffxivData.eliteHunts[d]
-          this.ffxivData.eliteHunts[d].job = 'hunts'
-          this.ffxivData.eliteHunts[d].job_sub = 'hunts'
-          this.ffxivData.eliteHunts[d].rank = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
-
-          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
-          this.ffxivData.eliteHunts[d].area = myAreaData
-          
-          let myPointData = getPointsData(obj.zone, this.ffxivData.eliteHunts[d].rank)
-          this.ffxivData.eliteHunts[d].points = myPointData
+        for (const i in huntsEliteRaw) {
+          let obj: any = huntsEliteRaw[i];
+          obj.job = 'sightseeing';
+          obj.job_sub = 'sightseeing';
+          obj.trigger = obj.trigger ? obj.trigger : false;
+          obj.weather1 = obj.weather1 ? obj.weather1 : false;
+          obj.weather2 = obj.weather2 ? obj.weather2 : false;
+          obj.maintenance = obj.maintenance ? obj.maintenance : false;
+          obj.rank = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
+          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
+          obj.points = getPointsData(obj.zone, obj.rank);
         }
+
+        this.ffxivData.eliteHunts = huntsEliteRaw;
 
         function getPointsData(zone: string, rank: string) {
-          let zonesArr = huntsPointsRaw.filter(o => o.zone == zone)
-          let narrowPoints = zonesArr.filter(o => o.ranks.includes(rank))
-          return narrowPoints
-        }
+          let zonesArr = huntsPointsRaw.filter(o => o.zone == zone);
+          let narrowPoints = zonesArr.filter(o => o.ranks.includes(rank));
+          return narrowPoints;
+        };
       },
       setAetherCurrentData() {
-        this.ffxivData.aethercurrents = aetherCurrentRaw
-        for (const d in this.ffxivData.aethercurrents) {
-          let obj = this.ffxivData.aethercurrents[d]
-          this.ffxivData.aethercurrents[d].job = 'aethercurrents'
-          this.ffxivData.aethercurrents[d].job_sub = obj.name ? 'currentquest' : 'current'
-
-          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
-          this.ffxivData.aethercurrents[d].area = myAreaData
-        }
+        for (const i in aetherCurrentRaw) {
+          let obj: any = aetherCurrentRaw[i];
+          obj.job = 'aethercurrents';
+          obj.job_sub = obj.name ? 'currentquest' : 'current';
+          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
+        };
+        this.ffxivData.aethercurrents = aetherCurrentRaw;
       },
       setFatesData() {
         this.ffxivData.fates = fatesRaw
@@ -289,7 +311,6 @@ export default {
         }
       },
       setBlueMageData() {
-
         //Create Filters for page
         const typeList = blueMageRaw.filter((obj: any, index: any) => 
             index === blueMageRaw.findIndex((o: any) => obj.type1 === o.type1)
@@ -524,9 +545,9 @@ export default {
         }
 
         //Update weather conditions
-        if (this.eorzeaClock.minutes == 0 && this.eorzeaClock.minutes < 2) {this.getWeatherData()}
-        if (this.eorzeaClock.minutes == 480 && this.eorzeaClock.minutes < 482) {this.getWeatherData()}
-        if (this.eorzeaClock.minutes == 960 && this.eorzeaClock.minutes < 962) {this.getWeatherData()}
+        if (this.eorzeaClock.minutes == 0 && this.eorzeaClock.minutes < 2) {this.createWeatherList()}
+        if (this.eorzeaClock.minutes == 480 && this.eorzeaClock.minutes < 482) {this.createWeatherList()}
+        if (this.eorzeaClock.minutes == 960 && this.eorzeaClock.minutes < 962) {this.createWeatherList()}
 
       },
       formatTimeRemaining(total: number) {
@@ -536,14 +557,6 @@ export default {
         if (h > 0) {return `${h}h ${m}m ${s}s`}
         else if (m > 0) {return `${m}m ${s}s`}
         return `${s}s`
-      },
-      getWeatherData() {
-        this.ffxivData.areas.forEach((area: any) => {
-          if (area.mapcode) {
-            let x = EorzeaWeather.getWeather(area.mapcode, new Date());
-            area.weather = x
-          }
-        });
       },
       changeTracked(e: any) {
         let index = this.ffxivData[e.job].findIndex(o => o.ID == e.ID)

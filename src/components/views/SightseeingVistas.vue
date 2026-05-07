@@ -99,7 +99,7 @@ import iconAndText from '../ui/iconAndText.vue';
     export default {
         name: "Sightseeing Vistas",
         components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText},
-        props: ['ffxivData', 'timerList', 'windowWidth'],
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
             return {
@@ -163,7 +163,7 @@ import iconAndText from '../ui/iconAndText.vue';
 
             },
             fetchVistaData(type: string) {
-                let results = this.ffxivData.expansionData.find((o: any) => o.expansion == this.filterSelected)
+                let results = this.ffxivData.expansion.find((o: any) => o.expansion == this.filterSelected)
                 return results[type]
             },
             fetchTimerCountdown(time: string) {
@@ -176,9 +176,10 @@ import iconAndText from '../ui/iconAndText.vue';
             checkTimeActive(type: string, arr: any) {
 
                 if (type == 'weather1' || type == 'weather2') {
-                    let x = arr.area.weather
-                    let y = arr[type]
-                    if (x == y) {return true}
+                    let curWeather = this.weatherList[arr.area.mapcode]
+                    let triggerWeather = arr[type]
+                    if (curWeather == triggerWeather) {return true}
+                    return null
                 }
 
                 if (type == 'time' && arr.time) {
@@ -199,9 +200,10 @@ import iconAndText from '../ui/iconAndText.vue';
                 }
 
                 //Match2 - Get Weather State
-                if (arr.weather1 && arr.area.weather) {
-                    let condition1 = arr.weather1 == arr.area.weather ? true :  false
-                    let condition2 = (arr.weather2 == arr.area.weather) && arr.weather2 ? true :  false
+                if (arr.weather1) {
+                    let curWeather = this.weatherList[arr.area.mapcode]
+                    let condition1 = arr.weather1 == curWeather ? true :  false
+                    let condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true :  false
                     match2 = condition1 || condition2 ? true : false
                 }
 

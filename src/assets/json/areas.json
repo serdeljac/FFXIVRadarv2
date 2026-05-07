@@ -9,8 +9,8 @@
     "area": "Limsa Lominsa Upper Decks",
     "point": "Limsa Lominsa Upper Decks",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -23,8 +23,8 @@
     "area": "Limsa Lominsa Lower Decks",
     "point": "Limsa Lominsa Lower Decks",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -37,8 +37,8 @@
     "area": "Mist",
     "point": "Mist",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -51,8 +51,8 @@
     "area": "Mist",
     "point": "Mist Subdivision",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -65,8 +65,8 @@
     "area": "Wolves' Den Pier",
     "point": "Wolves' Den Pier",
     "mapsize": 11.2,
-    "isSubarea": "FALSE",
-    "inOverview": "FALSE",
+    "issubarea": 0,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -79,8 +79,8 @@
     "area": "Unnamed Island",
     "point": "Unnamed Island",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "FALSE",
+    "issubarea": 0,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -93,8 +93,8 @@
     "area": "Zephyr Drift",
     "point": "Zephyr Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -107,8 +107,8 @@
     "area": "Zephyr Drift",
     "point": "La Thagran Checkpoint",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -121,8 +121,8 @@
     "area": "Zephyr Drift",
     "point": "Galadion Bay",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -135,8 +135,8 @@
     "area": "Zephyr Drift",
     "point": "The Rogue River",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -149,8 +149,8 @@
     "area": "Summerford",
     "point": "The Agelyss River",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -163,8 +163,8 @@
     "area": "Summerford",
     "point": "Seasong Grotto",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -177,8 +177,8 @@
     "area": "Summerford",
     "point": "The Cookpot",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -191,8 +191,8 @@
     "area": "Three-malm Bend",
     "point": "The Descent",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -205,8 +205,8 @@
     "area": "Three-malm Bend",
     "point": "The Nym River",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -219,8 +219,8 @@
     "area": "Three-malm Bend",
     "point": "The Skylift",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -233,8 +233,8 @@
     "area": "Three-malm Bend",
     "point": "Woad Whisper Canyon",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -247,8 +247,8 @@
     "area": "Three-malm Bend",
     "point": "The Foremast",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -261,8 +261,8 @@
     "area": "Three-malm Bend",
     "point": "The De Nevelle Checkpoint",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -275,8 +275,8 @@
     "area": "Moraby Bay",
     "point": "Tempest Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -289,8 +289,8 @@
     "area": "Moraby Bay",
     "point": "Oschon's Embrace",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -303,8 +303,8 @@
     "area": "Moraby Bay",
     "point": "Madman Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -317,8 +317,8 @@
     "area": "Moraby Bay",
     "point": "The Eyes",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -331,8 +331,8 @@
     "area": "Moraby Bay",
     "point": "The Mourning Widow",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -345,8 +345,8 @@
     "area": "Cedarwood",
     "point": "Blind Iron Mines",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -359,8 +359,8 @@
     "area": "Cedarwood",
     "point": "The Grey Fleet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -373,8 +373,8 @@
     "area": "The Gods' Grip",
     "point": "Empty Heart",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -387,8 +387,8 @@
     "area": "The Gods' Grip",
     "point": "The Salt Strand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -401,8 +401,8 @@
     "area": "The Gods' Grip",
     "point": "Candlekeep Quay",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -415,8 +415,8 @@
     "area": "The Gods' Grip",
     "point": "Oschon's Torch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -429,8 +429,8 @@
     "area": "Bloodshore",
     "point": "Gullperch Tower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -443,8 +443,8 @@
     "area": "Bloodshore",
     "point": "Isle of Endless Summer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -457,8 +457,8 @@
     "area": "Bloodshore",
     "point": "The Garlok's Lair",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -471,8 +471,8 @@
     "area": "Bloodshore",
     "point": "Hidden Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -485,8 +485,8 @@
     "area": "Raincatcher Gully",
     "point": "The Severed String",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -499,8 +499,8 @@
     "area": "Raincatcher Gully",
     "point": "Red Mantis Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -513,8 +513,8 @@
     "area": "Raincatcher Gully",
     "point": "Brayflox's Longstop",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -527,8 +527,8 @@
     "area": "Agelyss Wise",
     "point": "Castrum Occidens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -541,8 +541,8 @@
     "area": "Quarterstone",
     "point": "The Flock",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -555,8 +555,8 @@
     "area": "Quarterstone",
     "point": "The Brewer's Beacon",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -569,8 +569,8 @@
     "area": "Skull Valley",
     "point": "Camp Skull Valley",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -583,8 +583,8 @@
     "area": "Skull Valley",
     "point": "The Founder's Crypt",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -597,8 +597,8 @@
     "area": "Skull Valley",
     "point": "North Tidegate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -611,8 +611,8 @@
     "area": "Skull Valley",
     "point": "South Tidegate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -625,8 +625,8 @@
     "area": "The Isles of Umbra",
     "point": "The Ship Graveyard",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -639,8 +639,8 @@
     "area": "The Isles of Umbra",
     "point": "Moonshade Isle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -653,8 +653,8 @@
     "area": "Halfstone",
     "point": "Sahagin Landbase",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -667,8 +667,8 @@
     "area": "Halfstone",
     "point": "Novv's Nursery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -681,8 +681,8 @@
     "area": "Halfstone",
     "point": "The Serpent's Tongue",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -695,8 +695,8 @@
     "area": "Sapsa Spawning Grounds",
     "point": "The Reef of Sending",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -709,8 +709,8 @@
     "area": "Sapsa Spawning Grounds",
     "point": "Reaver Hide",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -723,8 +723,8 @@
     "area": "Bronze Lake",
     "point": "Jijiroon's Trading Post",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -737,8 +737,8 @@
     "area": "Bronze Lake",
     "point": "The Wanderer's Palace",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -751,8 +751,8 @@
     "area": "Zelma's Run",
     "point": "Zelma's Run",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -765,8 +765,8 @@
     "area": "Oakwood",
     "point": "Thalaos",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -779,8 +779,8 @@
     "area": "Oakwood",
     "point": "Poor Maid's Mill",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -793,8 +793,8 @@
     "area": "Oakwood",
     "point": "Memeroon's Trading Post",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -807,8 +807,8 @@
     "area": "Oakwood",
     "point": "Fool Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -821,8 +821,8 @@
     "area": "The Long Climb",
     "point": "The Hermit's Hovel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -835,8 +835,8 @@
     "area": "The Long Climb",
     "point": "The Floating City of Nym",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -849,8 +849,8 @@
     "area": "Iron Lake",
     "point": "Kobold Dig",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -863,8 +863,8 @@
     "area": "Iron Lake",
     "point": "789th Order Dig",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -877,8 +877,8 @@
     "area": "U'Ghamaro Mines",
     "point": "U'Ghamaro Mines",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -891,8 +891,8 @@
     "area": "New Gridania",
     "point": "New Gridania",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -905,8 +905,8 @@
     "area": "Old Gridania",
     "point": "Old Gridania",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -919,8 +919,8 @@
     "area": "Lavender Beds",
     "point": "Lavender Beds",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -933,8 +933,8 @@
     "area": "Lavender Beds",
     "point": "Lavender Beds Subdivision",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -947,8 +947,8 @@
     "area": "Bentbranch",
     "point": "Lilystone",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -961,8 +961,8 @@
     "area": "Bentbranch",
     "point": "The Hedgetree",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -975,8 +975,8 @@
     "area": "Bentbranch",
     "point": "The Tam-Tara Deepcroft",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -989,8 +989,8 @@
     "area": "Bentbranch",
     "point": "Galvanth's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1003,8 +1003,8 @@
     "area": "Bentbranch",
     "point": "Everschade (The Guardian Tree)",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1017,8 +1017,8 @@
     "area": "Bentbranch",
     "point": "The Matron's Lethe",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1031,8 +1031,8 @@
     "area": "Jadeite Thick",
     "point": "Blue Badger Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1045,8 +1045,8 @@
     "area": "Jadeite Thick",
     "point": "Gilbert's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1059,8 +1059,8 @@
     "area": "The Standing Corses",
     "point": "Spriggan Dig",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1073,8 +1073,8 @@
     "area": "Sorrel Haven",
     "point": "White Wolf Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1087,8 +1087,8 @@
     "area": "Sorrel Haven",
     "point": "Hopeseed Pond",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1101,8 +1101,8 @@
     "area": "Sorrel Haven",
     "point": "Sanguine Perch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1115,8 +1115,8 @@
     "area": "Greentear",
     "point": "Gabineaux's Bower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1129,8 +1129,8 @@
     "area": "Greentear",
     "point": "Spirithold",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1143,8 +1143,8 @@
     "area": "Greentear",
     "point": "Lifemend Stump",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1157,8 +1157,8 @@
     "area": "Greentear",
     "point": "Naked Rock",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1171,8 +1171,8 @@
     "area": "The Honey Yard",
     "point": "Fullflower Comb",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1185,8 +1185,8 @@
     "area": "Sylphlands",
     "point": "The Seedbed",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1199,8 +1199,8 @@
     "area": "Sylphlands",
     "point": "Hanging Barbs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1213,8 +1213,8 @@
     "area": "Sylphlands",
     "point": "Moonspore Grove",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1227,8 +1227,8 @@
     "area": "Sylphlands",
     "point": "Goldleaf Dais",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1241,8 +1241,8 @@
     "area": "Nine Ivies",
     "point": "Amarissaix's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1255,8 +1255,8 @@
     "area": "Nine Ivies",
     "point": "Castrum Oriens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1269,8 +1269,8 @@
     "area": "Nine Ivies",
     "point": "The Hedgetree",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1283,8 +1283,8 @@
     "area": "Nine Ivies",
     "point": "Little Solace",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1297,8 +1297,8 @@
     "area": "Nine Ivies",
     "point": "Josselin's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1311,8 +1311,8 @@
     "area": "The Bramble Patch",
     "point": "Sanctum of the Twelve",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1325,8 +1325,8 @@
     "area": "Lower Paths",
     "point": "South Shroud Landing",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1339,8 +1339,8 @@
     "area": "Silent Arbor",
     "point": "Goblins' Meet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1353,8 +1353,8 @@
     "area": "Silent Arbor",
     "point": "Taker's Rot",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1367,8 +1367,8 @@
     "area": "Silent Arbor",
     "point": "The Mun-Tuy Cellars",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1381,8 +1381,8 @@
     "area": "Upper Paths",
     "point": "Buscarron's Druthers",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1395,8 +1395,8 @@
     "area": "Upper Paths",
     "point": "Issom-Har",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1409,8 +1409,8 @@
     "area": "Upper Paths",
     "point": "No Man's Hovel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1423,8 +1423,8 @@
     "area": "Upper Paths",
     "point": "Redbelly Hive",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1437,8 +1437,8 @@
     "area": "Urth's Gift",
     "point": "Urth's Fount",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1451,8 +1451,8 @@
     "area": "Alder Springs",
     "point": "Finders' Bluff",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1465,8 +1465,8 @@
     "area": "Alder Springs",
     "point": "Florentel's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1479,8 +1479,8 @@
     "area": "Fallgourd Float",
     "point": "The Bobbing Cork",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1493,8 +1493,8 @@
     "area": "Treespeak",
     "point": "Blessed Bud",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1507,8 +1507,8 @@
     "area": "Treespeak",
     "point": "E-Tatt's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1521,8 +1521,8 @@
     "area": "Treespeak",
     "point": "Yellow Serpent Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1535,8 +1535,8 @@
     "area": "Peacegarden",
     "point": "The Hedgetree",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1549,8 +1549,8 @@
     "area": "Peacegarden",
     "point": "Ehcatl",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1563,8 +1563,8 @@
     "area": "Proud Creek",
     "point": "Ixali Logging Grounds",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1577,8 +1577,8 @@
     "area": "Proud Creek",
     "point": "Gelmorra Ruins",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1591,8 +1591,8 @@
     "area": "Proud Creek",
     "point": "Eugenia's Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1605,8 +1605,8 @@
     "area": "Ul'dah - Steps of Nald",
     "point": "Ul'dah - Steps of Nald",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 0,
     "type": "town"
   },
   {
@@ -1619,8 +1619,8 @@
     "area": "Ul'dah - Steps of Thal",
     "point": "The Merchants Strip",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -1633,8 +1633,8 @@
     "area": "Ul'dah - Steps of Thal",
     "point": "The Hustings Strip",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -1647,8 +1647,8 @@
     "area": "The Goblet",
     "point": "The Goblet",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -1661,8 +1661,8 @@
     "area": "The Goblet",
     "point": "The Goblet Subdivision",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -1675,8 +1675,8 @@
     "area": "The Gold Saucer",
     "point": "The Gold Saucer",
     "mapsize": 11.2,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -1689,8 +1689,8 @@
     "area": "The Gold Saucer",
     "point": "Chocobo Square",
     "mapsize": 11.2,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -1703,8 +1703,8 @@
     "area": "The Eighty Sins of Sasamo",
     "point": "The Gate of the Sultana",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1717,8 +1717,8 @@
     "area": "Hammerlea",
     "point": "The East Hammer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1731,8 +1731,8 @@
     "area": "Hammerlea",
     "point": "The West Hammer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1745,8 +1745,8 @@
     "area": "Hammerlea",
     "point": "The South Hammer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1759,8 +1759,8 @@
     "area": "Hammerlea",
     "point": "Beaconhill Lighthouse",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1773,8 +1773,8 @@
     "area": "Hammerlea",
     "point": "The Silver Bazaar",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1787,8 +1787,8 @@
     "area": "Nophica's Wells",
     "point": "Nophica's Wells",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1801,8 +1801,8 @@
     "area": "Horizon's Edge",
     "point": "Sunrise Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1815,8 +1815,8 @@
     "area": "Horizon's Edge",
     "point": "Sunset Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1829,8 +1829,8 @@
     "area": "The Footfalls",
     "point": "The Silent King",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1843,8 +1843,8 @@
     "area": "The Footfalls",
     "point": "The Waking Sands",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1857,8 +1857,8 @@
     "area": "Cape Westwind",
     "point": "Parata's Peace",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1871,8 +1871,8 @@
     "area": "Cape Westwind",
     "point": "Imperial Outpost",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1885,8 +1885,8 @@
     "area": "Cape Westwind",
     "point": "Castrum Marinum",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1899,8 +1899,8 @@
     "area": "Spineless Basin",
     "point": "The Gate of Thal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1913,8 +1913,8 @@
     "area": "Spineless Basin",
     "point": "Sagolii Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1927,8 +1927,8 @@
     "area": "Spineless Basin",
     "point": "Sultantree",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1941,8 +1941,8 @@
     "area": "Spineless Basin",
     "point": "Ul'dah Dispatch Yard",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1955,8 +1955,8 @@
     "area": "Spineless Basin",
     "point": "The Royal Plantations",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1969,8 +1969,8 @@
     "area": "Spineless Basin",
     "point": "The Gate of Nald",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1983,8 +1983,8 @@
     "area": "Spineless Basin",
     "point": "Fesca's Watch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -1997,8 +1997,8 @@
     "area": "Spineless Basin",
     "point": "Stonesthrow",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2011,8 +2011,8 @@
     "area": "The Clutch",
     "point": "The Unholy Heir",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2025,8 +2025,8 @@
     "area": "The Clutch",
     "point": "The Quiveron Manse",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2039,8 +2039,8 @@
     "area": "Black Brush",
     "point": "Sil'dih Excavation Site",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2053,8 +2053,8 @@
     "area": "Black Brush",
     "point": "The Rat's Nest",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2067,8 +2067,8 @@
     "area": "Black Brush",
     "point": "The Coffer & Coffin",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2081,8 +2081,8 @@
     "area": "Black Brush",
     "point": "Nanawa Mines",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2095,8 +2095,8 @@
     "area": "Black Brush",
     "point": "The Bonfire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2109,8 +2109,8 @@
     "area": "Black Brush",
     "point": "Lost Hope",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2123,8 +2123,8 @@
     "area": "Wellwick Wood",
     "point": "Thal's Respite",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2137,8 +2137,8 @@
     "area": "Wellwick Wood",
     "point": "Yugr'am River",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2151,8 +2151,8 @@
     "area": "The Burning Wall",
     "point": "Burgundy Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2165,8 +2165,8 @@
     "area": "Sandgate",
     "point": "Amalj'aa Encampment",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2179,8 +2179,8 @@
     "area": "Sandgate",
     "point": "Final Prayer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2193,8 +2193,8 @@
     "area": "Drybone",
     "point": "Church of Saint Adama Landama",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2207,8 +2207,8 @@
     "area": "Drybone",
     "point": "The Invisible City",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2221,8 +2221,8 @@
     "area": "Sagolii Desert",
     "point": "Byregot's Strike",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2235,8 +2235,8 @@
     "area": "The Red Labyrinth",
     "point": "Nald's Reflection",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2249,8 +2249,8 @@
     "area": "The Red Labyrinth",
     "point": "Minotaur Malm",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2263,8 +2263,8 @@
     "area": "Zanr'ak",
     "point": "Zanr'ak Encampment",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2277,8 +2277,8 @@
     "area": "Zanr'ak",
     "point": "Zanr'ak Altar",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2291,8 +2291,8 @@
     "area": "Zanr'ak",
     "point": "Circle of the Tempered",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2305,8 +2305,8 @@
     "area": "Zahar'ak",
     "point": "Zahar'ak",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2319,8 +2319,8 @@
     "area": "Broken Water",
     "point": "The Sepulchre",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2333,8 +2333,8 @@
     "area": "Broken Water",
     "point": "Ring of Ash",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2347,8 +2347,8 @@
     "area": "Bluefog",
     "point": "West Watchtower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2361,8 +2361,8 @@
     "area": "Bluefog",
     "point": "East Watchtower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2375,8 +2375,8 @@
     "area": "Bluefog",
     "point": "Abandoned Amajina Mythril Mine",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2389,8 +2389,8 @@
     "area": "Bluefog",
     "point": "Dalamud's Talons",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2403,8 +2403,8 @@
     "area": "Raubahn's Push",
     "point": "Dalamud's Talons",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2417,8 +2417,8 @@
     "area": "Raubahn's Push",
     "point": "Forward Gates",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2431,8 +2431,8 @@
     "area": "Dragonhead",
     "point": "Griffin Crossing",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2445,8 +2445,8 @@
     "area": "Dragonhead",
     "point": "Skyfire Locks",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2459,8 +2459,8 @@
     "area": "Providence Point",
     "point": "Witchdrop",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2473,8 +2473,8 @@
     "area": "Providence Point",
     "point": "Steel Vigil",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2487,8 +2487,8 @@
     "area": "Providence Point",
     "point": "The Ogre's Belly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2501,8 +2501,8 @@
     "area": "Providence Point",
     "point": "The Weeping Saint",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2515,8 +2515,8 @@
     "area": "Providence Point",
     "point": "Natalan",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2529,8 +2529,8 @@
     "area": "Boulder Downs",
     "point": "The Aurum Vale",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2543,8 +2543,8 @@
     "area": "Boulder Downs",
     "point": "Hall of the Seven Echoes",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2557,8 +2557,8 @@
     "area": "Boulder Downs",
     "point": "Monument Tower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2571,8 +2571,8 @@
     "area": "Boulder Downs",
     "point": "The Fury's Gaze",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2585,8 +2585,8 @@
     "area": "Boulder Downs",
     "point": "Daniffen Pass",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2599,8 +2599,8 @@
     "area": "Boulder Downs",
     "point": "Dzemael Darkhold",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2613,8 +2613,8 @@
     "area": "Whitebrim",
     "point": "Behemoth's Dominion",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2627,8 +2627,8 @@
     "area": "Fogfens",
     "point": "Castrum Centri",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2641,8 +2641,8 @@
     "area": "Fogfens",
     "point": "The Tangle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2655,8 +2655,8 @@
     "area": "Fogfens",
     "point": "Rathefrost",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2669,8 +2669,8 @@
     "area": "Fogfens",
     "point": "Camp Revenant's Toll",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2683,8 +2683,8 @@
     "area": "Revenant's Toll",
     "point": "The Diamond Forge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2697,8 +2697,8 @@
     "area": "Revenant's Toll",
     "point": "Rowena's House of Splendors",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2711,8 +2711,8 @@
     "area": "Revenant's Toll",
     "point": "The Rising Stones",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2725,8 +2725,8 @@
     "area": "Revenant's Toll",
     "point": "The Seventh Heaven",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2739,8 +2739,8 @@
     "area": "North Silvertear",
     "point": "Singing Shards",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2753,8 +2753,8 @@
     "area": "North Silvertear",
     "point": "The Keeper of the Lake",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2767,8 +2767,8 @@
     "area": "The Eight Sentinels",
     "point": "Crystal Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2781,8 +2781,8 @@
     "area": "Foundation",
     "point": "Foundation",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -2795,8 +2795,8 @@
     "area": "Foundation",
     "point": "The Pillars",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -2809,8 +2809,8 @@
     "area": "Idyllshire",
     "point": "Idyllshire",
     "mapsize": 11.2,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -2823,8 +2823,8 @@
     "area": "Riversmeet",
     "point": "The Pike",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2837,8 +2837,8 @@
     "area": "Riversmeet",
     "point": "Black Iron Bridge",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2851,8 +2851,8 @@
     "area": "Riversmeet",
     "point": "The Ninth Vare",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2865,8 +2865,8 @@
     "area": "Riversmeet",
     "point": "Camp Riversmeet",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2879,8 +2879,8 @@
     "area": "Riversmeet",
     "point": "Gorgagne Mills",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2893,8 +2893,8 @@
     "area": "Riversmeet",
     "point": "Gorgagne Holding",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2907,8 +2907,8 @@
     "area": "Riversmeet",
     "point": "Hemlock",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2921,8 +2921,8 @@
     "area": "Riversmeet",
     "point": "Coerthas River",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2935,8 +2935,8 @@
     "area": "Twinpools",
     "point": "The Dusk Vigil",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2949,8 +2949,8 @@
     "area": "Twinpools",
     "point": "The Dreaming Dragon",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2963,8 +2963,8 @@
     "area": "Twinpools",
     "point": "The Slate Mountains",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2977,8 +2977,8 @@
     "area": "Twinpools",
     "point": "Dragonspit",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -2991,8 +2991,8 @@
     "area": "Twinpools",
     "point": "The Convictory",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3005,8 +3005,8 @@
     "area": "Red Rim",
     "point": "The Bed of Bones",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3019,8 +3019,8 @@
     "area": "Red Rim",
     "point": "The Watcher",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3033,8 +3033,8 @@
     "area": "Cloudtop",
     "point": "The Protector",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3047,8 +3047,8 @@
     "area": "Cloudtop",
     "point": "The Rosehouse",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3061,8 +3061,8 @@
     "area": "Last Step",
     "point": "Ok' Gundu",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3075,8 +3075,8 @@
     "area": "The Blue Window",
     "point": "The Morrowmotes",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3089,8 +3089,8 @@
     "area": "The Blue Window",
     "point": "Ok' Gundu Nakki",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3103,8 +3103,8 @@
     "area": "The Blue Window",
     "point": "Provenance",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3117,8 +3117,8 @@
     "area": "Voor Sian Siran",
     "point": "Disappearing Falls",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3131,8 +3131,8 @@
     "area": "Voor Sian Siran",
     "point": "The Eddies",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3145,8 +3145,8 @@
     "area": "Voor Sian Siran",
     "point": "The Nidifice",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3159,8 +3159,8 @@
     "area": "Ok' Vundu Mok",
     "point": "Hall of the Fallen Plume",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3173,8 +3173,8 @@
     "area": "Ok' Vundu Mok",
     "point": "The Cromlech",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3187,8 +3187,8 @@
     "area": "Ok' Vundu Vana",
     "point": "The Whale's Crown",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3201,8 +3201,8 @@
     "area": "Vundu Ok' Bendu",
     "point": "Hearth of the Mighty Bendu",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3215,8 +3215,8 @@
     "area": "The Gauntlet",
     "point": "Coldwind",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3229,8 +3229,8 @@
     "area": "The Gauntlet",
     "point": "Hengr's Crucible",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3243,8 +3243,8 @@
     "area": "The Gauntlet",
     "point": "Mok Oogl Island",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3257,8 +3257,8 @@
     "area": "The Gauntlet",
     "point": "The Shattered Back",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3271,8 +3271,8 @@
     "area": "Alpha Quadrant",
     "point": "Helix",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3285,8 +3285,8 @@
     "area": "Alpha Quadrant",
     "point": "Centrifugal Crystal Engine",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3299,8 +3299,8 @@
     "area": "Alpha Quadrant",
     "point": "Cooling Station",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3313,8 +3313,8 @@
     "area": "Alpha Quadrant",
     "point": "Hyperstellar Downconverter",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3327,8 +3327,8 @@
     "area": "Alpha Quadrant",
     "point": "Quarantine Block",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3341,8 +3341,8 @@
     "area": "Beta Quadrant",
     "point": "Recombination Labs",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3355,8 +3355,8 @@
     "area": "Beta Quadrant",
     "point": "Biomass Incubation Complex",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3369,8 +3369,8 @@
     "area": "Beta Quadrant",
     "point": "The Habisphere",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3383,8 +3383,8 @@
     "area": "Gamma Quadrant",
     "point": "The Gration",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3397,8 +3397,8 @@
     "area": "Gamma Quadrant",
     "point": "The Cathedral",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3411,8 +3411,8 @@
     "area": "Gamma Quadrant",
     "point": "Castrum Solus",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3425,8 +3425,8 @@
     "area": "Gamma Quadrant",
     "point": "The Fractal Continuum",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3439,8 +3439,8 @@
     "area": "Delta Quadrant",
     "point": "Esh Thom",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3453,8 +3453,8 @@
     "area": "Delta Quadrant",
     "point": "Antithesis",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3467,8 +3467,8 @@
     "area": "Delta Quadrant",
     "point": "The Pappus Tree",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3481,8 +3481,8 @@
     "area": "Delta Quadrant",
     "point": "The Aqueduct",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3495,8 +3495,8 @@
     "area": "Delta Quadrant",
     "point": "Mobile Supply Cache",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3509,8 +3509,8 @@
     "area": "The Flagship",
     "point": "The Aetherochemical Research Facility",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3523,8 +3523,8 @@
     "area": "Chocobo Forest",
     "point": "The Hundred Throes",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3537,8 +3537,8 @@
     "area": "Chocobo Forest",
     "point": "Mare's Oath",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3551,8 +3551,8 @@
     "area": "Chocobo Forest",
     "point": "Whilom River",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3565,8 +3565,8 @@
     "area": "Chocobo Forest",
     "point": "The Hissing Cobbles",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3579,8 +3579,8 @@
     "area": "The Smoldering Wastes",
     "point": "Loth ast Vath",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3593,8 +3593,8 @@
     "area": "The Smoldering Wastes",
     "point": "The Stained One",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3607,8 +3607,8 @@
     "area": "Avalonia Fallen",
     "point": "Anyx Minor",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3621,8 +3621,8 @@
     "area": "Avalonia Fallen",
     "point": "The Danneroad",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3635,8 +3635,8 @@
     "area": "Sohm Al Foothills",
     "point": "Ehs Daih",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3649,8 +3649,8 @@
     "area": "Sohm Al Foothills",
     "point": "The Iron Feast",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3663,8 +3663,8 @@
     "area": "Mourn",
     "point": "Halo",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3677,8 +3677,8 @@
     "area": "Mourn",
     "point": "Anyx Old",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3691,8 +3691,8 @@
     "area": "The Makers' Quarter",
     "point": "The Arkhitekton",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3705,8 +3705,8 @@
     "area": "The Makers' Quarter",
     "point": "The Daggers",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3719,8 +3719,8 @@
     "area": "The Answering Quarter",
     "point": "Saint Mocianne's Arboretum",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3733,8 +3733,8 @@
     "area": "The Answering Quarter",
     "point": "The Asulon",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3747,8 +3747,8 @@
     "area": "The Ruling Quarter",
     "point": "Quickspill Delta",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3761,8 +3761,8 @@
     "area": "The Ruling Quarter",
     "point": "Matoya's Cave",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3775,8 +3775,8 @@
     "area": "The Ruling Quarter",
     "point": "The Path of Knowing",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3789,8 +3789,8 @@
     "area": "The Ruling Quarter",
     "point": "The Tipped Ewer",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3803,8 +3803,8 @@
     "area": "Eil Tohm",
     "point": "The House of Letters",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3817,8 +3817,8 @@
     "area": "Eil Tohm",
     "point": "Monsterie",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3831,8 +3831,8 @@
     "area": "Four Arms",
     "point": "Bahrr Lehs",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3845,8 +3845,8 @@
     "area": "Ohl Tahn",
     "point": "The Rookery",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3859,8 +3859,8 @@
     "area": "Ohl Tahn",
     "point": "Gron Rhei",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3873,8 +3873,8 @@
     "area": "Ohl Tahn",
     "point": "Tharl Oom Khash",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3887,8 +3887,8 @@
     "area": "Ohl Tahn",
     "point": "Sothton Walls",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3901,8 +3901,8 @@
     "area": "Ohl Tahn",
     "point": "Weston Waters",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3915,8 +3915,8 @@
     "area": "Ohl Tahn",
     "point": "Easton Eyes",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3929,8 +3929,8 @@
     "area": "Ohl Tahn",
     "point": "The Aery",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3943,8 +3943,8 @@
     "area": "Greensward",
     "point": "Mother of the Sheave",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3957,8 +3957,8 @@
     "area": "Greensward",
     "point": "The Lost Landlord",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3971,8 +3971,8 @@
     "area": "Landlord Colony",
     "point": "Landlord Colony",
     "mapsize": 44.1,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -3985,8 +3985,8 @@
     "area": "Kugane",
     "point": "Kugane",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -3999,8 +3999,8 @@
     "area": "Rhalgr's Reach",
     "point": "Rhalgr's Reach",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -4013,8 +4013,8 @@
     "area": "Shirogane",
     "point": "Shirogane",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -4027,8 +4027,8 @@
     "area": "Shirogane",
     "point": "Shirogane Subdivision",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "FALSE",
+    "issubarea": 1,
+    "inoverview": 0,
     "type": "house"
   },
   {
@@ -4041,8 +4041,8 @@
     "area": "The Doman Enclave",
     "point": "The Doman Enclave",
     "mapsize": 11.2,
-    "isSubarea": "FALSE",
-    "inOverview": "FALSE",
+    "issubarea": 0,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -4055,8 +4055,8 @@
     "area": "East End",
     "point": "Bittermill",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4069,8 +4069,8 @@
     "area": "East End",
     "point": "Owyn's Stash",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4083,8 +4083,8 @@
     "area": "East End",
     "point": "The Percipient One",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4097,8 +4097,8 @@
     "area": "Dimwold",
     "point": "Fletcher's Cabin",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4111,8 +4111,8 @@
     "area": "Pike Falls",
     "point": "The Comet's Tail",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4125,8 +4125,8 @@
     "area": "Pike Falls",
     "point": "The Pall of Clarity",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4139,8 +4139,8 @@
     "area": "Pike Falls",
     "point": "The Velodyna River",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4153,8 +4153,8 @@
     "area": "The Striped Hills",
     "point": "Schism",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4167,8 +4167,8 @@
     "area": "The Striped Hills",
     "point": "The Circles of Answering",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4181,8 +4181,8 @@
     "area": "The Striped Hills",
     "point": "Gyr Kehim",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4195,8 +4195,8 @@
     "area": "The Striped Hills",
     "point": "Mirage Creek",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4209,8 +4209,8 @@
     "area": "Virdjala",
     "point": "Castellum Velodyna",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4223,8 +4223,8 @@
     "area": "Virdjala",
     "point": "Vira Nilya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4237,8 +4237,8 @@
     "area": "Virdjala",
     "point": "Qalyana Nilya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4251,8 +4251,8 @@
     "area": "Virdjala",
     "point": "The Yawn",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4265,8 +4265,8 @@
     "area": "The Last Forest",
     "point": "Emprise",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4279,8 +4279,8 @@
     "area": "The Last Forest",
     "point": "Grymm & Enid",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4293,8 +4293,8 @@
     "area": "The Last Forest",
     "point": "Byron's Bread",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4307,8 +4307,8 @@
     "area": "The Last Forest",
     "point": "The Ziggurat",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4321,8 +4321,8 @@
     "area": "The Last Forest",
     "point": "The Carmine Kitchen",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4335,8 +4335,8 @@
     "area": "Rustrock",
     "point": "Mason's Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4349,8 +4349,8 @@
     "area": "Rustrock",
     "point": "Heather Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4363,8 +4363,8 @@
     "area": "Rustrock",
     "point": "Hidden Tear",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4377,8 +4377,8 @@
     "area": "Rustrock",
     "point": "Sleeping Stones",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4391,8 +4391,8 @@
     "area": "Rustrock",
     "point": "The Ephor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4405,8 +4405,8 @@
     "area": "Rustrock",
     "point": "Whitherwander",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4419,8 +4419,8 @@
     "area": "Rustrock",
     "point": "Momoroon's Milk",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4433,8 +4433,8 @@
     "area": "Wightrock",
     "point": "Goodblade",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4447,8 +4447,8 @@
     "area": "Wightrock",
     "point": "The Scabbard",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4461,8 +4461,8 @@
     "area": "Wightrock",
     "point": "Specula Imperatoris",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4475,8 +4475,8 @@
     "area": "Wightrock",
     "point": "The Choler",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4489,8 +4489,8 @@
     "area": "Wightrock",
     "point": "The Arms of Meed",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4503,8 +4503,8 @@
     "area": "Wightrock",
     "point": "Nyunkrepf's Hope",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4517,8 +4517,8 @@
     "area": "Mount Yorn",
     "point": "Castrum Abania",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4531,8 +4531,8 @@
     "area": "Mount Yorn",
     "point": "Radiata",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4545,8 +4545,8 @@
     "area": "Mount Yorn",
     "point": "The Ironroad",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4559,8 +4559,8 @@
     "area": "Mount Yorn",
     "point": "Coldhearth",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4573,8 +4573,8 @@
     "area": "The High Bank",
     "point": "The Firkins",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4587,8 +4587,8 @@
     "area": "The High Bank",
     "point": "Demilune",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4601,8 +4601,8 @@
     "area": "The High Bank",
     "point": "Sothwatch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4615,8 +4615,8 @@
     "area": "The High Bank",
     "point": "Sali Monastery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4629,8 +4629,8 @@
     "area": "The High Bank",
     "point": "The Dark of Lasting Cumber",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4643,8 +4643,8 @@
     "area": "The High Bank",
     "point": "Aenadem Ei",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4657,8 +4657,8 @@
     "area": "The High Bank",
     "point": "Rothlyt",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4671,8 +4671,8 @@
     "area": "The High Bank",
     "point": "The Pauper's Lode",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4685,8 +4685,8 @@
     "area": "The High Bank",
     "point": "Sweetwater",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4699,8 +4699,8 @@
     "area": "The High Bank",
     "point": "Stacks",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4713,8 +4713,8 @@
     "area": "Loch Seld",
     "point": "The Saltery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4727,8 +4727,8 @@
     "area": "Loch Seld",
     "point": "Lochwatch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4741,8 +4741,8 @@
     "area": "Loch Seld",
     "point": "The Destroyer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4755,8 +4755,8 @@
     "area": "Loch Seld",
     "point": "The Divine Audience",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4769,8 +4769,8 @@
     "area": "Loch Seld",
     "point": "The Ruiner",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4783,8 +4783,8 @@
     "area": "Loch Seld",
     "point": "The White Aisle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4797,8 +4797,8 @@
     "area": "The Ala Mhigan Quarter",
     "point": "Gylbarde's Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4811,8 +4811,8 @@
     "area": "The Ala Mhigan Quarter",
     "point": "The Fourth Royal Casern",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4825,8 +4825,8 @@
     "area": "The Ala Mhigan Quarter",
     "point": "The Resonatorium",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4839,8 +4839,8 @@
     "area": "The Queen's Gardens",
     "point": "The Queen's Gardens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4853,8 +4853,8 @@
     "area": "Abalathia's Skull",
     "point": "The Third Royal Casern",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4867,8 +4867,8 @@
     "area": "Abalathia's Skull",
     "point": "Cotter Tor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4881,8 +4881,8 @@
     "area": "Abalathia's Skull",
     "point": "Aenadem Ol",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4895,8 +4895,8 @@
     "area": "Abalathia's Skull",
     "point": "Bloodhowe",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4909,8 +4909,8 @@
     "area": "Abalathia's Skull",
     "point": "The Song of Kings",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4923,8 +4923,8 @@
     "area": "Abalathia's Skull",
     "point": "The Tomb of King Manfred",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4937,8 +4937,8 @@
     "area": "Abalathia's Skull",
     "point": "The Royal Hunting Grounds",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4951,8 +4951,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Ruby Price",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4965,8 +4965,8 @@
     "area": "Rasen Kaikyo",
     "point": "Barrier Isle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4979,8 +4979,8 @@
     "area": "Rasen Kaikyo",
     "point": "Sakazuki",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -4993,8 +4993,8 @@
     "area": "Rasen Kaikyo",
     "point": "Hells' Lid",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5007,8 +5007,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Isle of Bekko",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5021,8 +5021,8 @@
     "area": "Rasen Kaikyo",
     "point": "Onokoro",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5035,8 +5035,8 @@
     "area": "Rasen Kaikyo",
     "point": "Crick",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5049,8 +5049,8 @@
     "area": "Rasen Kaikyo",
     "point": "Heaven-on-High",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5063,8 +5063,8 @@
     "area": "Rasen Kaikyo",
     "point": "Ten-thousand-year Pine",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5077,8 +5077,8 @@
     "area": "Rasen Kaikyo",
     "point": "Quickscape Pier",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5091,8 +5091,8 @@
     "area": "Rasen Kaikyo",
     "point": "Shoal Rock",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5105,8 +5105,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Coral Banquet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5119,8 +5119,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Kobayashi Maru",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5133,8 +5133,8 @@
     "area": "Rasen Kaikyo",
     "point": "Saibai Cavern",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5147,8 +5147,8 @@
     "area": "Rasen Kaikyo",
     "point": "Exile",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5161,8 +5161,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Anemone Gardens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5175,8 +5175,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Adventure",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5189,8 +5189,8 @@
     "area": "Rasen Kaikyo",
     "point": "The Crab Pots",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5203,8 +5203,8 @@
     "area": "The Isle of Zekki",
     "point": "The Dive",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5217,8 +5217,8 @@
     "area": "The Isle of Zekki",
     "point": "The Air of the Opulent",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5231,8 +5231,8 @@
     "area": "The Turquoise Trench",
     "point": "The Turquoise Trench",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5245,8 +5245,8 @@
     "area": "East Othard Coastline",
     "point": "Isari",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5259,8 +5259,8 @@
     "area": "The Gensui Chain",
     "point": "The Drunken Toad",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5273,8 +5273,8 @@
     "area": "The Gensui Chain",
     "point": "Unseen Spirits Laughing",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5287,8 +5287,8 @@
     "area": "The Gensui Chain",
     "point": "The Heron's Flight",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5301,8 +5301,8 @@
     "area": "The Gensui Chain",
     "point": "Plum Spring",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5315,8 +5315,8 @@
     "area": "The Glittering Basin",
     "point": "Kusakari",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5329,8 +5329,8 @@
     "area": "The Glittering Basin",
     "point": "Eastern Ryurin Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5343,8 +5343,8 @@
     "area": "The Glittering Basin",
     "point": "Western Ryurin Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5357,8 +5357,8 @@
     "area": "The Glittering Basin",
     "point": "Castrum Fluminis",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5371,8 +5371,8 @@
     "area": "The Glittering Basin",
     "point": "Yuzuka Manor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5385,8 +5385,8 @@
     "area": "The Glittering Basin",
     "point": "The Swallow's Compass",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5399,8 +5399,8 @@
     "area": "The Glittering Basin",
     "point": "The Dairyu Moon Gates",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5413,8 +5413,8 @@
     "area": "The Glittering Basin",
     "point": "Imperial Hypersonic Assault Craft L-XXIII",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5427,8 +5427,8 @@
     "area": "Valley of the Fallen Rainbow",
     "point": "Prism Lake",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5441,8 +5441,8 @@
     "area": "Valley of the Fallen Rainbow",
     "point": "The Ribbons",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5455,8 +5455,8 @@
     "area": "Doma",
     "point": "Doma Castle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5469,8 +5469,8 @@
     "area": "Doma",
     "point": "The Coattails",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5483,8 +5483,8 @@
     "area": "Doma",
     "point": "Monzen",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5497,8 +5497,8 @@
     "area": "Doma",
     "point": "Mercantile Docks",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5511,8 +5511,8 @@
     "area": "Doma",
     "point": "The Dragon's Struggle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5525,8 +5525,8 @@
     "area": "The Sea of Blades",
     "point": "Ragill's Reckoning",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5539,8 +5539,8 @@
     "area": "The Sea of Blades",
     "point": "Kahkol Iloh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5553,8 +5553,8 @@
     "area": "The Sea of Blades",
     "point": "The Wound",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5567,8 +5567,8 @@
     "area": "The Sea of Blades",
     "point": "The Path of the Craven",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5581,8 +5581,8 @@
     "area": "Azim Khaat",
     "point": "The Bridge of High Rule Warrior",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5595,8 +5595,8 @@
     "area": "Onsal Hakair",
     "point": "Bardam's Mettle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5609,8 +5609,8 @@
     "area": "Onsal Hakair",
     "point": "Ceol Aen",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5623,8 +5623,8 @@
     "area": "Onsal Hakair",
     "point": "Chakha Zoh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5637,8 +5637,8 @@
     "area": "Onsal Hakair",
     "point": "Mol Lloh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5651,8 +5651,8 @@
     "area": "Onsal Hakair",
     "point": "Moonrise",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5665,8 +5665,8 @@
     "area": "Onsal Hakair",
     "point": "The House of the Crooked Coin",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5679,8 +5679,8 @@
     "area": "The Towering Still",
     "point": "The Uyagir Caves",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5693,8 +5693,8 @@
     "area": "The Towering Still",
     "point": "The Hundred-and-one Revelations",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5707,8 +5707,8 @@
     "area": "The Towering Still",
     "point": "Qerel Iloh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5721,8 +5721,8 @@
     "area": "Nhaama's Retreat",
     "point": "The Dusk Throne",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5735,8 +5735,8 @@
     "area": "Nhaama's Retreat",
     "point": "Dotharl Khaa",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5749,8 +5749,8 @@
     "area": "The Crystarium",
     "point": "The Crystarium",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -5763,8 +5763,8 @@
     "area": "Eulmore",
     "point": "The Buttress",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -5777,8 +5777,8 @@
     "area": "Eulmore",
     "point": "The Understory",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -5791,8 +5791,8 @@
     "area": "Eulmore",
     "point": "The Canopy",
     "mapsize": 21.4,
-    "isSubarea": "TRUE",
-    "inOverview": "TRUE",
+    "issubarea": 1,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -5805,8 +5805,8 @@
     "area": "The Empty",
     "point": "The Empty",
     "mapsize": 8.6,
-    "isSubarea": "FALSE",
-    "inOverview": "FALSE",
+    "issubarea": 0,
+    "inoverview": 0,
     "type": "side"
   },
   {
@@ -5819,8 +5819,8 @@
     "area": "Weathering",
     "point": "Northern Staging Point",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5833,8 +5833,8 @@
     "area": "Weathering",
     "point": "Inviolate Witness",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5847,8 +5847,8 @@
     "area": "Weathering",
     "point": "The Stay",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5861,8 +5861,8 @@
     "area": "Weathering",
     "point": "Clearmelt",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5875,8 +5875,8 @@
     "area": "Weathering",
     "point": "Hare Among Giants",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5889,8 +5889,8 @@
     "area": "Weathering",
     "point": "Watts's Anvil",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5903,8 +5903,8 @@
     "area": "Laxan Loft",
     "point": "The Hall of the Thrice Born",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5917,8 +5917,8 @@
     "area": "Laxan Loft",
     "point": "The Hanging Tower",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5931,8 +5931,8 @@
     "area": "The Forest of the Lost Shepherd",
     "point": "Wolves of Shadow",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5945,8 +5945,8 @@
     "area": "The Forest of the Lost Shepherd",
     "point": "Radisca's Round",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5959,8 +5959,8 @@
     "area": "The Forest of the Lost Shepherd",
     "point": "Mortal Irons",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5973,8 +5973,8 @@
     "area": "The Forest of the Lost Shepherd",
     "point": "Embrasure",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -5987,8 +5987,8 @@
     "area": "The Forest of the Lost Shepherd",
     "point": "The Belt",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6001,8 +6001,8 @@
     "area": "The Thirstless Shore",
     "point": "Dampsole",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6015,8 +6015,8 @@
     "area": "The Thirstless Shore",
     "point": "The Hour of Certain Durance",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6029,8 +6029,8 @@
     "area": "The Source",
     "point": "The Isle of Ken",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6043,8 +6043,8 @@
     "area": "The Exarch Gate",
     "point": "The Bridges",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6057,8 +6057,8 @@
     "area": "The Exarch Gate",
     "point": "The Accensor Gate",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6071,8 +6071,8 @@
     "area": "Fort Jobb",
     "point": "The Church of the First Light",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6085,8 +6085,8 @@
     "area": "Sullen",
     "point": "Weed",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6099,8 +6099,8 @@
     "area": "Sullen",
     "point": "Brick",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6113,8 +6113,8 @@
     "area": "Sullen",
     "point": "Knot",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6127,8 +6127,8 @@
     "area": "Sullen",
     "point": "Lap",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6141,8 +6141,8 @@
     "area": "The Chiliad",
     "point": "The Chiliad",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6155,8 +6155,8 @@
     "area": "The Bright Cliff",
     "point": "Governor's Row",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6169,8 +6169,8 @@
     "area": "The Bright Cliff",
     "point": "Greely Sties",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6183,8 +6183,8 @@
     "area": "The Bright Cliff",
     "point": "Greely Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6197,8 +6197,8 @@
     "area": "The Bright Cliff",
     "point": "Southern Crossing",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6211,8 +6211,8 @@
     "area": "The Bright Cliff",
     "point": "Cracked Shell Beach",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6225,8 +6225,8 @@
     "area": "The Bright Cliff",
     "point": "The Chisel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6239,8 +6239,8 @@
     "area": "The Bright Cliff",
     "point": "The Codger's Crook",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6253,8 +6253,8 @@
     "area": "The Bright Cliff",
     "point": "Open Arms",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6267,8 +6267,8 @@
     "area": "The Bright Cliff",
     "point": "The Clave",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6281,8 +6281,8 @@
     "area": "The Bright Cliff",
     "point": "Sharptongue Drip",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6295,8 +6295,8 @@
     "area": "The Bright Cliff",
     "point": "White Oil Falls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6309,8 +6309,8 @@
     "area": "The Whale's Breach",
     "point": "Gatetown",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6323,8 +6323,8 @@
     "area": "Stilltide",
     "point": "The Leaky Keel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6337,8 +6337,8 @@
     "area": "The Duergar Mountains",
     "point": "The Duergar's Tewel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6351,8 +6351,8 @@
     "area": "The Duergar Mountains",
     "point": "Dwarven Hollows",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6365,8 +6365,8 @@
     "area": "The Duergar Mountains",
     "point": "Flue Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6379,8 +6379,8 @@
     "area": "The Duergar Mountains",
     "point": "The Wet Whistle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6393,8 +6393,8 @@
     "area": "The Duergar Mountains",
     "point": "Komra",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6407,8 +6407,8 @@
     "area": "The Duergar Mountains",
     "point": "Boiled Oil Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6421,8 +6421,8 @@
     "area": "Scree",
     "point": "Pit 8",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6435,8 +6435,8 @@
     "area": "Scree",
     "point": "Top Rung",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6449,8 +6449,8 @@
     "area": "Scree",
     "point": "The Ladder",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6463,8 +6463,8 @@
     "area": "Scree",
     "point": "Amity",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6477,8 +6477,8 @@
     "area": "Tomra",
     "point": "Longbeard Council",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6491,8 +6491,8 @@
     "area": "Shadow Fault",
     "point": "Bottom Rung",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6505,8 +6505,8 @@
     "area": "Shadow Fault",
     "point": "Stonegazer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6519,8 +6519,8 @@
     "area": "Shadow Fault",
     "point": "Wax Seal Mills",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6533,8 +6533,8 @@
     "area": "Shadow Fault",
     "point": "Whisperwind Cove",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6547,8 +6547,8 @@
     "area": "Shadow Fault",
     "point": "Barrow Isle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6561,8 +6561,8 @@
     "area": "Shadow Fault",
     "point": "The Split Hull",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6575,8 +6575,8 @@
     "area": "Shadow Fault",
     "point": "Venmont Yards",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6589,8 +6589,8 @@
     "area": "Shadow Fault",
     "point": "Seagazer",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6603,8 +6603,8 @@
     "area": "Shadow Fault",
     "point": "The Lawns",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6617,8 +6617,8 @@
     "area": "Shadow Fault",
     "point": "Slowroad",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6631,8 +6631,8 @@
     "area": "The Northern Hills of Amber",
     "point": "Mount Biran Mines",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6645,8 +6645,8 @@
     "area": "The Northern Hills of Amber",
     "point": "Garik",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6659,8 +6659,8 @@
     "area": "The Central Hills of Amber",
     "point": "The Dragging Tail",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6673,8 +6673,8 @@
     "area": "The Central Hills of Amber",
     "point": "Our Ladies' Hands",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6687,8 +6687,8 @@
     "area": "The Central Hills of Amber",
     "point": "Nuvy's Leavings",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6701,8 +6701,8 @@
     "area": "The Central Hills of Amber",
     "point": "Kelk",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6715,8 +6715,8 @@
     "area": "The Central Hills of Amber",
     "point": "Lift Station",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6729,8 +6729,8 @@
     "area": "The Central Hills of Amber",
     "point": "Our Ladies' Feet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6743,8 +6743,8 @@
     "area": "The Southern Hills of Amber",
     "point": "Ladle",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6757,8 +6757,8 @@
     "area": "Nabaath Areng",
     "point": "The Pristine Palace of Amh Malik",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6771,8 +6771,8 @@
     "area": "Nabaath Areng",
     "point": "The Derrick",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6785,8 +6785,8 @@
     "area": "Nabaath Areng",
     "point": "Lift Station",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6799,8 +6799,8 @@
     "area": "Nabaath Areng",
     "point": "The Nabaath Severance",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6813,8 +6813,8 @@
     "area": "Mord Souq",
     "point": "The Rack",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6827,8 +6827,8 @@
     "area": "The Fields of Amber",
     "point": "Samiel's Backbone",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6841,8 +6841,8 @@
     "area": "The Fields of Amber",
     "point": "Snitch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6855,8 +6855,8 @@
     "area": "The Fields of Amber",
     "point": "Pitch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6869,8 +6869,8 @@
     "area": "The Fields of Amber",
     "point": "Twitch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6883,8 +6883,8 @@
     "area": "The Fields of Amber",
     "point": "The Inn at Journey's Head",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6897,8 +6897,8 @@
     "area": "Timh Gyeus",
     "point": "Phisor Lran",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6911,8 +6911,8 @@
     "area": "Timh Gyeus",
     "point": "The March of the Marchioness",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6925,8 +6925,8 @@
     "area": "Good Jenanna's Grace",
     "point": "Handmirror Lake",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6939,8 +6939,8 @@
     "area": "Good Jenanna's Grace",
     "point": "The Bookman's Shelves",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6953,8 +6953,8 @@
     "area": "Good Jenanna's Grace",
     "point": "The Woolen Way",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6967,8 +6967,8 @@
     "area": "Longmirror Lake",
     "point": "Thysm Lran",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6981,8 +6981,8 @@
     "area": "Longmirror Lake",
     "point": "Deepwood Swim",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -6995,8 +6995,8 @@
     "area": "Longmirror Lake",
     "point": "The House of the First Light",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7009,8 +7009,8 @@
     "area": "Mithai Glorianda",
     "point": "Lyhe Ghiah",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7023,8 +7023,8 @@
     "area": "Mithai Glorianda",
     "point": "Old Earra Bridge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7037,8 +7037,8 @@
     "area": "Mithai Glorianda",
     "point": "The Silent Cliffs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7051,8 +7051,8 @@
     "area": "Voeburtenburg",
     "point": "The Church at Dammroen Field",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7065,8 +7065,8 @@
     "area": "Voeburtenburg",
     "point": "Father Collard's Chambers",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7079,8 +7079,8 @@
     "area": "Voeburtenburg",
     "point": "Saint Fathric's Temple",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7093,8 +7093,8 @@
     "area": "Voeburtenburg",
     "point": "Anden's Airs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7107,8 +7107,8 @@
     "area": "Voeburtenburg",
     "point": "Sextuplet Shallow",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7121,8 +7121,8 @@
     "area": "Slitherbough",
     "point": "The Darker",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7135,8 +7135,8 @@
     "area": "The Citia Swamps",
     "point": "The Trip",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7149,8 +7149,8 @@
     "area": "The Citia Swamps",
     "point": "Fort Gohn",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7163,8 +7163,8 @@
     "area": "The Citia Swamps",
     "point": "The Deliberating Doll",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7177,8 +7177,8 @@
     "area": "The Citia Swamps",
     "point": "The Red Chalice",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7191,8 +7191,8 @@
     "area": "The Citia Swamps",
     "point": "Woven Oath",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7205,8 +7205,8 @@
     "area": "The Citia Swamps",
     "point": "Cleric",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7219,8 +7219,8 @@
     "area": "The Citia Swamps",
     "point": "Lozatl's Conquest",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7233,8 +7233,8 @@
     "area": "The Citia Swamps",
     "point": "The Womb",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7247,8 +7247,8 @@
     "area": "Lake Tusi Mek'ta",
     "point": "The Husk",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7261,8 +7261,8 @@
     "area": "Lake Tusi Mek'ta",
     "point": "The Covered Halls of Dwatl",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7275,8 +7275,8 @@
     "area": "Lake Tusi Mek'ta",
     "point": "Fruit of the Protector",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7289,8 +7289,8 @@
     "area": "Fanow",
     "point": "Sleepaway Common",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7303,8 +7303,8 @@
     "area": "The Blind Forest of Yx'Maja",
     "point": "Bowrest",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7317,8 +7317,8 @@
     "area": "The Blind Forest of Yx'Maja",
     "point": "The Wild Fete",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7331,8 +7331,8 @@
     "area": "The Blind Forest of Yx'Maja",
     "point": "Mjrl's Regret",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7345,8 +7345,8 @@
     "area": "The K'mul Astropolis",
     "point": "The Morning Stars",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7359,8 +7359,8 @@
     "area": "The K'mul Astropolis",
     "point": "Ox'Gatorl Mul",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7373,8 +7373,8 @@
     "area": "The K'mul Astropolis",
     "point": "Ox'Charl Mul",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7387,8 +7387,8 @@
     "area": "The K'mul Astropolis",
     "point": "Yx'Lokwa Mul",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7401,8 +7401,8 @@
     "area": "The K'mul Astropolis",
     "point": "Yx'Anpa Mul",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7415,8 +7415,8 @@
     "area": "The K'mul Astropolis",
     "point": "The Great Pyramid of Ux'ner",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7429,8 +7429,8 @@
     "area": "The K'mul Astropolis",
     "point": "The Confessional of Toupasa the Elder",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7443,8 +7443,8 @@
     "area": "The Ox'Dalan Gap",
     "point": "The Isle of Consorts",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7457,8 +7457,8 @@
     "area": "The Ox'Dalan Gap",
     "point": "The Isle of Bows",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7471,8 +7471,8 @@
     "area": "The Ox'Dalan Gap",
     "point": "The Isle of Sisters",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7485,8 +7485,8 @@
     "area": "The Ox'Dalan Gap",
     "point": "Hopl's Stopple",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7499,8 +7499,8 @@
     "area": "The Norvrandt Slope",
     "point": "Where the Dry Return",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7513,8 +7513,8 @@
     "area": "The Norvrandt Slope",
     "point": "Walls of the Forgotten",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7527,8 +7527,8 @@
     "area": "The Norvrandt Slope",
     "point": "The Founders' Floor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7541,8 +7541,8 @@
     "area": "The Norvrandt Slope",
     "point": "The Crock of Pearls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7555,8 +7555,8 @@
     "area": "The Norvrandt Slope",
     "point": "The Workbench",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7569,8 +7569,8 @@
     "area": "The Norvrandt Slope",
     "point": "The Ondo Cups",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7583,8 +7583,8 @@
     "area": "The Caliban Gorge",
     "point": "The Caliban Gap",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7597,8 +7597,8 @@
     "area": "The Caliban Gorge",
     "point": "The Swallowed Spire",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7611,8 +7611,8 @@
     "area": "The Caliban Gorge",
     "point": "Purpure",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7625,8 +7625,8 @@
     "area": "The Caliban Gorge",
     "point": "The Trinculo Shelf",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7639,8 +7639,8 @@
     "area": "Amaurot",
     "point": "Achora Heights",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7653,8 +7653,8 @@
     "area": "Amaurot",
     "point": "Bureau of the Architect",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7667,8 +7667,8 @@
     "area": "Amaurot",
     "point": "The Hall of Rhetoric",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7681,8 +7681,8 @@
     "area": "Amaurot",
     "point": "The Polyleritae District",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7695,8 +7695,8 @@
     "area": "Amaurot",
     "point": "Bureau of the Administrator",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7709,8 +7709,8 @@
     "area": "Amaurot",
     "point": "Bureau of the Secretariat",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7723,8 +7723,8 @@
     "area": "Amaurot",
     "point": "The Capitol",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7737,8 +7737,8 @@
     "area": "Radz-at-Han",
     "point": "Radz-at-Han",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -7751,8 +7751,8 @@
     "area": "Old Sharlayan",
     "point": "Old Sharlayan",
     "mapsize": 21.4,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -7765,8 +7765,8 @@
     "area": "The Outer Circuit",
     "point": "The Path of Artifice",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7779,8 +7779,8 @@
     "area": "The Outer Circuit",
     "point": "The Phreatic Conduit",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7793,8 +7793,8 @@
     "area": "The Outer Circuit",
     "point": "Upper Acrinthos",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7807,8 +7807,8 @@
     "area": "The Outer Circuit",
     "point": "Hatching Canal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7821,8 +7821,8 @@
     "area": "The Outer Circuit",
     "point": "The Aesthete's Tholos",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7835,8 +7835,8 @@
     "area": "The Outer Circuit",
     "point": "Passemerrant Pasturponics",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7849,8 +7849,8 @@
     "area": "The Outer Circuit",
     "point": "Troglophile's Deep",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7863,8 +7863,8 @@
     "area": "The Medial Circuit",
     "point": "Lower Acrinthos",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7877,8 +7877,8 @@
     "area": "The Medial Circuit",
     "point": "Mitato",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7891,8 +7891,8 @@
     "area": "The Medial Circuit",
     "point": "Pneuma",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7905,8 +7905,8 @@
     "area": "The Medial Circuit",
     "point": "Phoibos",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7919,8 +7919,8 @@
     "area": "The Medial Circuit",
     "point": "Psyche",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7933,8 +7933,8 @@
     "area": "The Medial Circuit",
     "point": "Meryall Agronomics",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7947,8 +7947,8 @@
     "area": "The Medial Circuit",
     "point": "The Thirty-third Facet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7961,8 +7961,8 @@
     "area": "Mornveil Forest",
     "point": "Mistloom",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7975,8 +7975,8 @@
     "area": "The Central Circuit",
     "point": "Logistikon Alpha",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -7989,8 +7989,8 @@
     "area": "The Central Circuit",
     "point": "Logistikon Beta",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8003,8 +8003,8 @@
     "area": "The Central Circuit",
     "point": "Logistikon Gamma",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8017,8 +8017,8 @@
     "area": "The Central Circuit",
     "point": "Kokkol's Forge",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8031,8 +8031,8 @@
     "area": "The Central Circuit",
     "point": "Thaumazein",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8045,8 +8045,8 @@
     "area": "The Central Circuit",
     "point": "Sharlayan Hamlet",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8059,8 +8059,8 @@
     "area": "The Shroud of the Samgha",
     "point": "The Wakeful Torana",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8073,8 +8073,8 @@
     "area": "The Shroud of the Samgha",
     "point": "The Burning Field",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8087,8 +8087,8 @@
     "area": "The Shroud of the Samgha",
     "point": "Pavana's Remorse",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8101,8 +8101,8 @@
     "area": "The Shroud of the Samgha",
     "point": "Agama Temple",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8115,8 +8115,8 @@
     "area": "The Shroud of the Samgha",
     "point": "The Font of Maya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8129,8 +8129,8 @@
     "area": "The Shroud of the Samgha",
     "point": "Purusa",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8143,8 +8143,8 @@
     "area": "The Perfumed Rise",
     "point": "Giantsgall Grounds",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8157,8 +8157,8 @@
     "area": "The Perfumed Rise",
     "point": "The Hamsa Hatchery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8171,8 +8171,8 @@
     "area": "The Perfumed Rise",
     "point": "Kadjaya's Footsteps",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8185,8 +8185,8 @@
     "area": "The Perfumed Rise",
     "point": "Jnanamandapa",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8199,8 +8199,8 @@
     "area": "The Perfumed Rise",
     "point": "The Great Work",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8213,8 +8213,8 @@
     "area": "Saltwind's Welcome",
     "point": "Akyaali",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8227,8 +8227,8 @@
     "area": "Saltwind's Welcome",
     "point": "Svarna",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8241,8 +8241,8 @@
     "area": "Saltwind's Welcome",
     "point": "Tebqeyiq",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8255,8 +8255,8 @@
     "area": "Saltwind's Welcome",
     "point": "Ussaqeyiq",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8269,8 +8269,8 @@
     "area": "Saltwind's Welcome",
     "point": "Yedlihmad",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8283,8 +8283,8 @@
     "area": "Night's Watch",
     "point": "Night's Watch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8297,8 +8297,8 @@
     "area": "The Eblan Rime",
     "point": "Horrea Campi",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8311,8 +8311,8 @@
     "area": "The Eblan Rime",
     "point": "Monitoring Station G",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8325,8 +8325,8 @@
     "area": "The Eblan Rime",
     "point": "Victors' Spoils",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8339,8 +8339,8 @@
     "area": "The Eblan Rime",
     "point": "Camp Broken Glass",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8353,8 +8353,8 @@
     "area": "Cerulea Ingens",
     "point": "Juturna Platform G",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8367,8 +8367,8 @@
     "area": "Cerulea Ingens",
     "point": "Tapper's Den",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8381,8 +8381,8 @@
     "area": "Regio Domorum",
     "point": "Liminal Station IV",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8395,8 +8395,8 @@
     "area": "Regio Domorum",
     "point": "The Runaway Train",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8409,8 +8409,8 @@
     "area": "Regio Domorum",
     "point": "The Enceladeum",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8423,8 +8423,8 @@
     "area": "Regio Domorum",
     "point": "Tertium",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8437,8 +8437,8 @@
     "area": "Regio Urbanissima",
     "point": "Palatium Novum",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8451,8 +8451,8 @@
     "area": "Regio Urbanissima",
     "point": "Forum Patens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8465,8 +8465,8 @@
     "area": "Regio Urbanissima",
     "point": "Forum Solius",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8479,8 +8479,8 @@
     "area": "Regio Urbanissima",
     "point": "Senaculum Imperialis",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8493,8 +8493,8 @@
     "area": "Regio Urbanissima",
     "point": "The Pipe",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8507,8 +8507,8 @@
     "area": "Sinus Lacrimarum",
     "point": "The Watcher's Palace",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8521,8 +8521,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "The Drowning Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8535,8 +8535,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "The Numbing Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8549,8 +8549,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "The Crushing Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8563,8 +8563,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "The Chlorophosgrot",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8577,8 +8577,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "Vallis Vulneris",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8591,8 +8591,8 @@
     "area": "Southern Mare Lamentorum",
     "point": "The Cradle of Darkness",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8605,8 +8605,8 @@
     "area": "Sinus Tormenti",
     "point": "Heimdall's Last Sight",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8619,8 +8619,8 @@
     "area": "Northern Mare Lamentorum",
     "point": "Kydonia Knolls",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8633,8 +8633,8 @@
     "area": "Northern Mare Lamentorum",
     "point": "The Biting Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8647,8 +8647,8 @@
     "area": "Northern Mare Lamentorum",
     "point": "The Striking Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8661,8 +8661,8 @@
     "area": "Northern Mare Lamentorum",
     "point": "Lovingway's Darlings",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8675,8 +8675,8 @@
     "area": "Northern Mare Lamentorum",
     "point": "The Searing Brand",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8689,8 +8689,8 @@
     "area": "Bestways Burrow",
     "point": "Hoper's Hold",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8703,8 +8703,8 @@
     "area": "The Carrotorium",
     "point": "The Carrotorium",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8717,8 +8717,8 @@
     "area": "Greatest Endsvale",
     "point": "Greatest Endsvale",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8731,8 +8731,8 @@
     "area": "Ostrakon Deka-okto",
     "point": "The Ragnarok",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8745,8 +8745,8 @@
     "area": "Ostrakon Deka-okto",
     "point": "The Vitrified Fort",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8759,8 +8759,8 @@
     "area": "Ostrakon Deka-okto",
     "point": "Ahm Nohl",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8773,8 +8773,8 @@
     "area": "Ostrakon Deka-okto",
     "point": "Reah Tahra",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8787,8 +8787,8 @@
     "area": "Ostrakon Tria",
     "point": "The Wellspring of Regret",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8801,8 +8801,8 @@
     "area": "Ostrakon Tria",
     "point": "Hollow of the Flesh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8815,8 +8815,8 @@
     "area": "Ostrakon Tria",
     "point": "Elegeia",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8829,8 +8829,8 @@
     "area": "Ostrakon Tria",
     "point": "The Tube",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8843,8 +8843,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "The Lost Hydraulic",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8857,8 +8857,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "The Tree of Life",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8871,8 +8871,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "Empty Portal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8885,8 +8885,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "Clouded Portal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8899,8 +8899,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "Fallow Portal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8913,8 +8913,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "Stigma-1",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8927,8 +8927,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "Unmemoried Portal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8941,8 +8941,8 @@
     "area": "Ostrakon Deka-hexi",
     "point": "A-4 Research",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8955,8 +8955,8 @@
     "area": "Ostrakon Hena",
     "point": "The Nekropolis",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8969,8 +8969,8 @@
     "area": "Ostrakon Hena",
     "point": "The Last Dregs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8983,8 +8983,8 @@
     "area": "Ostrakon Hena",
     "point": "Absolute Horizon",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -8997,8 +8997,8 @@
     "area": "A-4 Research",
     "point": "A-4 Research",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9011,8 +9011,8 @@
     "area": "Philomythes Notos",
     "point": "Propylaion",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9025,8 +9025,8 @@
     "area": "Philomythes Notos",
     "point": "First Bloom",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9039,8 +9039,8 @@
     "area": "Philomythes Notos",
     "point": "Noetophoreon",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9053,8 +9053,8 @@
     "area": "Philomythes Notos",
     "point": "The Cthonic Horns",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9067,8 +9067,8 @@
     "area": "Philomythes Notos",
     "point": "The Mourning Dew",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9081,8 +9081,8 @@
     "area": "Philomythes Notos",
     "point": "Notoneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9095,8 +9095,8 @@
     "area": "Philomythes Notos",
     "point": "The Twelve Wonders",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9109,8 +9109,8 @@
     "area": "Philomythes Notos",
     "point": "Anagnorisis",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9123,8 +9123,8 @@
     "area": "Kallimelios Zephyros",
     "point": "Peripeteia Krystalline",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9137,8 +9137,8 @@
     "area": "Kallimelios Zephyros",
     "point": "Northerly Zephyrneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9151,8 +9151,8 @@
     "area": "Kallimelios Zephyros",
     "point": "Southerly Zephyrneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9165,8 +9165,8 @@
     "area": "Kallimelios Zephyros",
     "point": "Metabaseos Thalassai",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9179,8 +9179,8 @@
     "area": "Ethoseletikos Boreas",
     "point": "Ktisis Hyperboreia",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9193,8 +9193,8 @@
     "area": "Ethoseletikos Boreas",
     "point": "Easterly Boreneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9207,8 +9207,8 @@
     "area": "Ethoseletikos Boreas",
     "point": "Southerly Boreneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9221,8 +9221,8 @@
     "area": "Misopses Euros",
     "point": "The Hungering Gardens",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9235,8 +9235,8 @@
     "area": "Misopses Euros",
     "point": "Lethe",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9249,8 +9249,8 @@
     "area": "Misopses Euros",
     "point": "Euroneus",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9263,8 +9263,8 @@
     "area": "Tuliyollal",
     "point": "Tuliyollal",
     "mapsize": 23.7,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -9277,8 +9277,8 @@
     "area": "Solution Nine",
     "point": "Solution Nine",
     "mapsize": 23.7,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": "town"
   },
   {
@@ -9291,8 +9291,8 @@
     "area": "Chabayuqeq",
     "point": "Agave Jaws",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9305,8 +9305,8 @@
     "area": "Chabayuqeq",
     "point": "Povlu's Peddlery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9319,8 +9319,8 @@
     "area": "Chabayuqeq",
     "point": "Icuvlo's Inn",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9333,8 +9333,8 @@
     "area": "Chabayuqeq",
     "point": "Panaqpelu Retreat",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9347,8 +9347,8 @@
     "area": "Chabameki",
     "point": "Miplu's Mate Garden",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9361,8 +9361,8 @@
     "area": "Chabameki",
     "point": "Ciblu's Coffee Grounds",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9375,8 +9375,8 @@
     "area": "Chabameki",
     "point": "Oruncanca",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9389,8 +9389,8 @@
     "area": "Solace",
     "point": "Shades of Grief",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9403,8 +9403,8 @@
     "area": "Solace",
     "point": "Naryor Gorna",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9417,8 +9417,8 @@
     "area": "Sorrow",
     "point": "Sunken Stars",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9431,8 +9431,8 @@
     "area": "Sorrow",
     "point": "Proof",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9445,8 +9445,8 @@
     "area": "Sorrow",
     "point": "Chirwagur Saltern",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9459,8 +9459,8 @@
     "area": "Sorrow",
     "point": "Chirwagur Lake",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9473,8 +9473,8 @@
     "area": "Larh Tortoh",
     "point": "Worqor Lar Dor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9487,8 +9487,8 @@
     "area": "Larh Tortoh",
     "point": "Sentinel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9501,8 +9501,8 @@
     "area": "Larh Tortoh",
     "point": "Indelible Passage",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9515,8 +9515,8 @@
     "area": "Larh Tortoh",
     "point": "Karvarhur the First",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9529,8 +9529,8 @@
     "area": "Wachunpelo",
     "point": "The Family Ranch",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9543,8 +9543,8 @@
     "area": "Wachunpelo",
     "point": "Mezcal Distillery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9557,8 +9557,8 @@
     "area": "Wachunpelo",
     "point": "Delicate Designs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9571,8 +9571,8 @@
     "area": "Worlar's Echo",
     "point": "Karryorzar the Gracious",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9585,8 +9585,8 @@
     "area": "Worlar's Echo",
     "point": "Ten Thousand Steps",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9599,8 +9599,8 @@
     "area": "Uyuyub'",
     "point": "House of Winds High",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9613,8 +9613,8 @@
     "area": "Uyuyub'",
     "point": "Bopo'uihih",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9627,8 +9627,8 @@
     "area": "Uyuyub'",
     "point": "Xodune",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9641,8 +9641,8 @@
     "area": "Uyuyub'",
     "point": "Cave Kikitola",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9655,8 +9655,8 @@
     "area": "Uyuyub'",
     "point": "Xo'onu",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9669,8 +9669,8 @@
     "area": "Uyuyub'",
     "point": "Xopik'",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9683,8 +9683,8 @@
     "area": "Miyakabek'zu",
     "point": "House of Waters High",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9697,8 +9697,8 @@
     "area": "Miyakabek'zu",
     "point": "Ok'bek'be",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9711,8 +9711,8 @@
     "area": "Miyakabek'zu",
     "point": "Fields of Gold",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9725,8 +9725,8 @@
     "area": "Miyakabek'zu",
     "point": "Bridge Puyhu",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9739,8 +9739,8 @@
     "area": "Miyakabek'zu",
     "point": "Breath Between",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9753,8 +9753,8 @@
     "area": "Miyakabek'zu",
     "point": "Ku'uxage",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9767,8 +9767,8 @@
     "area": "Uyuypoga",
     "point": "Kozanuakiy",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9781,8 +9781,8 @@
     "area": "Uyuypoga",
     "point": "Stride of the Sun",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9795,8 +9795,8 @@
     "area": "Uyuypoga",
     "point": "Flight of We Wingless",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9809,8 +9809,8 @@
     "area": "The Dewspun Bank",
     "point": "Deceiver's Mantel",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9823,8 +9823,8 @@
     "area": "The Dewspun Bank",
     "point": "Dock Tumu",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9837,8 +9837,8 @@
     "area": "Miyakabek'zoma",
     "point": "Marsh Ligaka",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9851,8 +9851,8 @@
     "area": "The Glostfired Bank",
     "point": "Ihuykatumu",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9865,8 +9865,8 @@
     "area": "The Glostfired Bank",
     "point": "Shoals of No Return",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9879,8 +9879,8 @@
     "area": "The Glostfired Bank",
     "point": "Cracked Cistern",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9893,8 +9893,8 @@
     "area": "Earthenshire",
     "point": "The Workpot",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9907,8 +9907,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "Xd'aa Talat Tsoly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9921,8 +9921,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "The Fanged Foundry",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9935,8 +9935,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "Xmun Hojaw",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9949,8 +9949,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "Nightstalker's Shadow",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9963,8 +9963,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "Yak Awak Tsoly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9977,8 +9977,8 @@
     "area": "The Ut'ohmu Horizon",
     "point": "Dirigible Landing",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -9991,8 +9991,8 @@
     "area": "Iq Br'aax",
     "point": "Garden of the Stars",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10005,8 +10005,8 @@
     "area": "The Xobr'it Cinderfield",
     "point": "Iq Rrax Tsoly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10019,8 +10019,8 @@
     "area": "The Xobr'it Cinderfield",
     "point": "Xobr'it Tsoly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10033,8 +10033,8 @@
     "area": "The Xobr'it Cinderfield",
     "point": "Village of Ilyon Asoh",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10047,8 +10047,8 @@
     "area": "The Xobr'it Cinderfield",
     "point": "The Ty'iinbek Traverse",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10061,8 +10061,8 @@
     "area": "The Xobr'it Cinderfield",
     "point": "Xty'iinbek Tsoly",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10075,8 +10075,8 @@
     "area": "Mamook",
     "point": "Sapsweet Cenote",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10089,8 +10089,8 @@
     "area": "Mamook",
     "point": "The Glory of Moxuk Reloonuk",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10103,8 +10103,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Blue-eyes' Abode",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10117,8 +10117,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Bitterbark Cenote",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10131,8 +10131,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Golmajiik Grove",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10145,8 +10145,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Tree of Living Light",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10159,8 +10159,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Cenote Neyozzote",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10173,8 +10173,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Choliselvaas",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10187,8 +10187,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Moxutural Zooj",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10201,8 +10201,8 @@
     "area": "The Ja Tiika Heartland",
     "point": "Gok Golma",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10215,8 +10215,8 @@
     "area": "The Cerulean Cexudross",
     "point": "Cenote Jayunja",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10229,8 +10229,8 @@
     "area": "The Cerulean Cexudross",
     "point": "Whetstone",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10243,8 +10243,8 @@
     "area": "The Cerulean Cexudross",
     "point": "Ankledeep",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10257,8 +10257,8 @@
     "area": "The Cerulean Cexudross",
     "point": "Gok Draak Descent",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10271,8 +10271,8 @@
     "area": "The Cerulean Cexudross",
     "point": "The Skydeep Cenote",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10285,8 +10285,8 @@
     "area": "The Cerulean Cexudross",
     "point": "Skydeep Cenote Inner Chamber",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10299,8 +10299,8 @@
     "area": "Eshceyaani Wilds",
     "point": "Mount Loazensasaya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10313,8 +10313,8 @@
     "area": "Eshceyaani Wilds",
     "point": "Yoweya-hwitto Cemetery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10327,8 +10327,8 @@
     "area": "Eshceyaani Wilds",
     "point": "Shaaloani Station",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10341,8 +10341,8 @@
     "area": "Eshceyaani Wilds",
     "point": "Tonatenyawi",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10355,8 +10355,8 @@
     "area": "Eshceyaani Wilds",
     "point": "Maw of Sansheya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10369,8 +10369,8 @@
     "area": "Yawtanane Grasslands",
     "point": "Tuliyollal Trailhead",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10383,8 +10383,8 @@
     "area": "Yawtanane Grasslands",
     "point": "Pyaayehe'pya",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10397,8 +10397,8 @@
     "area": "Yawtanane Grasslands",
     "point": "Yowekwa Canyon",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10411,8 +10411,8 @@
     "area": "Yawtanane Grasslands",
     "point": "Luwateninyawawsa",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10425,8 +10425,8 @@
     "area": "Pyariyoanaan Plain",
     "point": "Otsekarri Shore",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10439,8 +10439,8 @@
     "area": "Pyariyoanaan Plain",
     "point": "Boughs of Hwittayoanaan",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10453,8 +10453,8 @@
     "area": "Pyariyoanaan Plain",
     "point": "Lake Toari",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10467,8 +10467,8 @@
     "area": "Pyariyoanaan Plain",
     "point": "Sandnest",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10481,8 +10481,8 @@
     "area": "Everkeep Ward",
     "point": "Spire of Trial",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10495,8 +10495,8 @@
     "area": "Everkeep Ward",
     "point": "The Driftdowns",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10509,8 +10509,8 @@
     "area": "Everkeep Ward",
     "point": "Everkeep",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10523,8 +10523,8 @@
     "area": "Everkeep Ward",
     "point": "Tumbled Hearthrises",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10537,8 +10537,8 @@
     "area": "Everkeep Ward",
     "point": "Yyupye's Halo",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10551,8 +10551,8 @@
     "area": "Everkeep Ward",
     "point": "Earthen Sky",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10565,8 +10565,8 @@
     "area": "Everkeep Ward",
     "point": "Earthen Sky Hideout",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10579,8 +10579,8 @@
     "area": "East Yyasulani",
     "point": "Vanguard",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10593,8 +10593,8 @@
     "area": "East Yyasulani",
     "point": "Tesh'pyani Village",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10607,8 +10607,8 @@
     "area": "East Yyasulani",
     "point": "The Thunderyards",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10621,8 +10621,8 @@
     "area": "East Yyasulani",
     "point": "Electric Potential",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10635,8 +10635,8 @@
     "area": "Archeo Alexandria",
     "point": "Cracking Chasm",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10649,8 +10649,8 @@
     "area": "Archeo Alexandria",
     "point": "The Nameslates",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10663,8 +10663,8 @@
     "area": "Archeo Alexandria",
     "point": "Submerged Skyline",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10677,8 +10677,8 @@
     "area": "Gate of Remembrance",
     "point": "Meso Terminal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10691,8 +10691,8 @@
     "area": "Canal Town",
     "point": "The Promenade",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10705,8 +10705,8 @@
     "area": "Canal Town",
     "point": "Font of Devotion",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10719,8 +10719,8 @@
     "area": "Canal Town",
     "point": "The Immovable",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10733,8 +10733,8 @@
     "area": "Canal Town",
     "point": "Daguerreo Medical Collection",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10747,8 +10747,8 @@
     "area": "Canal Town",
     "point": "Hydro Terminal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10761,8 +10761,8 @@
     "area": "Yesterland",
     "point": "Starglass",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10775,8 +10775,8 @@
     "area": "Yesterland",
     "point": "Bergmahr-Ring",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10789,8 +10789,8 @@
     "area": "Yesterland",
     "point": "Esperance Wheels",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10803,8 +10803,8 @@
     "area": "Yesterland",
     "point": "Tower of Mu",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10817,8 +10817,8 @@
     "area": "Yesterland",
     "point": "Air Cab Station",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10831,8 +10831,8 @@
     "area": "Yesterland",
     "point": "Proto Alexandria",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10845,8 +10845,8 @@
     "area": "Yesterland",
     "point": "Geo Terminal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10859,8 +10859,8 @@
     "area": "Asyle Volcane",
     "point": "Opal Springs",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10873,8 +10873,8 @@
     "area": "Asyle Volcane",
     "point": "Heatwells",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10887,8 +10887,8 @@
     "area": "Asyle Volcane",
     "point": "Arena of Valor",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10901,8 +10901,8 @@
     "area": "Asyle Volcane",
     "point": "Steps of the Speaker",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10915,8 +10915,8 @@
     "area": "Asyle Volcane",
     "point": "Matchlock Menagerie",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10929,8 +10929,8 @@
     "area": "Asyle Volcane",
     "point": "Pyro Terminal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10943,8 +10943,8 @@
     "area": "Windspath Gardens",
     "point": "Blooms of Discovery",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10957,8 +10957,8 @@
     "area": "Windspath Gardens",
     "point": "Cleyra Museum of Nature",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10971,8 +10971,8 @@
     "area": "Windspath Gardens",
     "point": "The Knowable",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   },
   {
@@ -10985,8 +10985,8 @@
     "area": "Windspath Gardens",
     "point": "Aero Terminal",
     "mapsize": 41.9,
-    "isSubarea": "FALSE",
-    "inOverview": "TRUE",
+    "issubarea": 0,
+    "inoverview": 1,
     "type": ""
   }
 ]

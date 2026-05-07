@@ -77,7 +77,7 @@ import iconAndText from '../../ui/iconAndText.vue'
     export default {
         name: 'List Item - Sightseeing',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'timerList'],
+        props: ['data', 'timerList', 'weatherList'],
         emits: ['focusNode', 'changeTracked'],
         data() {
             return {
@@ -104,9 +104,10 @@ import iconAndText from '../../ui/iconAndText.vue'
             checkTimeActive(type: string, arr: any) {
 
                 if (type == 'weather1' || type == 'weather2') {
-                    let x = arr.area.weather
-                    let y = arr[type]
-                    if (x == y) {return true}
+                    let curWeather = this.weatherList[arr.area.mapcode]
+                    let triggerWeather = arr[type]
+                    if (curWeather == triggerWeather) {return true}
+                    return null
                 }
 
                 if (type == 'time' && arr.time) {
@@ -127,9 +128,10 @@ import iconAndText from '../../ui/iconAndText.vue'
                 }
 
                 //Match2 - Get Weather State
-                if (arr.weather1 && arr.area.weather) {
-                    let condition1 = arr.weather1 == arr.area.weather ? true :  false
-                    let condition2 = (arr.weather2 == arr.area.weather) && arr.weather2 ? true :  false
+                if (arr.weather1) {
+                    let curWeather = this.weatherList[arr.mapcode]
+                    let condition1 = arr.weather1 == curWeather ? true :  false
+                    let condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true :  false
                     match2 = condition1 || condition2 ? true : false
                 }
 

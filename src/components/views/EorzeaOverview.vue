@@ -49,6 +49,7 @@
                     v-if="filterTypeSelected == filtersByType[2][1]" 
                     :data="filtersByType[2][3]" 
                     :timerList="timerList"
+                    :weatherList="weatherList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e"/>
 
@@ -106,7 +107,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             aethercurrentList,
             mapDisplay
         },
-        props: ['ffxivData', 'timerList', 'windowWidth'],
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked'],
         data() {
             return {
@@ -149,10 +150,10 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             createFilterListForZone() {
                 let finalList: any = {}
                 let allUsableAreas: Array<any> = []
-                allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inOverview)
+                allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inoverview)
 
-                for (const d in this.ffxivData.expansionData) {
-                    let expName = this.ffxivData.expansionData[d].expansion
+                for (const d in this.ffxivData.expansion) {
+                    let expName = this.ffxivData.expansion[d].expansion
 
                     let fetchRegions = allUsableAreas.filter(o => o.expansion == expName)
                     fetchRegions = fetchRegions.filter((obj: any, index: any) => 
