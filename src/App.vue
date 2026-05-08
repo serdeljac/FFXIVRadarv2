@@ -247,6 +247,8 @@ export default {
         for (const i in aetheryteRaw) {
           let obj: any = aetheryteRaw[i];
           obj.point = obj.point ? obj.point : false;
+          obj.job = 'aetheryte';
+          obj.job_sub = 'aetheryte';
           obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
         };
 
@@ -272,8 +274,8 @@ export default {
       setEliteHuntsData() {
         for (const i in huntsEliteRaw) {
           let obj: any = huntsEliteRaw[i];
-          obj.job = 'sightseeing';
-          obj.job_sub = 'sightseeing';
+          obj.job = 'eliteHunts';
+          obj.job_sub = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
           obj.trigger = obj.trigger ? obj.trigger : false;
           obj.weather1 = obj.weather1 ? obj.weather1 : false;
           obj.weather2 = obj.weather2 ? obj.weather2 : false;

@@ -5,77 +5,79 @@
         <div class="body_content">
 
             <div class="mapDisplay">
-                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" />
+                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" :singleOnly="false" v-if="focusNode[0]"/>
             </div>
 
             <div class="mapContext">
                 <div class="filterbar isZoneSelect">
-                    <h2>{{ filterAreaSelected.zone }}</h2>
-                    <h3>{{ filterAreaSelected.expansion }}</h3>
+                    <h2>{{ currentZone.zone }}</h2>
+                    <h3>{{ currentZone.expansion }}</h3>
                     <div class="group">
-                        <buttonFilter :name="`Change Zone`" @click="changeZoneMenu = true"/>
-                        <iconAndText class="searchIcon" :icon="'sq_search'" @click="openSearchMenu()"/>
+                        <buttonFilter :name="`Change Zone`" @click="enableZoneMenu = true"/>
+                        <iconAndText class="searchIcon" :icon="'sq_search'" @click="enableSearchMenu = true"/>
                     </div>
                 </div>
 
                 <div class="filterbar isTabBar">
-                    <div 
+                    <div v-for="(d, index) in zoneNodes" :key="d[1]"
                         :class="[
                             `filterbar-tab`, 
-                            {'disabled': d[3].length == 0},
-                            {'activeTab': filterTypeSelected == d[1]}
+                            {'disabled': d.length == 0},
+                            {'activeTab': tabSelected == index}
                             ]" 
-                        v-for="d in filtersByType" :key="d[1]"
-                        @click="d[3].length != 0 ? filterTypeSelected = d[1] : false;">
-                        <iconAndText :icon="d[1]" />
+                            @click="d.length != 0 ? tabSelected = index.toString() : false;"
+                        >
+                        <iconAndText :icon="index" />
                     </div>
                 </div>
 
                 <gatheringList 
-                    v-if="filterTypeSelected == filtersByType[0][1]" 
-                    :data="filtersByType[0][3]" 
+                    v-if="tabSelected == 'miner'" 
+                    :data="zoneNodes.miner" 
                     :timerList="timerList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e"/>
 
                 <gatheringList 
-                    v-if="filterTypeSelected == filtersByType[1][1]" 
-                    :data="filtersByType[1][3]" 
+                    v-if="tabSelected == 'botany'"  
+                    :data="zoneNodes.botany" 
                     :timerList="timerList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e"/>
                     
                 <sightseeingList 
-                    v-if="filterTypeSelected == filtersByType[2][1]" 
-                    :data="filtersByType[2][3]" 
+                    v-if="tabSelected == 'sightseeing'" 
+                    :data="zoneNodes.sightseeing"
                     :timerList="timerList"
                     :weatherList="weatherList"
                     @changeTracked="(e: any) => $emit('changeTracked', e)"
                     @focusNode="(e: any) => focusNode = e"/>
 
                 <fatesList 
-                    v-if="filterTypeSelected == filtersByType[3][1]" 
-                    :data="filtersByType[3][3]" 
+                    v-if="tabSelected == 'fates'" 
+                    :data="zoneNodes.fates" 
                     @focusNode="(e: any) => focusNode = e"/>
                 
                 <huntsList 
-                    v-if="filterTypeSelected == filtersByType[4][1]" 
-                    :data="filtersByType[4][3]" 
+                    v-if="tabSelected == 'eliteHunts'"
+                    :data="zoneNodes.eliteHunts" 
                     @focusNode="(e: any) => focusNode = e"/>
 
                 <aethercurrentList 
-                    v-if="filterTypeSelected == filtersByType[5][1]" 
-                    :data="filtersByType[5][3]" 
+                    v-if="tabSelected == 'aethercurrents'" 
+                    :data="zoneNodes.aethercurrents" 
                     @focusNode="(e: any) => focusNode = e"/>
 
             </div>
         </div>
+
         <zoneSelect 
-            v-if="changeZoneMenu" 
-            :zoneList="ffxivData.areas" 
+            v-if="enableZoneMenu" 
+            :zoneList="zoneSelection" 
             :windowWidth="windowWidth" 
-            @zoneSelected="newZoneSelected"
-            @closeMenu="(e: any) => changeZoneMenu = e"/>
+            @zoneSelected="(e: any) => currentZone = e"
+            @closeMenu="(e: boolean) => enableZoneMenu = e"/>
+
     </div>
 </template>
 
@@ -111,47 +113,40 @@ import mapDisplay from '../layouts/MapDisplay.vue'
         emits: ['changeTracked'],
         data() {
             return {
-                filtersByZone: [] as any, 
-                filtersByType: [
-                    ['type', 'miner', false, []],
-                    ['type', 'botany', false, []],
-                    ['type', 'sightseeing', false, []],
-                    ['type', 'fates', false, []],
-                    ['type', 'eliteHunts', false, []],
-                    ['type', 'aethercurrents', false, []],
-                ] as any,
-                filterAreaSelected: {} as any,
-                filterTypeSelected: '' as string,
-                changeZoneMenu: false as boolean,
-                searchMenu: false as boolean,
-                focusNode: [] as any,
+                currentZone: [] as any, //Zone selected on map
+                zoneSelection: [] as any, //List of zones for 'Change Zone' menu
+                zoneNodes: {
+                    miner: [] as any,
+                    botany: [] as any,
+                    sightseeing: [] as any,
+                    fates: [] as any,
+                    eliteHunts: [] as any,
+                    aethercurrents: [] as any,
+                } as any, //List of nodes in the current zone
+                tabSelected: '' as string, //Tab that will display the nodes on the table
+                focusNode: [] as any, //Node that is focused for displaymap and node table
+                enableZoneMenu: false as boolean, 
+                enableSearchMenu: false as boolean,
             }
         },
-        computed: {
-            appendTabSelectedArray() {
-                let tabSelected = this.filterTypeSelected
-                for (const d in this.filtersByType) {
-                    let tabName = this.filtersByType[d][1]
-                    if (tabSelected == tabName) {return this.filtersByType[d][3]}
-                }
-            },
-        },
         created() {
-            this.createFilterListForZone() //Run Once
+            //Get the first zone with overview data and set it as default
+            this.currentZone = this.ffxivData.areas.find((o: any) => o.inoverview)
+            this.currentZone = this.ffxivData.areas[6]
 
-            let regions = this.filtersByZone[Object.keys(this.filtersByZone)[0]]
-            let zone = regions[Object.keys(regions)[0]]
-            this.filterAreaSelected = zone[3]
+            // Create list of zones based on expantions -> regions -> zones
+            this.createZoneSelectionArray()
 
-            this.createFilterListForType()
-            this.selectTabWithData()
+            //Get all nodes within the current zone selected
+            this.fetchNodesInCurrentZone()
         },
         methods: {
-            createFilterListForZone() {
+            createZoneSelectionArray() {
                 let finalList: any = {}
                 let allUsableAreas: Array<any> = []
                 allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inoverview)
 
+                //Create an object property list based on the expantions
                 for (const d in this.ffxivData.expansion) {
                     let expName = this.ffxivData.expansion[d].expansion
 
@@ -162,9 +157,11 @@ import mapDisplay from '../layouts/MapDisplay.vue'
 
                     finalList[expName] = {}
 
+                    //Create an object property list based on the regions of each expantion
                     for (const e in fetchRegions) {
                         let regionName = fetchRegions[e].region
 
+                        //Push the list of zones into each region
                         let fetchZones = allUsableAreas.filter(o => o.region == regionName)
                         fetchZones = fetchZones.filter((obj: any, index: any) => 
                             index === fetchZones.findIndex((o: any) => obj.zone === o.zone)
@@ -173,40 +170,26 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                         finalList[expName][regionName] = fetchZones
                     }
                 }
-                this.filtersByZone = finalList
+                this.zoneSelection = finalList
             },
-            createFilterListForType() {
-                for (const d in this.filtersByType) {
-                    let searchtype = this.filtersByType[d][1]
-                    let results: any = []
-                    if (searchtype == 'miner' || searchtype == 'botany') {
-                        results = this.ffxivData[searchtype].filter((o: any) => o.area.zone == this.filterAreaSelected.zone)
-                    } else {
-                        results = this.ffxivData[searchtype].filter((o: any) => o.zone == this.filterAreaSelected.zone)
-                    }
-                    
-                    this.filtersByType[d][3] = results
-                }
-            },
-            newZoneSelected(e: any) {
-                this.changeZoneMenu = false;
-                this.filterAreaSelected = e;
-                this.createFilterListForType()
-                this.selectTabWithData()
-            },
-            selectTabWithData() {
-                //Select the first tab that contains data
-                for (const d in this.filtersByType) {
-                    if (this.filtersByType[d][3].length != 0) {
-                        this.filterTypeSelected = this.filtersByType[d][1]
-                        this.focusNode = [this.filtersByType[d][3][0]]
+            fetchNodesInCurrentZone() {
+                //Find all nodes for the selected zones and set them in the zoneNodes object
+                let zone = this.currentZone.zone
+                this.zoneNodes.miner = this.ffxivData.miner.filter((o: any) => o.area.zone == zone)
+                this.zoneNodes.botany = this.ffxivData.botany.filter((o: any) => o.area.zone == zone)
+                this.zoneNodes.sightseeing = this.ffxivData.sightseeing.filter((o: any) => o.zone == zone)
+                this.zoneNodes.fates = this.ffxivData.fates.filter((o: any) => o.zone == zone)
+                this.zoneNodes.eliteHunts = this.ffxivData.eliteHunts.filter((o: any) => o.zone == zone)
+                this.zoneNodes.aethercurrents = this.ffxivData.aethercurrents.filter((o: any) => o.zone == zone)
+
+                //Find the first type of the node that has data and set
+                for (const d in this.zoneNodes) {
+                    if (this.zoneNodes[d].length > 0) {
+                        this.tabSelected = d
+                        this.focusNode = this.zoneNodes[d][0]
                         break;
                     }
                 }
-            },
-            openSearchMenu() {
-                console.log('open: openSearchMenu')
-                this.searchMenu = true
             },
         }
     }
