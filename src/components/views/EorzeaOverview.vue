@@ -75,7 +75,7 @@
             v-if="enableZoneMenu" 
             :zoneList="zoneSelection" 
             :windowWidth="windowWidth" 
-            @zoneSelected="(e: any) => currentZone = e"
+            @zoneSelected="changeZone"
             @closeMenu="(e: boolean) => enableZoneMenu = e"/>
 
     </div>
@@ -132,9 +132,8 @@ import mapDisplay from '../layouts/MapDisplay.vue'
         created() {
             //Get the first zone with overview data and set it as default
             this.currentZone = this.ffxivData.areas.find((o: any) => o.inoverview)
-            this.currentZone = this.ffxivData.areas[6]
 
-            // Create list of zones based on expantions -> regions -> zones
+            //Create list of zones based on expantions -> regions -> zones (Run Once)
             this.createZoneSelectionArray()
 
             //Get all nodes within the current zone selected
@@ -144,25 +143,28 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             createZoneSelectionArray() {
                 let finalList: any = {}
                 let allUsableAreas: Array<any> = []
-                allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inoverview)
 
-                //Create an object property list based on the expantions
-                for (const d in this.ffxivData.expansion) {
-                    let expName = this.ffxivData.expansion[d].expansion
+                //Filter only applicable zone data and get unique list of expansions
+                allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inoverview)
+                let getListOfAllExpansions = allUsableAreas.filter((obj: any, index: any) => 
+                    index === allUsableAreas.findIndex((o: any) => obj.expansion === o.expansion)
+                );
+
+                //Fetch the regions for each expansion and push the zones into the final list that will be used for the zone selection menu
+                for (const d in getListOfAllExpansions) {
+                    let expName = getListOfAllExpansions[d].expansion
+                    finalList[expName] = {}
 
                     let fetchRegions = allUsableAreas.filter(o => o.expansion == expName)
                     fetchRegions = fetchRegions.filter((obj: any, index: any) => 
                         index === fetchRegions.findIndex((o: any) => obj.region === o.region)
                     );
 
-                    finalList[expName] = {}
-
-                    //Create an object property list based on the regions of each expantion
+                    //Push the list of regions into each expansion
                     for (const e in fetchRegions) {
                         let regionName = fetchRegions[e].region
-
-                        //Push the list of zones into each region
-                        let fetchZones = allUsableAreas.filter(o => o.region == regionName)
+                        
+                        let fetchZones = allUsableAreas.filter(o => o.region == regionName && o.expansion == expName)
                         fetchZones = fetchZones.filter((obj: any, index: any) => 
                             index === fetchZones.findIndex((o: any) => obj.zone === o.zone)
                         );
@@ -171,9 +173,11 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                     }
                 }
                 this.zoneSelection = finalList
+                
             },
             fetchNodesInCurrentZone() {
                 //Find all nodes for the selected zones and set them in the zoneNodes object
+                console.log(this.currentZone)
                 let zone = this.currentZone.zone
                 this.zoneNodes.miner = this.ffxivData.miner.filter((o: any) => o.area.zone == zone)
                 this.zoneNodes.botany = this.ffxivData.botany.filter((o: any) => o.area.zone == zone)
@@ -191,6 +195,10 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                     }
                 }
             },
+            changeZone(e: any) {
+                this.currentZone = e
+                this.fetchNodesInCurrentZone()
+            }
         }
     }
 </script>

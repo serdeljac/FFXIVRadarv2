@@ -1,38 +1,43 @@
 <template>
     <div :class="[`zoneSelect`]">
+
         <div class="zoneSelect_background" @click="$emit('closeMenu', false)"></div>
+
         <div :class="[`zoneSelect_foreground`, windowWidth]">
-            <h2>Select Zone</h2>
-                <!-- Flex All six expansions -->
-                <div class="zoneSelect_wrapper">
-                    <!-- List -->
-                    <div class="zoneSelect_group" v-for="(regions, expansionIndex) in zoneSelectList" :key="expansionIndex">
-                        <h3 class="zoneSelect_list-expansion">
-                            <img class="iconSize" :src="getIconImageURL(expansionIndex.toString(), zoneList)" />
-                            {{ expansionIndex }}
-                        </h3>
-                        <hr />
-                        <div class="zoneSelect_list">
-                            <ul v-for="zones in regions" :key="zones.ID">
-                                <li @click="$emit('zoneSelected', zones)">
-                                    <img :src="getIconImageURL('arr')" v-if="zones.type == 'town'"/>
-                                    {{ zones.zone }} 
+            <h2 class="zoneSelect_titleHeader">Select Zone</h2>
+            <!-- Flex All six expansions -->
+            <div class="zoneSelect_wrapper">
+                <div class="zoneSelect_groupExpansions" v-for="(region, expansionIndex) in zoneList" :key="expansionIndex">
+                    <h3 class="zoneSelect_titleExpansion">
+                        <img class="iconSize" :src="getIconImageURL(expansionIndex.toString())"/>
+                    </h3>
+                    <div class="zoneSelect_groupRegions">
+                        <div  v-for="(zones, regionIndex) in region" :key="regionIndex">
+                            <ul>
+                                <li>
+                                    <h3 class="zoneSelect_titleRegion">
+                                        <img class="iconSize" :src="getIconImageURL(regionIndex.toString())"/>
+                                        {{ regionIndex }}
+                                    </h3>
+                                </li>
+                                <li v-for="d in zones" :key="d.ID" 
+                                    class="selectable"
+                                    @click="$emit('zoneSelected', d); $emit('closeMenu', false)">
+                                    <img v-if="d.type" class="iconSize" :src="getIconImageURL(d.type)"/>
+                                    {{ d.zone }}
                                 </li>
                             </ul>
                         </div>
+                    </div>
                 </div>
             </div>
-
         </div>
     </div>
 </template>
 
 <script lang="ts" setup>
-    function getIconImageURL(name: string, searchForIcon?: any) {
-        if (searchForIcon) {
-            let newName = searchForIcon.find((o: any) => o.expansion == name).icon
-            return new URL(`/src/assets/icons/${newName}.webp`, import.meta.url).href
-        }
+    function getIconImageURL(name: string) {
+        name = name.toLowerCase().replace(/ /g,'')
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
@@ -42,28 +47,6 @@
         name: 'Zone Select',
         props: ['zoneList', 'windowWidth'],
         emits: ['zoneSelected', 'closeMenu'],
-        data() {
-            return {
-                zoneSelectList: {} as any,
-            }
-        },
-        created() {
-            let fetchExpansions = this.zoneList.filter((obj: any, index: any) => 
-                index ===  this.zoneList.findIndex((o: any) => obj.expansion === o.expansion)
-            );
-
-            for (const i in fetchExpansions) {
-                let currentExpansion =  fetchExpansions[i].expansion
-                let foundZones = this.zoneList.filter((o: any) => o.expansion == currentExpansion && o.inOverview)
-
-                let removeDupeZones = foundZones.filter((obj: any, index: any) => 
-                    index ===  foundZones.findIndex((o: any) => obj.zone === o.zone)
-                );
-
-                removeDupeZones.sort((a, b) => a.type - b.type);
-                this.zoneSelectList[currentExpansion] = removeDupeZones
-            }
-        }
     }
 </script>
 
@@ -86,9 +69,9 @@
             margin: 2rem 8rem;
             width: calc(100vw - 16rem);
             height: calc(100vh - 4rem);
-            background-color: $buttonBackgroundColor;
+            background-color: $bodyBackgroundColor;
             border-radius: $borderRadius;
-            overflow: hidden;
+            overflow: hidden auto;
             padding: 1rem;
             box-shadow: 2px 2px 4px #000;
             &.desktop-small, &.tablet, &.mobile {
@@ -98,36 +81,53 @@
             }
         }
 
-        h2 {
+        &_titleHeader {
             text-align: center;
             width: 100%;
             padding-bottom: 20px;
         }
 
-        &_wrapper {
-            width: 100%;
+        &_titleExpansion {
+            align-self: center;
+            justify-self: center;
+        }
+
+        &_titleRegion {
+            border-bottom: 1px solid #797979;
+            margin-bottom: 6px;
+        }
+
+        &_groupExpansions {
             display: grid;
-            grid-template-columns: repeat(6, minmax(200px, 1fr));
-            gap: 20px;
-            hr {margin: 4px 0;}
+            grid-template-columns: 200px auto;
+            border: 1px solid #797979;
+            padding: 10px;
         }
 
-        &_list-expansion {
+        &_groupRegions {
+            width: 100%;
+            display: inline-flex;
+            gap: 40px;
+        }
+
+        &_wrapper {
             display: flex;
+            flex-direction: column;
+            gap: 20px;
+            
         }
 
-        &_list {
-            li {
-                padding: 3px 6px;
-                margin: 3px 0;
-                transition: all .07s linear;
-                border-radius: $borderRadius;
-                cursor: pointer;
-                &:hover {
-                    background-color: $buttonBackgroundColorHover;
-                }
+        .selectable {
+            margin: 4px 0;
+            cursor: pointer;
+            padding: 4px;
+            border-radius: $borderRadius;
+            &:hover {
+                background-color: $listBackgroundColorHover;
             }
         }
+
+
 
 
     }

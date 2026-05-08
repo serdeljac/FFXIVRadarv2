@@ -16,7 +16,7 @@
                 class="mapIcon"
                 :data-mapIconActive="checkRank(d.ranks)"
                 :style="`transform: translate(${getCoordinates(d)})`">
-                <img :src="getIconImg(d.job, d.job_sub)" />
+                <img :src="getIconImg(d.job, d.ranks)" />
             </div>
 
         </div>
@@ -27,7 +27,7 @@
     function getIconImg(jobName: string, subJob: string) {
         let name: string = subJob
         if (jobName == 'fates') {name = `fate_${subJob}`}
-        if (jobName == 'eliteHunts') {name = subJob == 'SS' ? 'hunts_SS' : `hunts`}
+        if (jobName == 'eliteHunts') {name = subJob == 'SS' ? 'hunts_ss' : `hunts`}
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 
@@ -71,7 +71,6 @@
                     allPoints[d]['job'] = 'eliteHunts'
                     allPoints[d]['job_sub'] = this.ffxivData.eliteHunts.find((o: any) => o.points.includes(allPoints[d])).rank
                 }
-                console.log(allPoints)
                 return allPoints
             },
             getCoordinates(arr: any) {
