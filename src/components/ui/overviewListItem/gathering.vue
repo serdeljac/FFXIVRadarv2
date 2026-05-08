@@ -1,40 +1,37 @@
 <template>
     <ul>
-        <li class="overviewListItem" 
-            v-for="node in nodeList" :key="node[0]" 
-            @click="focusNode = [node[0]]; emitFocusNode"
-            :data-rowFocused="node[0].node_code == focusNode[0].node_code ? true : null" 
-            :data-rowActive="checkRowActive(node[0])">
+        <li v-for="(material, nodeCode) in nodeList" :key="nodeCode"
+            class="overviewListItem"
+            @click="$emit('focusNode', material[0])"
+            :data-rowFocused="nodeCode == focusNode.node_code ? true : null" 
+            :data-rowActive="checkRowActive(material[0])">
 
             <div class="overviewListItem_header">
                 <iconAndText :text="`
-                    ${node[0].node_name} 
-                    ${node[0].job_sub.charAt(0).toUpperCase() + node[0].job_sub.slice(1)} 
-                    Node - Lv.${node[0].node_level}`" :icon="node[0].job_sub"/>
+                    ${material[0].node_name} 
+                    ${material[0].job_sub.charAt(0).toUpperCase() + material[0].job_sub.slice(1)} 
+                    Node - Lv.${material[0].node_level}`" :icon="material[0].job_sub"/>
 
                 <div class="forceright">
-                    <img 
-                        class="iconSize"
-                        v-if="node[0].time" 
-                        :src="getIconImg(node[0].tracked ? 'remove' : 'add')" 
-                        @click="$emit('changeTracked', node[0])"/>
-                    <p>{{ fetchTimerCountdowns(node[0].time) }}</p>
+                    <p>{{ fetchTimerCountdowns(material[0].time) }}</p>
                 </div>
             </div>
-            
+
             <hr/>
 
             <div class="overviewListItem_body">
-
                 <ul class="overviewListItem_list">
-                    <li v-for="d in node" :key="d.ID">
+                    <li v-for="d in material" :key="d.ID" >
+                        <img 
+                            class="iconSize"
+                            v-if="d.time" 
+                            :src="getIconImg(d.tracked ? 'remove' : 'add')" 
+                            @click="$emit('changeTracked', d)"/>
                         {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
                     </li>
                 </ul>
-
-                <p class="tombRequire" v-if="node[0].tomb">{{ `Requires ${node[0].tomb}` }}</p>
+                <p class="tombRequire" v-if="material[0].tomb">{{ `Requires ${material[0].tomb}` }}</p>
             </div>
-
         </li>
     </ul>
 </template>
@@ -52,23 +49,16 @@
     export default {
         name: 'List Item - Gathering',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'timerList'],
+        props: ['data', 'timerList', 'focusNode'],
         emits: ['focusNode', 'changeTracked'],
         data() {
             return {
-                nodeList: [] as any,
-                focusNode: [] as any,
+                nodeList: {} as any,
             }
         },
         created() {
-            this.nodeList = this.groupNodes() //Create the list based on current zone
-            this.focusNode = [this.nodeList[0][0]] //Set first found item as the focus (on tab select)
-            this.emitFocusNode
-        },
-        computed: {
-            emitFocusNode() {
-                this.$emit('focusNode', this.focusNode)
-            }
+            //Create and object where property is the node_code and the contents are the materials
+            this.groupNodes() 
         },
         methods: {
             fetchTimerCountdowns(time: string) {
@@ -79,19 +69,22 @@
                 return 'Any Time'
             },
             groupNodes() {
+                let groupedNodes: any = {}
+
+                //Fetch each unique node_code
                 let fetchNodeCodes = this.data.filter((obj: any, index: any) => 
                     index === this.data.findIndex((o: any) => obj.node_code === o.node_code)
                 );
 
-                let groupedNodes = []
+                //Filter each material based on the found node_code
                 for (const d in fetchNodeCodes) {
-                    let node_code = fetchNodeCodes[d].node_code
-                    let results = this.data.filter((o: any) => o.node_code == node_code)
-                    results.sort((a, b) => b.isshard + a.isshard);
-                    groupedNodes[d] = results
+                    let nodeCode = fetchNodeCodes[d].node_code
+                    let materials = this.data.filter((o: any) => o.node_code == nodeCode)
+                    materials.sort((a, b) => b.isshard + a.isshard);
+                    groupedNodes[nodeCode] = materials
                 }
 
-                return groupedNodes
+                this.nodeList = groupedNodes
             },
             checkRowActive(arr: any) {
                 let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
@@ -104,6 +97,13 @@
 
 <style scoped lang="scss">
     .overviewListItem {
+
+        &_list li {
+            display: flex;
+            align-items: center;
+            font-size: 0.8rem;
+            img {width: 20px;}
+        }
 
         .tombRequire {
             width: 100%;

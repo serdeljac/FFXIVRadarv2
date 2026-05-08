@@ -1,10 +1,10 @@
 <template>
     <ul>
-        <li class="overviewListItem" 
-            v-for="node in data" :key="node.ID" 
-            @click="focusNode = [node]; emitFocusNode"
-            :data-rowFocused="node.node_code == focusNode[0].node_code ? true : null">
-            
+        <li v-for="node in data" :key="node.ID"
+            class="overviewListItem"
+            @click="$emit('focusNode', node)"
+            :data-rowFocused="node.node_code == focusNode.node_code ? true : null">
+
             <div class="overviewListItem_header">
                 <iconAndText :text="`${node.name} - Lv.${node.level}`" :icon="`hunts${node.rank == 'SS' ? '_ss' : ''}`"/>
                 <p class="forceright">{{ `Rank: ${node.rank}` }}</p>
@@ -37,6 +37,7 @@
                     </ul>
                 </div>
             </div>
+
         </li>
     </ul>
 </template>
@@ -48,22 +49,8 @@ import iconAndText from '../../ui/iconAndText.vue'
     export default {
         name: 'List Item - Hunts',
         components: {displayAreaText, iconAndText},
-        props: ['data'],
+        props: ['data', 'focusNode'],
         emits: ['focusNode'],
-        data() {
-            return {
-                focusNode: [] as any,
-            }
-        },
-        computed: {
-            emitFocusNode() {
-                this.$emit('focusNode', this.focusNode)
-            }
-        },
-        created() {
-            this.focusNode = [this.data[0]] //Set first found item as the focus (on tab select)
-            this.emitFocusNode
-        }
     }
 </script>
 

@@ -5,7 +5,7 @@
         <div class="body_content">
 
             <div class="mapDisplay">
-                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" :singleOnly="false" v-if="focusNode[0]"/>
+                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" :singleOnly="false" v-if="focusNode"/>
             </div>
 
             <div class="mapContext">
@@ -25,7 +25,7 @@
                             {'disabled': d.length == 0},
                             {'activeTab': tabSelected == index}
                             ]" 
-                            @click="d.length != 0 ? tabSelected = index.toString() : false;"
+                            @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]"
                         >
                         <iconAndText :icon="index" />
                     </div>
@@ -41,13 +41,15 @@
                         v-if="tabSelected == 'miner'" 
                         :data="zoneNodes.miner" 
                         :timerList="timerList"
+                        :focusNode="focusNode"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
 
                     <gatheringList 
-                        v-if="tabSelected == 'botany'"  
+                        v-if="tabSelected == 'botany'" 
                         :data="zoneNodes.botany" 
                         :timerList="timerList"
+                        :focusNode="focusNode"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
                         
@@ -56,22 +58,26 @@
                         :data="zoneNodes.sightseeing"
                         :timerList="timerList"
                         :weatherList="weatherList"
+                        :focusNode="focusNode"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
 
                     <fatesList 
                         v-if="tabSelected == 'fates'" 
-                        :data="zoneNodes.fates" 
+                        :data="zoneNodes.fates"
+                        :focusNode="focusNode"
                         @focusNode="(e: any) => focusNode = e"/>
                     
                     <huntsList 
                         v-if="tabSelected == 'eliteHunts'"
-                        :data="zoneNodes.eliteHunts" 
+                        :data="zoneNodes.eliteHunts"
+                        :focusNode="focusNode"
                         @focusNode="(e: any) => focusNode = e"/>
 
                     <aethercurrentList 
                         v-if="tabSelected == 'aethercurrents'" 
                         :data="zoneNodes.aethercurrents" 
+                        :focusNode="focusNode"
                         @focusNode="(e: any) => focusNode = e"/>
                 </div>
 
@@ -82,6 +88,7 @@
                                 v-if="d.job == 'miner'" 
                                 :data="[d]" 
                                 :timerList="timerList"
+                                :focusNode="focusNode"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
                             
@@ -89,6 +96,7 @@
                                 v-if="d.job == 'botany'"  
                                 :data="[d]" 
                                 :timerList="timerList"
+                                :focusNode="focusNode"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
 
@@ -178,6 +186,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
         created() {
             //Get the first zone with overview data and set it as default
             this.currentZone = this.ffxivData.areas.find((o: any) => o.inoverview)
+            this.currentZone = this.ffxivData.areas[7]
 
             //Create list of zones based on expantions -> regions -> zones (Run Once)
             this.createZoneSelectionArray()
@@ -223,7 +232,6 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             },
             fetchNodesInCurrentZone() {
                 //Find all nodes for the selected zones and set them in the zoneNodes object
-                console.log(this.currentZone)
                 let zone = this.currentZone.zone
                 this.zoneNodes.miner = this.ffxivData.miner.filter((o: any) => o.area.zone == zone)
                 this.zoneNodes.botany = this.ffxivData.botany.filter((o: any) => o.area.zone == zone)
@@ -236,6 +244,8 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 for (const d in this.zoneNodes) {
                     if (this.zoneNodes[d].length > 0) {
                         this.tabSelected = d
+                        //ERROR HERE
+                        // console.log(this.zoneNodes[d][0])
                         this.focusNode = this.zoneNodes[d][0]
                         break;
                     }

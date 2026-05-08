@@ -1,18 +1,32 @@
 <template>
     <div class="mapDisplay">
         <div class="mapDisplay_background"
-            :style="`background-image: url('${getMapImg(focusNode[0].area.zone)}')`">
+            :style="`background-image: url('${getMapImg(focusNode.area.zone)}')`">
         </div>
         <div class="mapDisplay_overlay">
 
-            <div v-for="d in fetchFocusedNodes()" :key="d.ID"
+            <div v-for="d in getAetheyteNodes" :key="d.ID"
                 class="mapIcon"
-                :data-mapIconActive="d.node_code == focusNode[0].node_code ? true : null"
                 :style="`transform: translate(${getCoordinates(d)})`">
                 <img :src="getIconImg(d.job, d.job_sub)" />
             </div>
 
-            <div v-for="d in fetchHuntNodes()" :key="d.ID"
+            <div v-for="d in getUnchainedNodes" :key="d.ID"
+                class="mapIcon"
+                :data-mapIconActive="d.node_code == focusNode.node_code ? true : null"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg(d.job, d.job_sub)" />
+            </div>
+
+            <div v-for="d in getChainedNodes" :key="d.ID"
+                class="mapIcon"
+                :data-mapIconActive="d.chain_set == focusNode.chain_set ? true : null"
+                :data-chainNo="d.chain_no"
+                :style="`transform: translate(${getCoordinates(d)})`">
+                <img :src="getIconImg(d.job, d.job_sub)" />
+            </div>
+
+            <div v-for="d in getHuntNodes" :key="d.ID"
                 class="mapIcon"
                 :data-mapIconActive="checkRank(d.ranks)"
                 :style="`transform: translate(${getCoordinates(d)})`">
@@ -41,38 +55,41 @@
     export default {
         name: 'Eorzea Map',
         props: ['ffxivData', 'focusNode', 'singleOnly'],
-        methods: {
-            fetchFocusedNodes() {
-                if (this.focusNode[0].job == 'eliteHunts') {
-                    let currentZone = this.focusNode[0].area.zone
-                    let results = this.ffxivData.aetheryte.filter((o: any) => o.zone == currentZone)
-                    return results
-                }
-                if (!this.singleOnly) {
-                    let currentJob = this.focusNode[0].job
-                    let currentZone = this.focusNode[0].area.zone
-                    let nodeList = this.ffxivData[currentJob].filter((o: any) => o.area.zone == currentZone)
-                    let aetheryteList = this.ffxivData.aetheryte.filter((o: any) => o.zone == currentZone)
-                    let results = [...nodeList, ...aetheryteList]
-                    return results
-                } else {
-                    return this.focusNode
-                }
+        computed: {
+            getAetheyteNodes() {
+                let f = this.focusNode
+                let results = this.ffxivData.aetheryte.filter((o: any) => o.zone == f.area.zone)
+                return results
             },
-            fetchHuntNodes() {
-                if (this.focusNode[0].job != 'eliteHunts') {return []}
-                let currentZone = this.focusNode[0].area.zone
-                let r = this.ffxivData.eliteHunts.filter((o: any) => o.zone == currentZone).map(o => o.points).flat()
+            getUnchainedNodes() {
+                let f = this.focusNode
+                if (f.job == 'eliteHunts') {return []}
+                let results = this.ffxivData[f.job].filter((o: any) => o.area.zone == f.area.zone && !o.chain_set)
+                return results
+            },
+            getChainedNodes() {
+                let f = this.focusNode
+                if (f.job == 'eliteHunts') {return []}
+                let results = this.ffxivData[f.job].filter((o: any) => o.area.zone == f.area.zone && o.chain_set)
+                return results
+            },
+            getHuntNodes() {
+                let f = this.focusNode
+                if (f.job != 'eliteHunts') {return []}
+                let results = this.ffxivData[f.job].filter((o: any) => o.area.zone == f.area.zone).map((o: any) => o.points).flat()
 
-                let allPoints = r.filter((obj: any, index: any) => 
-                    index === r.findIndex((o: any) => obj.transx === o.transx && obj.transy === o.transy)
+                let allPoints = results.filter((obj: any, index: any) => 
+                    index === results.findIndex((o: any) => obj.transx === o.transx && obj.transy === o.transy)
                 );
+
                 for (const d in allPoints) {
                     allPoints[d]['job'] = 'eliteHunts'
                     allPoints[d]['job_sub'] = this.ffxivData.eliteHunts.find((o: any) => o.points.includes(allPoints[d])).rank
                 }
                 return allPoints
-            },
+            }
+        },
+        methods: {
             getCoordinates(arr: any) {
                 if (arr.transx) {return `${arr.transx}px, ${arr.transy}px`}
                     let mapsize = arr.area.mapsize
@@ -81,7 +98,7 @@
                     return `${x}px, ${y}px`
             },
             checkRank(rank: string) {
-                let current_rank = this.focusNode[0].rank
+                let current_rank = this.focusNode.rank
                 let results = rank.includes(current_rank) ? true : null
                 return results
             },

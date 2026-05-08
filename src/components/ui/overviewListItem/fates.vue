@@ -1,9 +1,9 @@
 <template>
     <ul>
-        <li class="overviewListItem" 
-            v-for="node in fetchNoChainSet()" :key="node.ID" 
-            @click="focusNode = [node]; emitFocusNode"
-            :data-rowFocused="node.node_code == focusNode[0].node_code ? true : null">
+        <li v-for="node in nodeList.nochainset" :key="node.ID"
+            class="overviewListItem" 
+            @click="$emit('focusNode', node)"
+            :data-rowFocused="node.node_code == focusNode.node_code ? true : null">
 
             <div class="overviewListItem_header">
                 <iconAndText :text="`${node.name} - Lv.${node.level}`" :icon="`fate_${node.job_sub}`"/>
@@ -16,11 +16,11 @@
             </div>
         </li>
 
-        <li class="overviewListItem" 
-            v-for="nodeSet in fetchChainSet()" :key="nodeSet.ID"
-            @click="focusNode = nodeSet; emitFocusNode"
-            :data-rowFocused="nodeSet[0].node_code == focusNode[0].node_code ? true : null">
-
+        <li v-for="(nodeSet, chainNo) in nodeList.chainset" :key="chainNo"
+            class="overviewListItem"
+            @click="$emit('focusNode', nodeSet[0])"
+            :data-rowFocused="nodeSet[0].node_code == focusNode.node_code ? true : null">
+            
             <div :class="[`overviewListItem_header set`]" v-for="(node, index) in nodeSet" :key="node.ID">
                 <div class="chainArrow" v-if="index != 0">
                     <span v-if="nodeSet[Number(index) -1].chain_no != node.chain_no">⇩</span>
@@ -52,45 +52,37 @@ import iconAndText from '../../ui/iconAndText.vue'
     export default {
         name: 'List Item - Fates',
         components: {displayAreaText, iconAndText},
-        props: ['data'],
+        props: ['data', 'focusNode'],
         emits: ['focusNode'],
         data() {
             return {
-                focusNode: [] as any,
-            }
-        },
-        computed: {
-            emitFocusNode() {
-                this.$emit('focusNode', this.focusNode)
+                nodeList: {} as any,
             }
         },
         created() {
-            this.focusNode = [this.data[0]] //Set first found item as the focus (on tab select)
-            this.emitFocusNode
+            //Seperate data into two sets: individual fates and chained fates
+            this.groupNodes()
         },
         methods: {
-            fetchNoChainSet() {
+            groupNodes() {
+                //Filter out the chain sets and append
                 let noChainList = this.data.filter((o: any) => !o.chain_set)
-                return noChainList
-            },
-            fetchChainSet() {
-                let fetchChainSets = this.data.filter((obj: any, index: any) => 
-                    index === this.data.findIndex((o: any) => obj.chain_set === o.chain_set)
+                this.nodeList['nochainset'] = noChainList
+
+                //Filter only chain sets and get unique chain set no
+                let chainList = this.data.filter((o: any) => o.chain_set)
+                chainList = chainList.filter((obj: any, index: any) => 
+                    index === chainList.findIndex((o: any) => obj.chain_set === o.chain_set)
                 );
 
-                fetchChainSets.shift()
-                
-                let groupedChainSet = []
-                for (const d in fetchChainSets) {
-                    let curChainSet = fetchChainSets[d].chain_set
-                    let results = this.data.filter((o:any) => o.chain_set == curChainSet)
-                    groupedChainSet.push(results)
+                //Group each set into an object by the chain_set no
+                let groupedChainSet: any = {}
+                for (const d in chainList) {
+                    let curSet = chainList[d].chain_set
+                    let foundSet = this.data.filter((o:any) => o.chain_set == curSet)
+                    groupedChainSet[curSet] = foundSet
                 }
-
-                return groupedChainSet
-            },
-            checkNodeSetFocus(arr: any) {
-                console.log(arr)
+                this.nodeList['chainset'] = groupedChainSet
             },
         },
     }
