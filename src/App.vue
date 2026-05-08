@@ -4,6 +4,7 @@
       :class="[`tracking_bar_pos`]" 
       :windowWidth="windowWidth"
       :timerList="timerList"
+      :weatherList="weatherList"
       :trackinglist="trackinglist"
       @openDetails="(e) => detailsPanel = e"
       @changeTracked="changeTracked"

@@ -59,6 +59,11 @@ main {
     p {animation: timerActiveAnimation 0.7s linear infinite;}
 }
 
+*[data-trackingActive] {
+    animation: rowActiveAnimation 0.7s linear infinite;
+    .rdrTable_col-time p {animation: timerActiveAnimation 0.7s linear infinite;}
+}
+
 *[data-rowActive] {
     animation: rowActiveAnimation 0.7s linear infinite;
 }

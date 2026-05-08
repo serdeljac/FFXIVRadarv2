@@ -1,50 +1,87 @@
 <template>
     <div class="trackingbar">
+
+        <!-- Header -->
         <div class="trackingbar_header">
             <router-link :to="`/`">
                 <h1>FFXIV Radar</h1>
             </router-link>
         </div>
-        <div :class="[`trackingbar_items`]">
-            <ul :class="[
-                {'grid4': windowWidth == 'desktop-large'},
-                {'grid3': windowWidth == 'desktop-small'},
-                {'grid2': windowWidth == 'tablet'},
-                {'grid1': windowWidth == 'mobile'}
-                ]">
-                <li v-for="d in trackinglist" :key="d.ID" :class="[`trackingbar_item`]" :data-activeNodeAnimation="checkActiveState(d.time)">
-                    <div class="content">
+
+        <!-- List items area -->
+        <ul :class="[`trackingbar_items`,
+            {'grid4': windowWidth == 'desktop-large'},
+            {'grid3': windowWidth == 'desktop-small'},
+            {'grid2': windowWidth == 'tablet'},
+            {'grid1': windowWidth == 'mobile'}
+            ]">
+
+            <!-- Individual Listed Items -->
+            <li v-for="d in sortTracklingList()" :key="d.ID" 
+                :class="[`trackingbar_item`]" 
+                :data-trackingActive="checkActiveState(d)"
+                @click="$emit('openDetails', d)">
+
+                    <!-- Show Content -->
+                    <div class="content_area">
                         <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
-                        <!-- TIMER HERE -->
+                        <div class="rdrTable_col-time timer">
+                            <p>{{ fetchTimerCountdown(d.time) }}</p>
+                        </div> 
                         <displayAreaText class="areaname" :areaObj="d"/>
                     </div>
-                    <div class="options">
-                        <div class="view"  @click="$emit('openDetails', d)">
-                            <p>View</p>
-                        </div>
-                        <div class="remove" @click="$emit('changeTracked', d)">
-                            <p>Remove</p>
-                        </div>
+                    
+                    <!-- Close Button -->
+                    <div class="close_area" @click="$emit('changeTracked', d)">
+                        <p>X</p>
                     </div>
-                </li>
-            </ul>
-        </div>
+
+            </li>
+        </ul>
     </div>
 </template>
 
 <script lang="ts">
-import menuButton from '../ui/ButtonMenu.vue';
-import iconAndText from '../ui/iconAndText.vue';
-import displayAreaText from '../ui/displayAreaText.vue';
+    import menuButton from '../ui/ButtonMenu.vue';
+    import iconAndText from '../ui/iconAndText.vue';
+    import displayAreaText from '../ui/displayAreaText.vue';
 
     export default {
         name: 'Tracking Bar',
         components: {menuButton, iconAndText, displayAreaText},
-        props: ['windowWidth', 'trackinglist', 'timerList'],
+        props: ['windowWidth', 'trackinglist', 'timerList', 'weatherList'],
         emits: ['openDetails','changeTracked'],
         methods: {
-            checkActiveState(timerID: string) {
-                return this.timerList.find(o=> o.ID === timerID).stateActive ? true : null;
+            checkActiveState(arr: any) {
+                let timerState = this.timerList.find((o: any) => o.ID === arr.time).stateActive ? true : null;
+
+                if (arr.job == 'sightseeing') {
+                    let curW = this.weatherList[arr.area.mapcode]
+                    let weather1 = arr.weather1
+                    let weather2 = arr.weather2
+
+                    let weatherState = curW == weather1 || curW == weather2 ? true : null
+                    let compare = timerState && weatherState ? true : null
+                    return compare
+                }
+                return timerState
+            },
+            fetchTimerCountdown(time: string) {
+                if (time) {
+                    let results = this.timerList.find((o: any) => o.ID == time).countdown
+                    return results
+                }
+                return '--:--'
+            },
+            sortTracklingList() {
+                let newTrackingList = []
+                
+                for (const d in this.trackinglist) {
+                    let state = this.checkActiveState(this.trackinglist[d])
+                    if (state) {newTrackingList.unshift(this.trackinglist[d])}
+                    else {newTrackingList.push(this.trackinglist[d])}
+                }
+                return newTrackingList
             }
         }
     }
@@ -54,15 +91,14 @@ import displayAreaText from '../ui/displayAreaText.vue';
     .trackingbar {
         background-color: $bodyBackgroundColor;
         display: grid;
-        grid-template-columns: calc(1rem + 230px) auto;
+        grid-template-columns: calc(230px + 2rem) 100%;
         width: 100%;
         border-bottom: 1px solid $borderColor;
         overflow: hidden;
 
         &_header {
-            padding: $paddingSize;
             padding-left: 2rem;
-            display: inline-flex;
+            display: flex;
             align-items: center;
             width: $sidebarWidthExpand;
             height: $trackingbarHeight;
@@ -77,78 +113,56 @@ import displayAreaText from '../ui/displayAreaText.vue';
         }
 
         &_items {
-            padding: $paddingSize;
+            width: calc(100% - $sidebarWidthExpand);
+            overflow: auto;
+            display: grid;
+            height: 70px;
             padding-right: 1rem;
-            width: 100%;
-            overflow-Y: auto;
-            
-            ul {
-                display: grid;
-                &.grid4 {grid-template-columns: 1fr 1fr 1fr 1fr;}
-                &.grid3 {grid-template-columns: 1fr 1fr 1fr;}
-                &.grid2 {grid-template-columns: 1fr 1fr;}
-                &.grid1 {grid-template-columns: 1fr;}
-                gap: 20px;
-            }
+            &.grid4 {grid-template-columns: 1fr 1fr 1fr 1fr;}
+            &.grid3 {grid-template-columns: 1fr 1fr 1fr;}
+            &.grid2 {grid-template-columns: 1fr 1fr;}
+            &.grid1 {grid-template-columns: 1fr;}
+            gap: 0 20px;
         }
 
         &_item {
+            display: inline-flex;
+            margin: 0.3rem 0;
+            border: 1px solid $borderColor;
+            border-radius: $borderRadius;
+            height: calc(70px - 0.6rem);
             overflow: hidden;
-            height: 55px;
-            .options {
-                transition: opacity 0.23s ease;
-                
-            }
-            &:hover {
-                    .content {opacity: 0.2}
-                    .options {opacity: 1;}
-                }
-            
+            cursor: pointer;
 
-            .content {
+            &:hover {
+                .close_area p {transform: translateX(0px)}
+            }
+
+            .content_area {
+                height: calc(70px - 0.6rem);
+                padding: 0.1rem 0.2rem;
+                width: 100%;
                 display: grid;
                 grid-template-columns: 1.5fr 0.5fr;
-                border: 1px solid $borderColor;
-                border-radius: $borderRadius;
-                height: 55px;
-                width: 100%;
-                padding: 0.3rem;
-                .areaname {
-                    grid-column: 1 / span 2;
-                    margin-top: 4px;
-                }
-                .timer {justify-self: center;}
+                position: relative;
             }
 
-            .options {
-                width: 100%;
-                height: 55px;
-                position: relative;
-                border: 1px solid transparent;
-                display: flex;
-                justify-content: space-between;
-                opacity: 0;
-                transform: translateY(-55px);
-                .view {
-                    padding-left: 1rem;
-                    background: linear-gradient(90deg, $trackingOptionsView 0%, $trackingOptionsView 50%, rgba(0, 0, 0, 0) 100%);
+            .close_area {
+                height: calc(70px - 0.6rem);
+                width: 5%;
+                p {
+                    transform: translateX(20px);
+                    transition: all .07s linear;
                 }
-                .remove {
-                    padding-right: 1rem;
-                    justify-self: end;
-                    background: linear-gradient(90deg, rgba(0, 0, 0, 0) 0%, $trackingOptionsRemove 50%, $trackingOptionsRemove 100%);
-                    p {justify-content: flex-end;}
-                }
-                div {
-                    cursor: pointer;
-                    width: 40%;
-                    p {
-                        display: flex;
-                        align-items: center;
-                        height: 100%;
-                        user-select: none;
-                    }
-                }
+            }
+
+            .itemname, .timer {
+                justify-self: center;
+                align-self: center;
+            }
+            .areaname {
+                grid-column: 1 / span 2;
+                justify-self: center;
             }
         }
 
@@ -171,5 +185,4 @@ import displayAreaText from '../ui/displayAreaText.vue';
             }
         }
     }
-
 </style>
