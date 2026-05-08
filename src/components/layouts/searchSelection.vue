@@ -1,7 +1,7 @@
 <template>
-    <div :class="[`zoneSelect`]">
-        <div class="zoneSelect_background" @click="$emit('closeMenu', false)"></div>
-        <div :class="[`zoneSelect_foreground`, windowWidth]">
+    <div :class="[`searchSelect`]">
+        <div class="searchSelect_background" @click="$emit('closeMenu', false)"></div>
+        <div :class="[`searchSelect_foreground`, windowWidth]">
             <h2>Select Zone</h2>
                 <!-- Flex All six expansions -->
                 <div class="zoneSelect_wrapper">

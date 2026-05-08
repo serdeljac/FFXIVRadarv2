@@ -14,11 +14,11 @@
                     <h3>{{ currentZone.expansion }}</h3>
                     <div class="group">
                         <buttonFilter :name="`Change Zone`" @click="enableZoneMenu = true"/>
-                        <iconAndText class="searchIcon" :icon="'sq_search'" @click="enableSearchMenu = true"/>
+                        <iconAndText class="searchIcon" :icon="'sq_search'" @click="enableSearchMenu = !enableSearchMenu"/>
                     </div>
                 </div>
 
-                <div class="filterbar isTabBar">
+                <div class="filterbar isTabBar" v-if="!enableSearchMenu">
                     <div v-for="(d, index) in zoneNodes" :key="d[1]"
                         :class="[
                             `filterbar-tab`, 
@@ -29,45 +29,89 @@
                         >
                         <iconAndText :icon="index" />
                     </div>
+                    
                 </div>
 
-                <gatheringList 
-                    v-if="tabSelected == 'miner'" 
-                    :data="zoneNodes.miner" 
-                    :timerList="timerList"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
+                <div class="filterbar isTabBar" v-else>
+                    <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
+                </div>
 
-                <gatheringList 
-                    v-if="tabSelected == 'botany'"  
-                    :data="zoneNodes.botany" 
-                    :timerList="timerList"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
+                <div v-if="!enableSearchMenu">
+                    <gatheringList 
+                        v-if="tabSelected == 'miner'" 
+                        :data="zoneNodes.miner" 
+                        :timerList="timerList"
+                        @changeTracked="(e: any) => $emit('changeTracked', e)"
+                        @focusNode="(e: any) => focusNode = e"/>
+
+                    <gatheringList 
+                        v-if="tabSelected == 'botany'"  
+                        :data="zoneNodes.botany" 
+                        :timerList="timerList"
+                        @changeTracked="(e: any) => $emit('changeTracked', e)"
+                        @focusNode="(e: any) => focusNode = e"/>
+                        
+                    <sightseeingList 
+                        v-if="tabSelected == 'sightseeing'" 
+                        :data="zoneNodes.sightseeing"
+                        :timerList="timerList"
+                        :weatherList="weatherList"
+                        @changeTracked="(e: any) => $emit('changeTracked', e)"
+                        @focusNode="(e: any) => focusNode = e"/>
+
+                    <fatesList 
+                        v-if="tabSelected == 'fates'" 
+                        :data="zoneNodes.fates" 
+                        @focusNode="(e: any) => focusNode = e"/>
                     
-                <sightseeingList 
-                    v-if="tabSelected == 'sightseeing'" 
-                    :data="zoneNodes.sightseeing"
-                    :timerList="timerList"
-                    :weatherList="weatherList"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
+                    <huntsList 
+                        v-if="tabSelected == 'eliteHunts'"
+                        :data="zoneNodes.eliteHunts" 
+                        @focusNode="(e: any) => focusNode = e"/>
 
-                <fatesList 
-                    v-if="tabSelected == 'fates'" 
-                    :data="zoneNodes.fates" 
-                    @focusNode="(e: any) => focusNode = e"/>
-                
-                <huntsList 
-                    v-if="tabSelected == 'eliteHunts'"
-                    :data="zoneNodes.eliteHunts" 
-                    @focusNode="(e: any) => focusNode = e"/>
+                    <aethercurrentList 
+                        v-if="tabSelected == 'aethercurrents'" 
+                        :data="zoneNodes.aethercurrents" 
+                        @focusNode="(e: any) => focusNode = e"/>
+                </div>
 
-                <aethercurrentList 
-                    v-if="tabSelected == 'aethercurrents'" 
-                    :data="zoneNodes.aethercurrents" 
-                    @focusNode="(e: any) => focusNode = e"/>
+                <div v-else>
+                    <ul>
+                        <li v-for="d in searchResults" :key="d.ID">
+                            <gatheringList 
+                                v-if="d.job == 'miner'" 
+                                :data="[d]" 
+                                :timerList="timerList"
+                                @changeTracked="(e: any) => $emit('changeTracked', e)"
+                                @focusNode="(e: any) => focusNode = e"/>
+                            
+                            <gatheringList 
+                                v-if="d.job == 'botany'"  
+                                :data="[d]" 
+                                :timerList="timerList"
+                                @changeTracked="(e: any) => $emit('changeTracked', e)"
+                                @focusNode="(e: any) => focusNode = e"/>
 
+                            <sightseeingList 
+                                v-if="d.job == 'sightseeing'" 
+                                :data="[d]"
+                                :timerList="timerList"
+                                :weatherList="weatherList"
+                                @changeTracked="(e: any) => $emit('changeTracked', e)"
+                                @focusNode="(e: any) => focusNode = e"/>
+
+                            <fatesList 
+                                v-if="d.job == 'fates'" 
+                                :data="[d]" 
+                                @focusNode="(e: any) => focusNode = e"/>
+                            
+                            <huntsList 
+                                v-if="d.job == 'eliteHunts'"
+                                :data="[d]" 
+                                @focusNode="(e: any) => focusNode = e"/>
+                        </li>
+                    </ul>
+                </div>
             </div>
         </div>
 
@@ -127,6 +171,8 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 focusNode: [] as any, //Node that is focused for displaymap and node table
                 enableZoneMenu: false as boolean, 
                 enableSearchMenu: false as boolean,
+                searchName: '' as string,
+                searchResults: [] as any,
             }
         },
         created() {
@@ -198,7 +244,55 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             changeZone(e: any) {
                 this.currentZone = e
                 this.fetchNodesInCurrentZone()
-            }
+            },
+            filterByInputValue(e: any) {
+                this.searchName = e;
+
+                if (this.searchName && this.searchName.trim() !== "" && this.searchName.length > 2) {
+                    const search = this.searchName.trim().toLowerCase();
+                    let minerData = this.ffxivData.miner.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
+                    let botanyData = this.ffxivData.botany.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
+                    let minerAetherialData = this.ffxivData.miner.filter((o: any) => o.usage == 'aetherial');
+                    minerAetherialData = findAetherialMatches(minerAetherialData);
+                    let botanyAetherialData = this.ffxivData.botany.filter((o: any) => o.usage == 'aetherial');
+                    botanyAetherialData = findAetherialMatches(botanyAetherialData);
+                    let sightseeingData = this.ffxivData.sightseeing.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
+                    let huntsData = this.ffxivData.eliteHunts.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
+                    let fatesData = this.ffxivData.fates.filter((o: any) => 
+                        o.name && o.name.toLowerCase().includes(search) ||
+                        o.bossname && o.bossname.toLowerCase().includes(search)
+                    );
+
+                    function findAetherialMatches(arr: any) {
+                        let foundAetherial = []
+                        for (const d in arr) {
+                            let usageGroup = arr[d].usage_info
+                            if (usageGroup.result1.toLowerCase().includes(search)) {
+                                foundAetherial.push(arr[d])
+                            }
+                            if (usageGroup.result2.toLowerCase().includes(search)) {
+                                foundAetherial.push(arr[d])
+                            }
+                            if (usageGroup.result3.toLowerCase().includes(search)) {
+                                foundAetherial.push(arr[d])
+                            }
+                        }
+                        return foundAetherial
+                    }
+
+                    this.searchResults = [
+                        ...minerData, 
+                        ...botanyData, 
+                        ...minerAetherialData, 
+                        ...botanyAetherialData,
+                        ...sightseeingData,
+                        ...huntsData,
+                        ...fatesData]
+
+                } else {
+                    this.searchResults = []
+                }
+            },
         }
     }
 </script>
