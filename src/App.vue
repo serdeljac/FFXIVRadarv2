@@ -32,10 +32,14 @@
         @changeTracked="(e: any) => changeTracked(e)"/>
     </main>
 
-    <aside 
-      :class="[`details_pos`, {'show' : detailsPanel.length > 0}]">
-      Details
-    </aside>
+    <detailspane 
+      v-if="detailsPanel.ID" 
+      :node="detailsPanel" 
+      :ffxivData="ffxivData"
+      :timerList="timerList"
+      :weatherList="weatherList"
+      @closeDetails="(e: any) => detailsPanel = e"/>
+      
   </div>
 </template>
 
@@ -48,6 +52,7 @@
   import sidebar from './components/layouts/Sidebar.vue';
   import trackingBar from './components/layouts/TrackingBar.vue';
   import buttonMenu from './components/ui/ButtonMenu.vue';
+  import detailspane from './components/layouts/DetailsPane.vue'
 
   //JSON Data
   import areaRaw from './assets/json/areas.json';
@@ -67,7 +72,7 @@
 
 export default {
   name: 'App Root',
-  components: {sidebar, trackingBar, buttonMenu}, 
+  components: {sidebar, trackingBar, buttonMenu, detailspane}, 
   data() {
     return {
       windowWidth: '' as String,

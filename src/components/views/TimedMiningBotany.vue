@@ -46,7 +46,9 @@
             <hr class="rdrTable split"/>
 
             <ul :class="[`rdrTable body`]">
-                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  :data-rowActive="checkRowActive(d)">
+                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  
+                    :data-rowActive="checkRowActive(d)"
+                    >
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
