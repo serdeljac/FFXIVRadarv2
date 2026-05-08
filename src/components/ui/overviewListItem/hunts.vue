@@ -1,6 +1,9 @@
 <template>
     <ul>
+        {{ data }}
+        {{ focusNode }}
         <li v-for="node in data" :key="node.ID"
+        
             class="overviewListItem"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null">

@@ -1,8 +1,9 @@
 <template>
-    <input type="text" :value="modelValue" @input="inputValue" placeholder="Search..." />
+    <input id="searchBox" ref="searchBox" type="text" :value="modelValue" @input="inputValue" placeholder="Search..." />
 </template>
 
 <script lang="ts">
+
     export default {
         name: "Filter Search",
         props: ['modelValue'],
@@ -10,8 +11,11 @@
         methods: {
             inputValue(event: any) {
                 this.$emit('selected', event.target.value);
-            }
-        }
+            },
+        },
+        mounted() {
+            (this.$refs.searchBox as HTMLInputElement).focus()
+        },
     }
 </script>
 

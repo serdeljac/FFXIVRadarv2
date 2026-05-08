@@ -105,17 +105,20 @@
                                 :data="[d]"
                                 :timerList="timerList"
                                 :weatherList="weatherList"
+                                :focusNode="focusNode"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
 
                             <fatesList 
                                 v-if="d.job == 'fates'" 
                                 :data="[d]" 
+                                :focusNode="focusNode"
                                 @focusNode="(e: any) => focusNode = e"/>
                             
                             <huntsList 
                                 v-if="d.job == 'eliteHunts'"
-                                :data="[d]" 
+                                :data="[d]"
+                                :focusNode="focusNode" 
                                 @focusNode="(e: any) => focusNode = e"/>
                         </li>
                     </ul>
@@ -244,8 +247,6 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 for (const d in this.zoneNodes) {
                     if (this.zoneNodes[d].length > 0) {
                         this.tabSelected = d
-                        //ERROR HERE
-                        // console.log(this.zoneNodes[d][0])
                         this.focusNode = this.zoneNodes[d][0]
                         break;
                     }
@@ -297,7 +298,8 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                         ...botanyAetherialData,
                         ...sightseeingData,
                         ...huntsData,
-                        ...fatesData]
+                        ...fatesData
+                    ]
 
                 } else {
                     this.searchResults = []

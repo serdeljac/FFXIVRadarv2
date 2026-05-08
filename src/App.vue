@@ -215,9 +215,9 @@ export default {
           obj.tracked = false;
           obj.time = obj.time ? obj.time : false;
           obj.isshard = obj.isshard == 1 ? true : false;
-          obj.tomb = obj.tomb ? true : false;
-          obj.perception = obj.perception ? true : false;
-          obj.attribute = obj.attribute ? true : false;
+          obj.tomb = obj.tomb ? obj.tomb : false;
+          obj.perception = obj.perception ? obj.perception : false;
+          obj.attribute = obj.attribute ? obj.attribute : false;
           obj.usage = obj.usage ? obj.usage : 'crafting';
           obj.usage_info = getSpecificUsageData(obj);
           obj.area = getSpecificAreaData(obj.area, this.ffxivData.areas);
