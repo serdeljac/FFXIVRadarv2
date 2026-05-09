@@ -61,14 +61,14 @@
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_col-time" :data-timerActive="checkTimeActive('time', d)">
-                        <p>{{ fetchTimerCountdown(d.time) }}</p>
+                    <div class="rdrTable_col-time" >
+                        <p :data-timeActive="checkTimeActive('time', d)">{{ fetchTimerCountdown(d.time) }}</p>
                     </div>
 
                     <!-- WEATHER -->
                     <div class="rdrTable_col-weather">
-                        <p :data-timerActive="checkTimeActive('weather1', d)">{{ d.weather1 }}</p>
-                        <p v-if="d.weather2" :data-timerActive="checkTimeActive('weather2', d)">{{ d.weather2 }}</p>
+                        <p v-if="d.weather1" :data-timeActive="checkTimeActive('weather1', d)">{{ d.weather1 }}</p>
+                        <p v-if="d.weather2" :data-timeActive="checkTimeActive('weather2', d)">{{ d.weather2 }}</p>
                         <p v-if="!d.weather1">Any Weather</p>
                     </div>
 

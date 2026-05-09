@@ -19,14 +19,14 @@
             <!-- Individual Listed Items -->
             <li v-for="d in sortTracklingList()" :key="d.ID" 
                 :class="[`trackingbar_item`]" 
-                :data-trackingActive="checkActiveState(d)"
+                :data-rowAndTimeActive="checkActiveState(d)"
                 @click="$emit('openDetails', d)">
 
                     <!-- Show Content -->
                     <div class="content_area">
                         <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
                         <div class="rdrTable_col-time timer">
-                            <p>{{ fetchTimerCountdown(d.time) }}</p>
+                            <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
                         </div> 
                         <displayAreaText class="areaname" :areaObj="d"/>
                     </div>

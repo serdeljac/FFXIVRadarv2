@@ -270,7 +270,7 @@ export default {
           obj.weather1 = obj.weather1 ? obj.weather1 : false;
           obj.weather2 = obj.weather2 ? obj.weather2 : false;
           obj.time = obj.time ? obj.time : false;
-          obj.mount = obj.mount == 'TRUE' ? true : false;
+          obj.mount = obj.mount === 0 ? false : true;
           obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
         };
 

@@ -47,7 +47,7 @@
 
             <ul :class="[`rdrTable body`]">
                 <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  
-                    :data-rowActive="checkRowActive(d)"
+                    :data-rowAndTimeActive="checkRowActive(d)"
                     >
 
                     <!-- TRACKER -->
@@ -94,8 +94,8 @@
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_col-time" :data-timerActive="checkRowActive(d)">
-                        <p>{{ fetchTimerCountdown(d.time) }}</p>
+                    <div class="rdrTable_col-time">
+                        <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
                     </div>
                 </li>
             </ul>

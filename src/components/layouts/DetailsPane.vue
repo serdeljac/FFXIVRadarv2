@@ -12,8 +12,7 @@
         </div>
 
         <div class="details_location">
-            <h2>{{ node.area.region }}</h2>
-            <h3>{{ `${node.area.zone} ` }}</h3>
+            <h3>{{ `${node.area.region} > ${node.area.zone}` }}</h3>
             <h4>{{ `(x${node.x}, y${node.y})` }}</h4>
         </div>
 
@@ -21,31 +20,25 @@
 
             <div v-if="node.job == 'miner' || node.job == 'botany'">
 
-                <div class="title">
-                    <iconAndText :text="`
-                        ${node.node_name} 
-                        ${node.job_sub.charAt(0).toUpperCase() + node.job_sub.slice(1)} 
-                        Node - Lv.${node.node_level}`" :icon="node.job_sub"/>
+                <div class="details_content-name">
+                    <p>{{`${node.name}`}}</p>
+                    <p>{{ `Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
                 </div>
 
-                <div class="name">
-                    <p>{{`${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}`}}</p>
-                </div>
-
-                <div class="detailInfo">
-                    <div class="detailInfo_left">
+                <div class="details_content-pairedCells">
+                    <div class="isBlock">
                         <p>Requirement:</p>
                         <p>{{ `${node.job_sub.charAt(0).toUpperCase() + node.job_sub.slice(1)} - Lv. ${node.node_level}` }}</p>
                         <p v-if="node.tomb">{{ node.tomb }}</p>
                     </div>
 
-                    <div class="detailInfo_right" :data-rowActive="checkRowActive(node)">
-                        <p>Time:</p>
-                        <p>{{ fetchTimerCountdown(node.time) }}</p>
+                    <div class="isBlock" :data-rowAndTimeActive="checkRowActive(node, 'time')">
+                        <p class="timeDisplay">Time:</p>
+                        <p class="timeDisplay">{{ fetchTimerCountdown(node.time) }}</p>
                     </div>
                 </div>
 
-                <div class="aetherialInfo" v-if="node.usage == 'aetherial'">
+                <div class="isBlock" v-if="node.usage == 'aetherial'">
                     <h3>Aetherial Reduction Materials:</h3>
                     <ul>
                         <li>{{ node.usage_info.result1 }}</li>
@@ -54,11 +47,11 @@
                     </ul>
                 </div>
 
-                <div class="materialInfo">
+                <div class="isBlock">
                     <h3>Other Materials:</h3>
                     <ul>
                         <li v-for="d in getOtherMaterials" :key="d.ID">
-                            {{ d.name }}
+                            {{ `${d.name} - Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}` }}
                         </li>
                     </ul>
                 </div>
@@ -67,33 +60,57 @@
 
             <div v-if="node.job == 'sightseeing'">
 
-                <div class="title">
-                    <iconAndText :text="`${node.name} `" :icon="node.job_sub"/>
+                <div class="details_content-name">
+                    <iconAndText :text="`${node.name}`" :icon="node.job_sub"/>
                 </div>
 
-                <div class="previewImg">
+                <div class="details_content-previewImg">
                     <img :src="getVistaPreviewImgSmall(node.area.icon, node.no)" /> 
                 </div>
 
-                <div class="detailInfo">
-                    <div class="detailInfo_left">
-                        <p>Weather:</p>
-                        <div>
-                            <p :data-timerActive="checkTimeActive('weather1', node)">{{ node.weather1 }}</p>
-                            <p v-if="node.weather2" :data-timerActive="checkTimeActive('weather2', node)">{{ node.weather2 }}</p>
+                <div class="details_content-notes">
+                    <p>
+                        <span v-if="node.mount">[Flying Mount Required]</span>
+                        {{ node.notes }}
+                    </p>
+                </div>
+
+                <div class="details_content-pairedCells">
+                    <div class="isBlock" :data-rowAndTimeActive="checkRowActive(node, 'weather')">
+                        <p class="timeDisplay">Weather:</p>
+                        <div v-if="node.weather1">
+                            <p :data-timeActive="checkTimeActive('weather1', node)">{{ node.weather1 }}</p>
+                            <p v-if="node.weather2" :data-timeActive="checkTimeActive('weather2', node)">{{ node.weather2 }}</p>
                         </div>
-                        <p v-if="!node.weather1">Any Weather</p>
+                        <p v-else>Any Weather</p>
                     </div>
 
-                    <div class="detailInfo_right" :data-rowActive="checkRowActive(node)">
-                        <p>Time:</p>
-                        <p>{{ fetchTimerCountdown(node.time) }}</p>
+                    <div class="isBlock" :data-rowAndTimeActive="checkRowActive(node, 'time')">
+                        <p class="timeDisplay">Time:</p>
+                        <p class="timeDisplay">{{ fetchTimerCountdown(node.time) }}</p>
                     </div>
                 </div>
+
+                <div class="details_content-emote isBlock">
+                    <iconAndText :text="`${node.emote} `" :icon="node.emote"/>
+                </div>  
             </div>
 
             <div v-if="node.job == 'aethercurrents'">
-                {{ node.job }}
+
+                <div class="details_content-name">
+                    <iconAndText :text="`Aether Current #${node.order}`" :icon="node.job_sub"/>
+                </div>
+
+                <div class="details_content-questName isBlock" v-if="node.name">
+                    <h3>Acquired from quest:</h3>
+                    <iconAndText :icon="`quest_${node.name_type}`" :text="`${node.name} - Lv.${node.name_level}`"/>
+                </div>
+
+                <div class="details_content-unlockName isBlock" v-if="node.unlock">
+                    <h3>Must complete:</h3>
+                    <iconAndText  :icon="`quest_${node.unlock_type}`" :text="`${node.unlock} - Lv.${node.unlock_level}`"/>
+                </div> 
             </div>
             
         </div>
@@ -142,9 +159,20 @@ import iconAndText from '../ui/iconAndText.vue'
                 }
                 return 'Any Time'
             },
-            checkRowActive(arr: any) {
-                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
-                if (currentTime) {return true}
+            checkRowActive(arr: any, type: string) {
+
+                if (type == 'time') {
+                    let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
+                    if (currentTime) {return true}
+                    return null
+                }
+
+                if (type == 'weather') {
+                    let curWeather = this.weatherList[arr.area.mapcode]
+                    if (curWeather == arr.weather1 || curWeather == arr.weather2) {return true}
+                    return null
+                }
+
                 return null
             },
             checkTimeActive(type: string, arr: any) {
@@ -203,40 +231,56 @@ import iconAndText from '../ui/iconAndText.vue'
         &_content {
             margin-top: 1rem;
 
-            .title, .name {
-                display: flex;
-                justify-content: center;
+            &-name {
+                font-size: 1.2rem;
+                text-align: center;
+                background-color: $borderColor;
+                padding: 0.2rem 0;
             }
 
-            .detailInfo {
+            .isBlock {
+                border: 1px solid #fff;
+                padding: 0.5rem;
+                text-align: center;
+                margin-top: 1rem;
+                
+            }
+
+            &-pairedCells {
                 display: flex;
                 width: 100%;
                 justify-content: space-around;
                 gap: 0 10px;
                 & > div {
                     display: flex;
+                    justify-content: center;
                     width: 50%;
                     text-align: center;
                     flex-direction: column;
                 } 
             }
 
-            .aetherialInfo, .materialInfo, .detailInfo_left, .detailInfo_right {
-                margin: 1rem auto;
-                border: 1px solid #fff;
-                padding: 0.5rem;
-                text-align: center;
-            }
-
-            .previewImg {
+            &-previewImg {
                 display: flex;
                 justify-content: center;
                 margin-top: 1rem;
                 img {
-                    width: 200px;
+                    width: 160px;
                     aspect-ratio: 1/1;
-
+                    border: 1px solid #fff;
+                    cursor: pointer;
                 }
+            }
+
+            &-notes {
+                margin-top: 0.5rem;
+                width: 100%;
+                text-align: center;
+                span {font-weight: bold;}
+            }
+
+            &-questName, &-unlockName {
+                h3 {margin-bottom: 0.3rem}
             }
         }
     }

@@ -254,6 +254,7 @@ import mapDisplay from '../layouts/MapDisplay.vue'
             },
             changeZone(e: any) {
                 this.currentZone = e
+                this.tabSelected = ''
                 this.fetchNodesInCurrentZone()
             },
             filterByInputValue(e: any) {

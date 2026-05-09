@@ -54,19 +54,28 @@ main {
     100% {width: 26px;  margin: -13px 0 0 -13px;}
 }
 
-*[data-timerActive] {
-    animation: timerActiveAnimation 0.7s linear infinite;
-    p {animation: timerActiveAnimation 0.7s linear infinite;}
+*[data-rowAndTimeActive] {
+    animation: rowActiveAnimation 0.7s linear infinite;
+    .timeDisplay {animation: timerActiveAnimation 0.7s linear infinite;}
 }
 
-*[data-trackingActive] {
-    animation: rowActiveAnimation 0.7s linear infinite;
-    .rdrTable_col-time p {animation: timerActiveAnimation 0.7s linear infinite;}
+p[data-timeActive] {
+    animation: timerActiveAnimation 0.7s linear infinite;
 }
 
 *[data-rowActive] {
     animation: rowActiveAnimation 0.7s linear infinite;
 }
+
+
+
+
+
+
+
+
+
+
 
 *[data-mapIconActive] {
     z-index: 20 !important;
