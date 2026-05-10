@@ -2,7 +2,7 @@
     <aside class="details">
 
         <div class="details_close">
-            <trashButton @click="$emit('closeDetails', [])"/>
+            <trashButton @click="$emit('closeDetails', false)"/>
         </div>
 
         <div class="details_map">

@@ -6,8 +6,8 @@
       :timerList="timerList"
       :weatherList="weatherList"
       :trackinglist="trackinglist"
-      @openDetails="(e) => detailsPanel = e"
-      @changeTrackedFromTrackingbar="changeTrackedFromTrackingbar"
+      @openDetails="openDetails"
+      @changeTracked="changeTracked"
       />
 
     <buttonMenu 
@@ -29,16 +29,16 @@
         :timerList="timerList"
         :weatherList="weatherList"
         @sendToDetails="(e: any) => detailsPanel = e"
-        @changeTracked="(e: any) => changeTracked(e)"/>
+        @changeTracked="changeTracked"/>
     </main>
 
     <detailspane 
-      v-if="detailsPanel.ID" 
+      v-if="openDetailSidebar" 
       :node="detailsPanel" 
       :ffxivData="ffxivData"
       :timerList="timerList"
       :weatherList="weatherList"
-      @closeDetails="(e: any) => detailsPanel = e"/>
+      @closeDetails="(e: any) => openDetailSidebar = e"/>
       
   </div>
 </template>
@@ -105,6 +105,7 @@ export default {
       intervalTicks: 0 as number,
       detailsPanel: {} as any,
       trackinglist: [] as any,
+      openDetailSidebar: false as boolean
     }
   },
   async created() {
@@ -567,25 +568,26 @@ export default {
         return `${s}s`
       },
       changeTracked(e: any) {
-        let index = this.ffxivData[e.job].findIndex(o => o.ID == e.ID)
-        this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
+        let node: any = this.ffxivData[e.job];
 
-        if (this.ffxivData[e.job][index].tracked) {
-          this.trackinglist.push(this.ffxivData[e.job][index])
+        //Change the node's tracking state
+        let index = node.findIndex(o => o.ID == e.ID)
+        node[index].tracked = !node[index].tracked
+
+        //Add or remove node from the trackinglist array
+        if (node[index].tracked) {
+          this.trackinglist.push(node[index])
+          this.openDetailSidebar = true
+          this.detailsPanel = e
         } else {
-          this.trackinglist = this.trackinglist.filter(o => o.ID != e.ID)
+          this.trackinglist = this.trackinglist.filter((o: any) => o.ID != e.ID)
+          this.openDetailSidebar = false
         }
+
       },
-      changeTrackedFromTrackingbar(e: any) {
-        let index = this.ffxivData[e.job].findIndex((o: any) => o.ID == e.ID)
-        this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
-        this.detailsPanel = []
-
-        if (this.ffxivData[e.job][index].tracked) {
-          this.trackinglist.push(this.ffxivData[e.job][index])
-        } else {
-          this.trackinglist = this.trackinglist.filter(o => o.ID != e.ID)
-        }
+      openDetails(e: any) {
+        this.openDetailSidebar = true
+        this.detailsPanel = e
       },
   }
 }

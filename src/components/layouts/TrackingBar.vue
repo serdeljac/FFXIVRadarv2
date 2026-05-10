@@ -19,11 +19,10 @@
             <!-- Individual Listed Items -->
             <li v-for="d in sortTracklingList()" :key="d.ID" 
                 :class="[`trackingbar_item`]" 
-                :data-rowAndTimeActive="checkActiveState(d)"
-                @click="$emit('openDetails', d)">
+                :data-rowAndTimeActive="checkActiveState(d)">
 
                     <!-- Show Content -->
-                    <div class="content_area">
+                    <div class="content_area" @click="$emit('openDetails', d)">
                         <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
                         <div class="rdrTable_col-time timer">
                             <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
@@ -32,7 +31,7 @@
                     </div>
                     
                     <!-- Close Button -->
-                    <div class="close_area" @click="$emit('changeTrackedFromTrackingbar', d)">
+                    <div class="close_area" @click="$emit('changeTracked', d)">
                         <trashButton class="trash" :addClass="'simple'"/>
                     </div>
 
@@ -51,7 +50,7 @@
         name: 'Tracking Bar',
         components: {menuButton, iconAndText, displayAreaText, trashButton},
         props: ['windowWidth', 'trackinglist', 'timerList', 'weatherList'],
-        emits: ['openDetails','changeTrackedFromTrackingbar'],
+        emits: ['openDetails','changeTracked'],
         methods: {
             checkActiveState(arr: any) {
                 let timerState = this.timerList.find((o: any) => o.ID === arr.time).stateActive ? true : null;
