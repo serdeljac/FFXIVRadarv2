@@ -9,21 +9,21 @@
             <div class="zoneSelect_wrapper">
                 <div class="zoneSelect_groupExpansions" v-for="(region, expansionIndex) in zoneList" :key="expansionIndex">
                     <h3 class="zoneSelect_titleExpansion">
-                        <img class="iconSize" :src="getIconImageURL(expansionIndex.toString())"/>
+                        <img class="iconSize3" :src="getIconImageURL(expansionIndex.toString())"/>
                     </h3>
                     <div class="zoneSelect_groupRegions">
                         <div  v-for="(zones, regionIndex) in region" :key="regionIndex">
                             <ul>
                                 <li>
                                     <h3 class="zoneSelect_titleRegion">
-                                        <img class="iconSize" :src="getIconImageURL(regionIndex.toString())"/>
+                                        <img class="iconSize2" :src="getIconImageURL(zones[0].regionicon)"/>
                                         {{ regionIndex }}
                                     </h3>
                                 </li>
                                 <li v-for="d in zones" :key="d.ID" 
                                     class="selectable"
                                     @click="$emit('zoneSelected', d); $emit('closeMenu', false)">
-                                    <img v-if="d.type" class="iconSize" :src="getIconImageURL(d.type)"/>
+                                    <img class="iconSize2" :src="getIconImageURL(d.type ? d.type : 'world')"/>
                                     {{ d.zone }}
                                 </li>
                             </ul>
@@ -90,6 +90,7 @@
         &_titleExpansion {
             align-self: center;
             justify-self: center;
+            img {transform: translateX(-7px)}
         }
 
         &_titleRegion {

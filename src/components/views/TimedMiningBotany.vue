@@ -60,6 +60,8 @@
                         <div>
                             <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
+                            <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImageURL('collectability')" />
+                            <img class="iconSize2" v-if="d.usage == 'customdelivery'" :src="getIconImageURL('customdelivery')" />
                         </div>
                     </div>
 

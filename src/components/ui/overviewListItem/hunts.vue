@@ -1,7 +1,5 @@
 <template>
     <ul>
-        {{ data }}
-        {{ focusNode }}
         <li v-for="node in data" :key="node.ID"
         
             class="overviewListItem"

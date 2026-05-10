@@ -142,3 +142,4 @@ vite.config.ts.timestamp-*
 /src/assets/sightseeing
 /src/assets/notes
 /src/assets/~$*.xlsx
+/src/assets/Backup*

@@ -80,8 +80,9 @@ p[data-timeActive] {
 *[data-mapIconActive] {
     z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
+    opacity: 0.5;
     img {
-        animation: mapIconActiveAnimation2 0.7s linear infinite;
+        // animation: mapIconActiveAnimation2 0.7s linear infinite;
     }
 }
 
@@ -219,6 +220,18 @@ Default Styles
     width: 24px;
     aspect-ratio: 1 / 1;
     margin-right: 6px;
+}
+
+.iconSize2 {
+    width: 14px;
+    aspect-ratio: 1 / 1;
+    margin: 0 4px;
+}
+
+.iconSize3 {
+    width: 180px;
+    // aspect-ratio: 1 / 1;
+    margin: 0 4px;
 }
 
 .overviewListItem {

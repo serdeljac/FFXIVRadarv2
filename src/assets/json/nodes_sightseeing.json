@@ -10,8 +10,8 @@
     "emote": "Lookout",
     "point": "",
     "name": "Barracuda Piers",
-    "x": 9.5,
-    "y": 7.8,
+    "x": 9.7,
+    "y": 7.7,
     "transx": 341,
     "transy": 264,
     "node_code": "sigh9578",
@@ -19,7 +19,7 @@
     "zone": "Limsa Lominsa Upper Decks",
     "no": 1,
     "type": "",
-    "notes": "On a ledge outside of the Culinarian Guild"
+    "notes": "On ledge of the balcony west of the Culinarians' Guild."
   },
   {
     "ID": "sightsee1",
@@ -41,7 +41,7 @@
     "zone": "Limsa Lominsa Lower Decks",
     "no": 2,
     "type": "",
-    "notes": "On the bow of The Astalicia ship"
+    "notes": "On the end of the bow of The Astalicia."
   },
   {
     "ID": "sightsee2",
@@ -59,11 +59,11 @@
     "transx": 381,
     "transy": 343,
     "node_code": "sigh203191",
-    "mount": 1,
+    "mount": 0,
     "zone": "Middle La Noscea",
     "no": 3,
     "type": "",
-    "notes": "Entrance into the Seasong Grotto cave"
+    "notes": "Underground in Seasong Grotto. Entrance in (x20.3, y19.7)."
   },
   {
     "ID": "sightsee3",
@@ -81,11 +81,11 @@
     "transx": 293,
     "transy": 322,
     "node_code": "sigh16173",
-    "mount": 1,
+    "mount": 0,
     "zone": "Middle La Noscea",
     "no": 4,
     "type": "",
-    "notes": "On the edge of the scaffolding beside the NPC"
+    "notes": "Beside the NPC on the Skylift bridge looking southwest."
   },
   {
     "ID": "sightsee4",
@@ -103,11 +103,11 @@
     "transx": 480,
     "transy": 513,
     "node_code": "sigh253275",
-    "mount": 1,
+    "mount": 0,
     "zone": "Middle La Noscea",
     "no": 5,
     "type": "",
-    "notes": "On top of the fence near the entrance to Lower La Noscea"
+    "notes": "On the southern fence to Lower La Noscea at La Thagran Checkpoint."
   },
   {
     "ID": "sightsee5",
@@ -125,11 +125,11 @@
     "transx": 434,
     "transy": 763,
     "node_code": "sigh231402",
-    "mount": 1,
+    "mount": 0,
     "zone": "Lower La Noscea",
     "no": 6,
     "type": "",
-    "notes": "On the bolder next to the bottom of the stairs at Oschon's Torch"
+    "notes": "On the bolder in Oschon's torch, looking towards Candlekeep Quay."
   },
   {
     "ID": "sightsee6",
@@ -151,7 +151,7 @@
     "zone": "Lower La Noscea",
     "no": 7,
     "type": "",
-    "notes": "On the roof of the gate to the Mist"
+    "notes": "On the roof of the outpost connected to Mist."
   },
   {
     "ID": "sightsee7",
@@ -169,11 +169,11 @@
     "transx": 571,
     "transy": 577,
     "node_code": "sigh299307",
-    "mount": 1,
+    "mount": 0,
     "zone": "Western La Noscea",
     "no": 8,
     "type": "",
-    "notes": "In the corner, behind the lighthouse"
+    "notes": "In the corner between the fence and the lighthouse in The Brewer's Beacon."
   },
   {
     "ID": "sightsee8",
@@ -195,7 +195,7 @@
     "zone": "Old Gridania",
     "no": 9,
     "type": "",
-    "notes": "Jump onto the shelves, then walk to the edge of the highest shelving unit"
+    "notes": "Go to the very back of the Leatherworkers' Guild and jump on the bookcases to the highest point."
   },
   {
     "ID": "sightsee9",
@@ -217,7 +217,7 @@
     "zone": "Old Gridania",
     "no": 10,
     "type": "",
-    "notes": "Climb the cliffs behind the vendor. Then, use SPRINT to jump onto the lampposts"
+    "notes": "From (x10.4, y6.6), jump along the rockface onto the cliff, then [SPRINT] jump onto the lamp post closest to the water."
   },
   {
     "ID": "sightsee10",
@@ -239,7 +239,7 @@
     "zone": "Central Shroud",
     "no": 11,
     "type": "",
-    "notes": "Sit on the stool near the aetheryte (opposite of the NPC)"
+    "notes": ""
   },
   {
     "ID": "sightsee11",
@@ -261,7 +261,7 @@
     "zone": "East Shroud",
     "no": 12,
     "type": "",
-    "notes": "At the gate to the Sanctum of the Twelve"
+    "notes": ""
   },
   {
     "ID": "sightsee12",
@@ -283,7 +283,7 @@
     "zone": "East Shroud",
     "no": 13,
     "type": "",
-    "notes": "On the roof above the Slyph Vendor NPC"
+    "notes": ""
   },
   {
     "ID": "sightsee13",
@@ -305,7 +305,7 @@
     "zone": "Ul'dah - Steps of Thal",
     "no": 14,
     "type": "",
-    "notes": "Stand on the silver square closest to the stairs in Hunter's Strip"
+    "notes": ""
   },
   {
     "ID": "sightsee14",
@@ -327,7 +327,7 @@
     "zone": "Ul'dah - Steps of Thal",
     "no": 15,
     "type": "",
-    "notes": "From the Hustings Strip, jump down from the balcony onto the east-most lamp"
+    "notes": ""
   },
   {
     "ID": "sightsee15",
@@ -349,7 +349,7 @@
     "zone": "Western Thanalan",
     "no": 16,
     "type": "",
-    "notes": "On top of the red tarp"
+    "notes": ""
   },
   {
     "ID": "sightsee16",
@@ -371,7 +371,7 @@
     "zone": "Central Thanalan",
     "no": 17,
     "type": "",
-    "notes": "Half-way down off the cliff side at the north end of Sil'dih Excavation Site"
+    "notes": ""
   },
   {
     "ID": "sightsee17",
@@ -393,7 +393,7 @@
     "zone": "Eastern Thanalan",
     "no": 18,
     "type": "",
-    "notes": "Under the tree, as close to the center as possible"
+    "notes": ""
   },
   {
     "ID": "sightsee18",
@@ -415,7 +415,7 @@
     "zone": "Eastern Thanalan",
     "no": 19,
     "type": "",
-    "notes": "On top of the rubble at the fork to The Invisible City"
+    "notes": ""
   },
   {
     "ID": "sightsee19",
@@ -437,7 +437,7 @@
     "zone": "Eastern Thanalan",
     "no": 20,
     "type": "",
-    "notes": "On the lower level of the Highbridge"
+    "notes": ""
   },
   {
     "ID": "sightsee20",
@@ -455,11 +455,11 @@
     "transx": 375,
     "transy": 238,
     "node_code": "sigh20131",
-    "mount": 1,
+    "mount": 0,
     "zone": "Middle La Noscea",
     "no": 21,
     "type": "",
-    "notes": "On the edge of the cliff"
+    "notes": "After crossing the wooden bridge, on the ledge next to the Water Sprite."
   },
   {
     "ID": "sightsee21",
@@ -477,11 +477,11 @@
     "transx": 480,
     "transy": 311,
     "node_code": "sigh25717",
-    "mount": 1,
+    "mount": 0,
     "zone": "Middle La Noscea",
     "no": 22,
     "type": "",
-    "notes": "On the lamp post in the inn"
+    "notes": "Inside the Summerford Farms settlement; on top of the shelves."
   },
   {
     "ID": "sightsee22",
@@ -503,7 +503,7 @@
     "zone": "Lower La Noscea",
     "no": 23,
     "type": "",
-    "notes": "On top of the house"
+    "notes": "On the roof of the House of Sticks."
   },
   {
     "ID": "sightsee23",
@@ -521,11 +521,11 @@
     "transx": 615,
     "transy": 439,
     "node_code": "sigh326235",
-    "mount": 1,
+    "mount": 0,
     "zone": "Eastern La Noscea",
     "no": 24,
     "type": "",
-    "notes": "Sit on the chair at the end of the dock"
+    "notes": "On the eastmost chair on the docks of Hidden Falls."
   },
   {
     "ID": "sightsee24",
@@ -543,11 +543,11 @@
     "transx": 557,
     "transy": 644,
     "node_code": "sigh296338",
-    "mount": 1,
+    "mount": 0,
     "zone": "Eastern La Noscea",
     "no": 25,
     "type": "",
-    "notes": "Stand on the ledge of the roof next to the NPC"
+    "notes": "On top of the Gullperch Tower, on the ledge."
   },
   {
     "ID": "sightsee25",
@@ -565,11 +565,11 @@
     "transx": 504,
     "transy": 501,
     "node_code": "sigh269266",
-    "mount": 1,
+    "mount": 0,
     "zone": "Western La Noscea",
     "no": 26,
     "type": "",
-    "notes": "Against the railing east of the statue"
+    "notes": "Southeast of the large statue in Aleport. Along the fence, looking at the Levemete NPC."
   },
   {
     "ID": "sightsee26",
@@ -587,11 +587,11 @@
     "transx": 318,
     "transy": 693,
     "node_code": "sigh171362",
-    "mount": 1,
+    "mount": 0,
     "zone": "Western La Noscea",
     "no": 27,
     "type": "",
-    "notes": "Beside the pot on the beach"
+    "notes": "Beside the pot in The Ship Graveyard on the southeast corner."
   },
   {
     "ID": "sightsee27",
@@ -609,11 +609,11 @@
     "transx": 427,
     "transy": 421,
     "node_code": "sigh228224",
-    "mount": 1,
+    "mount": 0,
     "zone": "Western La Noscea",
     "no": 28,
     "type": "",
-    "notes": "On the south-east post holding the red tarps"
+    "notes": "On the post closest to the NPC Ahtzatrach in Camp Skull Valley."
   },
   {
     "ID": "sightsee28",
@@ -634,8 +634,8 @@
     "mount": 0,
     "zone": "Western La Noscea",
     "no": 29,
-    "type": "",
-    "notes": "SPRINT jump onto the tip of the post at the edge, then onto the middle post"
+    "type": "jumppuzzle",
+    "notes": "Use [SPRINT] to jump high enough onto the posts and finish on the highest post of the tent."
   },
   {
     "ID": "sightsee29",
@@ -657,7 +657,7 @@
     "zone": "Upper La Noscea",
     "no": 30,
     "type": "",
-    "notes": "Highest point on the house"
+    "notes": "On the edge of the roof of the highest house in Camp Bronze Lake"
   },
   {
     "ID": "sightsee30",
@@ -675,11 +675,11 @@
     "transx": 243,
     "transy": 410,
     "node_code": "sigh12922",
-    "mount": 1,
+    "mount": 0,
     "zone": "Upper La Noscea",
     "no": 31,
     "type": "",
-    "notes": "On the tip of the bone spire"
+    "notes": "In Thalaos, use [SPRINT] to run up the large bone in the northern area."
   },
   {
     "ID": "sightsee31",
@@ -701,7 +701,7 @@
     "zone": "Upper La Noscea",
     "no": 32,
     "type": "",
-    "notes": "Jump onto the structure from the broken wall onto the arch"
+    "notes": "Either jump from the broken wall using [SPRINT] or use a flying mount to reach the arch."
   },
   {
     "ID": "sightsee32",
@@ -719,11 +719,11 @@
     "transx": 229,
     "transy": 275,
     "node_code": "sigh127151",
-    "mount": 1,
+    "mount": 0,
     "zone": "Outer La Noscea",
     "no": 33,
     "type": "",
-    "notes": "On the edge of the cliff of The Floating City of Nym"
+    "notes": "On the west most edge of The Floating City of Nym."
   },
   {
     "ID": "sightsee33",
@@ -741,11 +741,11 @@
     "transx": 315,
     "transy": 295,
     "node_code": "sigh171163",
-    "mount": 1,
+    "mount": 0,
     "zone": "Outer La Noscea",
     "no": 34,
     "type": "",
-    "notes": "On top of the pillar on the south side of the ruined arch"
+    "notes": "From (x17.1, y15.9), jump into the broken arch onto the pillar on the south end."
   },
   {
     "ID": "sightsee34",
@@ -767,7 +767,7 @@
     "zone": "Outer La Noscea",
     "no": 35,
     "type": "",
-    "notes": "From the bottom, make your way onto the pipe of the smaller furnace. Then leap onto the balcony of the second furnace and work your way up to the very top. Cannot use flying mount"
+    "notes": "From (x23.4, y12), navigate your way to the highest point using [SPRINT]."
   },
   {
     "ID": "sightsee35",
@@ -785,11 +785,11 @@
     "transx": 280,
     "transy": 175,
     "node_code": "sigh154101",
-    "mount": 1,
+    "mount": 0,
     "zone": "Outer La Noscea",
     "no": 36,
     "type": "",
-    "notes": "Sit on the stool inside the house on the second level"
+    "notes": "On the second floor of the house in The Hermit's Hovel."
   },
   {
     "ID": "sightsee36",
@@ -811,7 +811,7 @@
     "zone": "New Gridania",
     "no": 37,
     "type": "",
-    "notes": "From the railing on the stairs, SPRINT jump to the nearest door, then the other"
+    "notes": "From the stairs near Blue Badger Gate, [SPRINT] jump from the railing of the stairs, to the gate door, then to the other gate on the north side."
   },
   {
     "ID": "sightsee37",
@@ -833,7 +833,7 @@
     "zone": "Old Gridania",
     "no": 38,
     "type": "",
-    "notes": "At the Lancer's Guild, SPRINT jump along the south wall from east side to west"
+    "notes": "From the back of the Lancers' Guild, jump onto the shelves towards the opposite corner."
   },
   {
     "ID": "sightsee38",
@@ -855,7 +855,7 @@
     "zone": "Central Shroud",
     "no": 39,
     "type": "",
-    "notes": "On the top of the arch"
+    "notes": ""
   },
   {
     "ID": "sightsee39",
@@ -877,7 +877,7 @@
     "zone": "Central Shroud",
     "no": 40,
     "type": "",
-    "notes": "On top of the vines"
+    "notes": ""
   },
   {
     "ID": "sightsee40",
@@ -899,7 +899,7 @@
     "zone": "Central Shroud",
     "no": 41,
     "type": "",
-    "notes": "On the tree root that acts like a bridge"
+    "notes": ""
   },
   {
     "ID": "sightsee41",
@@ -921,7 +921,7 @@
     "zone": "Central Shroud",
     "no": 42,
     "type": "",
-    "notes": "On the middle post on the north side of the bridge"
+    "notes": ""
   },
   {
     "ID": "sightsee42",
@@ -943,7 +943,7 @@
     "zone": "East Shroud",
     "no": 43,
     "type": "",
-    "notes": "In front of the glowing mushroom tree at The Seedbed"
+    "notes": ""
   },
   {
     "ID": "sightsee43",
@@ -965,7 +965,7 @@
     "zone": "South Shroud",
     "no": 44,
     "type": "",
-    "notes": "On the outside balcony of the pub in Buscarron's Druthers"
+    "notes": ""
   },
   {
     "ID": "sightsee44",
@@ -987,7 +987,7 @@
     "zone": "South Shroud",
     "no": 45,
     "type": "",
-    "notes": "On the windowsill of the hut in South Shroud Landing"
+    "notes": ""
   },
   {
     "ID": "sightsee45",
@@ -1009,7 +1009,7 @@
     "zone": "South Shroud",
     "no": 46,
     "type": "",
-    "notes": "Underneath the big bolder by the crystal"
+    "notes": ""
   },
   {
     "ID": "sightsee46",
@@ -1031,7 +1031,7 @@
     "zone": "South Shroud",
     "no": 47,
     "type": "",
-    "notes": "On top of the flat mushroom on the roof"
+    "notes": ""
   },
   {
     "ID": "sightsee47",
@@ -1053,7 +1053,7 @@
     "zone": "North Shroud",
     "no": 48,
     "type": "",
-    "notes": "On top of the middle log"
+    "notes": ""
   },
   {
     "ID": "sightsee48",
@@ -1075,7 +1075,7 @@
     "zone": "North Shroud",
     "no": 49,
     "type": "",
-    "notes": "Edge of the clifface"
+    "notes": ""
   },
   {
     "ID": "sightsee49",
@@ -1097,7 +1097,7 @@
     "zone": "North Shroud",
     "no": 50,
     "type": "",
-    "notes": "Fall from the ledge above onto the root below"
+    "notes": ""
   },
   {
     "ID": "sightsee50",
@@ -1119,7 +1119,7 @@
     "zone": "Western Thanalan",
     "no": 51,
     "type": "",
-    "notes": "On top of the lamppost"
+    "notes": ""
   },
   {
     "ID": "sightsee51",
@@ -1141,7 +1141,7 @@
     "zone": "Western Thanalan",
     "no": 52,
     "type": "",
-    "notes": "On the second post from the bottom at the north-west corner of the building"
+    "notes": ""
   },
   {
     "ID": "sightsee52",
@@ -1163,7 +1163,7 @@
     "zone": "Central Thanalan",
     "no": 53,
     "type": "",
-    "notes": "On the post closest to the building"
+    "notes": ""
   },
   {
     "ID": "sightsee53",
@@ -1185,7 +1185,7 @@
     "zone": "Central Thanalan",
     "no": 54,
     "type": "",
-    "notes": "On the tarp"
+    "notes": ""
   },
   {
     "ID": "sightsee54",
@@ -1207,7 +1207,7 @@
     "zone": "Eastern Thanalan",
     "no": 55,
     "type": "",
-    "notes": "On the mount sticking out of the hill at the bottom"
+    "notes": ""
   },
   {
     "ID": "sightsee55",
@@ -1229,7 +1229,7 @@
     "zone": "Eastern Thanalan",
     "no": 56,
     "type": "",
-    "notes": "On top of the scaffolding, in the center"
+    "notes": ""
   },
   {
     "ID": "sightsee56",
@@ -1251,7 +1251,7 @@
     "zone": "Eastern Thanalan",
     "no": 57,
     "type": "",
-    "notes": "At the base of the statue."
+    "notes": ""
   },
   {
     "ID": "sightsee57",
@@ -1273,7 +1273,7 @@
     "zone": "Southern Thanalan",
     "no": 58,
     "type": "",
-    "notes": "In front of the statue"
+    "notes": ""
   },
   {
     "ID": "sightsee58",
@@ -1295,7 +1295,7 @@
     "zone": "Southern Thanalan",
     "no": 59,
     "type": "",
-    "notes": "On the stone column"
+    "notes": ""
   },
   {
     "ID": "sightsee59",
@@ -1317,7 +1317,7 @@
     "zone": "Southern Thanalan",
     "no": 60,
     "type": "",
-    "notes": "By the large mound at the top of the hill"
+    "notes": ""
   },
   {
     "ID": "sightsee60",
@@ -1339,7 +1339,7 @@
     "zone": "Southern Thanalan",
     "no": 61,
     "type": "",
-    "notes": "On the roof of a leaning building"
+    "notes": ""
   },
   {
     "ID": "sightsee61",
@@ -1361,7 +1361,7 @@
     "zone": "Southern Thanalan",
     "no": 62,
     "type": "",
-    "notes": "Left-hand side of the drill sergeant"
+    "notes": ""
   },
   {
     "ID": "sightsee62",
@@ -1383,7 +1383,7 @@
     "zone": "Northern Thanalan",
     "no": 63,
     "type": "",
-    "notes": "On the tip of the flagpole pointing east"
+    "notes": ""
   },
   {
     "ID": "sightsee63",
@@ -1405,7 +1405,7 @@
     "zone": "Northern Thanalan",
     "no": 64,
     "type": "",
-    "notes": "On top of the gate at the center"
+    "notes": ""
   },
   {
     "ID": "sightsee64",
@@ -1427,7 +1427,7 @@
     "zone": "Northern Thanalan",
     "no": 65,
     "type": "",
-    "notes": "At the center, on top of the fence"
+    "notes": ""
   },
   {
     "ID": "sightsee65",
@@ -1449,7 +1449,7 @@
     "zone": "Northern Thanalan",
     "no": 66,
     "type": "",
-    "notes": "On the tip of the orange spire, use SPRINT to jump high enough"
+    "notes": ""
   },
   {
     "ID": "sightsee66",
@@ -1471,7 +1471,7 @@
     "zone": "Northern Thanalan",
     "no": 67,
     "type": "",
-    "notes": "On the small ledge of the pillar"
+    "notes": ""
   },
   {
     "ID": "sightsee67",
@@ -1493,7 +1493,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 68,
     "type": "",
-    "notes": "On top of the ladder on the highest floor of the observatory"
+    "notes": ""
   },
   {
     "ID": "sightsee68",
@@ -1515,7 +1515,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 69,
     "type": "",
-    "notes": "On the highest chandelier"
+    "notes": ""
   },
   {
     "ID": "sightsee69",
@@ -1537,7 +1537,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 70,
     "type": "",
-    "notes": "Fall from the ledge onto a platform, then walk just below the lamp post"
+    "notes": ""
   },
   {
     "ID": "sightsee70",
@@ -1559,7 +1559,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 71,
     "type": "",
-    "notes": "On the arch of the bell tower"
+    "notes": ""
   },
   {
     "ID": "sightsee71",
@@ -1581,7 +1581,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 72,
     "type": "",
-    "notes": "Top of the observatory, next to the NPC nearest to the stairs"
+    "notes": ""
   },
   {
     "ID": "sightsee72",
@@ -1603,7 +1603,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 73,
     "type": "",
-    "notes": "In The Fury's Gaze cave, just before the room with the Plasmoids"
+    "notes": ""
   },
   {
     "ID": "sightsee73",
@@ -1625,7 +1625,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 74,
     "type": "",
-    "notes": "On the highest platform along the mountain side"
+    "notes": ""
   },
   {
     "ID": "sightsee74",
@@ -1647,7 +1647,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 75,
     "type": "",
-    "notes": "On the south edge of the roof"
+    "notes": ""
   },
   {
     "ID": "sightsee75",
@@ -1669,7 +1669,7 @@
     "zone": "Coerthas Central Highlands",
     "no": 76,
     "type": "",
-    "notes": "On the edge of a broken partition wall in the ruins"
+    "notes": ""
   },
   {
     "ID": "sightsee76",
@@ -1691,7 +1691,7 @@
     "zone": "Mor Dhona",
     "no": 77,
     "type": "",
-    "notes": "Obove the red light"
+    "notes": ""
   },
   {
     "ID": "sightsee77",
@@ -1713,7 +1713,7 @@
     "zone": "Mor Dhona",
     "no": 78,
     "type": "",
-    "notes": "Up on the highest point, by a lone tree"
+    "notes": ""
   },
   {
     "ID": "sightsee78",
@@ -1735,7 +1735,7 @@
     "zone": "Mor Dhona",
     "no": 79,
     "type": "",
-    "notes": "On the rock beside the crystal tree"
+    "notes": ""
   },
   {
     "ID": "sightsee79",
@@ -1757,7 +1757,7 @@
     "zone": "Mor Dhona",
     "no": 80,
     "type": "",
-    "notes": "On the tree"
+    "notes": ""
   },
   {
     "ID": "sightsee80",

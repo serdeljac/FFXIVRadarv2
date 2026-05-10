@@ -4,11 +4,12 @@
             :style="`background-image: url('${getMapImg(focusNode.area.zone)}')`">
         </div>
         <div class="mapDisplay_overlay">
+            <div class="corrddisplay">{{ `ID: ${focusNode.ID} - (x.${focusNode.x}, y.${focusNode.y})` }}</div>
 
             <div v-for="d in getAetheyteNodes" :key="d.ID"
-                class="mapIcon"
+                class="mapIcon aetheryte"
                 :style="`transform: translate(${getCoordinates(d)})`">
-                <img :src="getIconImg(d.job, d.job_sub)" />
+                <img :src="getIconImg(d.job, 'aetheryte')" />
             </div>
 
             <div v-for="d in getUnchainedNodes" :key="d.ID"
@@ -107,6 +108,13 @@
 </script>
 
 <style scoped lang="scss">
+    .corrddisplay {
+        position: absolute;
+        background: black;
+        font-size: 2rem;
+        transform: translateY(-30px)
+    }
+
     .mapDisplay {
         & > div {
             width: 800px;

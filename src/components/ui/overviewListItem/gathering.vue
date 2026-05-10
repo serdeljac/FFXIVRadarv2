@@ -11,6 +11,7 @@
                     ${material[0].node_name} 
                     ${material[0].job_sub.charAt(0).toUpperCase() + material[0].job_sub.slice(1)} 
                     Node - Lv.${material[0].node_level}`" :icon="material[0].job_sub"/>
+                
 
                 <div class="forceright">
                     <p class="timeDisplay">{{ fetchTimerCountdowns(material[0].time) }}</p>
@@ -28,6 +29,8 @@
                             :src="getIconImg(d.tracked ? 'remove' : 'add')" 
                             @click="$emit('changeTracked', d)"/>
                         {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
+                        <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImg('collectability')" />
+                        <img class="iconSize2" v-if="d.usage == 'customdelivery'" :src="getIconImg('customdelivery')" />
                     </li>
                 </ul>
                 <p class="tombRequire" v-if="material[0].tomb">{{ `Requires ${material[0].tomb}` }}</p>
