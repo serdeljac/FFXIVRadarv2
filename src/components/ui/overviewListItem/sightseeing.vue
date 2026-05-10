@@ -12,9 +12,9 @@
                     :icon="`${node.job_sub}`"/>
 
                 <div class="forceright">
-                    <img class="iconSize"
+                    <img 
                         v-if="node.time" 
-                        :src="getIconImg(node.tracked ? 'remove' : 'add')" 
+                        :class="[`iconSize trackingIcon`, {'remove': node.tracked}]" :src="getIconImg('alarm')" 
                         @click="$emit('changeTracked', node)"/>
                     <p>{{ fetchTimerCountdowns(node.time) }}</p>
                 </div>

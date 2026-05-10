@@ -24,9 +24,8 @@
                 <ul class="overviewListItem_list">
                     <li v-for="d in material" :key="d.ID" >
                         <img 
-                            class="iconSize"
                             v-if="d.time" 
-                            :src="getIconImg(d.tracked ? 'remove' : 'add')" 
+                            :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImg('alarm')" 
                             @click="$emit('changeTracked', d)"/>
                         {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
                         <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImg('collectability')" />

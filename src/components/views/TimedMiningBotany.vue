@@ -18,6 +18,7 @@
                 <buttonFilter 
                     :name="'Reset'" 
                     :state="true"
+                    :noicon="true"
                     @click="resetFilters()"/>
             </div>
         </div>
@@ -52,7 +53,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img class="iconSize" :src="getIconImageURL(d.tracked ? 'remove' : 'add')" @click="$emit('changeTracked', d)"/>
+                        <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NAME -->
@@ -229,6 +230,7 @@ import seachBar from '../ui/searchBar.vue';
                 for (const d in this.filters) {
                     this.filters[d][2] = true
                 }
+                this.searchName = '';
                 this.sortNodesIntoGroup(this.allTimedNodes)
             },
             checkIfNewGroup(index: number) {
@@ -258,7 +260,10 @@ import seachBar from '../ui/searchBar.vue';
             filterByInputValue(e: any) {
                 this.searchName = e;
                 this.arraySet = 0
-                this.resetFilters()
+                for (const d in this.filters) {
+                    this.filters[d][2] = true
+                }
+                
                 if (this.searchName && this.searchName.trim() !== "") {
                     const search = this.searchName.trim().toLowerCase();
                     let foundName = this.allTimedNodes.filter((o: any) => o.name && o.name.toLowerCase().includes(search));

@@ -42,7 +42,7 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_col-tracking" >
-                        <img class="iconSize" :src="getIconImageURL(d.tracked ? 'remove' : 'add')" @click="$emit('changeTracked', d)"/>
+                        <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')"" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NO -->

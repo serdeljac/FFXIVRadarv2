@@ -223,6 +223,12 @@ Default Styles
     margin: 0 4px;
 }
 
+.trackingIcon {
+    &.remove {
+        filter:grayscale(1);
+    }
+}
+
 .overviewListItem {
     background-color: $listBackgroundColor;
     border-radius: $borderRadius;
