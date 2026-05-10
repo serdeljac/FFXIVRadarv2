@@ -13,8 +13,8 @@
                     <h2>{{ currentZone.zone }}</h2>
                     <h3>{{ currentZone.expansion }}</h3>
                     <div class="group">
-                        <buttonFilter :name="`Change Zone`" @click="enableZoneMenu = true"/>
-                        <iconAndText class="searchIcon" :icon="'sq_search'" @click="enableSearchMenu = !enableSearchMenu"/>
+                        <buttonFilter :noicon="true" :name="`Change Zone`" @click="enableZoneMenu = true"/>
+                        <iconAndText :class="[`searchIcon`, {'active': enableSearchMenu}]" :icon="'sq_search'" @click="enableSearchMenu = !enableSearchMenu"/>
                     </div>
                 </div>
 
@@ -323,6 +323,14 @@ import mapDisplay from '../layouts/MapDisplay.vue'
     .mapContext {
         width: 90%;
     }
+}
 
+.searchIcon {
+    transform: scale(1);
+    transition: transform 0.04s linear;
+    &.active{
+        transform: scale(1.3);
+        transform-origin: center;
+    }
 }
 </style>

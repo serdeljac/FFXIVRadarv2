@@ -67,16 +67,6 @@ p[data-timeActive] {
     animation: rowActiveAnimation 0.7s linear infinite;
 }
 
-
-
-
-
-
-
-
-
-
-
 *[data-mapIconActive] {
     z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
@@ -230,12 +220,10 @@ Default Styles
 
 .iconSize3 {
     width: 180px;
-    // aspect-ratio: 1 / 1;
     margin: 0 4px;
 }
 
 .overviewListItem {
-    max-width: 600px;
     background-color: $listBackgroundColor;
     border-radius: $borderRadius;
     cursor: pointer;

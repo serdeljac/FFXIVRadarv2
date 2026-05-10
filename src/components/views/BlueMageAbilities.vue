@@ -8,6 +8,7 @@
                     <buttonFilter 
                         :name="d[1]" 
                         :disabled="!d[2]"
+                        :noicon="true"
                         @click="changeFilter(index)"/>
                 </div>
             </div>

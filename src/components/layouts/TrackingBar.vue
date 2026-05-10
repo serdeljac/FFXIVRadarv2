@@ -32,8 +32,8 @@
                     </div>
                     
                     <!-- Close Button -->
-                    <div class="close_area" @click="$emit('changeTracked', d)">
-                        <p>X</p>
+                    <div class="close_area" @click="$emit('changeTrackedFromTrackingbar', d)">
+                        <trashButton class="trash" :addClass="'simple'"/>
                     </div>
 
             </li>
@@ -45,12 +45,13 @@
     import menuButton from '../ui/ButtonMenu.vue';
     import iconAndText from '../ui/iconAndText.vue';
     import displayAreaText from '../ui/displayAreaText.vue';
+    import trashButton from '../ui/trashButton.vue'
 
     export default {
         name: 'Tracking Bar',
-        components: {menuButton, iconAndText, displayAreaText},
+        components: {menuButton, iconAndText, displayAreaText, trashButton},
         props: ['windowWidth', 'trackinglist', 'timerList', 'weatherList'],
-        emits: ['openDetails','changeTracked'],
+        emits: ['openDetails','changeTrackedFromTrackingbar'],
         methods: {
             checkActiveState(arr: any) {
                 let timerState = this.timerList.find((o: any) => o.ID === arr.time).stateActive ? true : null;
@@ -135,7 +136,7 @@
             cursor: pointer;
 
             &:hover {
-                .close_area p {transform: translateX(0px)}
+                .close_area .trash {transform: translateX(-15px)}
             }
 
             .content_area {
@@ -150,7 +151,7 @@
             .close_area {
                 height: calc(70px - 0.6rem);
                 width: 5%;
-                p {
+                .trash {
                     transform: translateX(20px);
                     transition: all .07s linear;
                 }

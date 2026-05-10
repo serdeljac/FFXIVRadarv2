@@ -7,7 +7,7 @@
       :weatherList="weatherList"
       :trackinglist="trackinglist"
       @openDetails="(e) => detailsPanel = e"
-      @changeTracked="changeTracked"
+      @changeTrackedFromTrackingbar="changeTrackedFromTrackingbar"
       />
 
     <buttonMenu 
@@ -569,6 +569,17 @@ export default {
       changeTracked(e: any) {
         let index = this.ffxivData[e.job].findIndex(o => o.ID == e.ID)
         this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
+
+        if (this.ffxivData[e.job][index].tracked) {
+          this.trackinglist.push(this.ffxivData[e.job][index])
+        } else {
+          this.trackinglist = this.trackinglist.filter(o => o.ID != e.ID)
+        }
+      },
+      changeTrackedFromTrackingbar(e: any) {
+        let index = this.ffxivData[e.job].findIndex((o: any) => o.ID == e.ID)
+        this.ffxivData[e.job][index].tracked = !this.ffxivData[e.job][index].tracked
+        this.detailsPanel = []
 
         if (this.ffxivData[e.job][index].tracked) {
           this.trackinglist.push(this.ffxivData[e.job][index])

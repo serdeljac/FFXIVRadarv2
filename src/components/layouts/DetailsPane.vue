@@ -2,9 +2,7 @@
     <aside class="details">
 
         <div class="details_close">
-            <img class="iconSize"
-                :src="getIconImg('close')" 
-                @click="$emit('closeDetails', [])"/>
+            <trashButton @click="$emit('closeDetails', [])"/>
         </div>
 
         <div class="details_map">
@@ -129,10 +127,11 @@
 <script lang="ts">
 import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
+import trashButton from '../ui/trashButton.vue'
 
     export default {
         name: "Details Pane",
-        components: {mapDisplay, iconAndText},
+        components: {mapDisplay, iconAndText, trashButton},
         props: ['ffxivData', 'node', 'timerList', 'weatherList'],
         emits: ['closeDetails'],
         data() {

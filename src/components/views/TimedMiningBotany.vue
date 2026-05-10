@@ -5,7 +5,7 @@
         <div class="filterbar">
 
             <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
-                <p class="filterbar_groupName">{{ d[0][0] }}</p>
+                <!-- <p class="filterbar_groupName">{{ d[0][0] }}</p> -->
                 <buttonFilter 
                     v-for="e in d" :key="e[1]"
                     :name="e[1]" 
@@ -145,6 +145,7 @@ import seachBar from '../ui/searchBar.vue';
                 searchName: '' as string,
                 showOnlyActive: false as boolean,
                 filters: [] as any, //[Group, Name, State]
+                filterList: {} as any,
             }
         },
         created() {
@@ -308,6 +309,7 @@ import seachBar from '../ui/searchBar.vue';
 <style scoped lang="scss">
     .rdrTable li {grid-template-columns: 80px 400px 100px auto 100px 120px;}
     .filterbar_groupName::first-letter {text-transform: uppercase;}
+    .filterbar_group {margin-bottom: 20px}
 
     .pagenation {
         display: flex;
