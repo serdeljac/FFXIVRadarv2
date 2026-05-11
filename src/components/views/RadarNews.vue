@@ -16,7 +16,8 @@
 
 <script lang="ts">
     export default {
-        name: "Radar News"
+        name: "Radar News",
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>
 

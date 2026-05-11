@@ -70,7 +70,7 @@ import iconAndTextBM from '../ui/iconAndTextBMage.vue';
     export default {
         name: "Blue Mage Abilities",
         components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndTextBM},
-        props: ['ffxivData', 'timerList', 'windowWidth'],
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
             return {

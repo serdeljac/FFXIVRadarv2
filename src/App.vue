@@ -24,12 +24,12 @@
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
         <router-view 
-        :ffxivData="ffxivData"
-        :windowWidth="windowWidth"
-        :timerList="timerList"
-        :weatherList="weatherList"
-        @sendToDetails="(e: any) => detailsPanel = e"
-        @changeTracked="changeTracked"/>
+          :ffxivData="ffxivData"
+          :windowWidth="windowWidth"
+          :timerList="timerList"
+          :weatherList="weatherList"
+          @sendToDetails="(e: any) => detailsPanel = e"
+          @changeTracked="changeTracked"/>
     </main>
 
     <detailspane 

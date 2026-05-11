@@ -5,7 +5,6 @@
         <div class="filterbar">
 
             <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
-                <!-- <p class="filterbar_groupName">{{ d[0][0] }}</p> -->
                 <buttonFilter 
                     v-for="e in d" :key="e[1]"
                     :name="e[1]" 
@@ -134,7 +133,7 @@ import seachBar from '../ui/searchBar.vue';
     export default {
         name: "Timed Mining/Botany",
         components: {promotionBanner, displayAreaText, buttonFilter, seachBar},
-        props: ['ffxivData', 'timerList', 'windowWidth'],
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
             return {

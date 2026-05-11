@@ -224,6 +224,11 @@ Default Styles
 }
 
 .trackingIcon {
+    border-radius: 4px;
+    border: 1px solid rgba(101, 77, 237, 0.603);
+    background-color: rgba(59, 45, 135, 0.603);
+    box-shadow: 1px 1px 3px #000;
+    &:active {box-shadow: inset 1px 1px 3px #000;}
     &.remove {
         filter:grayscale(1);
     }

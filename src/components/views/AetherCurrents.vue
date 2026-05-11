@@ -67,7 +67,7 @@ import iconAndText from '../ui/iconAndText.vue';
 
     export default {
         name: "Aether Currents",
-        props: ['ffxivData', 'timerList', 'windowWidth'],
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         components: {promotionBanner, displayAreaText, buttonFilter, iconAndText},
         data() {

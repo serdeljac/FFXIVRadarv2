@@ -13,7 +13,8 @@
 
 <script lang="ts">
     export default {
-        name: "About Us"
+        name: "About Us",
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>
 

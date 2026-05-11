@@ -6,7 +6,8 @@
 
 <script lang="ts">
     export default {
-        name: "Error 404"
+        name: "Error 404",
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>
 

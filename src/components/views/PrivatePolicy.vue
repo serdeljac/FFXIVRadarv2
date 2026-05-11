@@ -305,7 +305,8 @@
 
 <script lang="ts">
     export default {
-        name: "Private Policy"
+        name: "Private Policy",
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>
 
