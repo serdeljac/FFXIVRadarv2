@@ -1,6 +1,13 @@
 <template>
     <div>
         <h1>About Us</h1>
+
+        <!-- 
+            Created by who
+            Why was this created
+            Special Thanks
+            Show Character Info
+        -->
     </div>
 </template>
 
