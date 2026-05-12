@@ -1,18 +1,57 @@
 <template>
     <div>
-        <h1>Radar News</h1>
+        <h1>~ FFXIV Radar News ~</h1>
 
-        <!-- 
-            Include Admin picture
-            Admin Name
-            Date Posted
-            Title of post
-            Description - paragraph
-            changes - Bullet points
-        
-        -->
+        <!-- This will eventually be grabbed from a server -->
+        <div class="bulleton">
+            <div class="bulleton_profileImg">
+                <img :src="getIconImageURL('profile')"/>
+            </div>
+            <div class="bulleton_content">
+                <h2>V1.1 - Updated Sightseeing/Fate data</h2>
+                <p class="bulleton_postdate">Posted: May 2, 2026 @ 14:22 PST</p>
+                <hr />
+                <div class="bulleton_details">
+                    <ol class="bulleton_list-tier1">
+                        <li>
+                            <p>Added sightseeing log data for A Realm Reborn #14-20 and #44-80</p>
+                            <ul class="bulleton_list-tier2">
+                                <li>Notes are added</li>
+                                <li>Fixed 'Mount Required'</li>
+                                <li>Added preview and full size images</li>
+                            </ul>
+                        </li>
+                        <li>
+                            <p>Added proper icon locations on the map for fates</p>
+                            <ul class="bulleton_list-tier2">
+                                <li>Added proper icon placement data</li>
+                                <li>Changed coordinates to more accurate locations</li>
+                            </ul>
+                        </li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="bulleton">
+            <div class="bulleton_profileImg">
+                <img :src="getIconImageURL('profile')"/>
+            </div>
+            <div class="bulleton_content">
+                <h2>v1.0 - Site has officially been launched!</h2>
+                <p class="bulleton_postdate">Posted: May 1, 2026 @ 16:43 PST</p>
+            </div>
+        </div>
+
     </div>
 </template>
+
+<script lang="ts" setup>
+    function getIconImageURL(name: string) {
+        return new URL(`/src/assets/${name}.jpg`, import.meta.url).href
+    }
+</script>
 
 <script lang="ts">
     export default {
@@ -22,5 +61,42 @@
 </script>
 
 <style scoped lang="scss">
+h1 {text-align: center;}
+
+.bulleton {
+    max-width: 800px;
+    min-width: 300px;
+    margin: 40px auto;
+    background-color: $listBackgroundColorHover;
+    padding: 1rem 2rem;
+    border-radius: $borderRadius;
+    display: grid;
+    grid-template-columns: 0.5fr 1.5fr;
+    align-items: center;
+    box-shadow: rgba(0, 0, 0, 0.25) 0px 14px 28px, rgba(0, 0, 0, 0.22) 0px 10px 10px;
+
+    &_postdate {
+        opacity: 0.7;
+        font-style: italic;
+    }
+
+    hr {
+        margin: 0.5rem 10px;
+    }
+
+    &_details {
+        padding: 0 20px;
+    }
+
+    .bulleton_list-tier1 > li {
+        list-style-type: decimal;
+        margin-bottom: 0.5rem;
+    }
+
+    .bulleton_list-tier2 > li {
+        list-style-type: circle;
+        list-style-position: inside;
+    }
+}
 
 </style>

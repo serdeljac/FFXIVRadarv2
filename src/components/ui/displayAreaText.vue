@@ -25,6 +25,10 @@
     align-items: center;
     cursor: pointer;
     user-select: none;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    &:active {
+        box-shadow: inset rgba(0, 0, 0, 0.22) 0px 1px 3px, inset rgba(0, 0, 0, 0.44) 0px 1px 2px;
+    }
     
     &.hasBackground {
         transition: all .07s linear;

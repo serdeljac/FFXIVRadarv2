@@ -2,7 +2,7 @@
     <aside :class="['sidebar', menuState]">
 
         <div class="sidebar_clockdisplay extended" @click="$emit('toggleClock')">
-            <p>Erozean Clock:</p>
+            <p>Eorzea Clock:</p>
             <h2>{{ eorzeaClock.formatIs24Hour ? eorzeaClock.formatTime24Hour : eorzeaClock.formatTime12Hour }}</h2>
         </div>
 
