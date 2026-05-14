@@ -1,8 +1,7 @@
 <template>
     <ul>
         <li v-for="node in data" :key="node.ID"
-        
-            class="overviewListItem"
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null">
 
@@ -44,13 +43,13 @@
 </template>
 
 <script lang="ts">
-import displayAreaText from '../../ui/displayAreaText.vue';
-import iconAndText from '../../ui/iconAndText.vue'
+    import displayAreaText from '../../ui/displayAreaText.vue';
+    import iconAndText from '../../ui/iconAndText.vue'
 
     export default {
         name: 'List Item - Hunts',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode'],
+        props: ['data', 'focusNode', 'windowWidth'],
         emits: ['focusNode'],
     }
 </script>
@@ -58,11 +57,15 @@ import iconAndText from '../../ui/iconAndText.vue'
 <style scoped lang="scss"> 
     .overviewListItem {
 
+        &.compact {
+            .overviewListItem_body {
+                display: block;
+            }
+        }
+
         &_body {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            
-
             .specialTrigger {
                 padding: 3px 2px;
                 grid-column: 1 / span 2;
@@ -81,10 +84,6 @@ import iconAndText from '../../ui/iconAndText.vue'
                 li {color: $levelColor}
             }
         }
-
-        
-
-
     }
 
 </style>

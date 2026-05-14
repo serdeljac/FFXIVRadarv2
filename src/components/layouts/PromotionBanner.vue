@@ -7,8 +7,6 @@
 </template>
 
 <script lang="ts">
-    
-
     export default {
         name: "Promotion Banner",
         props: ['length']
@@ -17,17 +15,15 @@
 
 <style scoped lang="scss">
     .promotion_banner {
-        width: 100%;
-        height: 100px;
+        
         display: flex;
         justify-content: center;
         align-items: center;
-        
-        &_wide {
-            width: 728px;
-            height: 90px;
-            aspect-ratio: 1 / 1;
-            background-color: white;
-        }
+        width: 100%;
+        max-width: 728px;
+        // height: 90px;
+        aspect-ratio: 8 / 1;
+        background-color: white;
+        margin: auto;
     }
 </style>

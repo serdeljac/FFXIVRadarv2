@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="(material, nodeCode) in nodeList" :key="nodeCode"
-            class="overviewListItem"
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', material[0])"
             :data-rowFocused="nodeCode == focusNode.node_code ? true : null" 
             :data-rowAndTimeActive="checkRowActive(material[0])">
@@ -51,7 +51,7 @@
     export default {
         name: 'List Item - Gathering',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'timerList', 'focusNode'],
+        props: ['data', 'timerList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked'],
         data() {
             return {
@@ -99,6 +99,12 @@
 
 <style scoped lang="scss">
     .overviewListItem {
+
+        &.compact {
+            .overviewListItem_list {
+                display: block;
+            }
+        }
 
         &_list li {
             display: flex;

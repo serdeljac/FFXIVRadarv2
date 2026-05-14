@@ -1,10 +1,10 @@
 <template>
-    <div class="mapDisplay">
+    <div class="mapDisplay" :style="`width: ${mapSize}px; height: ${mapSize}px`">
         <div class="mapDisplay_background"
-            :style="`background-image: url('${getMapImg(focusNode.area.zone)}')`">
+            :style="`background-image: url('${getMapImg(focusNode.area.zone)}'); transform: scale(${mapSize / 800})`">
         </div>
-        <div class="mapDisplay_overlay">
-            <div class="corrddisplay">{{ `ID: ${focusNode.ID} - (x.${focusNode.x}, y.${focusNode.y})` }}</div>
+
+        <div class="mapDisplay_overlay" :style="`transform: scale(${mapSize / 800})`">
 
             <div v-for="d in getAetheyteNodes" :key="d.ID"
                 class="mapIcon aetheryte"
@@ -55,7 +55,7 @@
 <script lang="ts">
     export default {
         name: 'Eorzea Map',
-        props: ['ffxivData', 'focusNode', 'singleOnly'],
+        props: ['ffxivData', 'focusNode', 'singleOnly', 'mapSize'],
         computed: {
             getAetheyteNodes() {
                 let f = this.focusNode
@@ -108,11 +108,10 @@
 </script>
 
 <style scoped lang="scss">
-    .corrddisplay {
-        position: absolute;
-        background: black;
-        font-size: 2rem;
-        transform: translateY(-30px)
+    .mapDisplay {
+        width: 800px;
+        height: 800px;
+        background: red;
     }
 
     .mapDisplay {
@@ -121,6 +120,7 @@
             height: 800px;
             aspect-ratio: 1/1;
             position: absolute;
+            transform-origin: top left;
         }
 
         .mapIcon {

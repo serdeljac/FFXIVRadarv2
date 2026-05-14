@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="node in nodeList.nochainset" :key="node.ID"
-            class="overviewListItem" 
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null">
 
@@ -52,7 +52,7 @@ import iconAndText from '../../ui/iconAndText.vue'
     export default {
         name: 'List Item - Fates',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode'],
+        props: ['data', 'focusNode', 'windowWidth'],
         emits: ['focusNode'],
         data() {
             return {
@@ -90,6 +90,18 @@ import iconAndText from '../../ui/iconAndText.vue'
 
 <style scoped lang="scss">
     .overviewListItem {
+
+        &.compact {
+            .overviewListItem_header {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                .iconAndText {
+                    align-items: initial;
+                    justify-content: center;
+                }
+            }
+        }
 
         &_header {
             &.set {

@@ -1,7 +1,6 @@
 <template>
     <div class="privatepolicy">
-        <h2>FFXIV RADAR</h2> 
-        <h4 class="voidspace">PRIVACY POLICY</h4>
+        <h1>~FFXIV RADAR Private Policy~</h1> 
         <h6>Effective Date: May 10, 2026 | Last Updated: May 10, 2026</h6>
         <hr class="header_bar"/>
 
@@ -319,6 +318,11 @@
     .group {
         width: 96%;
         margin: 0 auto;
+    }
+
+    h1 {
+        text-align: center;
+        margin: 2rem auto;
     }
 
     h2,h3,h4,h6 {

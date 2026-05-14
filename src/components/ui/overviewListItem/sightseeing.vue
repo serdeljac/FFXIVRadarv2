@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="node in data" :key="node.ID"
-            class="overviewListItem"
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null"
             :data-rowActive="checkRowActive(node)">
@@ -71,13 +71,13 @@
 </script>
 
 <script lang="ts">
-import displayAreaText from '../../ui/displayAreaText.vue';
-import iconAndText from '../../ui/iconAndText.vue'
+    import displayAreaText from '../../ui/displayAreaText.vue';
+    import iconAndText from '../../ui/iconAndText.vue'
 
     export default {
         name: 'List Item - Sightseeing',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'timerList', 'weatherList', 'focusNode'],
+        props: ['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked'],
         methods: {
             fetchTimerCountdowns(time: string) {
@@ -162,6 +162,14 @@ import iconAndText from '../../ui/iconAndText.vue'
     }
 
     .overviewListItem {
+
+        &.compact {
+            .overviewListItem_body {
+                display: block;
+                .previewImg {margin: auto;}
+                .notes {text-align: center;}
+            }
+        }
 
         &_body {
             display: flex;

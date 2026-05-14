@@ -37,6 +37,7 @@
 </script>
 
 <script lang="ts">
+
     export default {
         name: "About Us",
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
@@ -44,7 +45,10 @@
 </script>
 
 <style scoped lang="scss">
-    h1 {text-align: center;}
+    h1 {
+        text-align: center;
+        margin: 2rem auto;
+    }
 
     .about {
         max-width: 800px;

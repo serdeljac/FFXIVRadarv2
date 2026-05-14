@@ -206,6 +206,8 @@ import trashButton from '../ui/trashButton.vue'
         border-left: 1px solid $borderColor;
         display: flex;
         flex-direction: column;
+        overflow-Y: auto;
+        overflow-X: hidden;
 
         &_close {
             margin-top: 1rem;

@@ -85,7 +85,6 @@ p[data-timeActive] {
 /*********************************************************
 Default Styles
 *********************************************************/
-.body_content {margin: 1rem 0 5rem;}
 
 .filterbar {
     display: flex;
@@ -115,7 +114,9 @@ Default Styles
 
     &_group {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
+        justify-content: center;
     }
 
     &-tab {
@@ -208,12 +209,14 @@ Default Styles
 
 .iconSize {
     width: 24px;
+    height: 24px;
     aspect-ratio: 1 / 1;
     margin-right: 6px;
 }
 
 .iconSize2 {
     width: 14px;
+    height: 14px;
     aspect-ratio: 1 / 1;
     margin: 0 4px;
 }

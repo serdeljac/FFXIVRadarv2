@@ -1,14 +1,16 @@
 <template>
-    <div class="Eorzea Overview">
-        <promotionBanner length="wide"/>
+    <div class="eorzeaOverview">
 
-        <div class="body_content">
+        <div :class="[`body_content`, {'verticalPos': windowWidth == 'tablet' || windowWidth == 'mobile'}]">
+            <mapDisplay 
+                :ffxivData="ffxivData" 
+                :focusNode="focusNode" 
+                :singleOnly="false" 
+                :mapSize="columnLayout" 
+                v-if="focusNode"
+                :class="[`mapDisplay_root`]"/>
 
-            <div class="mapDisplay">
-                <mapDisplay :ffxivData="ffxivData" :focusNode="focusNode" :singleOnly="false" v-if="focusNode"/>
-            </div>
-
-            <div class="mapContext">
+            <div :class="[`mapContext`, {'marginPos': windowWidth == 'mobile'}]">
                 <div class="filterbar isZoneSelect">
                     <h2>{{ currentZone.zone }}</h2>
                     <h3>{{ currentZone.expansion }}</h3>
@@ -23,10 +25,8 @@
                         :class="[
                             `filterbar-tab`, 
                             {'disabled': d.length == 0},
-                            {'activeTab': tabSelected == index}
-                            ]" 
-                            @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]"
-                        >
+                            {'activeTab': tabSelected == index}]" 
+                            @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]">
                         <iconAndText :icon="index" />
                     </div>
                     
@@ -36,12 +36,14 @@
                     <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
                 </div>
 
+                <!-- Display list of nodes within the zone selection -->
                 <div v-if="!enableSearchMenu">
                     <gatheringList 
                         v-if="tabSelected == 'miner'" 
                         :data="zoneNodes.miner" 
                         :timerList="timerList"
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
 
@@ -50,6 +52,7 @@
                         :data="zoneNodes.botany" 
                         :timerList="timerList"
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
                         
@@ -59,6 +62,7 @@
                         :timerList="timerList"
                         :weatherList="weatherList"
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @changeTracked="(e: any) => $emit('changeTracked', e)"
                         @focusNode="(e: any) => focusNode = e"/>
 
@@ -66,21 +70,25 @@
                         v-if="tabSelected == 'fates'" 
                         :data="zoneNodes.fates"
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @focusNode="(e: any) => focusNode = e"/>
                     
                     <huntsList 
                         v-if="tabSelected == 'eliteHunts'"
                         :data="zoneNodes.eliteHunts"
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @focusNode="(e: any) => focusNode = e"/>
 
                     <aethercurrentList 
                         v-if="tabSelected == 'aethercurrents'" 
                         :data="zoneNodes.aethercurrents" 
                         :focusNode="focusNode"
+                        :windowWidth="windowWidth"
                         @focusNode="(e: any) => focusNode = e"/>
                 </div>
 
+                <!-- Display list of nodes within the Search Bar -->
                 <div v-else>
                     <ul>
                         <li v-for="d in searchResults" :key="d.ID">
@@ -89,6 +97,7 @@
                                 :data="[d]" 
                                 :timerList="timerList"
                                 :focusNode="focusNode"
+                                :windowWidth="windowWidth"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
                             
@@ -97,6 +106,7 @@
                                 :data="[d]" 
                                 :timerList="timerList"
                                 :focusNode="focusNode"
+                                :windowWidth="windowWidth"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
 
@@ -106,6 +116,7 @@
                                 :timerList="timerList"
                                 :weatherList="weatherList"
                                 :focusNode="focusNode"
+                                :windowWidth="windowWidth"
                                 @changeTracked="(e: any) => $emit('changeTracked', e)"
                                 @focusNode="(e: any) => focusNode = e"/>
 
@@ -113,12 +124,14 @@
                                 v-if="d.job == 'fates'" 
                                 :data="[d]" 
                                 :focusNode="focusNode"
+                                :windowWidth="windowWidth"
                                 @focusNode="(e: any) => focusNode = e"/>
                             
                             <huntsList 
                                 v-if="d.job == 'eliteHunts'"
                                 :data="[d]"
-                                :focusNode="focusNode" 
+                                :focusNode="focusNode"
+                                :windowWidth="windowWidth"
                                 @focusNode="(e: any) => focusNode = e"/>
                         </li>
                     </ul>
@@ -137,22 +150,20 @@
 </template>
 
 <script lang="ts">
-import promotionBanner from '../layouts/PromotionBanner.vue';
-import buttonFilter from '../ui/ButtonFilter.vue';
-import seachBar from '../ui/searchBar.vue';
-import iconAndText from '../ui/iconAndText.vue';
-import zoneSelect from '../layouts/zoneSelection.vue';
-import gatheringList from '../ui/overviewListItem/gathering.vue';
-import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
-import fatesList from '../ui/overviewListItem/fates.vue';
-import huntsList from '../ui/overviewListItem/hunts.vue';
-import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue'
-import mapDisplay from '../layouts/MapDisplay.vue'
+    import buttonFilter from '../ui/ButtonFilter.vue';
+    import seachBar from '../ui/searchBar.vue';
+    import iconAndText from '../ui/iconAndText.vue';
+    import zoneSelect from '../layouts/zoneSelection.vue';
+    import gatheringList from '../ui/overviewListItem/gathering.vue';
+    import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
+    import fatesList from '../ui/overviewListItem/fates.vue';
+    import huntsList from '../ui/overviewListItem/hunts.vue';
+    import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue';
+    import mapDisplay from '../layouts/MapDisplay.vue';
 
     export default {
         name: "Eorzea Overview",
         components: {
-            promotionBanner, 
             buttonFilter, 
             seachBar, 
             iconAndText, 
@@ -184,6 +195,17 @@ import mapDisplay from '../layouts/MapDisplay.vue'
                 enableSearchMenu: false as boolean,
                 searchName: '' as string,
                 searchResults: [] as any,
+            }
+        },
+        computed: {
+            columnLayout() {
+                let dim = {
+                    'desktop-large': 800,
+                    'desktop-small': 600,
+                    'tablet': 500,
+                    'mobile': 400,
+                }
+                return dim[this.windowWidth]
             }
         },
         created() {
@@ -311,17 +333,26 @@ import mapDisplay from '../layouts/MapDisplay.vue'
 </script>
 
 <style scoped lang="scss">
-.body_content {
-    display: flex;
-    gap: 20px;
+.eorzeaOverview {
+    margin-top: 1rem;
 
-    .mapDisplay {
-        max-width: 800px;
-        width: 100%;
+    .body_content {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 2rem;
+        justify-content: center;
+        &.verticalPos {
+            flex-direction: column;
+            .mapDisplay_root, .mapContext {
+                width: 100%;
+                margin: auto;
+            }
+        }
     }
 
     .mapContext {
-        width: 90%;
+        max-width: 600px;
+        &.marginPos {margin: 0 !important;}
     }
 }
 

@@ -1,9 +1,7 @@
 <template>
-    <div class="TimedNodes">
-        <promotionBanner length="wide"/>
+    <div :class="[`timedNodes`, windowWidth]">
 
         <div class="filterbar">
-
             <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
                 <buttonFilter 
                     v-for="e in d" :key="e[1]"
@@ -34,12 +32,12 @@
 
             <ul class="rdrTable header">
                 <li>
-                    <p>Tracker</p>
-                    <p>Name</p>
-                    <p>Attributes</p>
-                    <p>Area</p>
-                    <p>Level</p>
-                    <p>Timer</p>
+                    <p class="rdrTable_col-tracking">Tracker</p>
+                    <p class="rdrTable_col-name">Name</p>
+                    <p class="rdrTable_col-attributes">Attributes</p>
+                    <p class="rdrTable_col-level">Level</p>
+                    <p class="rdrTable_col-time">Timer</p>
+                    <p class="rdrTable_col-area">Area</p>
                 </li>
             </ul>
 
@@ -47,17 +45,17 @@
 
             <ul :class="[`rdrTable body`]">
                 <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  
-                    :data-rowAndTimeActive="checkRowActive(d)"
-                    >
+                    :data-rowAndTimeActive="checkRowActive(d)">
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_col-tracking" >
+                    <div class="rdrTable_col-tracking">
                         <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
                     </div>
 
                     <!-- NAME -->
                     <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
                         <div>
+                            <img v-if="windowWidth == 'mobile'" :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
                             <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
                             <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImageURL('collectability')" />
@@ -85,19 +83,19 @@
                         </div>
                     </div>
 
-                    <!-- AREA -->
-                    <div>
-                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
-                    </div>
-
                     <!-- LEVEL -->
-                    <div>
+                    <div class="rdrTable_col-level">
                         {{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}
                     </div>
 
                     <!-- TIMER -->
                     <div class="rdrTable_col-time">
                         <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
+                    </div>
+
+                    <!-- AREA -->
+                    <div class="rdrTable_col-area">
+                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
                     </div>
                 </li>
             </ul>
@@ -125,14 +123,13 @@
 </script>
 
 <script lang="ts">
-import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayAreaText from '../ui/displayAreaText.vue';
-import buttonFilter from '../ui/ButtonFilter.vue';
-import seachBar from '../ui/searchBar.vue';
+    import displayAreaText from '../ui/displayAreaText.vue';
+    import buttonFilter from '../ui/ButtonFilter.vue';
+    import seachBar from '../ui/searchBar.vue';
 
     export default {
         name: "Timed Mining/Botany",
-        components: {promotionBanner, displayAreaText, buttonFilter, seachBar},
+        components: {displayAreaText, buttonFilter, seachBar},
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
@@ -215,8 +212,6 @@ import seachBar from '../ui/searchBar.vue';
                 }
                 
                 //Switch Values
-                // this.filters[arrayIndex][2] = !this.filters[arrayIndex][2]
-
                 for (const d in this.filters) {
                     if (!this.filters[d][2]) {
                         hold = hold.filter((o: any) => o[this.filters[d][0]] != this.filters[d][1])
@@ -311,15 +306,41 @@ import seachBar from '../ui/searchBar.vue';
 </script>
 
 <style scoped lang="scss">
-    .rdrTable li {grid-template-columns: 80px 400px 100px auto 100px 120px;}
-    .filterbar_groupName::first-letter {text-transform: uppercase;}
-    .filterbar_group {margin-bottom: 20px}
+    .timedNodes.tablet {
+        .rdrTable li {grid-template-columns: 80px 250px 120px auto;}
+        .rdrTable_col-attributes, .rdrTable_col-level {display: none}
+    }
+
+    .timedNodes.mobile {
+        .rdrTable li {
+            grid-template-columns: auto;
+            justify-content: center;
+        }
+        .rdrTable_col-tracking, .rdrTable_col-attributes, .rdrTable_col-level, .rdrTable_col-time {display: none}
+        .rdrTable.header {display: none;}
+        .rdrTable.body li {
+            .rdrTable_col-name > div {
+                display: flex;
+                width: 400px;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+                
+            }
+            .rdrTable_col-area {grid-column: 1 / span 2}
+            & > div {margin: 4px auto;}
+        }
+    }
+
+
+    .rdrTable li {grid-template-columns: 80px 400px 100px 100px 120px auto;}
 
     .pagenation {
         display: flex;
+        flex-wrap: wrap;
         align-items: center;
         justify-content: center;
-        width: 80%;
+        width: 90%;
         margin: 2rem auto;
 
         div {
@@ -333,7 +354,7 @@ import seachBar from '../ui/searchBar.vue';
             align-items: center;
             justify-content: center;
             padding: 0.5rem 1rem;
-            margin: 0 1rem;
+            margin: 0.5rem 1rem;
             cursor: pointer;
             &.pageActive {background-color: $borderColor;}
             &:hover {background-color: $borderColorFade;}

@@ -18,7 +18,8 @@
         </ul>
 
         <footer>
-            <p>&copy; 2023 FFXIV Radar. All rights reserved.</p>
+            <donateBtn :menuState="menuState"/>
+            <p>&copy; 2023 FFXIV Radar. All rights reserved. <br />This site not built with AI.</p>
         </footer>
     </aside>
 </template>
@@ -30,12 +31,13 @@
 </script>
 
 <script lang="ts">
-
+    import donateBtn from '../ui/donateNow.vue'
 
     export default {
         name: 'Sidebar',
         props: ['menuState', 'eorzeaClock'],
         emits: ['toggleClock'],
+        components: {donateBtn},
         data() {
             return {
                 forceExpanded: true,
@@ -112,8 +114,6 @@
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
         background-color: $bodyBackgroundColor;
 
-       
-
         //Collapsed Sidebar Adjustments Only
         &.compact {
             width: $sidebarWidthCollapse;
@@ -129,6 +129,9 @@
                 padding-left: 0;
                 img {margin: auto;}
                 p {display: none;}
+            }
+            footer p {
+                margin: 1rem 0.5rem;
             }
         }
 
@@ -162,6 +165,10 @@
         }
 
         footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            p {margin: 1rem 0;}
             align-self: center;
             font-size: 0.75rem;
             text-align: center;

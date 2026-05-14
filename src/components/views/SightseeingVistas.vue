@@ -1,6 +1,5 @@
 <template>
-    <div class="sightseeVistas">
-        <promotionBanner length="wide"/>
+    <div :class="[`sightseeVistas`, windowWidth]">
 
         <div class="filterbar">
             <div class="filterbar_group group1">
@@ -14,7 +13,7 @@
 
         <div class="vistaNote">
             <p v-if="filterSelected == 'A Realm Reborn'">To Unlock vista's 21-80, you MUST complete all 20 in the log.</p>
-            <br />
+            <br v-if="filterSelected == 'A Realm Reborn'"/>
             <p>
                 Each vista discovered will grant you <span class="expColor">{{ fetchVistaData('vista_exp') }}</span> <img class="iconSize" :src="getIconImageURL('exp')" />
                 when you're between levels <span class="levelColor">{{ fetchVistaData('vista_min') }}-{{ fetchVistaData('vista_max') }}</span>.
@@ -25,23 +24,23 @@
 
             <ul class="rdrTable header">
                 <li>
-                    <p>Tracker</p>
-                    <p>No</p>
-                    <p>Name</p>
-                    <p>Area</p>
-                    <p>Time</p>
-                    <p>Weather</p>
-                    <p>Emote</p>
+                    <p class="rdrTable_col-tracking">Tracker</p>
+                    <p class="rdrTable_col-no">No</p>
+                    <p class="rdrTable_col-name">Name</p>
+                    <p class="rdrTable_col-time">Time</p>
+                    <p class="rdrTable_col-weather">Weather</p>
+                    <p class="rdrTable_col-emote">Emote</p>
+                    <p class="rdrTable_col-area">Area</p>
                 </li>
             </ul>
 
-            <hr class="rdrTable split"/>
+            <hr class="rdrTable split" />
 
             <ul :class="[`rdrTable body`]">
                 <li v-for="d in allVistaNodes[filterSelected]" :key="d.ID" :data-rowActive="checkRowActive(d)">
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_col-tracking" >
+                    <div class="rdrTable_col-tracking">
                         <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')"" @click="$emit('changeTracked', d)"/>
                     </div>
 
@@ -52,16 +51,12 @@
 
                     <!-- NAME -->
                     <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
+                        <img v-if="windowWidth == 'mobile'" :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
                         <p>{{ d.name }}</p>
                     </div>
 
-                    <!-- AREA -->
-                    <div>
-                        <displayAreaText @click="$emit('sendToDetails', d)" :areaObj="d" :excludeBackground="true" />
-                    </div>
-
                     <!-- TIMER -->
-                    <div class="rdrTable_col-time" >
+                    <div class="rdrTable_col-time">
                         <p :data-timeActive="checkTimeActive('time', d)">{{ fetchTimerCountdown(d.time) }}</p>
                     </div>
 
@@ -73,8 +68,13 @@
                     </div>
 
                     <!-- EMOTE -->
-                    <div>
+                    <div class="rdrTable_col-emote">
                         <iconAndText :icon="d.emote" :text="d.emote"/>
+                    </div>
+
+                    <!-- AREA -->
+                    <div class="rdrTable_col-area">
+                        <displayAreaText @click="$emit('sendToDetails', d)" :areaObj="d" :excludeBackground="true" />
                     </div>
                 </li>
             </ul>
@@ -90,15 +90,14 @@
 </script>
 
 <script lang="ts">
-import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayAreaText from '../ui/displayAreaText.vue';
-import buttonFilter from '../ui/ButtonFilter.vue';
-import seachBar from '../ui/searchBar.vue';
-import iconAndText from '../ui/iconAndText.vue';
+    import displayAreaText from '../ui/displayAreaText.vue';
+    import buttonFilter from '../ui/ButtonFilter.vue';
+    import seachBar from '../ui/searchBar.vue';
+    import iconAndText from '../ui/iconAndText.vue';
 
     export default {
         name: "Sightseeing Vistas",
-        components: {promotionBanner, displayAreaText, buttonFilter, seachBar, iconAndText},
+        components: {displayAreaText, buttonFilter, seachBar, iconAndText},
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
         data() {
@@ -215,12 +214,40 @@ import iconAndText from '../ui/iconAndText.vue';
 </script>
 
 <style scoped lang="scss">
-    .rdrTable li {grid-template-columns: 80px 80px minmax(auto, 400px) auto 100px 200px 200px;}
+    .sightseeVistas.tablet {
+        .rdrTable li {grid-template-columns: 80px 300px 120px auto;}
+        .rdrTable_col-no, .rdrTable_col-time, .rdrTable_col-weather {display: none}
+    }
+
+    .sightseeVistas.mobile {
+        .rdrTable li {
+            grid-template-columns: auto;
+            justify-content: center;
+        }
+        .rdrTable_col-tracking, .rdrTable_col-no, .rdrTable_col-time, .rdrTable_col-weather, .rdrTable_col-emote {display: none}
+        .rdrTable.header {display: none;}
+        .rdrTable.body li {
+            padding: 6px;
+            .rdrTable_col-name {
+                display: flex;
+                width: 400px;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+            }
+            .rdrTable_col-area {grid-column: 1 / span 2}
+            & > div {margin: 4px auto;}
+        }
+    }
+
+    .rdrTable li {grid-template-columns: 80px 80px 300px 100px 120px 120px auto;}
     .vistaNote {
         text-align: center;
         p {
             display: inline-flex;
             align-items: center;
+            flex-wrap: wrap;
+            justify-content: center;
             span {margin-left: 4px;}
             img {margin: 0 2px 0 2px;}
         }

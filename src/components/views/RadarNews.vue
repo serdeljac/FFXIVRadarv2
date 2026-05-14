@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div :class="[`radarNews`, windowWidth]">
         <h1>~ FFXIV Radar News ~</h1>
 
         <!-- This will eventually be grabbed from a server -->
@@ -61,7 +61,15 @@
 </script>
 
 <style scoped lang="scss">
-h1 {text-align: center;}
+.radarNews.mobile {
+    .bulleton {grid-template-columns: auto;}
+    .bulleton_profileImg {display: none}
+}
+
+h1 {
+    text-align: center;
+    margin: 2rem auto;
+}
 
 .bulleton {
     max-width: 800px;

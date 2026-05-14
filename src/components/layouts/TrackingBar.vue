@@ -1,5 +1,5 @@
 <template>
-    <div class="trackingbar">
+    <div :class="[`trackingbar`, {'compact': windowWidth == 'mobile'}]">
 
         <!-- Header -->
         <div class="trackingbar_header">
@@ -96,8 +96,21 @@
         border-bottom: 1px solid $borderColor;
         overflow: hidden;
 
+        &.compact {
+            display: grid;
+            grid-template-columns: 100%;
+            padding-left: 80px !important;
+            justify-items: center;
+            .trackingbar_header {display: none;}
+            .trackingbar_items {width: 100%}
+            .trackingbar_item {
+                max-width: 400px;
+                width: 100%;
+            }
+        }
+
         &_header {
-            padding-left: 2rem;
+            padding-left: 2rem !important;
             display: flex;
             align-items: center;
             width: $sidebarWidthExpand;

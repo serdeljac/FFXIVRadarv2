@@ -1,7 +1,7 @@
 <template>
     <ul>
         <li v-for="node in nodeList.noquest" :key="node.ID"
-            class="overviewListItem"
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null" >
 
@@ -14,7 +14,7 @@
         </li>
 
         <li v-for="node in nodeList.quest" :key="node.ID"
-            class="overviewListItem"
+            :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', node)"
             :data-rowFocused="node.node_code == focusNode.node_code ? true : null" >
 
@@ -42,7 +42,7 @@
     export default {
         name: 'List Item - Aether Currents',
         components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode'],
+        props: ['data', 'focusNode', 'windowWidth'],
         emits: ['focusNode'],
         data() {
             return {
@@ -68,6 +68,13 @@
 
 <style scoped lang="scss">
     .overviewListItem {
+        &.compact {
+            .overviewListItem_body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+            }
+        }
 
         &_body {
             display: flex;

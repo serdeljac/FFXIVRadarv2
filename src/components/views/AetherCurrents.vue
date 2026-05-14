@@ -1,6 +1,5 @@
 <template>
-    <div class="aethercurrents">
-        <promotionBanner length="wide"/>
+    <div :class="[`aetherCurrents`, windowWidth]">
         
         <div class="filterbar">
             <div class="filterbar_group group1">
@@ -15,10 +14,10 @@
         <div class="body_content">
             <ul class="rdrTable header">
                 <li>
-                    <p>Type</p>
-                    <p>Location</p>
-                    <p>Quest</p>
-                    <p>Unlock Requirement</p>
+                    <p class="rdrTable_col-type">Type</p>
+                    <p class="rdrTable_col-quest">Quest</p>
+                    <p class="rdrTable_col-unlock">Unlock Requirement</p>
+                    <p class="rdrTable_col-area">Location</p>
                 </li>
             </ul>
 
@@ -28,23 +27,26 @@
                 <li v-for="d in allAetherNodes[filterSelected]" :key="d.ID" :class="[d.specialClass]">
 
                     <!-- ICON -->
-                    <div class="rdrTable_type">
+                    <div class="rdrTable_col-type">
                         <img class="iconSize" :src="getIconImageURL(d.name ? 'currentquest' : 'current')" />
                     </div>
 
-                    <!-- AREA -->
-                    <div>
-                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
-                    </div>
-
                     <!-- QUEST NAME -->
-                    <div>
+                    <div class="rdrTable_col-quest">
+                        <img v-if="windowWidth == 'mobile'" class="iconSize" :src="getIconImageURL(d.name ? 'currentquest' : 'current')" />
                         <iconAndText v-if="d.name" :icon="`quest_${d.name_type}`" :text="`${d.name} - Lv.${d.name_level}`"/>
+                        <p v-else>{{ `Aether Current #${d.no}` }}</p>
                     </div>
 
                     <!-- UNLOCK CONDITION -->
-                    <div>
+                    <div class="rdrTable_col-unlock">
                         <iconAndText v-if="d.unlock" :icon="`quest_${d.unlock_type}`" :text="`${d.unlock} - Lv.${d.unlock_level}`"/>
+                        <p v-else>-</p>
+                    </div>
+
+                    <!-- AREA -->
+                    <div class="rdrTable_col-area">
+                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
                     </div>
                 </li>
             </ul>
@@ -60,16 +62,15 @@
 </script>
 
 <script lang="ts">
-import promotionBanner from '../layouts/PromotionBanner.vue';
-import displayAreaText from '../ui/displayAreaText.vue';
-import buttonFilter from '../ui/ButtonFilter.vue';
-import iconAndText from '../ui/iconAndText.vue';
+    import displayAreaText from '../ui/displayAreaText.vue';
+    import buttonFilter from '../ui/ButtonFilter.vue';
+    import iconAndText from '../ui/iconAndText.vue';
 
     export default {
         name: "Aether Currents",
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'sendToDetails'],
-        components: {promotionBanner, displayAreaText, buttonFilter, iconAndText},
+        components: {displayAreaText, buttonFilter, iconAndText},
         data() {
             return {
                 filters: [] as any, //[Group, Name, State]
@@ -125,7 +126,34 @@ import iconAndText from '../ui/iconAndText.vue';
 </script>
 
 <style scoped lang="scss">
-    .rdrTable li {grid-template-columns: 80px auto 400px 400px;}
-    .rdrTable_type {padding-left: 1rem}
+    .aetherCurrents.tablet {
+        .rdrTable li {grid-template-columns: 80px 400px auto;}
+        .rdrTable_col-unlock {display: none}
+    }
+
+    .aetherCurrents.mobile {
+        .rdrTable li {
+            grid-template-columns: auto;
+            justify-content: center;
+        }
+        .rdrTable.header {display: none;}
+        .rdrTable_col-type, .rdrTable_col-unlock {display: none}
+        .rdrTable.body li {
+            .rdrTable_col-quest {
+                display: flex;
+                width: 400px;
+                align-items: center;
+                justify-content: center;
+                margin: auto;
+                
+            }
+            .rdrTable_col-area {grid-column: 1 / span 2}
+            & > div {margin: 4px auto;}
+        }
+    }
+
+
+    .rdrTable li {grid-template-columns: 80px 400px 400px auto;}
+    .rdrTable_col-type {padding-left: 1rem}
     .breakspace {margin-bottom: 2rem;}
 </style>

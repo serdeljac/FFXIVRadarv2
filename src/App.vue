@@ -23,6 +23,7 @@
     <main 
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
+        <promotionBanner />
         <router-view 
           :ffxivData="ffxivData"
           :windowWidth="windowWidth"
@@ -33,7 +34,7 @@
     </main>
 
     <detailspane 
-      v-if="openDetailSidebar" 
+      v-if="openDetailSidebar && (windowWidth != 'tablet' && windowWidth != 'mobile')" 
       :node="detailsPanel" 
       :ffxivData="ffxivData"
       :timerList="timerList"
@@ -49,6 +50,7 @@
   import EorzeaWeather from 'eorzea-weather';
 
   //Components
+  import promotionBanner from './components/layouts/PromotionBanner.vue';
   import sidebar from './components/layouts/Sidebar.vue';
   import trackingBar from './components/layouts/TrackingBar.vue';
   import buttonMenu from './components/ui/ButtonMenu.vue';
@@ -72,7 +74,7 @@
 
 export default {
   name: 'App Root',
-  components: {sidebar, trackingBar, buttonMenu, detailspane}, 
+  components: {sidebar, trackingBar, buttonMenu, detailspane, promotionBanner}, 
   data() {
     return {
       windowWidth: '' as String,
@@ -632,6 +634,7 @@ export default {
       .sidebar_pos {left: -$sidebarWidthExpand + 1px;}
       .menu_Btn {left: 1.5rem;}
       .main_content {
+        padding: 1rem 0.5rem;
         width: 100%;
         margin-left: 0;
       } 
@@ -669,6 +672,8 @@ export default {
     top: 100px;
     transition: all .23s ease;
     z-index: 101;
+    width: 32px;
+    height: 32px;
     &.tracking_pos {top: 17px}
   }
 

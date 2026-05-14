@@ -8,8 +8,14 @@
 <script lang="ts" setup>
     function getIconImageURL(name: string) {
         name = name.toLowerCase().replace(/ /g,'')
-        if (name == 'crafting') {name = 'sq_crafting'}
-        if (name == 'scripts') {name = 'purplegatherscripts'}
+        name = name == 'crafting' ? 'sq_crafting' : name
+        name = name == 'scripts' ? 'purplegatherscripts' : name
+        name = name == 'arealmreborn' ? 'arr' : name
+        name = name == 'heavensward' ? 'hwd' : name
+        name = name == 'stormblood' ? 'sbd' : name
+        name = name == 'shadowbringers' ? 'sbs' : name
+        name = name == 'endwalker' ? 'ewr' : name
+        name = name == 'dawntrail' ? 'dtl' : name
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
@@ -56,7 +62,7 @@
     --edge-light: hsla(0, 0%, 50%, 0.8);
     --text-light: rgba(255, 255, 255, 0.4);
     --back-color: 240, 40%;
-    margin: 0 0.5rem;
+    margin: 1rem 0.5rem;
     cursor: pointer;
     padding: 0.7em 1em;
     border-radius: 0.5em;
