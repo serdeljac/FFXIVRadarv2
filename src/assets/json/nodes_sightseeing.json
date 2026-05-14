@@ -239,7 +239,7 @@
     "zone": "Central Shroud",
     "no": 11,
     "type": "",
-    "notes": ""
+    "notes": "In Bentbrancch Meadows, sit next to the NPC Margeria, north of the Aetheryte"
   },
   {
     "ID": "sightsee11",
@@ -257,11 +257,11 @@
     "transx": 325,
     "transy": 335,
     "node_code": "sigh176182",
-    "mount": 1,
+    "mount": 0,
     "zone": "East Shroud",
     "no": 12,
     "type": "",
-    "notes": ""
+    "notes": "Between the entrance gate closest to Sanctum of the Twelve."
   },
   {
     "ID": "sightsee12",
@@ -283,7 +283,7 @@
     "zone": "East Shroud",
     "no": 13,
     "type": "",
-    "notes": ""
+    "notes": "On the roof above the NPC Sylphic Vendor in Little Solace."
   },
   {
     "ID": "sightsee13",
@@ -766,7 +766,7 @@
     "mount": 0,
     "zone": "Outer La Noscea",
     "no": 35,
-    "type": "",
+    "type": "jumppuzzle",
     "notes": "From (x23.4, y12), navigate your way to the highest point using [SPRINT]."
   },
   {
@@ -855,7 +855,7 @@
     "zone": "Central Shroud",
     "no": 39,
     "type": "",
-    "notes": ""
+    "notes": "In The Bannock, on top of the arch above the NPC Alixie."
   },
   {
     "ID": "sightsee39",
@@ -873,11 +873,11 @@
     "transx": 245,
     "transy": 430,
     "node_code": "sigh136231",
-    "mount": 1,
+    "mount": 0,
     "zone": "Central Shroud",
     "no": 40,
     "type": "",
-    "notes": ""
+    "notes": "South along the wall, jump onto the cliffside beside the roots, and onto the roots themselves. Use [SPRINT] to jump higher."
   },
   {
     "ID": "sightsee40",
@@ -895,11 +895,11 @@
     "transx": 299,
     "transy": 415,
     "node_code": "sigh163223",
-    "mount": 1,
+    "mount": 0,
     "zone": "Central Shroud",
     "no": 41,
     "type": "",
-    "notes": ""
+    "notes": "On the tree that creates a path between Sanguine Perch and Hopeseed Pond."
   },
   {
     "ID": "sightsee41",
@@ -917,11 +917,11 @@
     "transx": 497,
     "transy": 348,
     "node_code": "sigh265188",
-    "mount": 1,
+    "mount": 0,
     "zone": "Central Shroud",
     "no": 42,
     "type": "",
-    "notes": ""
+    "notes": "On the bridge that crosses the river in East Vein, jump onto the middle-north post."
   },
   {
     "ID": "sightsee42",
@@ -939,11 +939,11 @@
     "transx": 388,
     "transy": 189,
     "node_code": "sigh209107",
-    "mount": 1,
+    "mount": 0,
     "zone": "East Shroud",
     "no": 43,
     "type": "",
-    "notes": ""
+    "notes": "Just south of the tree in the center of The Seedbed."
   },
   {
     "ID": "sightsee43",
@@ -965,7 +965,7 @@
     "zone": "South Shroud",
     "no": 44,
     "type": "",
-    "notes": ""
+    "notes": "Stand on top of the raling above the entrance to the bar in Buscarron's Druthers."
   },
   {
     "ID": "sightsee44",
@@ -987,7 +987,7 @@
     "zone": "South Shroud",
     "no": 45,
     "type": "",
-    "notes": ""
+    "notes": "Sand on the ledge of the window of the hut in South Shroud Landing."
   },
   {
     "ID": "sightsee45",
@@ -1005,11 +1005,11 @@
     "transx": 633,
     "transy": 448,
     "node_code": "sigh333239",
-    "mount": 1,
+    "mount": 0,
     "zone": "South Shroud",
     "no": 46,
     "type": "",
-    "notes": ""
+    "notes": "In Urth's Found, stand beneith the rock, close to a large glowing rock along the path."
   },
   {
     "ID": "sightsee46",
@@ -1027,11 +1027,11 @@
     "transx": 473,
     "transy": 390,
     "node_code": "sigh254211",
-    "mount": 1,
+    "mount": 0,
     "zone": "South Shroud",
     "no": 47,
     "type": "",
-    "notes": ""
+    "notes": "In Quarrymill, stand on top of the south-most chimney; closest to NPC Simmie."
   },
   {
     "ID": "sightsee47",
@@ -1049,11 +1049,11 @@
     "transx": 340,
     "transy": 360,
     "node_code": "sigh184195",
-    "mount": 1,
+    "mount": 0,
     "zone": "North Shroud",
     "no": 48,
     "type": "",
-    "notes": ""
+    "notes": "Use [SPRINT] to jump onto the center log, in the northwest part of Ixali Loggin Grounds."
   },
   {
     "ID": "sightsee48",
@@ -1071,11 +1071,11 @@
     "transx": 289,
     "transy": 605,
     "node_code": "sigh15832",
-    "mount": 1,
+    "mount": 0,
     "zone": "North Shroud",
     "no": 49,
     "type": "",
-    "notes": ""
+    "notes": "South of Finders' Bluff, where all the Pumice Golem's are gathered, walk to the south-most edge of the cliff."
   },
   {
     "ID": "sightsee49",
@@ -1097,7 +1097,7 @@
     "zone": "North Shroud",
     "no": 50,
     "type": "",
-    "notes": ""
+    "notes": "North of Finders' Bluff, where all the Ziz's are gathered, climb down from the cliff and onto the end of a withered brach."
   },
   {
     "ID": "sightsee50",

@@ -1,5 +1,6 @@
 <template>
     <div class="mapDisplay" :style="`width: ${mapSize}px; height: ${mapSize}px`">
+        <!-- <p class="lock">{{ `x${focusNode.x}, y${focusNode.y}` }}</p> -->
         <div class="mapDisplay_background"
             :style="`background-image: url('${getMapImg(focusNode.area.zone)}'); transform: scale(${mapSize / 800})`">
         </div>
@@ -108,6 +109,11 @@
 </script>
 
 <style scoped lang="scss">
+.lock {
+    position: absolute;
+    z-index:99999;
+    background: #000;
+}
     .mapDisplay {
         width: 800px;
         height: 800px;

@@ -1,5 +1,5 @@
 <template>
-    <div :class="[`zoneSelect`]">
+    <div :class="[`zoneSelect`, windowWidth]">
 
         <div class="zoneSelect_background" @click="$emit('closeMenu', false)"></div>
 
@@ -51,6 +51,18 @@
 </script>
 
 <style scoped lang="scss">
+.zoneSelect.tablet, .zoneSelect.mobile {
+    .zoneSelect_groupExpansions {display: block}
+    .iconSize3 {display: none}
+    .zoneSelect_foreground {
+        width: 100vw;
+        height: 100vh;
+        margin: 0;
+    }
+}
+
+
+
     .zoneSelect {
 
         &_background {
@@ -109,6 +121,7 @@
             width: 100%;
             display: inline-flex;
             gap: 40px;
+            flex-wrap: wrap;
         }
 
         &_wrapper {

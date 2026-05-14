@@ -110,7 +110,10 @@
             display: flex;
             align-items: center;
             font-size: 0.8rem;
-            img {width: 20px;}
+            img {
+                width: 14px;
+                height: 14px;
+            }
         }
 
         .tombRequire {
