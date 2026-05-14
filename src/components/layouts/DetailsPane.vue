@@ -116,9 +116,9 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImg(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
+    // function getIconImg(name: string) {
+    //     return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    // }
     function getVistaPreviewImgSmall(expansion: string, no: number) {
         return new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
     }

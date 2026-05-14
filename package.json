@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@next/bundle-analyzer": "^16.2.3",
+    "@paypal/paypal-js": "^9.7.0",
     "axios": "^1.16.0",
     "eorzea-time": "^3.0.0",
     "eorzea-weather": "^3.2.0",
@@ -17,8 +18,7 @@
     "sass-loader": "^16.0.7",
     "vue": "^3.5.32",
     "vue-loader": "^17.4.2",
-    "vue-router": "^5.0.4",
-    "xivapi-js": "^0.3.0"
+    "vue-router": "^5.0.4"
   },
   "devDependencies": {
     "@types/node": "^25.5.2",

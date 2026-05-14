@@ -31,9 +31,9 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/${name}.jpg`, import.meta.url).href
-    }
+    // function getIconImageURL(name: string) {
+    //     return new URL(`/src/assets/${name}.jpg`, import.meta.url).href
+    // }
 </script>
 
 <script lang="ts">
