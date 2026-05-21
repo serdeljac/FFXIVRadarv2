@@ -1,4 +1,5 @@
 <template>
+  <Analytics />
   <div :class="[`app_container`, `menustate_${menuState}`]" :data-screenMode="windowWidth">
     <trackingBar 
       :class="[`tracking_bar_pos`]" 
@@ -43,6 +44,10 @@
       
   </div>
 </template>
+
+<script lang="ts" setup>
+import { Analytics } from '@vercel/analytics/vue';
+</script>
 
 <script lang="ts">
   //API's

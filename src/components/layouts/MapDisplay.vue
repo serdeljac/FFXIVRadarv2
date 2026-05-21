@@ -1,12 +1,8 @@
 <template>
     <div class="mapDisplay" :style="`width: ${mapSize}px; height: ${mapSize}px`">
-        <!-- <p class="lock">{{ `x${focusNode.x}, y${focusNode.y}` }}</p> -->
-        <div class="mapDisplay_background"
-            :style="`background-image: url('${getMapImg(focusNode.area.zone)}'); transform: scale(${mapSize / 800})`">
-        </div>
+        <div class="mapDisplay_background" id="ffmap" :style="`transform: scale(${mapSize / 800})`"></div>
 
         <div class="mapDisplay_overlay" :style="`transform: scale(${mapSize / 800})`">
-
             <div v-for="d in getAetheyteNodes" :key="d.ID"
                 class="mapIcon aetheryte"
                 :style="`transform: translate(${getCoordinates(d)})`">
@@ -40,23 +36,26 @@
 </template>
 
 <script lang="ts" setup>
+
     function getIconImg(jobName: string, subJob: string) {
         let name: string = subJob
         if (jobName == 'fates') {name = `fate_${subJob}`}
         if (jobName == 'eliteHunts') {name = subJob == 'SS' ? 'hunts_ss' : `hunts`}
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
-
-    function getMapImg(zone: string) {
-        let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
-        return new URL(`/src/assets/maps/${convert_name}.webp`, import.meta.url).href
-    }
 </script>
 
 <script lang="ts">
+    import axios from "axios";
+
     export default {
         name: 'Eorzea Map',
         props: ['ffxivData', 'focusNode', 'singleOnly', 'mapSize'],
+        data() {
+            return {
+                currentZone: 'none' as string
+            }
+        },
         computed: {
             getAetheyteNodes() {
                 let f = this.focusNode
@@ -104,7 +103,26 @@
                 let results = rank.includes(current_rank) ? true : null
                 return results
             },
-        }
+            async getImgUrl(zone: string) {
+                let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
+                const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${convert_name}.webp`;
+                const response = await axios.get(imageUrl, { responseType: "blob" });
+                const objectUrl = URL.createObjectURL(response.data);
+                document.getElementById("ffmap").style.backgroundImage = `url('${objectUrl}')` 
+            },
+            
+        },
+        mounted() {
+            this.getImgUrl(this.focusNode.area.zone)
+            this.currentZone = this.focusNode.area.zone
+        },
+        updated() {
+            let focusZone = this.focusNode.area.zone
+            if (this.currentZone != focusZone) {
+                this.getImgUrl(focusZone)
+                this.currentZone = focusZone
+            }
+        },
     }
 </script>
 
@@ -117,7 +135,6 @@
     .mapDisplay {
         width: 800px;
         height: 800px;
-        background: red;
     }
 
     .mapDisplay {

@@ -143,3 +143,6 @@ vite.config.ts.timestamp-*
 /src/assets/notes
 /src/assets/~$*.xlsx
 /src/assets/Backup*
+.vercel
+.env*.local
+/imgFilesBackup
