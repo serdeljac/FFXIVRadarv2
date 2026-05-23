@@ -106,13 +106,22 @@
 </script>
 
 <style scoped lang="scss">
+    @media screen and (max-height: 812px) {
+        .sidebar_clockdisplay {padding: 0px 8px !important}
+}
+
+
     .sidebar {
-        z-index: 100;
-        border-right: 1px solid $borderColor;
-        transition: all .23s ease;
         display: grid;
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
+        z-index: 100;
+        border-right: 1px solid $borderColor;
         background-color: $bodyBackgroundColor;
+        transition: all .23s ease;
+        
+        
+        
+        
 
         //Collapsed Sidebar Adjustments Only
         &.compact {

@@ -25,7 +25,6 @@
     <main 
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
-      <h1 class="text-3xl font-bold underline">test</h1>
         <promotionBanner />
         <router-view 
           :ffxivData="ffxivData"
@@ -671,7 +670,7 @@ export default {
     position: fixed;
     top: $trackingbarHeight;
     left: 0;
-    height: calc(100vh - $trackingbarHeight);
+    height: calc(100dvh - $trackingbarHeight);
   }
 
   .menu_Btn {
