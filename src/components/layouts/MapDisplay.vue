@@ -1,6 +1,7 @@
 <template>
     <div class="mapDisplay" :style="`width: ${mapSize}px; height: ${mapSize}px`">
         <div class="mapDisplay_background" id="ffmap" :style="`transform: scale(${mapSize / 800})`"></div>
+        
         <loaderMap v-if="currentZone.length == 0"/>
 
         <div class="mapDisplay_overlay" :style="`transform: scale(${mapSize / 800})`">
@@ -56,7 +57,8 @@
         components: {loaderMap},
         data() {
             return {
-                currentZone: 'none' as string
+                currentZone: 'none' as string,
+                progress: 0 as number
             }
         },
         computed: {
@@ -108,12 +110,21 @@
             },
             async getImgUrl(zone: string) {
                 let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
+                let objectUrl: any = ''
                 const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${convert_name}.webp`;
-                const response = await axios.get(imageUrl, { responseType: "blob" });
-                const objectUrl = URL.createObjectURL(response.data);
-                document.getElementById("ffmap").style.backgroundImage = `url('${objectUrl}')` 
+                
+                try {
+                    const response = await axios.get(imageUrl, { 
+                        responseType: "blob",
+                        timeout: 5000,
+                    });
+                    objectUrl = URL.createObjectURL(response.data);
+                    document.getElementById("ffmap").style.backgroundImage = `url('${objectUrl}')` 
+                } catch (error) {
+                    console.error(`Error getting FFXIVRADARMAPS API: ${error.message}`)
+                    throw error
+                }
             },
-            
         },
         mounted() {
             this.getImgUrl(this.focusNode.area.zone)

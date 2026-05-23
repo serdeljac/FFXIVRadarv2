@@ -1,6 +1,7 @@
 <template>
   <Analytics />
   <div :class="[`app_container`, `menustate_${menuState}`]" :data-screenMode="windowWidth">
+    
     <trackingBar 
       :class="[`tracking_bar_pos`]" 
       :windowWidth="windowWidth"
@@ -24,6 +25,7 @@
     <main 
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
+      <h1 class="text-3xl font-bold underline">test</h1>
         <promotionBanner />
         <router-view 
           :ffxivData="ffxivData"
