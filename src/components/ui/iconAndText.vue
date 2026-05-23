@@ -1,7 +1,7 @@
 <template>
-    <div :class="[`iconAndText`, addClass]" :chainNo="chainNo ? chainNo : null">
-        <img class="iconSize" :src="getIconImageURL(fetchIconName)"/>
-        <img v-if="secIcon" class="iconSize" :src="getIconImageURL(secIcon)"/>
+    <div :class="[`iconAndText`, addClass, {'notext': !text}]" :chainNo="chainNo ? chainNo : null">
+        <img :class="[`iconSize`]" :src="getIconImageURL(fetchIconName)"/>
+        <img v-if="secIcon" :class="[`iconSize`]" :src="getIconImageURL(secIcon)"/>
         <p v-if="text">{{ text }}</p>
     </div>
 </template>
@@ -37,6 +37,7 @@
     .iconAndText {
         display: inline-flex;
         align-items: center;
+        &.notext img {margin: 0}
         &.rewards {
             img {margin-right: 2px;}
             p {margin-right: 6px;}
@@ -48,7 +49,5 @@
                 @extend .inheritChainNo;
             }
         }
-
-        
     }
 </style>

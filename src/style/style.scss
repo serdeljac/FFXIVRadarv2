@@ -17,6 +17,9 @@ li {list-style-type: none;}
 
 .app_container {
     font-size: 18px;
+    &[data-screenMode="mobile"] {
+        font-size: 14px;
+    }
 }
 
 body {
@@ -281,4 +284,21 @@ Default Styles
     }
 
     
+}
+
+
+.buymecoffee_btn {
+    font-size: 1rem;
+  padding: 0.6em 0.8em;
+  border-radius: 0.5em;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 2px 3px #000000b4;
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+  font-style: italic;
+  img {width: 50px;}
 }

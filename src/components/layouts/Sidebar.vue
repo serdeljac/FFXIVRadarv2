@@ -6,21 +6,13 @@
             <h2>{{ eorzeaClock.formatIs24Hour ? eorzeaClock.formatTime24Hour : eorzeaClock.formatTime12Hour }}</h2>
         </div>
 
-        <ul class="sidebar_items">
-            <li v-for="a in link_list" :key="a.id">
-                <router-link :to="`/${a.link}`" :class="[{'inactive': !a.active }]">
-                    <div class="sidebar_items-link">
-                        <img class="iconSize" :src="getIconImageURL(a.icon)" alt="icn" />
-                        <p>{{ a.name }}</p>
-                    </div>
-                </router-link>
-            </li>
-        </ul>
+        <sidebarLinks :sidebarState="menuState"/>
 
         <footer>
             <donateBtn :menuState="menuState"/>
             <p>&copy; 2023 FFXIV Radar. All rights reserved. <br />This site not built with AI.</p>
         </footer>
+
     </aside>
 </template>
 
@@ -32,85 +24,23 @@
 
 <script lang="ts">
     import donateBtn from '../ui/donateNow.vue'
+    import sidebarLinks from './parts/sidebarItems.vue'
 
     export default {
         name: 'Sidebar',
         props: ['menuState', 'eorzeaClock'],
         emits: ['toggleClock'],
-        components: {donateBtn},
+        components: {sidebarLinks, donateBtn},
         data() {
             return {
                 forceExpanded: true,
-                link_list: [
-                    {
-                        id: 1,
-                        name: 'Eorzea Overview',
-                        icon: 'eorzeamap',
-                        link: 'EorzeaOverview',
-                        active: true,
-                    },
-                    
-                    {
-                        id: 2,
-                        name: 'Timed Mining/Botany',
-                        icon: 'gathering',
-                        link: 'TimedMiningBotany',
-                        active: true,
-                    },
-                    {
-                        id: 4,
-                        name: 'Sightseeing',
-                        icon: 'sightseeing',
-                        link: 'Sightseeing',
-                        active: true,
-                    },
-                    {
-                        id: 6,
-                        name: 'Aether Currents',
-                        icon: 'aethercurrents',
-                        link: 'AetherCurrents',
-                        active: true,
-                    },
-                    {
-                        id: 7,
-                        name: 'Blue Mage Abilities',
-                        icon: 'bluemage',
-                        link: 'BlueMageAbilities',
-                        active: true,
-                    },
-                    {
-                        id: 8,
-                        name: 'FFXIV Radar News',
-                        icon: 'news',
-                        link: 'News',
-                        active: false,
-                    },
-                    {
-                        id: 9,
-                        name: 'About Us',
-                        icon: 'about',
-                        link: 'AboutUs',
-                        active: false,
-                    },
-                    {
-                        id: 10,
-                        name: 'Private Policy',
-                        icon: 'privatepolicy',
-                        link: 'PrivatePolicy',
-                        active: false,
-                    }
-                ],
+                
             }
         },
     }
 </script>
 
 <style scoped lang="scss">
-    @media screen and (max-height: 812px) {
-        .sidebar_clockdisplay {padding: 0px 8px !important}
-}
-
-
     .sidebar {
         display: grid;
         grid-template-rows: minmax(auto, 200px) 1fr minmax(80px, auto);
@@ -118,10 +48,7 @@
         border-right: 1px solid $borderColor;
         background-color: $bodyBackgroundColor;
         transition: all .23s ease;
-        
-        
-        
-        
+        overflow: hidden;
 
         //Collapsed Sidebar Adjustments Only
         &.compact {
@@ -146,8 +73,6 @@
 
         &_clockdisplay {
             align-self: center;
-            padding: $paddingSize;
-            padding-left: 2rem;
             text-align: center;
             user-select: none;
             cursor: pointer;
@@ -156,31 +81,13 @@
             &.collapsed {display: none;}
         }
 
-        &_items {
-            .currentPage div {background-color: $borderColor;}
-            &-link {
-                padding: $paddingSize;
-                padding-left: 2rem;
-                display: inline-flex;
-                align-items: center;
-                gap: 7px;
-                user-select: none;
-                width: 100%;
-                transition: background-color 0.05s linear;
-                &:hover {
-                    background-color: $borderColorFade;
-                }
-            }
-        }
-
         footer {
             display: flex;
             flex-direction: column;
             align-items: center;
-            p {margin: 1rem 0;}
-            align-self: center;
             font-size: 0.75rem;
             text-align: center;
+            p {margin: 1rem 0;}
         }
     }
 </style>

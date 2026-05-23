@@ -1,6 +1,6 @@
 <template>
     <div :class="[`container`, `${menuState}`]">
-        <button class="button">
+        <button class="buymecoffee_btn button">
             <img :src="getIconImg('coffee')" />
             <p v-if="menuState != 'compact'">Buy me a coffee!</p>
         </button>
@@ -24,19 +24,7 @@
 
 /* From Uiverse.io by Spacious74 */ 
 button {
-  font-size: 1.4em;
-  padding: 0.6em 0.8em;
-  border-radius: 0.5em;
-  border: none;
-  background-color: #000;
-  color: #fff;
-  cursor: pointer;
-  box-shadow: 2px 2px 3px #000000b4;
-  display: inline-flex;
-  align-items: center;
-  font-weight: bold;
-  font-style: italic;
-  img {width: 50px;}
+  
 }
 
 .container {
