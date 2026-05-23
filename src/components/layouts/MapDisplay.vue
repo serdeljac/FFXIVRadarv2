@@ -38,7 +38,6 @@
 </template>
 
 <script lang="ts" setup>
-
     function getIconImg(jobName: string, subJob: string) {
         let name: string = subJob
         if (jobName == 'fates') {name = `fate_${subJob}`}
@@ -109,18 +108,40 @@
                 return results
             },
             async getImgUrl(zone: string) {
-                let convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
-                let objectUrl: any = ''
+
+                //Url of image
+                const convert_name = zone.replace(/[-,',\s]/g, '').toLowerCase()
                 const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${convert_name}.webp`;
-                
+
                 try {
-                    const response = await axios.get(imageUrl, { 
-                        responseType: "blob",
-                        timeout: 5000,
-                    });
-                    objectUrl = URL.createObjectURL(response.data);
-                    document.getElementById("ffmap").style.backgroundImage = `url('${objectUrl}')` 
+                    const CACHE_NAME = "ffxivmap_cache";
+                    const cache = await caches.open(CACHE_NAME);
+                    const cached = await cache.match(imageUrl);
+
+                    if (cached) {
+                        //If found, use the image from cache
+                        const blob = await cached.blob();
+                        const cachedURL = URL.createObjectURL(blob);
+                        document.getElementById("ffmap").style.backgroundImage = `url('${cachedURL}')`
+                        console.log('Image loaded from Cache: ', cachedURL)
+                    } else {
+                        //If unfound in cache, fetch and append downloaded image into cache
+                        const response: any = await axios.get(imageUrl, { 
+                            responseType: "blob",
+                            timeout: 5000,
+                        });
+                        const axiosURL = URL.createObjectURL(response.data);
+                        document.getElementById("ffmap").style.backgroundImage = `url('${axiosURL}')`
+
+                        const blob = response.data;
+                        await cache.put(imageUrl, new Response(blob, {
+                            headers: { "Content-Type": blob.type },
+                        }));
+                        URL.createObjectURL(blob);
+                        console.log('Image downloaded from Axios: ', axiosURL)
+                    }
                 } catch (error) {
+                    document.getElementById("ffmap").style.backgroundImage = `url('/src/assets/blankmap.jpg')`
                     console.error(`Error getting FFXIVRADARMAPS API: ${error.message}`)
                     throw error
                 }
