@@ -1,9 +1,9 @@
 <template>
   <Analytics />
-  <div :class="[`app_container`, `menustate_${menuState}`]" :data-screenMode="windowWidth">
+  <div :class="[`app_container`, `menustate_${sidebarLayout}`]" :data-screenMode="windowWidth">
     
     <trackingBar 
-      :class="[`tracking_bar_pos`]" 
+      :class="[`trackingbar`, sidebarLayout, windowWidth]" 
       :windowWidth="windowWidth"
       :timerList="timerList"
       :weatherList="weatherList"
@@ -13,14 +13,13 @@
       />
 
     <buttonMenu 
-      :class="[`menu_Btn`, {'tracking_pos' : menuState == 'hidden-extended' || menuState == 'mobile-extended'}]" 
+      :class="[`menu_Btn`, {'tracking_pos' : sidebarLayout == 'hidden-extended' || sidebarLayout == 'mobile-extended'}]" 
       @click="toggleMenu()"/>
 
     <sidebar 
-      :class="[`sidebar_pos`]" 
-      :menuState="menuState"
-      :eorzeaClock="eorzeaClock" 
-      @toggleClock="toggleClock"/>
+      :class="[`sidebar`, sidebarLayout]" 
+      :sidebarLayout="sidebarLayout"
+      :eorzeaClock="eorzeaClock" />
 
     <main 
       :class="[`main_content`]" 
@@ -84,7 +83,7 @@ export default {
   data() {
     return {
       windowWidth: '' as String,
-      menuState: 'extended' as String,
+      sidebarLayout: 'extended' as String,
       ffxivData: {
         areas: [] as any,
         miner: [] as any,
@@ -98,11 +97,10 @@ export default {
         bluemageFilters: [] as any
       },
       eorzeaClock: {
-        formatIs24Hour: true,
-        formatTime24Hour: '' as String,
-        formatTime12Hour: '' as String,
-        errorFindClock: false,
-        minutes: 0 as number,
+        display24Hr: 0 as number,
+        display12Hr: 0 as number,
+        displayMin: 0 as number,
+        totalMin: 0 as number,
       },
       goldSaucer: {
         minutes: '' as String,
@@ -137,51 +135,48 @@ export default {
 
         if (curWidth >= desktopWidthLg) {
           this.windowWidth = 'desktop-large'
-          this.menuState = 'extended';
+          this.sidebarLayout = 'extended';
         }
         else if (curWidth >= desktopWidthSm && curWidth < desktopWidthLg) {
           this.windowWidth = 'desktop-small'
-          this.menuState = 'compact';
+          this.sidebarLayout = 'compact';
         }
         else if (curWidth >= tabletWidth && curWidth < desktopWidthSm) {
           this.windowWidth = 'tablet'
-          this.menuState = 'hidden-extended';
+          this.sidebarLayout = 'hidden-extended';
         }
         else if (curWidth < tabletWidth) {
           this.windowWidth = 'mobile'
-          this.menuState = 'hidden-extended';
+          this.sidebarLayout = 'hidden-extended';
         } 
         else {
           console.error('Cannot get Window Width!');
           this.windowWidth = 'desktop-large';
-          this.menuState = 'extended';
+          this.sidebarLayout = 'extended';
         }
       },
       toggleMenu() {
         if (this.windowWidth == 'desktop-large') {
-          this.menuState = this.menuState == 'extended' ? 'compact' : 'extended';
+          this.sidebarLayout = this.sidebarLayout == 'extended' ? 'compact' : 'extended';
         }
         else if (this.windowWidth == 'desktop-small') {
-          this.menuState = this.menuState == 'compact' ? 'overlay-extended' : 'compact';
+          this.sidebarLayout = this.sidebarLayout == 'compact' ? 'overlay-extended' : 'compact';
         }
         else if (this.windowWidth == 'tablet') {
-          this.menuState = this.menuState == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
+          this.sidebarLayout = this.sidebarLayout == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
         }
         else if (this.windowWidth == 'mobile') {
-          this.menuState = this.menuState == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
+          this.sidebarLayout = this.sidebarLayout == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
         }
       },
       toggleForceMenu() {
         if (this.windowWidth == 'desktop-small') {
-          this.menuState = 'compact'
+          this.sidebarLayout = 'compact'
         }
         else if (this.windowWidth == 'tablet' || this.windowWidth == 'mobile') {
-          this.menuState = 'hidden-extended'
+          this.sidebarLayout = 'hidden-extended'
         }
 
-      },
-      toggleClock() {
-        this.eorzeaClock.formatIs24Hour = !this.eorzeaClock.formatIs24Hour;
       },
       setupInitialFFXIVData() {
         // Run these once on web load
@@ -392,17 +387,20 @@ export default {
       },
       setEorzeaClock() {
         let rawclock: string = new EorzeaTime().toString()
+        let ero = this.eorzeaClock
 
         if (!rawclock) {
-          this.eorzeaClock.errorFindClock = true
-          console.error(`Cannot find Eorzea Clock: ${rawclock}`)
+          console.error('Cannot fetch Eorzea Time');
+          ero.display24Hr = 0
+          ero.display12Hr = 0
+          ero.displayMin = 0
         }
 
-        let hr = Number(rawclock.slice(0, 2))
-        let min = Number(rawclock.slice(3, 5))
-        this.eorzeaClock.minutes = min + (hr * 60)
-        this.eorzeaClock.formatTime24Hour = this.get24HourClock(hr, min)
-        this.eorzeaClock.formatTime12Hour = this.get12HourClock(hr, min)
+        ero.display24Hr = Number(rawclock.slice(0, 2))
+        ero.display12Hr = ero.display24Hr > 12 ? ero.display24Hr - 12 : ero.display24Hr
+        ero.displayMin = Number(rawclock.slice(3, 5))
+        ero.totalMin = (ero.display24Hr * 60) + ero.displayMin
+        
       },
       setGoldSaucerClockState() {
         const now = new Date();
@@ -477,7 +475,7 @@ export default {
         return `${newhr}:${newmin}`
       },
       getTimerCountdown() {
-        let currentMinutes = this.eorzeaClock.minutes
+        let currentMinutes = this.eorzeaClock.totalMin
 
         for (const d in timerRaw) {
           let obj  = timerRaw[d]
@@ -562,9 +560,9 @@ export default {
         }
 
         //Update weather conditions
-        if (this.eorzeaClock.minutes == 0 && this.eorzeaClock.minutes < 2) {this.createWeatherList()}
-        if (this.eorzeaClock.minutes == 480 && this.eorzeaClock.minutes < 482) {this.createWeatherList()}
-        if (this.eorzeaClock.minutes == 960 && this.eorzeaClock.minutes < 962) {this.createWeatherList()}
+        if (this.eorzeaClock.totalMin == 0 && this.eorzeaClock.totalMin < 2) {this.createWeatherList()}
+        if (this.eorzeaClock.totalMin == 480 && this.eorzeaClock.totalMin < 482) {this.createWeatherList()}
+        if (this.eorzeaClock.totalMin == 960 && this.eorzeaClock.totalMin < 962) {this.createWeatherList()}
 
       },
       formatTimeRemaining(total: number) {
@@ -607,8 +605,8 @@ export default {
     flex-wrap: wrap;
 
     &.menustate_extended {
-      .tracking_bar_pos {padding-left: 1rem;}
-      .sidebar_pos {width: $sidebarWidthExpand; left: 0;}
+      .tracking_bar {padding-left: 1rem;}
+      .sidebar {width: $sidebarWidthExpand; left: 0;}
       .menu_Btn {left: $sidebarWidthExpand - 16px;}
       .main_content {
         width: calc(100% - #{$sidebarWidthExpand});
@@ -617,7 +615,7 @@ export default {
     }
 
     &.menustate_compact {
-      .tracking_bar_pos {padding-left: 1rem;}
+      .tracking_bar {padding-left: 1rem;}
       .menu_Btn {left: $sidebarWidthCollapse - 16px;}
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
@@ -626,8 +624,8 @@ export default {
     }
 
     &.menustate_overlay-extended {
-      .tracking_bar_pos {padding-left: 1rem;}
-      .sidebar_pos {width: $sidebarWidthExpand; left: 0;}
+      .tracking_bar {padding-left: 1rem;}
+      .sidebar {width: $sidebarWidthExpand; left: 0;}
       .menu_Btn {left: $sidebarWidthExpand - 16px;}
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
@@ -636,8 +634,8 @@ export default {
     }
 
     &.menustate_hidden-extended {
-      .tracking_bar_pos {padding-left: 30px;}
-      .sidebar_pos {left: -$sidebarWidthExpand + 1px;}
+      .tracking_bar {padding-left: 30px;}
+      .sidebar {left: -$sidebarWidthExpand + 1px;}
       .menu_Btn {left: 1.5rem;}
       .main_content {
         padding: 1rem 0.5rem;
@@ -647,8 +645,8 @@ export default {
     }
 
     &.menustate_mobile-extended {
-      .tracking_bar_pos {padding-left: 30px;}
-      .sidebar_pos {width: $sidebarWidthExpand;}
+      .tracking_bar {padding-left: 30px;}
+      .sidebar {width: $sidebarWidthExpand;}
       .menu_Btn {left: 1.5rem;}
       .main_content {
         width: 100%;
@@ -657,21 +655,8 @@ export default {
     }
   }
 
-  .tracking_bar_pos {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: $trackingbarHeight;
-    z-index: 100;
-  }
 
-  .sidebar_pos {
-    position: fixed;
-    top: $trackingbarHeight;
-    left: 0;
-    height: calc(100dvh - $trackingbarHeight);
-  }
+
 
   .menu_Btn {
     position: fixed;

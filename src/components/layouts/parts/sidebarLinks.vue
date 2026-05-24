@@ -1,11 +1,17 @@
 <template>
-    <ul :class="[`linklist`, sidebarState]">
+    <ul :class="[`linkList`, sidebarLayout]">
         <li v-for="a in link_list" :key="a.id">
             <router-link :to="`/${a.link}`">
-                <iconAndText 
-                    :addClass="'linklist_item'" 
-                    :icon="`sq_${a.icon}`" 
-                    :text="sidebarState == 'extended' ? a.name : '' "/>
+
+                <div v-if="sidebarLayout == 'compact'" :class="['linkList-collapse']">
+                    <img :src="getIconImageURL(`sq_${a.icon}`)" />
+                </div>
+
+                <div v-else :class="['linkList-extended']" >
+                    <img :src="getIconImageURL(`sq_${a.icon}`)" />
+                    <p>{{ a.name }}</p>
+                </div>
+
             </router-link>
         </li>
     </ul>
@@ -65,41 +71,13 @@
     ]
 
     function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/sq_${name}.webp`, import.meta.url).href
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
 
 <script lang="ts">
-    import iconAndText from '../../ui/iconAndText.vue'
     export default {
         name: "List Items",
-        components: {iconAndText},
-        props: ['sidebarState'],
+        props: ['sidebarLayout'],
     }
 </script>
-
-<style scoped lang="scss">
-.linklist {
-
-    //Responsive
-    &.compact {
-        padding-left: 0;
-        img {margin: auto;}
-        p {display: none;}
-    }
-
-
-    .currentPage &_item {background-color: $borderColor !important;}
-    &_item{
-        padding: $paddingSize;
-        padding-left: 2rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 7px;
-        user-select: none;
-        width: 100%;
-        transition: background-color 0.05s linear;
-        &:hover {background-color: $borderColorFade;}
-    }
-}
-</style>

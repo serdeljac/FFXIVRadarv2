@@ -1,8 +1,8 @@
 <template>
-    <div :class="[`container`, `${menuState}`]">
+    <div :class="[`container`, `${sidebarLayout}`]">
         <button class="buymecoffee_btn button">
             <img :src="getIconImg('coffee')" />
-            <p v-if="menuState != 'compact'">Buy me a coffee!</p>
+            <p v-if="sidebarLayout != 'compact'">Buy me a coffee!</p>
         </button>
     </div>
 </template>
@@ -16,17 +16,26 @@
 <script lang="ts">
     export default {
         name: "Dontate Button",
-        props: ['menuState']
+        props: ['sidebarLayout']
     }
 </script>
 
 <style scoped lang="scss">
-
-/* From Uiverse.io by Spacious74 */ 
-button {
-  
+.buymecoffee_btn {
+    font-size: 1rem;
+  padding: 0.6em 0.8em;
+  border-radius: 0.5em;
+  border: none;
+  background-color: #000;
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 2px 2px 3px #000000b4;
+  display: inline-flex;
+  align-items: center;
+  font-weight: bold;
+  font-style: italic;
+  img {width: 50px;}
 }
-
 .container {
   position: relative;
   padding: 3px;
@@ -67,6 +76,4 @@ button {
 .container:active::before {
   filter: blur(0.2em);
 }
-
-
 </style>
