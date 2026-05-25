@@ -16,9 +16,9 @@ h1, h2, h3, h4, h5, h6 {
 li {list-style-type: none;}
 
 .app_container {
-    font-size: 18px;
+    font-size: 14px;
     &[data-screenMode="mobile"] {
-        font-size: 14px;
+        font-size: 12px;
     }
 }
 
@@ -295,11 +295,6 @@ Default Styles
 
 
 
-
-
-
-
-
 /*********************************************************
 Sidebar
 *********************************************************/
@@ -318,9 +313,11 @@ Sidebar
     background-color: $bodyBackgroundColor;
     min-height: 600px;
     &.compact {width: $sidebarWidthCollapse}
+    &.mobile {display: block;}
 
     &_clockdisplay {
         padding-top: 2rem;
+        margin: 10px 0;
         p,h2 {
             text-align: center;
             cursor: pointer;
@@ -331,15 +328,19 @@ Sidebar
     }
 
     .linkList {
+        margin: 10px 0;
         &-extended {
             display: inline-flex;
             align-items: center;
             gap: 7px;
             user-select: none;
-            transition: background-color 0.05s linear;
-            &:hover {background-color: $borderColorFade;}
+            transition: all 0.05s linear;
             padding: 0.5rem 0.5rem 0.5rem 1.5rem;
             width: 100%;
+            &:hover {
+                background-color: $borderColorHover;
+                padding-left: 2rem;
+            }
         }
 
         &-collapse {
@@ -348,16 +349,17 @@ Sidebar
             justify-content: center;
             user-select: none;
             transition: background-color 0.05s linear;
-            &:hover {background-color: $borderColorFade;}
+            &:hover {background-color: $borderColorHover;}
             width: 100%;
             padding: 0.5rem 0;
         }
 
-        img {width: 24px;}
+        img {width: 20px;}
         .currentPage div {background-color: $borderColor;}
     }
 
     footer {
+        margin: 10px 0;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -368,12 +370,14 @@ Sidebar
 }
 
 
+
+
+
 /*********************************************************
 Trackingbar
 *********************************************************/
 
 .trackingbar {
-    
     background-color: $bodyBackgroundColor;
     overflow: hidden;
     position: fixed;
@@ -384,7 +388,7 @@ Trackingbar
     border-bottom: 1px solid $borderColor;
     display: flex;
     gap: 10px;
-    justify-content: center;
+    justify-content: space-between;
 
     &.mobile, &.tablet {
         .trackingbar_header {
@@ -392,8 +396,12 @@ Trackingbar
         }
     }
 
+    &.mobile {
+        .trackingbar_items {display: none}
+    }
+
     &_header {
-        width: $sidebarWidthExpand + 1px;
+        min-width: $sidebarWidthExpand - 1px;
         height: $trackingbarHeight;
         display: flex;
         align-items: center;
@@ -403,136 +411,87 @@ Trackingbar
     }
 
     &_items {
-        width: calc(100% - ($sidebarWidthExpand + 21px));
-        background: blue;
+        width: 100%;
         height: $trackingbarHeight;
+        overflow-y: auto;
+        display: grid;
+        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));;
     }
 
-    &_item::before {
-        $test: attr(timeattr);
-        $alter: str-replace($test, ",", " ");
-        content: $test;
-        $string: 'The answer to life the universe and everything is 42.';
-        @debug "divider offset: #{$test}";
-        @debug "divider offset: #{$alter}";
-        @debug "divider offset: #{$string}";
-  content: str-replace($string, 'e', 'xoxo');
+    &_item {
+        width: clamp(250px, 100%, 400px);
+        height: $trackingbarHeight - 12px;
+        margin: 6px 0;
+        border: 3px solid $borderColor;
+        background-color: $bodyBackgroundColor;
+        padding: 0 6px;
+        display: flex;
+        flex-direction: column;
+        .toprow, .bottomrow {
+            display: flex;
+            height: 26px;
+            width: 100%;
+            align-items: center;
+        }
+        .toprow {justify-content: space-between;}
+        .bottomrow {justify-content: space-evenly;}
+    }
+}
+
+
+
+
+
+
+/*********************************************************
+7_About Us
+*********************************************************/
+.about_us {
+
+    .about {
+        max-width: 800px;
+        min-width: 300px;
+        margin: 40px auto;
     }
 
-    &_item::after {
-        content: attr(timeattr)
+    h1 {
+        text-align: center;
+        margin: 2rem auto;
+    }
+    p {margin-bottom: 2rem;}
+}
+
+
+/*********************************************************
+8_Private Policy
+*********************************************************/
+.privatepolicy {
+    width: 96%;
+    margin: 0 auto;
+
+    .group {
+        width: 96%;
+        margin: 0 auto;
+    }
+    h1 {
+        text-align: center;
+        margin: 2rem auto;
     }
 
+    h2,h3,h4,h6 {
+        text-align: center;
+        margin-bottom: 0.5rem;
+        }
 
-    // &_item[timeattr^="true"] {
-    //         color: green;
-    //     }
-        
-        
-        // grid-template-columns: calc(230px + 2rem) 100%;
-        // width: 100%;
-        // 
-        // 
-
-        // &.compact {
-        //     display: grid;
-        //     grid-template-columns: 100%;
-        //     padding-left: 80px !important;
-        //     justify-items: center;
-        //     .trackingbar_header {display: none;}
-        //     .trackingbar_items {width: 100%}
-        //     .trackingbar_item {
-        //         max-width: 400px;
-        //         width: 100%;
-        //     }
-        // }
-
-        // &_header {
-        //     padding-left: 2rem !important;
-        //     display: flex;
-        //     align-items: center;
-        //     width: $sidebarWidthExpand;
-        //     height: $trackingbarHeight;
-        //     h1 {
-        //         font-size: 1.5rem;
-        //         margin-left: 0.5rem;
-        //     }
-        //     .btn_menu {
-        //         width: 32px;
-        //         aspect-ratio: 1/1;
-        //     }
-        // }
-
-        // &_items {
-        //     width: calc(100% - $sidebarWidthExpand);
-        //     overflow: auto;
-        //     display: grid;
-        //     height: 70px;
-        //     padding-right: 1rem;
-        //     &.grid4 {grid-template-columns: 1fr 1fr 1fr 1fr;}
-        //     &.grid3 {grid-template-columns: 1fr 1fr 1fr;}
-        //     &.grid2 {grid-template-columns: 1fr 1fr;}
-        //     &.grid1 {grid-template-columns: 1fr;}
-        //     gap: 0 20px;
-        // }
-
-        // &_item {
-        //     display: inline-flex;
-        //     margin: 0.3rem 0;
-        //     border: 1px solid $borderColor;
-        //     border-radius: $borderRadius;
-        //     height: calc(70px - 0.6rem);
-        //     overflow: hidden;
-        //     cursor: pointer;
-
-        //     &:hover {
-        //         .close_area .trash {transform: translateX(-15px)}
-        //     }
-
-        //     .content_area {
-        //         height: calc(70px - 0.6rem);
-        //         padding: 0.1rem 0.2rem;
-        //         width: 100%;
-        //         display: grid;
-        //         grid-template-columns: 1.5fr 0.5fr;
-        //         position: relative;
-        //     }
-
-        //     .close_area {
-        //         height: calc(70px - 0.6rem);
-        //         width: 5%;
-        //         .trash {
-        //             transform: translateX(20px);
-        //             transition: all .07s linear;
-        //         }
-        //     }
-
-        //     .itemname, .timer {
-        //         justify-self: center;
-        //         align-self: center;
-        //     }
-        //     .areaname {
-        //         grid-column: 1 / span 2;
-        //         justify-self: center;
-        //     }
-        // }
-
-        // &_adjust {
-        //     width: 50px;
-        //     margin-left: 1rem;
-        //     display: flex;
-        //     flex-direction: column;
-        //     gap: 6px;
-        //     img {
-        //         width: 20px;
-        //         cursor: pointer;
-        //         &.inactive {
-        //             opacity: 0.3;
-        //             cursor: default;
-        //         }
-        //         &:first-child {
-        //             transform: rotate(180deg);
-        //         }
-        //     }
-        // }
+    h4:not(.voidspace) {
+        margin-top: 1.5rem;
     }
+    h4,h5 {font-weight: bold}
+    h5 {margin-top: 1rem;}
+    hr {margin: 0.75rem;}
+    p, ul {margin: 0.25rem 0;}
+    .contact {margin-bottom: 1rem;}
+    ul {margin-left: 2rem;}
+    li {list-style-type: circle;}
+}

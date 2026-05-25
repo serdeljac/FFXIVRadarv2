@@ -119,10 +119,6 @@
 </script>
 
 <style scoped lang="scss">
-    // .blueMageAbilties.tablet {
-    //     .rdrTable li {grid-template-columns: 140px 100px 420px 340px auto;}
-    //     .rdrTable_col-no, .rdrTable_col-time, .rdrTable_col-weather {display: none}
-    // }
 
     .rdrTable li {grid-template-columns: 140px 100px 300px 300px auto;}
 </style>

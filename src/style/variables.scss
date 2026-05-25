@@ -1,23 +1,26 @@
 //Colors
 $fontColor: #FAFAFA;
 $bodyBackgroundColor: #121212;
-
-$borderColor: #5b045b;
-$borderColorHover: #753373;
-
-
 $expColor: gold;
 $levelColor: rgb(75, 156, 227);
+
+$borderColor: #5b045b;
+$borderColorHover: rgba(91, 4, 91, 0.67);
+
 $listBackgroundColor: rgb(24, 24, 24);
 $listBackgroundColorHover: rgb(47, 47, 47);
 
-
-$borderColorFade: rgba(91, 4, 91, 0.67);
-$trackingOptionsView: #5b045b;
-$trackingOptionsRemove: #3b063b;
-$listOddRowColor: #045d5d36;
 $buttonBackgroundColor: #074141;
 $buttonBackgroundColorHover: #096161;
+
+$iconColor: rgb(157, 164, 106);
+$iconColorHover: rgb(230, 241, 146);
+
+
+// $trackingOptionsView: #5b045b;
+// $trackingOptionsRemove: #3b063b;
+
+
 
 //Measurements
 $sidebarWidthExpand: 270px;

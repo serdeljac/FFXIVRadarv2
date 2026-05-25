@@ -1,17 +1,28 @@
 <template>
     <div :data-rowAndTimeActive="getActiveState">
-        <p>{{ node.name }}</p>
-        <p>{{ getTimer }}</p>
+
+        <div class="toprow">
+            <btnTracking :trackingEnabled="node.tracked" @click="$emit('changeTracked', node)"/>
+            <p>{{ `${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
+            <btnToggleDetails :direction="'open'" @click="$emit('openDetails', node)"/>
+        </div>
+
+        <div class="bottomrow">
+            <p>{{ `${node.area.region} > ${node.area.zone}` }}</p>
+            <p>{{ getTimer }}</p>
+        </div>
     </div>
 </template>
 
-<script lang="ts" setup>
-</script>
-
 <script lang="ts">
+    import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
+    import btnTracking from '../../ui/buttons/toggleTracking.vue'
+
     export default {
         name: "Trackingbar Item",
         props: ['timerList', 'weatherList', 'node'],
+        emits: ['changeTracked', 'openDetails'],
+        components: {btnToggleDetails,btnTracking},
         computed: {
             getActiveState() {
                 let timerState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : null;
@@ -37,7 +48,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-
-</style>

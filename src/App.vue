@@ -17,7 +17,7 @@
       @click="toggleMenu()"/>
 
     <sidebar 
-      :class="[`sidebar`, sidebarLayout]" 
+      :class="[`sidebar`, sidebarLayout, windowWidth]" 
       :sidebarLayout="sidebarLayout"
       :eorzeaClock="eorzeaClock" />
 
@@ -58,7 +58,7 @@ import { Analytics } from '@vercel/analytics/vue';
   import promotionBanner from './components/layouts/PromotionBanner.vue';
   import sidebar from './components/layouts/Sidebar.vue';
   import trackingBar from './components/layouts/TrackingBar.vue';
-  import buttonMenu from './components/ui/ButtonMenu.vue';
+  import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
   import detailspane from './components/layouts/DetailsPane.vue'
 
   //JSON Data

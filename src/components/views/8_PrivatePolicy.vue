@@ -305,49 +305,5 @@
 <script lang="ts">
     export default {
         name: "Private Policy",
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>
-
-<style scoped lang="scss">
-    .privatepolicy {
-        width: 80%;
-        margin: 0 auto;
-    }
-
-    .group {
-        width: 96%;
-        margin: 0 auto;
-    }
-
-    h1 {
-        text-align: center;
-        margin: 2rem auto;
-    }
-
-    h2,h3,h4,h6 {
-        text-align: center;
-        margin-bottom: 0.5rem;
-        }
-
-    h4:not(.voidspace) {
-        margin-top: 1.5rem;
-    }
-    h4,h5 {font-weight: bold}
-    h5 {margin-top: 1rem;}
-    hr {margin: 0.75rem;}
-    p, ul {
-        margin: 0.25rem 0;
-    }
-    .contact {
-        margin-bottom: 1rem;
-    }
-
-    ul {
-        margin-left: 2rem;
-    }
-
-    li {
-        list-style-type: circle;
-    }
-</style>

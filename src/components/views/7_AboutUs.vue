@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="about_us">
         <h1>~ About Us ~</h1>
 
             <div class="about">
@@ -30,34 +30,9 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    // function getIconImageURL(name: string) {
-    //     return new URL(`/src/assets/${name}.jpg`, import.meta.url).href
-    // }
-</script>
-
 <script lang="ts">
-
     export default {
         name: "About Us",
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        
     }
 </script>
-
-<style scoped lang="scss">
-    h1 {
-        text-align: center;
-        margin: 2rem auto;
-    }
-
-    .about {
-        max-width: 800px;
-        min-width: 300px;
-        margin: 40px auto;
-    }
-
-    p {
-        margin-bottom: 2rem;
-    }
-
-</style>

@@ -8,45 +8,17 @@
             </router-link>
         </div>
 
+        <!-- Tracking Bar List -->
         <div class="trackingbar_items">
-
             <trackingbarItem 
                 v-for="d in sortTracklingList()" :key="d.ID"
                 :node="d"
                 :timerList="timerList"
                 :weatherList="weatherList"
                 :class="[`trackingbar_item`]"
-            />
-
+                @changeTracked="e => $emit('changeTracked', e)"
+                @openDetails="e => $emit('openDetails', e)"/>
         </div>
-
-
-        <!-- <ul :class="[`trackingbar_items`,
-            {'grid4': windowWidth == 'desktop-large'},
-            {'grid3': windowWidth == 'desktop-small'},
-            {'grid2': windowWidth == 'tablet'},
-            {'grid1': windowWidth == 'mobile'}
-            ]">
-
-            <li v-for="d in sortTracklingList()" :key="d.ID" 
-                :class="[`trackingbar_item`]" 
-                :data-rowAndTimeActive="checkActiveState(d)">
-
-   
-                    <div class="content_area" @click="$emit('openDetails', d)">
-                        <iconAndText class="itemname" :icon="d.job_sub" :text="d.name" />
-                        <div class="rdrTable_col-time timer">
-                            <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
-                        </div> 
-                        <displayAreaText class="areaname" :areaObj="d"/>
-                    </div>
-        
-                    <div class="close_area" @click="$emit('changeTracked', d)">
-                        <trashButton class="trash" :addClass="'simple'"/>
-                    </div>
-
-            </li>
-        </ul> -->
     </header>
 </template>
 
@@ -73,13 +45,6 @@
                 }
                 return timerState
             },
-            fetchTimerCountdown(time: string) {
-                if (time) {
-                    let results = this.timerList.find((o: any) => o.ID == time)
-                    return [results.stateActive, results.countdown]
-                }
-                return '--:--'
-            },
             sortTracklingList() {
                 let newTrackingList = []
                 
@@ -91,5 +56,5 @@
                 return newTrackingList
             }
         }
-    }
+    } 
 </script>

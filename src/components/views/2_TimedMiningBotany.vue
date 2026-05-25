@@ -357,7 +357,7 @@
             margin: 0.5rem 1rem;
             cursor: pointer;
             &.pageActive {background-color: $borderColor;}
-            &:hover {background-color: $borderColorFade;}
+            &:hover {background-color: $borderColorHover;}
         }
     }
 </style>
