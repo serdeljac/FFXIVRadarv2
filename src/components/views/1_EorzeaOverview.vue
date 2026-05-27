@@ -1,7 +1,7 @@
 <template>
-    <div class="eorzeaOverview">
+    <section :class="[`eorzeaOverview body_content`, windowWidth]">
 
-        <div :class="[`body_content`, {'verticalPos': windowWidth == 'tablet' || windowWidth == 'mobile'}]">
+        <div class="body_content-group mapDisplay" :style="`width: ${columnLayout}px; height: ${columnLayout}px`">
             <mapDisplay 
                 :ffxivData="ffxivData" 
                 :focusNode="focusNode" 
@@ -9,149 +9,171 @@
                 :mapSize="columnLayout" 
                 v-if="focusNode"
                 :class="[`mapDisplay_root`]"/>
+        </div>
 
-            <div :class="[`mapContext`, {'marginPos': windowWidth == 'mobile'}]">
-                <div class="filterbar isZoneSelect">
+        <div class="body_content-group mapContext">
+
+            <!-- Display Map title and search buttons -->
+            <div class="mapContext_header">
+                <div class="mapContext_header-location" v-if="!enableSearchMenu">
+                    <h2>{{ currentZone.region }}</h2>
                     <h2>{{ currentZone.zone }}</h2>
                     <h3>{{ currentZone.expansion }}</h3>
-                    <div class="group">
-                        <buttonFilter :noicon="true" :name="`Change Zone`" @click="enableZoneMenu = true"/>
-                        <iconAndText :class="[`searchIcon`, {'active': enableSearchMenu}]" :icon="'sq_search'" @click="enableSearchMenu = !enableSearchMenu"/>
-                    </div>
                 </div>
 
-                <div class="filterbar isTabBar" v-if="!enableSearchMenu">
-                    <div v-for="(d, index) in zoneNodes" :key="d[1]"
-                        :class="[
-                            `filterbar-tab`, 
-                            {'disabled': d.length == 0},
-                            {'activeTab': tabSelected == index}]" 
-                            @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]">
-                        <iconAndText :icon="index" />
-                    </div>
+                <div class="mapContext_header-location" v-else>
+                    <h2>Search...</h2>
+                </div>
+
+                <div class="mapContext_header-zonesearch">
+                    <toggleMenuBtn 
+                        :name="`Change Zone`" 
+                        :disabled="enableSearchMenu ? true : null" 
+                        :enabled="enableZoneMenu ? true : null"
+                        @click="enableZoneMenu = true"/>
+
+                    <toggleMenuBtn 
+                        :name="`Search`" 
+                        :enabled="enableSearchMenu ? true : null" 
+                        @click="enableSearchMenu = !enableSearchMenu"/>
+                </div>
+            </div>
+
+            <!-- Tab and Search Bars -->
+            <div class="mapContext_header-tabbar" v-if="!enableSearchMenu">
+                <div v-for="(d, index) in zoneNodes" :key="d[1]"
+                    :class="[
+                        `tab`, 
+                        {'disabled': d.length == 0},
+                        {'activeTab': tabSelected == index}]" 
+                        @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]">
+                    <iconAndText :icon="index" />
+                </div>
+            </div>
+
+            <div class="mapContext_header-searchbar" v-else>
+                <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
+            </div>
+
+            <!-- Display list of nodes within the zone selection -->
+            <div v-if="!enableSearchMenu">
+                <gatheringList 
+                    v-if="tabSelected == 'miner'" 
+                    :data="zoneNodes.miner" 
+                    :timerList="timerList"
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
+                    @focusNode="(e: any) => focusNode = e"/>
+
+                <gatheringList 
+                    v-if="tabSelected == 'botany'" 
+                    :data="zoneNodes.botany" 
+                    :timerList="timerList"
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
+                    @focusNode="(e: any) => focusNode = e"/>
                     
-                </div>
+                <sightseeingList 
+                    v-if="tabSelected == 'sightseeing'" 
+                    :data="zoneNodes.sightseeing"
+                    :timerList="timerList"
+                    :weatherList="weatherList"
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @changeTracked="(e: any) => $emit('changeTracked', e)"
+                    @focusNode="(e: any) => focusNode = e"/>
 
-                <div class="filterbar isTabBar" v-else>
-                    <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
-                </div>
+                <fatesList 
+                    v-if="tabSelected == 'fates'" 
+                    :data="zoneNodes.fates"
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @focusNode="(e: any) => focusNode = e"/>
+                
+                <huntsList 
+                    v-if="tabSelected == 'eliteHunts'"
+                    :data="zoneNodes.eliteHunts"
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @focusNode="(e: any) => focusNode = e"/>
 
-                <!-- Display list of nodes within the zone selection -->
-                <div v-if="!enableSearchMenu">
-                    <gatheringList 
-                        v-if="tabSelected == 'miner'" 
-                        :data="zoneNodes.miner" 
-                        :timerList="timerList"
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @changeTracked="(e: any) => $emit('changeTracked', e)"
-                        @focusNode="(e: any) => focusNode = e"/>
+                <aethercurrentList 
+                    v-if="tabSelected == 'aethercurrents'" 
+                    :data="zoneNodes.aethercurrents" 
+                    :focusNode="focusNode"
+                    :windowWidth="windowWidth"
+                    @focusNode="(e: any) => focusNode = e"/>
+            </div>
 
-                    <gatheringList 
-                        v-if="tabSelected == 'botany'" 
-                        :data="zoneNodes.botany" 
-                        :timerList="timerList"
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @changeTracked="(e: any) => $emit('changeTracked', e)"
-                        @focusNode="(e: any) => focusNode = e"/>
+            <!-- Display list of nodes within the Search Bar -->
+            <div v-else>
+                <ul>
+                    <li v-for="d in searchResults" :key="d.ID">
+                        <gatheringList 
+                            v-if="d.job == 'miner'" 
+                            :data="[d]" 
+                            :timerList="timerList"
+                            :focusNode="focusNode"
+                            :windowWidth="windowWidth"
+                            @changeTracked="(e: any) => $emit('changeTracked', e)"
+                            @focusNode="(e: any) => focusNode = e"/>
                         
-                    <sightseeingList 
-                        v-if="tabSelected == 'sightseeing'" 
-                        :data="zoneNodes.sightseeing"
-                        :timerList="timerList"
-                        :weatherList="weatherList"
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @changeTracked="(e: any) => $emit('changeTracked', e)"
-                        @focusNode="(e: any) => focusNode = e"/>
+                        <gatheringList 
+                            v-if="d.job == 'botany'"  
+                            :data="[d]" 
+                            :timerList="timerList"
+                            :focusNode="focusNode"
+                            :windowWidth="windowWidth"
+                            @changeTracked="(e: any) => $emit('changeTracked', e)"
+                            @focusNode="(e: any) => focusNode = e"/>
 
-                    <fatesList 
-                        v-if="tabSelected == 'fates'" 
-                        :data="zoneNodes.fates"
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @focusNode="(e: any) => focusNode = e"/>
-                    
-                    <huntsList 
-                        v-if="tabSelected == 'eliteHunts'"
-                        :data="zoneNodes.eliteHunts"
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @focusNode="(e: any) => focusNode = e"/>
+                        <sightseeingList 
+                            v-if="d.job == 'sightseeing'" 
+                            :data="[d]"
+                            :timerList="timerList"
+                            :weatherList="weatherList"
+                            :focusNode="focusNode"
+                            :windowWidth="windowWidth"
+                            @changeTracked="(e: any) => $emit('changeTracked', e)"
+                            @focusNode="(e: any) => focusNode = e"/>
 
-                    <aethercurrentList 
-                        v-if="tabSelected == 'aethercurrents'" 
-                        :data="zoneNodes.aethercurrents" 
-                        :focusNode="focusNode"
-                        :windowWidth="windowWidth"
-                        @focusNode="(e: any) => focusNode = e"/>
-                </div>
-
-                <!-- Display list of nodes within the Search Bar -->
-                <div v-else>
-                    <ul>
-                        <li v-for="d in searchResults" :key="d.ID">
-                            <gatheringList 
-                                v-if="d.job == 'miner'" 
-                                :data="[d]" 
-                                :timerList="timerList"
-                                :focusNode="focusNode"
-                                :windowWidth="windowWidth"
-                                @changeTracked="(e: any) => $emit('changeTracked', e)"
-                                @focusNode="(e: any) => focusNode = e"/>
-                            
-                            <gatheringList 
-                                v-if="d.job == 'botany'"  
-                                :data="[d]" 
-                                :timerList="timerList"
-                                :focusNode="focusNode"
-                                :windowWidth="windowWidth"
-                                @changeTracked="(e: any) => $emit('changeTracked', e)"
-                                @focusNode="(e: any) => focusNode = e"/>
-
-                            <sightseeingList 
-                                v-if="d.job == 'sightseeing'" 
-                                :data="[d]"
-                                :timerList="timerList"
-                                :weatherList="weatherList"
-                                :focusNode="focusNode"
-                                :windowWidth="windowWidth"
-                                @changeTracked="(e: any) => $emit('changeTracked', e)"
-                                @focusNode="(e: any) => focusNode = e"/>
-
-                            <fatesList 
-                                v-if="d.job == 'fates'" 
-                                :data="[d]" 
-                                :focusNode="focusNode"
-                                :windowWidth="windowWidth"
-                                @focusNode="(e: any) => focusNode = e"/>
-                            
-                            <huntsList 
-                                v-if="d.job == 'eliteHunts'"
-                                :data="[d]"
-                                :focusNode="focusNode"
-                                :windowWidth="windowWidth"
-                                @focusNode="(e: any) => focusNode = e"/>
-                        </li>
-                    </ul>
-                </div>
+                        <fatesList 
+                            v-if="d.job == 'fates'" 
+                            :data="[d]" 
+                            :focusNode="focusNode"
+                            :windowWidth="windowWidth"
+                            @focusNode="(e: any) => focusNode = e"/>
+                        
+                        <huntsList 
+                            v-if="d.job == 'eliteHunts'"
+                            :data="[d]"
+                            :focusNode="focusNode"
+                            :windowWidth="windowWidth"
+                            @focusNode="(e: any) => focusNode = e"/>
+                    </li>
+                </ul>
             </div>
         </div>
 
-        <zoneSelect 
-            v-if="enableZoneMenu" 
-            :zoneList="zoneSelection" 
-            :windowWidth="windowWidth" 
-            @zoneSelected="changeZone"
-            @closeMenu="(e: boolean) => enableZoneMenu = e"/>
+        
+        
 
-    </div>
+    <zoneSelect 
+        v-if="enableZoneMenu" 
+        :zoneList="zoneSelection" 
+        :windowWidth="windowWidth" 
+        @zoneSelected="changeZone"
+        @closeMenu="(e: boolean) => enableZoneMenu = e"/>
+
+    </section>
 </template>
 
 <script lang="ts">
-    import buttonFilter from '../ui/ButtonFilter.vue';
-    import seachBar from '../ui/searchBar.vue';
+    import toggleMenuBtn from '../ui/buttons/toggleMenu.vue'
+
+    import seachBar from '../ui/buttons/inputSearchBar.vue';
     import iconAndText from '../ui/iconAndText.vue';
     import zoneSelect from '../layouts/zoneSelection.vue';
     import gatheringList from '../ui/overviewListItem/gathering.vue';
@@ -164,7 +186,7 @@
     export default {
         name: "Eorzea Overview",
         components: {
-            buttonFilter, 
+            toggleMenuBtn,
             seachBar, 
             iconAndText, 
             zoneSelect, 
@@ -200,7 +222,7 @@
         computed: {
             columnLayout() {
                 let dim = {
-                    'desktop-large': 800,
+                    'desktop-large': 600,
                     'desktop-small': 600,
                     'tablet': 500,
                     'mobile': 400,
@@ -331,37 +353,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-.eorzeaOverview {
-    margin-top: 1rem;
-
-    .body_content {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 2rem;
-        justify-content: center;
-        &.verticalPos {
-            flex-direction: column;
-            .mapDisplay_root, .mapContext {
-                width: 100%;
-                margin: auto;
-            }
-        }
-    }
-
-    .mapContext {
-        max-width: 600px;
-        &.marginPos {margin: 0 !important;}
-    }
-}
-
-.searchIcon {
-    transform: scale(1);
-    transition: transform 0.04s linear;
-    &.active{
-        transform: scale(1.3);
-        transform-origin: center;
-    }
-}
-</style>

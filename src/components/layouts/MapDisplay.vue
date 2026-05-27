@@ -1,8 +1,6 @@
 <template>
     <div class="mapDisplay" :style="`width: ${mapSize}px; height: ${mapSize}px`">
         <div class="mapDisplay_background" id="ffmap" :style="` transform: scale(${mapSize / 800})`"></div>
-        
-        <!-- <loaderMap v-if="currentZone.length == 0"/> -->
 
         <div class="mapDisplay_overlay" :style="`transform: scale(${mapSize / 800})`">
             <div v-for="d in getAetheyteNodes" :key="d.ID"
@@ -48,12 +46,10 @@
 
 <script lang="ts">
     import axios from "axios";
-    import loaderMap from '../ui/loaderMap.vue'
 
     export default {
         name: 'Eorzea Map',
         props: ['ffxivData', 'focusNode', 'singleOnly', 'mapSize'],
-        components: {loaderMap},
         computed: {
             getAetheyteNodes() {
                 let f = this.focusNode

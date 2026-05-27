@@ -1,61 +1,75 @@
 <template>
-    <div :class="[`timedNodes`, windowWidth]">
+    <div :class="[`timedNodes body_content`, windowWidth]">
 
-        <div class="filterbar">
-            <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
-                <buttonFilter 
-                    v-for="e in d" :key="e[1]"
-                    :name="e[1]" 
-                    :disabled="!e[2]"
-                    @click="changeFilter(e)"/>
-            </div>
+        <!-- Filter Bar -->
+        <div class="body_content-group filterbar">
+            <div class="wrapper">
+                <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
+                    <toggleFilterBtn 
+                        v-for="e in d" :key="e[1]"
+                        :name="e[1]"
+                        :icon="e[1]"
+                        :enabled="e[2] ? true : null"
+                        @click="changeFilter(e)"/>
+                </div>
 
-            <div :class="[`filterbar_group`]">
-                <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
-                <buttonFilter 
-                    :name="'Reset'" 
-                    :state="true"
-                    :noicon="true"
-                    @click="resetFilters()"/>
+                <div :class="[`filterbar_group`]">
+                    <inputSearchBar :modelValue="searchName" @selected="filterByInputValue"/>
+                    <toggleFilterBtn 
+                        :name="'Reset'"
+                        :enabled="true"
+                        @click="resetFilters()"/>
+                </div>
             </div>
         </div>
 
-        <div class="body_content">
+        <!-- Pagenation -->
+        <ul class="body_content-group pagenation">
+            <li class="pagenation_item" v-for="(d, index) in compiledDataForTable" :key="d.ID" 
+                @click="arraySet = Number(index)"
+                :class="{'pageActive': arraySet == Number(index)}">
+                {{ Number(index) + 1 }}
+            </li>
+        </ul>
 
-            <div class="pagenation" v-if="totalArraySets > 1">
-                <div v-for="(d, index) in compiledDataForTable" :key="d.ID" 
-                    @click="arraySet = Number(index)"
-                    :class="{'pageActive': arraySet == Number(index)}">
-                    {{ Number(index) + 1 }}
-                </div>
-            </div>
+        <!-- Table -->
+        <div :class="[`body_content-group rdrTable`, windowWidth]">
 
-            <ul class="rdrTable header">
-                <li>
-                    <p class="rdrTable_col-tracking">Tracker</p>
-                    <p class="rdrTable_col-name">Name</p>
-                    <p class="rdrTable_col-attributes">Attributes</p>
-                    <p class="rdrTable_col-level">Level</p>
-                    <p class="rdrTable_col-time">Timer</p>
-                    <p class="rdrTable_col-area">Area</p>
+            <ul class="rdrTable_header">
+                <li class="rdrTable_row">
+                    <p class="rdrTable_row-tracking"></p>
+                    <p class="rdrTable_row-name">Name</p>
+                    <p class="rdrTable_row-attributes">Attributes</p>
+                    <p class="rdrTable_row-level">Level</p>
+                    <p class="rdrTable_row-time">Timer</p>
+                    <p class="rdrTable_row-area">Area</p>
                 </li>
             </ul>
 
-            <hr class="rdrTable split"/>
+            <hr class="rdrTable_split"/>
 
-            <ul :class="[`rdrTable body`]">
-                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID"  
-                    :data-rowAndTimeActive="checkRowActive(d)">
+            <ul class="rdrTable_body">
+                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID" 
+                    :data-rowAndTimeActive="activeList[d.ID]"
+                    class="rdrTable_row">
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_col-tracking">
-                        <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
+                    <div class="rdrTable_row-tracking" >
+                        <toggleTrackingBtn 
+                            :trackingEnabled="d.tracked" 
+                            class="hasContext"
+                            :data-context="`Track Node`"
+                            @click="$emit('changeTracked', d)"/>
+                        <toggleDetailsBtn 
+                            v-if="windowWidth != 'mobile'" 
+                            @click="$emit('openDetails', d)"
+                            class="hasContext"
+                            :data-context="`View Details`"/>
                     </div>
 
                     <!-- NAME -->
-                    <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
+                    <div class="rdrTable_row-name" >
                         <div>
-                            <img v-if="windowWidth == 'mobile'" :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
                             <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
                             <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImageURL('collectability')" />
@@ -64,7 +78,7 @@
                     </div>
 
                     <!-- ATTRIBUTES -->
-                    <div class="rdrTable_col-attributes">
+                    <div class="rdrTable_row-attributes">
                         <div>
                             <!-- JOB NAME -->
                             <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
@@ -84,32 +98,24 @@
                     </div>
 
                     <!-- LEVEL -->
-                    <div class="rdrTable_col-level">
-                        {{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}
+                    <div class="rdrTable_row-level">
+                        {{`Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_col-time">
-                        <p class="timeDisplay">{{ fetchTimerCountdown(d.time) }}</p>
+                    <div class="rdrTable_row-time">
+                        <timeDisplay :timerList="timerList" :timeId="d.time" @timeActive="(e: any) => sendTimerState(e, d.ID)"/>
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_col-area">
-                        <displayAreaText class="areaname" :areaObj="d" :excludeBackground="true" @click="$emit('sendToDetails', d)"/>
+                    <div class="rdrTable_row-area">
+                        <areaDisplay :node="d"/>
                     </div>
                 </li>
             </ul>
 
             <div v-if="displayNoNodesFound">
                 <p class="noResults">No nodes found with the current filter selection.</p>
-            </div>
-
-            <div class="pagenation" v-if="totalArraySets > 1">
-                <div v-for="(d, index) in compiledDataForTable" :key="d.ID" 
-                    @click="arraySet = Number(index)"
-                    :class="{'pageActive': arraySet == Number(index)}">
-                    {{ Number(index) + 1 }}
-                </div>
             </div>
 
         </div>
@@ -123,15 +129,18 @@
 </script>
 
 <script lang="ts">
-    import displayAreaText from '../ui/displayAreaText.vue';
-    import buttonFilter from '../ui/ButtonFilter.vue';
-    import seachBar from '../ui/searchBar.vue';
+    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+    import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+    import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
+    import inputSearchBar from '../ui/buttons/inputSearchBar.vue';
+    import timeDisplay from '../ui/displayTime.vue'
+    import areaDisplay from '../ui/displayArea.vue'
 
     export default {
         name: "Timed Mining/Botany",
-        components: {displayAreaText, buttonFilter, seachBar},
+        components: {toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay},
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
-        emits: ['changeTracked', 'sendToDetails'],
+        emits: ['changeTracked', 'openDetails'],
         data() {
             return {
                 compiledDataForTable: [] as any,
@@ -143,6 +152,7 @@
                 showOnlyActive: false as boolean,
                 filters: [] as any, //[Group, Name, State]
                 filterList: {} as any,
+                activeList: {} as any
             }
         },
         created() {
@@ -155,32 +165,24 @@
         methods: {
             createFilterList() {
                 //Search for all Job names within AllTimedNodes
-                const jobList = this.allTimedNodes.filter((obj: any, index: any) => 
+                let jobList = this.allTimedNodes.filter((obj: any, index: any) => 
                     index === this.allTimedNodes.findIndex((o: any) => obj.job === o.job)
                 );
 
                 //Search for all Job names within AllTimedNodes
-                const usageList = this.allTimedNodes.filter((obj: any, index: any) => 
+                let usageList = this.allTimedNodes.filter((obj: any, index: any) => 
                     index === this.allTimedNodes.findIndex((o: any) => obj.usage === o.usage)
                 );
 
                 //Search for all Expansion names within AllTimedNodes
-                const expansionList = this.ffxivData.expansion.filter((obj: any, index: any) => 
+                let expansionList = this.ffxivData.expansion.filter((obj: any, index: any) => 
                     index === this.ffxivData.expansion.findIndex((o: any) => obj.expansion === o.expansion)
                 );
 
-                //Append and set default filter list
-                for (const d in jobList) {
-                    this.filters.push(['job', jobList[d].job, true])
-                }
-
-                for (const d in usageList) {
-                    this.filters.push(['usage', usageList[d].usage, true])
-                }
-                for (const d in expansionList) {
-                    this.filters.push(['expansion', expansionList[d].expansion, true])
-                }
-
+                jobList = jobList.map((o => ['job', o.job, true]))
+                usageList = usageList.map((o => ['usage', o.usage, true]))
+                expansionList = expansionList.map((o => ['expansion', o.expansion, true]))
+                this.filters = [...jobList, ...usageList, ...expansionList]
             },
             sortNodesIntoGroup(array: any) {
                 const result = [];
@@ -281,83 +283,10 @@
                     this.sortNodesIntoGroup(hold)
                 }
             },
-            fetchTimerCountdown(time: string) {
-                if (time) {
-                    let results = this.timerList.find((o: any) => o.ID == time).countdown
-                    return results
-                }
-                return '--:--'
-            },
-            checkTimeActive(type: string, arr: any) {
-                if (type == 'time' && arr.time) {
-                    let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                    results = results ? true : null
-                    return results
-                }
-                return null
-            },
-            checkRowActive(arr: any) {
-                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
-                if (currentTime) {return true}
-                return null
+            sendTimerState(timeState: any, id: string) {
+                this.activeList[id] = timeState
             }
         }
     }
 </script>
 
-<style scoped lang="scss">
-    .timedNodes.tablet {
-        .rdrTable li {grid-template-columns: 80px 250px 120px auto;}
-        .rdrTable_col-attributes, .rdrTable_col-level {display: none}
-    }
-
-    .timedNodes.mobile {
-        .rdrTable li {
-            grid-template-columns: auto;
-            justify-content: center;
-        }
-        .rdrTable_col-tracking, .rdrTable_col-attributes, .rdrTable_col-level, .rdrTable_col-time {display: none}
-        .rdrTable.header {display: none;}
-        .rdrTable.body li {
-            .rdrTable_col-name > div {
-                display: flex;
-                width: 400px;
-                align-items: center;
-                justify-content: center;
-                margin: auto;
-                
-            }
-            .rdrTable_col-area {grid-column: 1 / span 2}
-            & > div {margin: 4px auto;}
-        }
-    }
-
-
-    .rdrTable li {grid-template-columns: 80px 400px 100px 100px 120px auto;}
-
-    .pagenation {
-        display: flex;
-        flex-wrap: wrap;
-        align-items: center;
-        justify-content: center;
-        width: 90%;
-        margin: 2rem auto;
-
-        div {
-            width: 32px;
-            user-select: none;
-            aspect-ratio: 1/1;
-            border-radius: 4px;
-            background-color: $bodyBackgroundColor;
-            border: 1px solid $borderColor;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 0.5rem 1rem;
-            margin: 0.5rem 1rem;
-            cursor: pointer;
-            &.pageActive {background-color: $borderColor;}
-            &:hover {background-color: $borderColorHover;}
-        }
-    }
-</style>

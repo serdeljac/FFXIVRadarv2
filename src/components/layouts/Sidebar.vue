@@ -7,11 +7,11 @@
             @click="clockIs24Format = !clockIs24Format">
             <h2 v-if="clockIs24Format">
                 {{ eorzeaClock.display24Hr }} <br/>
-                {{ eorzeaClock.displayMin }}
+                {{ clockMinute }}
             </h2>
             <h2 v-else>
                 {{ eorzeaClock.display12Hr }} <br/>
-                {{ eorzeaClock.displayMin }} <br />
+                {{ clockMinute }} <br />
                 {{ eorzeaClock.display24Hr > 12 ? 'PM' : 'AM' }}
             </h2>
         </div>
@@ -22,10 +22,10 @@
             @click="clockIs24Format = !clockIs24Format">
             <p>Eorzea Clock:</p>
             <h2 v-if="clockIs24Format">
-                {{ `${eorzeaClock.display24Hr}:${eorzeaClock.displayMin}` }}
+                {{ `${eorzeaClock.display24Hr}:${clockMinute}` }}
             </h2>
             <h2 v-else>
-                {{ `${eorzeaClock.display12Hr}:${eorzeaClock.displayMin} ${eorzeaClock.display24Hr > 12 ? 'PM' : 'AM'}` }}
+                {{ `${eorzeaClock.display12Hr}:${clockMinute} ${eorzeaClock.display24Hr > 12 ? 'PM' : 'AM'}` }}
             </h2>
         </div>
 
@@ -52,6 +52,13 @@
             return {
                 forceExpanded: true,
                 clockIs24Format: true as boolean,
+            }
+        },
+        computed: {
+            clockMinute() {
+                let m = this.eorzeaClock.displayMin
+                let fix = m < 10 ? `${m}0` : m
+                return fix
             }
         }
     }

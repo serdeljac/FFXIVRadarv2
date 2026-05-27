@@ -1,6 +1,6 @@
 <template>
   <Analytics />
-  <div :class="[`app_container`, `menustate_${sidebarLayout}`]" :data-screenMode="windowWidth">
+  <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]" >
     
     <trackingBar 
       :class="[`trackingbar`, sidebarLayout, windowWidth]" 
@@ -25,12 +25,12 @@
       :class="[`main_content`]" 
       @click="toggleForceMenu()">
         <promotionBanner />
-        <router-view 
+        <router-view
           :ffxivData="ffxivData"
           :windowWidth="windowWidth"
           :timerList="timerList"
           :weatherList="weatherList"
-          @sendToDetails="(e: any) => detailsPanel = e"
+          @openDetails="openDetails"
           @changeTracked="changeTracked"/>
     </main>
 
@@ -583,16 +583,13 @@ export default {
         //Add or remove node from the trackinglist array
         if (node[index].tracked) {
           this.trackinglist.push(node[index])
-          this.openDetailSidebar = true
-          this.detailsPanel = e
         } else {
           this.trackinglist = this.trackinglist.filter((o: any) => o.ID != e.ID)
-          this.openDetailSidebar = false
         }
 
       },
       openDetails(e: any) {
-        this.openDetailSidebar = true
+        this.openDetailSidebar = !this.openDetailSidebar
         this.detailsPanel = e
       },
   }
@@ -638,7 +635,6 @@ export default {
       .sidebar {left: -$sidebarWidthExpand + 1px;}
       .menu_Btn {left: 1.5rem;}
       .main_content {
-        padding: 1rem 0.5rem;
         width: 100%;
         margin-left: 0;
       } 

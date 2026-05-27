@@ -1,17 +1,20 @@
 <template>
-    <div :class="[`sightseeVistas`, windowWidth]">
+    <div :class="[`sightseeVistas body_content`, windowWidth]">
 
-        <div class="filterbar">
-            <div class="filterbar_group group1">
-                <buttonFilter 
+        <!-- Filter Bar -->
+        <div class="body_content-group filterbar">
+            <div class="wrapper">
+                <toggleFilterBtn 
                     v-for="(d, index) in filters" :key="d[1]" 
-                    :name="`${d[1]}`" 
-                    :disabled="d[2]"
+                    :name="d[1]" 
+                    :icon="d[1]"
+                    :enabled="!d[2] ? true : null"
                     @click="changeFilter(index)"/>
             </div>
         </div>
 
-        <div class="vistaNote">
+        <!-- Expansion Notes -->
+        <div class="body_content-group vistaNote">
             <p v-if="filterSelected == 'A Realm Reborn'">To Unlock vista's 21-80, you MUST complete all 20 in the log.</p>
             <br v-if="filterSelected == 'A Realm Reborn'"/>
             <p>
@@ -20,61 +23,78 @@
             </p>
         </div>
 
-        <div class="body_content">
+        <!-- Table -->
+        <div :class="[`body_content-group rdrTable`, windowWidth]">
 
-            <ul class="rdrTable header">
-                <li>
-                    <p class="rdrTable_col-tracking">Tracker</p>
-                    <p class="rdrTable_col-no">No</p>
-                    <p class="rdrTable_col-name">Name</p>
-                    <p class="rdrTable_col-time">Time</p>
-                    <p class="rdrTable_col-weather">Weather</p>
-                    <p class="rdrTable_col-emote">Emote</p>
-                    <p class="rdrTable_col-area">Area</p>
+            <ul class="rdrTable_header">
+                <li class="rdrTable_row">
+                    <p class="rdrTable_row-tracking"></p>
+                    <p class="rdrTable_row-no">No</p>
+                    <p class="rdrTable_row-name">Name</p>
+                    <p class="rdrTable_row-time">Time</p>
+                    <p class="rdrTable_row-weather">Weather</p>
+                    <p class="rdrTable_row-emote">Emote</p>
+                    <p class="rdrTable_row-area">Area</p>
                 </li>
             </ul>
 
-            <hr class="rdrTable split" />
+            <hr class="rdrTable_split" />
 
-            <ul :class="[`rdrTable body`]">
-                <li v-for="d in allVistaNodes[filterSelected]" :key="d.ID" :data-rowActive="checkRowActive(d)">
+            <ul class="rdrTable_body">
+                <li v-for="d in allVistaNodes[filterSelected]" :key="d.ID" 
+                :data-rowActive="activeTime[d.ID] && activeWeather[d.ID] ? true : null"
+                class="rdrTable_row">
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_col-tracking">
-                        <img :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')"" @click="$emit('changeTracked', d)"/>
+                    <div class="rdrTable_row-tracking">
+                        <toggleTrackingBtn 
+                            :trackingEnabled="d.tracked" 
+                            v-if="d.time"
+                            class="hasContext"
+                            :data-context="`Track Node`"
+                            @click="$emit('changeTracked', d)"/>
+                        <toggleDetailsBtn 
+                            v-if="windowWidth != 'mobile'" 
+                            @click="$emit('openDetails', d)"
+                            class="hasContext"
+                            :data-context="`View Details`"/>
                     </div>
 
                     <!-- NO -->
-                    <div class="rdrTable_col-no">
-                        <p >{{ d.no }}</p>
+                    <div class="rdrTable_row-no">
+                        <p>{{ d.no }}</p>
                     </div>
 
                     <!-- NAME -->
-                    <div class="rdrTable_col-name" @click="$emit('sendToDetails', d)">
-                        <img v-if="windowWidth == 'mobile'" :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImageURL('alarm')" @click="$emit('changeTracked', d)"/>
+                    <div class="rdrTable_row-name">
                         <p>{{ d.name }}</p>
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_col-time">
-                        <p :data-timeActive="checkTimeActive('time', d)">{{ fetchTimerCountdown(d.time) }}</p>
+                    <div class="rdrTable_row-time">
+                        <timeDisplay 
+                            :timerList="timerList" 
+                            :timeId="d.time" 
+                            @timeActive="(e: any) => sendTimerState(e, d.ID, 'timer')"/>
                     </div>
 
                     <!-- WEATHER -->
-                    <div class="rdrTable_col-weather">
-                        <p v-if="d.weather1" :data-timeActive="checkTimeActive('weather1', d)">{{ d.weather1 }}</p>
-                        <p v-if="d.weather2" :data-timeActive="checkTimeActive('weather2', d)">{{ d.weather2 }}</p>
-                        <p v-if="!d.weather1">Any Weather</p>
+                    <div class="rdrTable_row-weather">
+                        <weatherDisplay 
+                            :weatherList="weatherList" 
+                            :node="d" 
+                            @weatherActive="(e: any) => sendTimerState(e, d.ID, 'weather')"/>
                     </div>
 
                     <!-- EMOTE -->
-                    <div class="rdrTable_col-emote">
-                        <iconAndText :icon="d.emote" :text="d.emote"/>
+                    <div class="rdrTable_row-emote">
+                        <img class="iconSize" :src="getIconImageURL(d.emote)" />
+                        <p>{{ d.emote }}</p>
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_col-area">
-                        <displayAreaText @click="$emit('sendToDetails', d)" :areaObj="d" :excludeBackground="true" />
+                    <div class="rdrTable_row-area">
+                        <areaDisplay :node="d"/>
                     </div>
                 </li>
             </ul>
@@ -85,39 +105,31 @@
 
 <script lang="ts" setup>
     function getIconImageURL(name: string) {
+        name = name.toLocaleLowerCase()
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
 
 <script lang="ts">
-    import displayAreaText from '../ui/displayAreaText.vue';
-    import buttonFilter from '../ui/ButtonFilter.vue';
-    import seachBar from '../ui/searchBar.vue';
-    import iconAndText from '../ui/iconAndText.vue';
+    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+    import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+    import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
+    import timeDisplay from '../ui/displayTime.vue'
+    import weatherDisplay from '../ui/displayWeather.vue'
+    import areaDisplay from '../ui/displayArea.vue'
 
     export default {
         name: "Sightseeing Vistas",
-        components: {displayAreaText, buttonFilter, seachBar, iconAndText},
+        components: {toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay},
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
-        emits: ['changeTracked', 'sendToDetails'],
+        emits: ['changeTracked', 'openDetails'],
         data() {
             return {
                 allVistaNodes: {} as any,
-                showDetails: '' as string,
-                showOnlyActive: false as boolean,
                 filters: [] as any, //[Group, Name, State]
                 filterSelected: '' as string,
-                timerState: {} as any,
-                weatherState: {} as any,
-                responsive: {
-                    "tracking": true,
-                    "no": true,
-                    "name": true,
-                    "area": true,
-                    "timer": true,
-                    "weather": true,
-                    "emote": true
-                }
+                activeTime: {} as any,
+                activeWeather: {} as any,
             }
         },
         created() {
@@ -208,48 +220,14 @@
 
                 if (!arr.weather1) {return match1}
                 return match1 == match2 ? true : null
+            },
+            sendTimerState(timeState: any, id: string, type: string) {
+                if (type == 'timer') {
+                    this.activeTime[id] = timeState
+                } else if (type == 'weather') {
+                    this.activeWeather[id] = timeState
+                }
             }
         }
     }
 </script>
-
-<style scoped lang="scss">
-    .sightseeVistas.tablet {
-        .rdrTable li {grid-template-columns: 80px 300px 120px auto;}
-        .rdrTable_col-no, .rdrTable_col-time, .rdrTable_col-weather {display: none}
-    }
-
-    .sightseeVistas.mobile {
-        .rdrTable li {
-            grid-template-columns: auto;
-            justify-content: center;
-        }
-        .rdrTable_col-tracking, .rdrTable_col-no, .rdrTable_col-time, .rdrTable_col-weather, .rdrTable_col-emote {display: none}
-        .rdrTable.header {display: none;}
-        .rdrTable.body li {
-            padding: 6px;
-            .rdrTable_col-name {
-                display: flex;
-                width: 400px;
-                align-items: center;
-                justify-content: center;
-                margin: auto;
-            }
-            .rdrTable_col-area {grid-column: 1 / span 2}
-            & > div {margin: 4px auto;}
-        }
-    }
-
-    .rdrTable li {grid-template-columns: 80px 80px 300px 100px 120px 120px auto;}
-    .vistaNote {
-        text-align: center;
-        p {
-            display: inline-flex;
-            align-items: center;
-            flex-wrap: wrap;
-            justify-content: center;
-            span {margin-left: 4px;}
-            img {margin: 0 2px 0 2px;}
-        }
-    }
-</style>

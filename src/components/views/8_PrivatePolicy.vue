@@ -1,16 +1,20 @@
 <template>
-    <div class="privatepolicy">
-        <h1>~FFXIV RADAR Private Policy~</h1> 
-        <h6>Effective Date: May 10, 2026 | Last Updated: May 10, 2026</h6>
-        <hr class="header_bar"/>
+    <div :class="[`privatePolicy body_content`, windowWidth]">
+
+        <div class="group">
+            <h1>~FFXIV RADAR Private Policy~</h1> 
+            <h6>Effective Date: May 10, 2026 | Last Updated: May 10, 2026</h6>
+            <hr class="header_bar"/>
+        </div>
 
         <div class="group">
             <p>This Privacy Policy describes how FFXIV Radar, an individual operating in British Columbia, Canada, collects, uses, discloses, and protects your personal information when you visit our website at https://ffxivradar.com, use our application "FFXIV Radar," or otherwise engage with our services (collectively, the 'Services'). We appreciate your trust and are committed to handling your information with caution and respect. This document seeks to provide clarity on how we manage your data in compliance with applicable privacy laws.</p>
             <p>By accessing or using the Services, you acknowledge that you have read and understood this Privacy Policy. You agree to be bound by its terms and commit to complying with the practices described herein. If you do not agree with this Privacy Policy, you should not use our Services.</p>
             <p>FFXIV Radar complies with the California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020 (collectively, "CCPA/CPRA"), the General Data Protection Regulation (EU) 2016/679 ("GDPR"), and the California Online Privacy Protection Act ("CalOPPA"). These legislative frameworks guide our data handling practices and empower you with specific rights over your personal information.</p>
+            <hr class="bar_section"/>
         </div>
 
-        <hr class="bar_section"/>
+        
 
         <div class="group">
             <h4 class="voidspace">1. INFORMATION WE COLLECT</h4>
@@ -305,5 +309,6 @@
 <script lang="ts">
     export default {
         name: "Private Policy",
+        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>

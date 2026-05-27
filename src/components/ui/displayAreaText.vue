@@ -38,15 +38,10 @@
         &:hover {background-color: $buttonBackgroundColorHover;}
     }
     
-    img {
-        margin-right: 6px;
-        width: 20px;
-        aspect-ratio: 1 / 1;
-    }
+    
 
     .cord {
-        color: rgb(123, 123, 238);
-        margin-left: 4px;
+       
     }
 }
 </style>

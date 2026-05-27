@@ -1,47 +1,50 @@
 <template>
-    <div :class="[`blueMageAbilties`, windowWidth]">
+    <div :class="[`blueMageAbilties body_content`, windowWidth]">
 
-        <div class="filterbar">
-            <div class="filterbar_group">
-                <div v-for="(d, index) in filters" :key="d[1]">
-                    <buttonFilter 
-                        :name="d[1]" 
-                        :disabled="!d[2]"
-                        :noicon="true"
-                        @click="changeFilter(index)"/>
-                </div>
+        <!-- Filter Bar -->
+        <div class="body_content-group filterbar">
+            <div class="wrapper">
+                <toggleFilterBtn 
+                    v-for="(d, index) in filters" :key="d[1]"
+                    :name="d[1]" 
+                    :enabled="d[2] ? true : null"
+                    @click="changeFilter(index)"/>
             </div>
         </div>
 
-        <div class="body_content">
-            <ul class="rdrTable header">
-                <li>
-                    <p class="rdrTable_col-name">Name</p>
-                    <p class="rdrTable_col-level">Min Lv</p>
-                    <p class="rdrTable_col-enemy">Enemy/NPC</p>
-                    <p class="rdrTable_col-notes">Notes</p>
-                    <p class="rdrTable_col-area">Location</p>
+        <!-- Table -->
+        <div :class="[`body_content-group rdrTable`, windowWidth]">
+
+            <ul class="rdrTable_header">
+                <li class="rdrTable_row">
+                    <p class="rdrTable_row-name">Name</p>
+                    <p class="rdrTable_row-level">Min Lv</p>
+                    <p class="rdrTable_row-enemy">Enemy/NPC</p>
+                    <p class="rdrTable_row-notes">Notes</p>
+                    <p class="rdrTable_row-area">Location</p>
                 </li>
             </ul>
-            <hr class="rdrTable split"/>
-            <ul :class="[`rdrTable body`]">
-                <li v-for="d in appendData" :key="d.ID" >
+
+            <hr class="rdrTable_split"/>
+
+            <ul :class="[`rdrTable_body`]">
+                <li v-for="d in appendData" :key="d.ID" class="rdrTable_row">
 
                     <!-- NAME -->
-                    <div class="rdrTable_col-name">{{ d.name }}</div>
+                    <div class="rdrTable_row-name">{{ d.name }}</div>
 
                     <!-- LEVEL -->
-                    <div class="rdrTable_col-level">{{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}</div>
+                    <div class="rdrTable_row-level">{{`Lv. ${d.level} ${'★★★★★'.slice(0, d.stars)}`}}</div>
 
                     <!-- ENEMY/NPC -->
-                    <div class="rdrTable_col-enemy">
+                    <div class="rdrTable_row-enemy">
                         <div v-for="e in d.npc" :key="e[1]">
                             <p v-if="filterSelected == 'All' || filterSelected == e[0]">{{ e[2] }}</p>
                         </div>
                     </div>
 
                     <!-- NOTES -->
-                    <div class="rdrTable_col-notes">
+                    <div class="rdrTable_row-notes">
                         <div v-for="e in d.notes" :key="e[1]">
                             <p v-if="filterSelected == 'All' || filterSelected == e[0]">
                                 {{ e[2] ? e[2] : '-' }}</p>
@@ -49,9 +52,9 @@
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_col-area">
+                    <div class="rdrTable_row-area">
                         <div v-for="e in d.location" :key="e[1]">
-                            <iconAndTextBM v-if="filterSelected == 'All' || filterSelected == e[0]" :bmData="e" />
+                            <areaDisplayBM v-if="filterSelected == 'All' || filterSelected == e[0]" :bmData="e" />
                         </div>
                     </div>
                 </li>
@@ -61,16 +64,13 @@
 </template>
 
 <script lang="ts">
-    import displayAreaText from '../ui/displayAreaText.vue';
-    import buttonFilter from '../ui/ButtonFilter.vue';
-    import seachBar from '../ui/searchBar.vue';
-    import iconAndTextBM from '../ui/iconAndTextBMage.vue';
+    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+    import areaDisplayBM from '../ui/displayAreaForBm.vue';
 
     export default {
         name: "Blue Mage Abilities",
-        components: {displayAreaText, buttonFilter, seachBar, iconAndTextBM},
+        components: {toggleFilterBtn, areaDisplayBM},
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
-        emits: ['changeTracked', 'sendToDetails'],
         data() {
             return {
                 filters: [] as any, //[Group, Name, State]
@@ -117,8 +117,3 @@
         }
     }
 </script>
-
-<style scoped lang="scss">
-
-    .rdrTable li {grid-template-columns: 140px 100px 300px 300px auto;}
-</style>

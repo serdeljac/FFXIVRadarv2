@@ -9,7 +9,8 @@
 
         <div class="bottomrow">
             <p>{{ `${node.area.region} > ${node.area.zone}` }}</p>
-            <p>{{ getTimer }}</p>
+            <timeDisplay :timeId="node.time" :timerList="timerList"/>
+            
         </div>
     </div>
 </template>
@@ -17,12 +18,13 @@
 <script lang="ts">
     import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
     import btnTracking from '../../ui/buttons/toggleTracking.vue'
+    import timeDisplay from '../../ui/displayTime.vue'
 
     export default {
         name: "Trackingbar Item",
         props: ['timerList', 'weatherList', 'node'],
         emits: ['changeTracked', 'openDetails'],
-        components: {btnToggleDetails,btnTracking},
+        components: { btnToggleDetails, btnTracking, timeDisplay},
         computed: {
             getActiveState() {
                 let timerState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : null;
