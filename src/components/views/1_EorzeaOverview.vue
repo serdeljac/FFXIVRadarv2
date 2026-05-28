@@ -1,355 +1,387 @@
 <template>
-    <section :class="[`eorzeaOverview body_content`, windowWidth]">
+  <section :class="[`eorzeaOverview body_content`, windowWidth]">
 
-        <div class="body_content-group mapDisplay" :style="`width: ${columnLayout}px; height: ${columnLayout}px`">
-            <mapDisplay 
-                :ffxivData="ffxivData" 
-                :focusNode="focusNode" 
-                :singleOnly="false" 
-                :mapSize="columnLayout" 
-                v-if="focusNode"
-                :class="[`mapDisplay_root`]"/>
+    <!-- Map Display -->
+    <div
+      class="body_content-group mapDisplay"
+      :style="{ width: `${columnLayout}px`, height: `${columnLayout}px` }">
+      <mapDisplay
+        v-if="focusNode"
+        :ffxivData="ffxivData"
+        :focusNode="focusNode"
+        :singleOnly="false"
+        :mapSize="columnLayout"
+        class="mapDisplay_root" />
+    </div>
+
+    <!-- Map Context Panel -->
+    <div class="body_content-group mapContext">
+
+      <!-- Header: location title + zone/search toggles -->
+      <div class="mapContext_header">
+        <div class="mapContext_header-location">
+          <template v-if="!enableSearchMenu">
+            <h2>{{ currentZone.region }}</h2>
+            <h2>{{ currentZone.zone }}</h2>
+            <h3>{{ currentZone.expansion }}</h3>
+          </template>
+          <template v-else>
+            <h2>Search...</h2>
+          </template>
         </div>
 
-        <div class="body_content-group mapContext">
+        <div class="mapContext_header-zonesearch">
+          <toggleMenuBtn
+            name="Change Zone"
+            :disabled="enableSearchMenu || null"
+            :enabled="enableZoneMenu || null"
+            @click="enableZoneMenu = true" />
 
-            <!-- Display Map title and search buttons -->
-            <div class="mapContext_header">
-                <div class="mapContext_header-location" v-if="!enableSearchMenu">
-                    <h2>{{ currentZone.region }}</h2>
-                    <h2>{{ currentZone.zone }}</h2>
-                    <h3>{{ currentZone.expansion }}</h3>
-                </div>
-
-                <div class="mapContext_header-location" v-else>
-                    <h2>Search...</h2>
-                </div>
-
-                <div class="mapContext_header-zonesearch">
-                    <toggleMenuBtn 
-                        :name="`Change Zone`" 
-                        :disabled="enableSearchMenu ? true : null" 
-                        :enabled="enableZoneMenu ? true : null"
-                        @click="enableZoneMenu = true"/>
-
-                    <toggleMenuBtn 
-                        :name="`Search`" 
-                        :enabled="enableSearchMenu ? true : null" 
-                        @click="enableSearchMenu = !enableSearchMenu"/>
-                </div>
-            </div>
-
-            <!-- Tab and Search Bars -->
-            <div class="mapContext_header-tabbar" v-if="!enableSearchMenu">
-                <div v-for="(d, index) in zoneNodes" :key="d[1]"
-                    :class="[
-                        `tab`, 
-                        {'disabled': d.length == 0},
-                        {'activeTab': tabSelected == index}]" 
-                        @click="d.length != 0 ? tabSelected = index.toString() : false; focusNode = zoneNodes[index.toString()][0]">
-                    <iconAndText :icon="index" />
-                </div>
-            </div>
-
-            <div class="mapContext_header-searchbar" v-else>
-                <seachBar :modelValue="searchName" @selected="filterByInputValue"/>
-            </div>
-
-            <!-- Display list of nodes within the zone selection -->
-            <div v-if="!enableSearchMenu">
-                <gatheringList 
-                    v-if="tabSelected == 'miner'" 
-                    :data="zoneNodes.miner" 
-                    :timerList="timerList"
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
-
-                <gatheringList 
-                    v-if="tabSelected == 'botany'" 
-                    :data="zoneNodes.botany" 
-                    :timerList="timerList"
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
-                    
-                <sightseeingList 
-                    v-if="tabSelected == 'sightseeing'" 
-                    :data="zoneNodes.sightseeing"
-                    :timerList="timerList"
-                    :weatherList="weatherList"
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @changeTracked="(e: any) => $emit('changeTracked', e)"
-                    @focusNode="(e: any) => focusNode = e"/>
-
-                <fatesList 
-                    v-if="tabSelected == 'fates'" 
-                    :data="zoneNodes.fates"
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @focusNode="(e: any) => focusNode = e"/>
-                
-                <huntsList 
-                    v-if="tabSelected == 'eliteHunts'"
-                    :data="zoneNodes.eliteHunts"
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @focusNode="(e: any) => focusNode = e"/>
-
-                <aethercurrentList 
-                    v-if="tabSelected == 'aethercurrents'" 
-                    :data="zoneNodes.aethercurrents" 
-                    :focusNode="focusNode"
-                    :windowWidth="windowWidth"
-                    @focusNode="(e: any) => focusNode = e"/>
-            </div>
-
-            <!-- Display list of nodes within the Search Bar -->
-            <div v-else>
-                <ul>
-                    <li v-for="d in searchResults" :key="d.ID">
-                        <gatheringList 
-                            v-if="d.job == 'miner'" 
-                            :data="[d]" 
-                            :timerList="timerList"
-                            :focusNode="focusNode"
-                            :windowWidth="windowWidth"
-                            @changeTracked="(e: any) => $emit('changeTracked', e)"
-                            @focusNode="(e: any) => focusNode = e"/>
-                        
-                        <gatheringList 
-                            v-if="d.job == 'botany'"  
-                            :data="[d]" 
-                            :timerList="timerList"
-                            :focusNode="focusNode"
-                            :windowWidth="windowWidth"
-                            @changeTracked="(e: any) => $emit('changeTracked', e)"
-                            @focusNode="(e: any) => focusNode = e"/>
-
-                        <sightseeingList 
-                            v-if="d.job == 'sightseeing'" 
-                            :data="[d]"
-                            :timerList="timerList"
-                            :weatherList="weatherList"
-                            :focusNode="focusNode"
-                            :windowWidth="windowWidth"
-                            @changeTracked="(e: any) => $emit('changeTracked', e)"
-                            @focusNode="(e: any) => focusNode = e"/>
-
-                        <fatesList 
-                            v-if="d.job == 'fates'" 
-                            :data="[d]" 
-                            :focusNode="focusNode"
-                            :windowWidth="windowWidth"
-                            @focusNode="(e: any) => focusNode = e"/>
-                        
-                        <huntsList 
-                            v-if="d.job == 'eliteHunts'"
-                            :data="[d]"
-                            :focusNode="focusNode"
-                            :windowWidth="windowWidth"
-                            @focusNode="(e: any) => focusNode = e"/>
-                    </li>
-                </ul>
-            </div>
+          <toggleMenuBtn
+            name="Search"
+            :enabled="enableSearchMenu || null"
+            @click="enableSearchMenu = !enableSearchMenu" />
         </div>
+      </div>
 
-        
-        
+      <!-- Tab Bar (zone mode) -->
+      <div v-if="!enableSearchMenu" class="mapContext_header-tabbar">
+        <div
+          v-for="(nodes, jobKey) in zoneNodes"
+          :key="jobKey"
+          :class="['tab', { disabled: nodes.length === 0, activeTab: tabSelected === jobKey }]"
+          @click="selectTab(jobKey)">
+          <iconAndText :icon="jobKey" />
+        </div>
+      </div>
 
-    <zoneSelect 
-        v-if="enableZoneMenu" 
-        :zoneList="zoneSelection" 
-        :windowWidth="windowWidth" 
-        @zoneSelected="changeZone"
-        @closeMenu="(e: boolean) => enableZoneMenu = e"/>
+      <!-- Search Bar -->
+      <div v-else class="mapContext_header-searchbar">
+        <searchBar :modelValue="searchName" @selected="filterByInputValue" />
+      </div>
 
-    </section>
+      <!-- Node list — zone mode -->
+      <template v-if="!enableSearchMenu">
+        <gatheringList
+          v-if="tabSelected === 'miner'"
+          :data="zoneNodes.miner"
+          :timerList="timerList"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @changeTracked="(e: any) => $emit('changeTracked', e)"
+          @focusNode="(e: any) => (focusNode = e)" />
+
+        <gatheringList
+          v-if="tabSelected === 'botany'"
+          :data="zoneNodes.botany"
+          :timerList="timerList"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @changeTracked="(e: any) => $emit('changeTracked', e)"
+          @focusNode="(e: any) => (focusNode = e)" />
+
+        <sightseeingList
+          v-if="tabSelected === 'sightseeing'"
+          :data="zoneNodes.sightseeing"
+          :timerList="timerList"
+          :weatherList="weatherList"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @changeTracked="(e: any) => $emit('changeTracked', e)"
+          @focusNode="(e: any) => (focusNode = e)" />
+
+        <fatesList
+          v-if="tabSelected === 'fates'"
+          :data="zoneNodes.fates"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @focusNode="(e: any) => (focusNode = e)" />
+
+        <huntsList
+          v-if="tabSelected === 'eliteHunts'"
+          :data="zoneNodes.eliteHunts"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @focusNode="(e: any) => (focusNode = e)" />
+
+        <aethercurrentList
+          v-if="tabSelected === 'aethercurrents'"
+          :data="zoneNodes.aethercurrents"
+          :focusNode="focusNode"
+          :windowWidth="windowWidth"
+          @focusNode="(e: any) => (focusNode = e)" />
+      </template>
+
+      <!-- Node list — search mode -->
+      <template v-else>
+        <ul>
+          <li v-for="d in searchResults" :key="d.ID">
+            <gatheringList
+              v-if="d.job === 'miner' || d.job === 'botany'"
+              :data="[d]"
+              :timerList="timerList"
+              :focusNode="focusNode"
+              :windowWidth="windowWidth"
+              @changeTracked="(e: any) => $emit('changeTracked', e)"
+              @focusNode="(e: any) => (focusNode = e)" />
+
+            <sightseeingList
+              v-if="d.job === 'sightseeing'"
+              :data="[d]"
+              :timerList="timerList"
+              :weatherList="weatherList"
+              :focusNode="focusNode"
+              :windowWidth="windowWidth"
+              @changeTracked="(e: any) => $emit('changeTracked', e)"
+              @focusNode="(e: any) => (focusNode = e)" />
+
+            <fatesList
+              v-if="d.job === 'fates'"
+              :data="[d]"
+              :focusNode="focusNode"
+              :windowWidth="windowWidth"
+              @focusNode="(e: any) => (focusNode = e)" />
+
+            <huntsList
+              v-if="d.job === 'eliteHunts'"
+              :data="[d]"
+              :focusNode="focusNode"
+              :windowWidth="windowWidth"
+              @focusNode="(e: any) => (focusNode = e)" />
+          </li>
+        </ul>
+      </template>
+
+    </div>
+
+    <!-- Zone Selection Modal -->
+    <zoneSelect
+      v-if="enableZoneMenu"
+      :zoneList="zoneSelection"
+      :windowWidth="windowWidth"
+      @zoneSelected="changeZone"
+      @closeMenu="(e: boolean) => (enableZoneMenu = e)" />
+
+  </section>
 </template>
 
 <script lang="ts">
-    import toggleMenuBtn from '../ui/buttons/toggleMenu.vue'
+import toggleMenuBtn      from '../ui/buttons/toggleMenu.vue';
+import searchBar          from '../ui/buttons/inputSearchBar.vue'; // fixed typo: seachBar → searchBar
+import iconAndText        from '../ui/iconAndText.vue';
+import zoneSelect         from '../layouts/zoneSelection.vue';
+import gatheringList      from '../ui/overviewListItem/gathering.vue';
+import sightseeingList    from '../ui/overviewListItem/sightseeing.vue';
+import fatesList          from '../ui/overviewListItem/fates.vue';
+import huntsList          from '../ui/overviewListItem/hunts.vue';
+import aethercurrentList  from '../ui/overviewListItem/aethercurrents.vue';
+import mapDisplay         from '../layouts/MapDisplay.vue';
 
-    import seachBar from '../ui/buttons/inputSearchBar.vue';
-    import iconAndText from '../ui/iconAndText.vue';
-    import zoneSelect from '../layouts/zoneSelection.vue';
-    import gatheringList from '../ui/overviewListItem/gathering.vue';
-    import sightseeingList from '../ui/overviewListItem/sightseeing.vue';
-    import fatesList from '../ui/overviewListItem/fates.vue';
-    import huntsList from '../ui/overviewListItem/hunts.vue';
-    import aethercurrentList from '../ui/overviewListItem/aethercurrents.vue';
-    import mapDisplay from '../layouts/MapDisplay.vue';
+// Ordered job keys — drives tab rendering order and auto-select priority
+const JOB_KEYS = ['miner', 'botany', 'sightseeing', 'fates', 'eliteHunts', 'aethercurrents'] as const;
+type JobKey = typeof JOB_KEYS[number];
 
-    export default {
-        name: "Eorzea Overview",
-        components: {
-            toggleMenuBtn,
-            seachBar, 
-            iconAndText, 
-            zoneSelect, 
-            gatheringList, 
-            sightseeingList, 
-            fatesList,
-            huntsList,
-            aethercurrentList,
-            mapDisplay
-        },
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
-        emits: ['changeTracked'],
-        data() {
-            return {
-                currentZone: [] as any, //Zone selected on map
-                zoneSelection: [] as any, //List of zones for 'Change Zone' menu
-                zoneNodes: {
-                    miner: [] as any,
-                    botany: [] as any,
-                    sightseeing: [] as any,
-                    fates: [] as any,
-                    eliteHunts: [] as any,
-                    aethercurrents: [] as any,
-                } as any, //List of nodes in the current zone
-                tabSelected: '' as string, //Tab that will display the nodes on the table
-                focusNode: [] as any, //Node that is focused for displaymap and node table
-                enableZoneMenu: false as boolean, 
-                enableSearchMenu: false as boolean,
-                searchName: '' as string,
-                searchResults: [] as any,
-            }
-        },
-        computed: {
-            columnLayout() {
-                let dim = {
-                    'desktop-large': 600,
-                    'desktop-small': 600,
-                    'tablet': 500,
-                    'mobile': 400,
-                }
-                return dim[this.windowWidth]
-            }
-        },
-        created() {
-            //Get the first zone with overview data and set it as default
-            this.currentZone = this.ffxivData.areas.find((o: any) => o.inoverview)
-            this.currentZone = this.ffxivData.areas[7]
+// Aetherial result field names — extend here if data grows beyond result3
+const AETHERIAL_RESULT_FIELDS = ['result1', 'result2', 'result3'] as const;
 
-            //Create list of zones based on expantions -> regions -> zones (Run Once)
-            this.createZoneSelectionArray()
+export default {
+  name: 'EorzeaOverview',
 
-            //Get all nodes within the current zone selected
-            this.fetchNodesInCurrentZone()
-        },
-        methods: {
-            createZoneSelectionArray() {
-                let finalList: any = {}
-                let allUsableAreas: Array<any> = []
+  components: {
+    toggleMenuBtn,
+    searchBar,
+    iconAndText,
+    zoneSelect,
+    gatheringList,
+    sightseeingList,
+    fatesList,
+    huntsList,
+    aethercurrentList,
+    mapDisplay,
+  },
 
-                //Filter only applicable zone data and get unique list of expansions
-                allUsableAreas = this.ffxivData.areas.filter((o: any) => o.inoverview)
-                let getListOfAllExpansions = allUsableAreas.filter((obj: any, index: any) => 
-                    index === allUsableAreas.findIndex((o: any) => obj.expansion === o.expansion)
-                );
+  props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+  emits: ['changeTracked'],
 
-                //Fetch the regions for each expansion and push the zones into the final list that will be used for the zone selection menu
-                for (const d in getListOfAllExpansions) {
-                    let expName = getListOfAllExpansions[d].expansion
-                    finalList[expName] = {}
+  data() {
+    return {
+      currentZone:     {} as any,
+      zoneSelection:   {} as Record<string, Record<string, any[]>>,
+      zoneNodes: {
+        miner:          [] as any[],
+        botany:         [] as any[],
+        sightseeing:    [] as any[],
+        fates:          [] as any[],
+        eliteHunts:     [] as any[],
+        aethercurrents: [] as any[],
+      } as Record<JobKey, any[]>,
+      tabSelected:      '' as string,
+      focusNode:        null as any,
+      enableZoneMenu:   false as boolean,
+      enableSearchMenu: false as boolean,
+      searchName:       '' as string,
+      searchResults:    [] as any[],
+    };
+  },
 
-                    let fetchRegions = allUsableAreas.filter(o => o.expansion == expName)
-                    fetchRegions = fetchRegions.filter((obj: any, index: any) => 
-                        index === fetchRegions.findIndex((o: any) => obj.region === o.region)
-                    );
+  computed: {
+    columnLayout(): number {
+      const dims: Record<string, number> = {
+        'desktop-large': 600,
+        'desktop-small': 600,
+        tablet:          500,
+        mobile:          400,
+      };
+      // Fallback to 600 for unknown breakpoints
+      return dims[this.windowWidth] ?? 600;
+    },
+  },
 
-                    //Push the list of regions into each expansion
-                    for (const e in fetchRegions) {
-                        let regionName = fetchRegions[e].region
-                        
-                        let fetchZones = allUsableAreas.filter(o => o.region == regionName && o.expansion == expName)
-                        fetchZones = fetchZones.filter((obj: any, index: any) => 
-                            index === fetchZones.findIndex((o: any) => obj.zone === o.zone)
-                        );
+  created() {
+    // TODO: Replace hardcoded index with a reliable default zone identifier
+    // areas[7] is used intentionally as a known starting zone; the find() call
+    // above it was dead code and has been removed.
+    this.currentZone = this.ffxivData.areas[7];
 
-                        finalList[expName][regionName] = fetchZones
-                    }
-                }
-                this.zoneSelection = finalList
-                
-            },
-            fetchNodesInCurrentZone() {
-                //Find all nodes for the selected zones and set them in the zoneNodes object
-                let zone = this.currentZone.zone
-                this.zoneNodes.miner = this.ffxivData.miner.filter((o: any) => o.area.zone == zone)
-                this.zoneNodes.botany = this.ffxivData.botany.filter((o: any) => o.area.zone == zone)
-                this.zoneNodes.sightseeing = this.ffxivData.sightseeing.filter((o: any) => o.zone == zone)
-                this.zoneNodes.fates = this.ffxivData.fates.filter((o: any) => o.zone == zone)
-                this.zoneNodes.eliteHunts = this.ffxivData.eliteHunts.filter((o: any) => o.zone == zone)
-                this.zoneNodes.aethercurrents = this.ffxivData.aethercurrents.filter((o: any) => o.zone == zone)
+    this.createZoneSelectionArray();
+    this.fetchNodesInCurrentZone();
+  },
 
-                //Find the first type of the node that has data and set
-                for (const d in this.zoneNodes) {
-                    if (this.zoneNodes[d].length > 0) {
-                        this.tabSelected = d
-                        this.focusNode = this.zoneNodes[d][0]
-                        break;
-                    }
-                }
-            },
-            changeZone(e: any) {
-                this.currentZone = e
-                this.tabSelected = ''
-                this.fetchNodesInCurrentZone()
-            },
-            filterByInputValue(e: any) {
-                this.searchName = e;
+  methods: {
+    // ─── Zone Selection ───────────────────────────────────────────────────────
 
-                if (this.searchName && this.searchName.trim() !== "" && this.searchName.length > 2) {
-                    const search = this.searchName.trim().toLowerCase();
-                    let minerData = this.ffxivData.miner.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
-                    let botanyData = this.ffxivData.botany.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
-                    let minerAetherialData = this.ffxivData.miner.filter((o: any) => o.usage == 'aetherial');
-                    minerAetherialData = findAetherialMatches(minerAetherialData);
-                    let botanyAetherialData = this.ffxivData.botany.filter((o: any) => o.usage == 'aetherial');
-                    botanyAetherialData = findAetherialMatches(botanyAetherialData);
-                    let sightseeingData = this.ffxivData.sightseeing.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
-                    let huntsData = this.ffxivData.eliteHunts.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
-                    let fatesData = this.ffxivData.fates.filter((o: any) => 
-                        o.name && o.name.toLowerCase().includes(search) ||
-                        o.bossname && o.bossname.toLowerCase().includes(search)
-                    );
+    createZoneSelectionArray() {
+      // Only include areas flagged for overview
+      const overviewAreas: any[] = this.ffxivData.areas.filter((o: any) => o.inoverview);
 
-                    function findAetherialMatches(arr: any) {
-                        let foundAetherial = []
-                        for (const d in arr) {
-                            let usageGroup = arr[d].usage_info
-                            if (usageGroup.result1.toLowerCase().includes(search)) {
-                                foundAetherial.push(arr[d])
-                            }
-                            if (usageGroup.result2.toLowerCase().includes(search)) {
-                                foundAetherial.push(arr[d])
-                            }
-                            if (usageGroup.result3.toLowerCase().includes(search)) {
-                                foundAetherial.push(arr[d])
-                            }
-                        }
-                        return foundAetherial
-                    }
+      // Build expansion → region → zones structure using Maps for O(1) dedup
+      // instead of repeated findIndex O(n²) calls
+      const expansionOrder: string[] = [];
+      const byExpansion = new Map<string, Map<string, any[]>>();
 
-                    this.searchResults = [
-                        ...minerData, 
-                        ...botanyData, 
-                        ...minerAetherialData, 
-                        ...botanyAetherialData,
-                        ...sightseeingData,
-                        ...huntsData,
-                        ...fatesData
-                    ]
+      for (const area of overviewAreas) {
+        const { expansion, region, zone } = area;
 
-                } else {
-                    this.searchResults = []
-                }
-            },
+        if (!byExpansion.has(expansion)) {
+          byExpansion.set(expansion, new Map());
+          expansionOrder.push(expansion);
         }
-    }
+        const regionMap = byExpansion.get(expansion)!;
+
+        if (!regionMap.has(region)) {
+          regionMap.set(region, []);
+        }
+        const zones = regionMap.get(region)!;
+
+        // Deduplicate zones by zone name
+        if (!zones.some((z) => z.zone === zone)) {
+          zones.push(area);
+        }
+      }
+
+      // Convert Maps back to the plain-object shape the zoneSelect component expects
+      const finalList: Record<string, Record<string, any[]>> = {};
+      for (const expansion of expansionOrder) {
+        finalList[expansion] = {};
+        for (const [region, zones] of byExpansion.get(expansion)!) {
+          finalList[expansion][region] = zones;
+        }
+      }
+
+      this.zoneSelection = finalList;
+    },
+
+    fetchNodesInCurrentZone() {
+      const zone = this.currentZone.zone;
+
+      this.zoneNodes.miner          = this.ffxivData.miner.filter((o: any) => o.area?.zone === zone);
+      this.zoneNodes.botany         = this.ffxivData.botany.filter((o: any) => o.area?.zone === zone);
+      this.zoneNodes.sightseeing    = this.ffxivData.sightseeing.filter((o: any) => o.zone === zone);
+      this.zoneNodes.fates          = this.ffxivData.fates.filter((o: any) => o.zone === zone);
+      this.zoneNodes.eliteHunts     = this.ffxivData.eliteHunts.filter((o: any) => o.zone === zone);
+      this.zoneNodes.aethercurrents = this.ffxivData.aethercurrents.filter((o: any) => o.zone === zone);
+
+      // Auto-select the first tab that has data, preserving JOB_KEYS order
+      this.tabSelected = '';
+      this.focusNode   = null;
+      for (const key of JOB_KEYS) {
+        if (this.zoneNodes[key].length > 0) {
+          this.tabSelected = key;
+          this.focusNode   = this.zoneNodes[key][0];
+          break;
+        }
+      }
+    },
+
+    selectTab(jobKey: string) {
+      if (this.zoneNodes[jobKey]?.length === 0) return; // ignore disabled tabs
+      this.tabSelected = jobKey;
+      this.focusNode   = this.zoneNodes[jobKey][0];
+    },
+
+    changeZone(e: any) {
+      this.currentZone = e;
+      this.fetchNodesInCurrentZone(); // tabSelected reset happens inside
+    },
+
+    // ─── Search ───────────────────────────────────────────────────────────────
+
+    filterByInputValue(e: any) {
+      this.searchName = e;
+
+      const query = (e ?? '').trim().toLowerCase();
+      if (query.length <= 2) {
+        this.searchResults = [];
+        return;
+      }
+
+      const includes = (val: string | undefined) =>
+        val ? val.toLowerCase().includes(query) : false;
+
+      // Standard name-match filters
+      const minerData      = this.ffxivData.miner.filter((o: any) => includes(o.name));
+      const botanyData     = this.ffxivData.botany.filter((o: any) => includes(o.name));
+      const sightseeingData = this.ffxivData.sightseeing.filter((o: any) => includes(o.name));
+      const huntsData      = this.ffxivData.eliteHunts.filter((o: any) => includes(o.name));
+      // Fixed precedence bug: original was `a && b || c && d` (&&  > ||),
+      // meaning the fates condition wasn't bracketed correctly; now explicit.
+      const fatesData      = this.ffxivData.fates.filter(
+        (o: any) => includes(o.name) || includes(o.bossname),
+      );
+
+      // Aetherial secondary-result matches — extracted to a standalone method
+      // to avoid re-declaring a closure on every keystroke
+      const minerAetherialData  = this.findAetherialMatches(this.ffxivData.miner,  query);
+      const botanyAetherialData = this.findAetherialMatches(this.ffxivData.botany, query);
+
+      // Deduplicate: aetherial nodes whose *name* also matched would appear twice
+      const nameMatchIds = new Set([
+        ...minerData.map((o: any)  => o.ID),
+        ...botanyData.map((o: any) => o.ID),
+      ]);
+      const uniqueAetherialMiner  = minerAetherialData.filter((o: any) => !nameMatchIds.has(o.ID));
+      const uniqueAetherialBotany = botanyAetherialData.filter((o: any) => !nameMatchIds.has(o.ID));
+
+      this.searchResults = [
+        ...minerData,
+        ...botanyData,
+        ...uniqueAetherialMiner,
+        ...uniqueAetherialBotany,
+        ...sightseeingData,
+        ...huntsData,
+        ...fatesData,
+      ];
+    },
+
+    findAetherialMatches(arr: any[], query: string): any[] {
+      // Only examine aetherial-usage nodes; check all declared result fields
+      return arr.filter((o: any) => {
+        if (o.usage !== 'aetherial' || !o.usage_info) return false;
+        return AETHERIAL_RESULT_FIELDS.some(
+          (field) => o.usage_info[field]?.toLowerCase().includes(query),
+        );
+      });
+    },
+  },
+};
 </script>

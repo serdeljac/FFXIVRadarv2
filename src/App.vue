@@ -1,100 +1,104 @@
 <template>
   <Analytics />
-  <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]" >
-    
-    <trackingBar 
-      :class="[`trackingbar`, sidebarLayout, windowWidth]" 
+  <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
+
+    <trackingBar
+      :class="[`trackingbar`, sidebarLayout, windowWidth]"
       :windowWidth="windowWidth"
       :timerList="timerList"
       :weatherList="weatherList"
       :trackinglist="trackinglist"
       @openDetails="openDetails"
-      @changeTracked="changeTracked"
-      />
+      @changeTracked="changeTracked" />
 
-    <buttonMenu 
-      :class="[`menu_Btn`, {'tracking_pos' : sidebarLayout == 'hidden-extended' || sidebarLayout == 'mobile-extended'}]" 
-      @click="toggleMenu()"/>
+    <buttonMenu
+      :class="[`menu_Btn`, { tracking_pos: sidebarLayout === 'hidden-extended' || sidebarLayout === 'mobile-extended' }]"
+      @click="toggleMenu" />
 
-    <sidebar 
-      :class="[`sidebar`, sidebarLayout, windowWidth]" 
+    <sidebar
+      :class="[`sidebar`, sidebarLayout, windowWidth]"
       :sidebarLayout="sidebarLayout"
       :eorzeaClock="eorzeaClock" />
 
-    <main 
-      :class="[`main_content`]" 
-      @click="toggleForceMenu()">
-        <promotionBanner />
-        <router-view
-          :ffxivData="ffxivData"
-          :windowWidth="windowWidth"
-          :timerList="timerList"
-          :weatherList="weatherList"
-          @openDetails="openDetails"
-          @changeTracked="changeTracked"/>
+    <main :class="[`main_content`]" @click="toggleForceMenu">
+      <promotionBanner />
+      <router-view
+        :ffxivData="ffxivData"
+        :windowWidth="windowWidth"
+        :timerList="timerList"
+        :weatherList="weatherList"
+        @openDetails="openDetails"
+        @changeTracked="changeTracked" />
     </main>
 
-    <detailspane 
-      v-if="openDetailSidebar && (windowWidth != 'tablet' && windowWidth != 'mobile')" 
-      :node="detailsPanel" 
+    <detailspane
+      v-if="openDetailSidebar && windowWidth !== 'tablet' && windowWidth !== 'mobile'"
+      :node="detailsPanel"
       :ffxivData="ffxivData"
       :timerList="timerList"
       :weatherList="weatherList"
-      @closeDetails="(e: any) => openDetailSidebar = e"/>
-      
+      @closeDetails="(e: any) => (openDetailSidebar = e)" />
+
   </div>
 </template>
 
-<script lang="ts" setup>
-import { Analytics } from '@vercel/analytics/vue';
-</script>
-
 <script lang="ts">
-  //API's
-  import EorzeaTime from 'eorzea-time';
-  import EorzeaWeather from 'eorzea-weather';
+// APIs
+import EorzeaTime from 'eorzea-time';
+import EorzeaWeather from 'eorzea-weather';
+import { Analytics } from '@vercel/analytics/vue';
 
-  //Components
-  import promotionBanner from './components/layouts/PromotionBanner.vue';
-  import sidebar from './components/layouts/Sidebar.vue';
-  import trackingBar from './components/layouts/TrackingBar.vue';
-  import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
-  import detailspane from './components/layouts/DetailsPane.vue'
+// Components
+import promotionBanner from './components/layouts/PromotionBanner.vue';
+import sidebar from './components/layouts/Sidebar.vue';
+import trackingBar from './components/layouts/TrackingBar.vue';
+import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
+import detailspane from './components/layouts/DetailsPane.vue';
 
-  //JSON Data
-  import areaRaw from './assets/json/areas.json';
-  import expansionsRaw from './assets/json/data_expansions.json';
-  import miningRaw from './assets/json/nodes_miner.json';
-  import botanyRaw from './assets/json/nodes_botany.json';
-  import aetherialRaw from './assets/json/data_aetherial.json';
-  import aetheryteRaw from './assets/json/nodes_aetheryte.json';
-  import sightseeingRaw from './assets/json/nodes_sightseeing.json';
-  import huntsEliteRaw from './assets/json/data_hunts.json'
-  import huntsPointsRaw from './assets/json/nodes_huntpoints.json'
-  import aetherCurrentRaw from './assets/json/nodes_aethercurrent.json';
-  import fatesRaw from './assets/json/nodes_fates.json'
-  import blueMageRaw from './assets/json/data_bluemage.json'
-  import timerRaw from './assets/json/data_timer.json';
-  
+// JSON Data
+import areaRaw from './assets/json/areas.json';
+import expansionsRaw from './assets/json/data_expansions.json';
+import miningRaw from './assets/json/nodes_miner.json';
+import botanyRaw from './assets/json/nodes_botany.json';
+import aetherialRaw from './assets/json/data_aetherial.json';
+import aetheryteRaw from './assets/json/nodes_aetheryte.json';
+import sightseeingRaw from './assets/json/nodes_sightseeing.json';
+import huntsEliteRaw from './assets/json/data_hunts.json';
+import huntsPointsRaw from './assets/json/nodes_huntpoints.json';
+import aetherCurrentRaw from './assets/json/nodes_aethercurrent.json';
+import fatesRaw from './assets/json/nodes_fates.json';
+import blueMageRaw from './assets/json/data_bluemage.json';
+import timerRaw from './assets/json/data_timer.json';
+
+// Gold Saucer repeats every 20 real-time minutes (1200 seconds).
+// Active windows: [0–600), [1200–1800), [2400–3000)
+const GS_CYCLE = 1200; // seconds
+const GS_ACTIVE_WINDOW = 600; // seconds active per cycle
+
+// Eorzea weather changes at Eorzea-minute 0, 480, and 960
+const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 
 export default {
-  name: 'App Root',
-  components: {sidebar, trackingBar, buttonMenu, detailspane, promotionBanner}, 
+  name: 'AppRoot',
+
+  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner },
+
   data() {
     return {
-      windowWidth: '' as String,
-      sidebarLayout: 'extended' as String,
+      windowWidth: '' as string,
+      sidebarLayout: 'extended' as string,
       ffxivData: {
-        areas: [] as any,
-        miner: [] as any,
-        botany: [] as any,
-        aetheryte: [] as any,
-        sightseeing: [] as any,
-        eliteHunts: [] as any,
-        aethercurrents: [] as any,
-        fates: [] as any,
-        bluemageData: [] as any,
-        bluemageFilters: [] as any
+        areas: [] as any[],
+        miner: [] as any[],
+        botany: [] as any[],
+        aetheryte: [] as any[],
+        sightseeing: [] as any[],
+        eliteHunts: [] as any[],
+        aethercurrents: [] as any[],
+        fates: [] as any[],
+        bluemageData: [] as any[],
+        bluemageFilters: [] as any[],
+        expansion: [] as any[],
       },
       eorzeaClock: {
         display24Hr: 0 as number,
@@ -103,497 +107,458 @@ export default {
         totalMin: 0 as number,
       },
       goldSaucer: {
-        minutes: '' as String,
+        seconds: 0 as number,   // renamed from `minutes` — value was always seconds
         active: false as boolean,
       },
-      timerList: [] as any,
-      weatherList: {} as any,
+      timerList: [] as any[],
+      weatherList: {} as Record<string, any>,
       intervalTicks: 0 as number,
       detailsPanel: {} as any,
-      trackinglist: [] as any,
-      openDetailSidebar: false as boolean
+      trackinglist: [] as any[],
+      openDetailSidebar: false as boolean,
+      _clockInterval: null as ReturnType<typeof setInterval> | null,
+      _resizeHandler: null as (() => void) | null,
+    };
+  },
+
+  created() {
+    // Bind resize handler once so the same reference can be removed on unmount
+    this._resizeHandler = this.onWindowResize.bind(this);
+    window.addEventListener('resize', this._resizeHandler);
+    this.onWindowResize();
+
+    this.setupInitialFFXIVData();
+
+    this._clockInterval = setInterval(() => {
+      this.onClockTick();
+    }, 1000);
+  },
+
+  unmounted() {
+    // Clean up to prevent memory / listener leaks
+    if (this._resizeHandler) {
+      window.removeEventListener('resize', this._resizeHandler);
+    }
+    if (this._clockInterval !== null) {
+      clearInterval(this._clockInterval);
     }
   },
-  async created() {
-    try {
-      this.enabledWindowResizeResponse()
-      this.setupInitialFFXIVData()
-    } catch (error) {
-      console.error('Error in setupInitialFFXIVData()', error);
-    }
-    
-    this.enableClockIntervalCount()
-    setInterval(() => {this.enableClockIntervalCount()}, 1000)
-  },
+
   methods: {
-      enabledWindowResizeResponse() {
-        window.addEventListener('resize', this.enabledWindowResizeResponse);
-        let curWidth: number = window.innerWidth;
-        let desktopWidthLg: number = 1700;
-        let desktopWidthSm: number = 1260;
-        let tabletWidth: number = 800;
+    // ─── Window & Layout ──────────────────────────────────────────────────────
 
-        if (curWidth >= desktopWidthLg) {
-          this.windowWidth = 'desktop-large'
-          this.sidebarLayout = 'extended';
-        }
-        else if (curWidth >= desktopWidthSm && curWidth < desktopWidthLg) {
-          this.windowWidth = 'desktop-small'
-          this.sidebarLayout = 'compact';
-        }
-        else if (curWidth >= tabletWidth && curWidth < desktopWidthSm) {
-          this.windowWidth = 'tablet'
-          this.sidebarLayout = 'hidden-extended';
-        }
-        else if (curWidth < tabletWidth) {
-          this.windowWidth = 'mobile'
-          this.sidebarLayout = 'hidden-extended';
-        } 
-        else {
-          console.error('Cannot get Window Width!');
-          this.windowWidth = 'desktop-large';
-          this.sidebarLayout = 'extended';
-        }
-      },
-      toggleMenu() {
-        if (this.windowWidth == 'desktop-large') {
-          this.sidebarLayout = this.sidebarLayout == 'extended' ? 'compact' : 'extended';
-        }
-        else if (this.windowWidth == 'desktop-small') {
-          this.sidebarLayout = this.sidebarLayout == 'compact' ? 'overlay-extended' : 'compact';
-        }
-        else if (this.windowWidth == 'tablet') {
-          this.sidebarLayout = this.sidebarLayout == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
-        }
-        else if (this.windowWidth == 'mobile') {
-          this.sidebarLayout = this.sidebarLayout == 'hidden-extended' ? 'mobile-extended' : 'hidden-extended';
-        }
-      },
-      toggleForceMenu() {
-        if (this.windowWidth == 'desktop-small') {
-          this.sidebarLayout = 'compact'
-        }
-        else if (this.windowWidth == 'tablet' || this.windowWidth == 'mobile') {
-          this.sidebarLayout = 'hidden-extended'
-        }
+    onWindowResize() {
+      const w = window.innerWidth;
+      if (w >= 1700) {
+        this.windowWidth = 'desktop-large';
+        this.sidebarLayout = 'extended';
+      } else if (w >= 1260) {
+        this.windowWidth = 'desktop-small';
+        this.sidebarLayout = 'compact';
+      } else if (w >= 800) {
+        this.windowWidth = 'tablet';
+        this.sidebarLayout = 'hidden-extended';
+      } else {
+        this.windowWidth = 'mobile';
+        this.sidebarLayout = 'hidden-extended';
+      }
+    },
 
-      },
-      setupInitialFFXIVData() {
-        // Run these once on web load
-        this.setAreaData();
-        this.ffxivData['expansion'] = expansionsRaw;
-        this.setMiningAndBotanyData(miningRaw, 'miner');
-        this.setMiningAndBotanyData(botanyRaw, 'botany');
-        this.setAetheryteData();
-        this.setSightseeingData();
-        this.setEliteHuntsData();
-        this.setAetherCurrentData();
-        this.setFatesData();
-        this.setBlueMageData();
-        this.createWeatherList();
-        this.setEorzeaClock();
-        this.setGoldSaucerClockState();
-        this.setTimerData();
-        this.getTimerCountdown();
-      },
-      setAreaData() {
-        for (const i in areaRaw) {
-          let obj: any = areaRaw[i];
-          obj.issubarea = obj.issubarea == 1 ? true : false;
-          obj.inoverview = obj.inoverview == 1 ? true : false;
-          obj.type = obj.type ? obj.type : false;
-          obj.icon = expansionsRaw.find((o: any) => o.expansion == obj.expansion).icon;
+    toggleMenu() {
+      const transitions: Record<string, [string, string]> = {
+        'desktop-large': ['extended', 'compact'],
+        'desktop-small': ['compact', 'overlay-extended'],
+        tablet:          ['hidden-extended', 'mobile-extended'],
+        mobile:          ['hidden-extended', 'mobile-extended'],
+      };
+      const pair = transitions[this.windowWidth as string];
+      if (pair) {
+        this.sidebarLayout = this.sidebarLayout === pair[0] ? pair[1] : pair[0];
+      }
+    },
+
+    toggleForceMenu() {
+      const collapseMap: Record<string, string> = {
+        'desktop-small': 'compact',
+        tablet:          'hidden-extended',
+        mobile:          'hidden-extended',
+      };
+      const target = collapseMap[this.windowWidth as string];
+      if (target) this.sidebarLayout = target;
+    },
+
+    // ─── Initial Data Setup ───────────────────────────────────────────────────
+
+    setupInitialFFXIVData() {
+      this.setAreaData();
+      this.ffxivData.expansion = expansionsRaw as any[];
+      this.setMiningAndBotanyData(miningRaw, 'miner');
+      this.setMiningAndBotanyData(botanyRaw, 'botany');
+      this.setAetheryteData();
+      this.setSightseeingData();
+      this.setEliteHuntsData();
+      this.setAetherCurrentData();
+      this.setFatesData();
+      this.setBlueMageData();
+      // Clock must be set before timers so totalMin is available
+      this.setEorzeaClock();
+      this.createWeatherList();
+      this.setGoldSaucerState();
+      this.setTimerData(); // builds list + calculates initial countdown
+    },
+
+    setAreaData() {
+      const areas = (areaRaw as any[]).map((obj) => ({
+        ...obj,
+        issubarea: obj.issubarea === 1,
+        inoverview: obj.inoverview === 1,
+        type: obj.type || false,
+        icon: (expansionsRaw as any[]).find((e) => e.expansion === obj.expansion)?.icon,
+      }));
+      this.ffxivData.areas = areas;
+    },
+
+    createWeatherList() {
+      // Use a Set for O(1) dedup instead of findIndex O(n²)
+      const seen = new Set<string>();
+      for (const area of this.ffxivData.areas) {
+        if (!area.mapcode || seen.has(area.mapcode)) continue;
+        seen.add(area.mapcode);
+        this.weatherList[area.mapcode] = EorzeaWeather.getWeather(area.mapcode, new Date()) || false;
+      }
+    },
+
+    setMiningAndBotanyData(arr: any[], job: string) {
+      const areas = this.ffxivData.areas;
+
+      const getUsageInfo = (obj: any): any => {
+        if (obj.usage === 'customdelivery' || obj.usage === 'scripts') return obj.usage_info;
+        if (obj.usage === 'aetherial') return (aetherialRaw as any[]).find((o) => o.name === obj.name);
+        return false;
+      };
+
+      const getAreaData = (areaName: string): any => {
+        const result =
+          areas.find((o) => o.area === areaName) ??
+          areas.find((o) => o.point === areaName);
+        if (!result) console.error(`Cannot find area in setMiningAndBotanyData: ${areaName}`);
+        return result ?? areaName;
+      };
+
+      const processed = (arr as any[]).map((obj) => ({
+        ...obj,
+        tracked: false,
+        time: obj.time || false,
+        isshard: obj.isshard === 1,
+        tomb: obj.tomb || false,
+        perception: obj.perception || false,
+        attribute: obj.attribute || false,
+        usage: obj.usage || 'crafting',
+        usage_info: getUsageInfo(obj),
+        area: getAreaData(obj.area),
+      }));
+
+      (this.ffxivData as any)[job] = processed;
+    },
+
+    setAetheryteData() {
+      this.ffxivData.aetheryte = (aetheryteRaw as any[]).map((obj) => ({
+        ...obj,
+        point: obj.point || false,
+        job: 'aetheryte',
+        job_sub: 'aetheryte',
+        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+      }));
+    },
+
+    setSightseeingData() {
+      this.ffxivData.sightseeing = (sightseeingRaw as any[]).map((obj) => ({
+        ...obj,
+        job: 'sightseeing',
+        job_sub: 'sightseeing',
+        tracked: false,
+        point: obj.point || false,
+        type: obj.type || false,
+        weather1: obj.weather1 || false,
+        weather2: obj.weather2 || false,
+        time: obj.time || false,
+        mount: obj.mount !== 0,
+        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+      }));
+    },
+
+    setEliteHuntsData() {
+      const getPointsData = (zone: string, rank: string): any[] =>
+        (huntsPointsRaw as any[]).filter((o) => o.zone === zone && o.ranks.includes(rank));
+
+      this.ffxivData.eliteHunts = (huntsEliteRaw as any[]).map((obj) => {
+        const rankShort = obj.rank === 'SS' ? 'SS' : obj.rank.slice(0, 1);
+        return {
+          ...obj,
+          job: 'eliteHunts',
+          job_sub: rankShort,
+          rank: rankShort,
+          trigger: obj.trigger || false,
+          weather1: obj.weather1 || false,
+          weather2: obj.weather2 || false,
+          maintenance: obj.maintenance || false,
+          area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+          points: getPointsData(obj.zone, rankShort),
         };
-        this.ffxivData['areas'] = areaRaw;
-      },
-      createWeatherList() {
-        const areaList = this.ffxivData.areas.filter((obj: any, index: any) => 
-            index === this.ffxivData.areas.findIndex((o: any) => obj.mapcode === o.mapcode)
-        );
-        
-        areaList.forEach((o: any) => {
-          if (o.mapcode) {
-            let x = EorzeaWeather.getWeather(o.mapcode, new Date());
-            this.weatherList[o.mapcode] = x ? x : false;
+      });
+    },
+
+    setAetherCurrentData() {
+      this.ffxivData.aethercurrents = (aetherCurrentRaw as any[]).map((obj) => ({
+        ...obj,
+        job: 'aethercurrents',
+        job_sub: obj.name ? 'currentquest' : 'current',
+        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+      }));
+    },
+
+    setFatesData() {
+      this.ffxivData.fates = (fatesRaw as any[]).map((obj) => ({
+        ...obj,
+        job: 'fates',
+        chain_set: obj.chain_set || false,
+        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+      }));
+    },
+
+    setBlueMageData() {
+      // Build type-filter list (unique type1 values)
+      const seenTypes = new Set<string>();
+      const filters: any[] = [['type1', 'All', true]];
+      for (const entry of blueMageRaw as any[]) {
+        if (!seenTypes.has(entry.type1)) {
+          seenTypes.add(entry.type1);
+          filters.push(['type1', entry.type1, false]);
+        }
+      }
+      this.ffxivData.bluemageFilters = filters;
+
+      // Use array length directly — no fragile Object.keys trick
+      const maxNo: number = (blueMageRaw as any[])[blueMageRaw.length - 1].no;
+
+      const groupData = (
+        types: string[],
+        typesSub: string[],
+        dataList: any[],
+        searchLocation = false,
+      ): any[] =>
+        types.map((type, i) => {
+          const base: any[] = [type, typesSub[i] || false];
+          if (!searchLocation) {
+            base.push(dataList[i]);
+          } else {
+            const d = dataList[i];
+            base.push([d.location, d.x || false, d.y || false]);
           }
+          return base;
         });
-      },
-      setMiningAndBotanyData(arr: any, job: string) {
-        for (const i in arr) {
-          let obj: any = arr[i];
-          obj.tracked = false;
-          obj.time = obj.time ? obj.time : false;
-          obj.isshard = obj.isshard == 1 ? true : false;
-          obj.tomb = obj.tomb ? obj.tomb : false;
-          obj.perception = obj.perception ? obj.perception : false;
-          obj.attribute = obj.attribute ? obj.attribute : false;
-          obj.usage = obj.usage ? obj.usage : 'crafting';
-          obj.usage_info = getSpecificUsageData(obj);
-          obj.area = getSpecificAreaData(obj.area, this.ffxivData.areas);
-        };
 
-        this.ffxivData[job] = arr;
+      this.ffxivData.bluemageData = [];
+      for (let no = 1; no <= maxNo; no++) {
+        const abilities = (blueMageRaw as any[]).filter((o) => o.no === no);
+        const types    = abilities.map((o) => o.type1);
+        const typesSub = abilities.map((o) => o.type2);
 
-        function getSpecificUsageData(arr: any) {
-          if (arr.usage == 'customdelivery' || arr.usage == 'scripts') {
-            return arr.usage_info;
+        this.ffxivData.bluemageData.push({
+          ID:       abilities[0].no,
+          no:       abilities[0].no,
+          name:     abilities[0].name,
+          level:    abilities[0].level,
+          stars:    abilities[0].stars,
+          category: types,
+          location: groupData(types, typesSub, abilities, true),
+          npc:      groupData(types, typesSub, abilities.map((o) => o.npc)),
+          notes:    groupData(types, typesSub, abilities.map((o) => o.notes)),
+        });
+      }
+    },
+
+    // ─── Eorzea Clock ─────────────────────────────────────────────────────────
+
+    setEorzeaClock() {
+      const raw: string = new EorzeaTime().toString();
+      if (!raw) {
+        console.error('Cannot fetch Eorzea Time');
+        Object.assign(this.eorzeaClock, { display24Hr: 0, display12Hr: 0, displayMin: 0, totalMin: 0 });
+        return;
+      }
+      const h24 = Number(raw.slice(0, 2));
+      const min = Number(raw.slice(3, 5));
+      this.eorzeaClock.display24Hr = h24;
+      this.eorzeaClock.display12Hr = h24 > 12 ? h24 - 12 : h24;
+      this.eorzeaClock.displayMin  = min;
+      this.eorzeaClock.totalMin    = h24 * 60 + min;
+    },
+
+    // ─── Gold Saucer ──────────────────────────────────────────────────────────
+
+    setGoldSaucerState() {
+      const now = new Date();
+      const elapsed = now.getMinutes() * 60 + now.getSeconds();
+      // Within each 20-min cycle, active = first 10 min, inactive = second 10 min
+      const posInCycle = elapsed % GS_CYCLE;
+      this.goldSaucer.active  = posInCycle < GS_ACTIVE_WINDOW;
+      this.goldSaucer.seconds = GS_ACTIVE_WINDOW - (posInCycle % GS_ACTIVE_WINDOW);
+    },
+
+    // ─── Timers ───────────────────────────────────────────────────────────────
+
+    setTimerData() {
+      this.timerList = (timerRaw as any[]).map((obj) => ({
+        ID:               obj.ID,
+        displayRanges12Hr: this.buildRangeStrings(true,  [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
+        displayRanges24Hr: this.buildRangeStrings(false, [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
+        stateActive: false as boolean,
+        seconds:     0 as number,   // renamed from `minutes` — unit is seconds
+        countdown:   '' as string,
+      }));
+      this.recalcTimerCountdowns();
+    },
+
+    buildRangeStrings(use12Hr: boolean, starts: number[], ends: number[]): string[] {
+      const fmt = use12Hr ? this.fmt12Hr : this.fmt24Hr;
+      return starts
+        .map((s, i) => (s !== ends[i] ? `${fmt(s, 0)} - ${fmt(ends[i], 0)}` : null))
+        .filter(Boolean) as string[];
+    },
+
+    fmt12Hr(hr: number, min: number): string {
+      const h   = hr === 0 ? 12 : hr > 12 ? hr - 12 : hr;
+      const m   = min < 10 ? `0${min}` : `${min}`;
+      const ampm = hr >= 12 && hr < 24 ? 'PM' : 'AM';
+      return `${h}:${m} ${ampm}`;
+    },
+
+    fmt24Hr(hr: number, min: number): string {
+      return `${hr < 10 ? '0' : ''}${hr}:${min < 10 ? '0' : ''}${min}`;
+    },
+
+    recalcTimerCountdowns() {
+      const curMin = this.eorzeaClock.totalMin;
+
+      (timerRaw as any[]).forEach((obj, d) => {
+        const starts = [obj.start0 * 60, obj.start1 * 60, obj.start2 * 60];
+        const ends   = [obj.end0   * 60, obj.end1   * 60, obj.end2   * 60];
+        const sets   = obj.sets as number;
+
+        let active = false;
+        let minsUntil = 0;
+
+        // Build ordered [start, end] windows for this timer (up to `sets` windows)
+        const windows = Array.from({ length: sets }, (_, i) => [starts[i], ends[i]]);
+
+        // Find which window the current time falls in
+        let resolved = false;
+        for (const [s, e] of windows) {
+          if (curMin <= s) {
+            // Before this window starts
+            active    = false;
+            minsUntil = s - curMin;
+            resolved  = true;
+            break;
           }
-          else if (arr.usage == 'aetherial') {
-            let r = aetherialRaw.find((o: any) => o.name == arr.name);
-            return r;
-          };
-          return false;
-        };
-
-        function getSpecificAreaData(area: string, areas: any[]) {
-          let results = areas.find((o: any) => o.area == area);
-          if (!results) {results = areas.find((o: any) => o.point == area);}
-          if (!results) {console.error(`Cannot find area in App.JS: ${area}`); return area;}
-          return results;
-        };
-      },
-      setAetheryteData() {
-        for (const i in aetheryteRaw) {
-          let obj: any = aetheryteRaw[i];
-          obj.point = obj.point ? obj.point : false;
-          obj.job = 'aetheryte';
-          obj.job_sub = 'aetheryte';
-          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
-        };
-
-        this.ffxivData.aetheryte = aetheryteRaw;
-      },
-      setSightseeingData() {
-        for (const i in sightseeingRaw) {
-          let obj: any = sightseeingRaw[i];
-          obj.job = 'sightseeing';
-          obj.job_sub = 'sightseeing';
-          obj.tracked = false;
-          obj.point = obj.point ? obj.point : false;
-          obj.type = obj.type ? obj.type : false;
-          obj.weather1 = obj.weather1 ? obj.weather1 : false;
-          obj.weather2 = obj.weather2 ? obj.weather2 : false;
-          obj.time = obj.time ? obj.time : false;
-          obj.mount = obj.mount === 0 ? false : true;
-          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
-        };
-
-        this.ffxivData.sightseeing = sightseeingRaw;
-      },
-      setEliteHuntsData() {
-        for (const i in huntsEliteRaw) {
-          let obj: any = huntsEliteRaw[i];
-          obj.job = 'eliteHunts';
-          obj.job_sub = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
-          obj.trigger = obj.trigger ? obj.trigger : false;
-          obj.weather1 = obj.weather1 ? obj.weather1 : false;
-          obj.weather2 = obj.weather2 ? obj.weather2 : false;
-          obj.maintenance = obj.maintenance ? obj.maintenance : false;
-          obj.rank = obj.rank == 'SS' ? 'SS' : obj.rank.slice(0,1)
-          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
-          obj.points = getPointsData(obj.zone, obj.rank);
-        }
-
-        this.ffxivData.eliteHunts = huntsEliteRaw;
-
-        function getPointsData(zone: string, rank: string) {
-          let zonesArr = huntsPointsRaw.filter(o => o.zone == zone);
-          let narrowPoints = zonesArr.filter(o => o.ranks.includes(rank));
-          return narrowPoints;
-        };
-      },
-      setAetherCurrentData() {
-        for (const i in aetherCurrentRaw) {
-          let obj: any = aetherCurrentRaw[i];
-          obj.job = 'aethercurrents';
-          obj.job_sub = obj.name ? 'currentquest' : 'current';
-          obj.area = this.ffxivData.areas.find((o: any) => o.zone == obj.zone);
-        };
-        this.ffxivData.aethercurrents = aetherCurrentRaw;
-      },
-      setFatesData() {
-        this.ffxivData.fates = fatesRaw
-        for (const d in this.ffxivData.fates) {
-          let obj = this.ffxivData.fates[d]
-          this.ffxivData.fates[d].job = 'fates'
-          this.ffxivData.fates[d].chain_set = obj.chain_set == '' ? false : obj.chain_set
-
-          let myAreaData = this.ffxivData.areas.find(o => o.zone == obj.zone)
-          this.ffxivData.fates[d].area = myAreaData
-        }
-      },
-      setBlueMageData() {
-        //Create Filters for page
-        const typeList = blueMageRaw.filter((obj: any, index: any) => 
-            index === blueMageRaw.findIndex((o: any) => obj.type1 === o.type1)
-        );
-        for (const d in typeList) {
-            this.ffxivData.bluemageFilters[d] = ['type1', typeList[d].type1, false]
-        }
-        this.ffxivData.bluemageFilters.unshift(['type1', 'All', true])
-
-        let blueMageNo = blueMageRaw[Object.keys(blueMageRaw)[blueMageRaw.length-1]].no
-        let bmAbility = []
-        for (let i=0; i<blueMageNo; i++)  {
-            bmAbility = blueMageRaw.filter(o => o.no == (i + 1))
-
-            this.ffxivData.bluemageData[i] = {
-                'ID': bmAbility[0].no,
-                'no': bmAbility[0].no,
-                'name': bmAbility[0].name,
-                'level': bmAbility[0].level,
-                'stars': bmAbility[0].stars,
-                'category': bmAbility.map(o => o.type1),
-                'location': groupData(
-                  bmAbility.map(o => o.type1), 
-                  bmAbility.map(o => o.type2),
-                  bmAbility.map(o => o),
-                  true
-                ),
-                'npc': groupData(
-                  bmAbility.map(o => o.type1),
-                  bmAbility.map(o => o.type2),
-                  bmAbility.map(o => o.npc)
-                ),
-                'notes':groupData(
-                  bmAbility.map(o => o.type1),
-                  bmAbility.map(o => o.type2),
-                  bmAbility.map(o => o.notes)
-                ),
-            }
-
-            function groupData(types: Array<string>[], typesSub: Array<string>[], dataList: any[], searchLocation?: boolean, ) {
-              if (!types) {console.error('No Type assigned to BlueMage Data, check Data', dataList); return false}
-
-              let results: Array<any> = []
-              for (const d in types) {
-                let hold: Array<any> = []
-                hold[0] = types[d]
-                hold[1] = typesSub[d] ? typesSub[d] : false
-
-                if (!searchLocation) {
-                  hold[2] = dataList[d]
-                } else {
-                  let correctX = dataList[d].x ? dataList[d].x : false
-                  let correctY = dataList[d].y ? dataList[d].y : false
-                  hold[2] = [dataList[d].location, correctX, correctY]
-                }
-                results.push(hold)
-              }
-
-              return results
-            }
-        }
-      },
-      setEorzeaClock() {
-        let rawclock: string = new EorzeaTime().toString()
-        let ero = this.eorzeaClock
-
-        if (!rawclock) {
-          console.error('Cannot fetch Eorzea Time');
-          ero.display24Hr = 0
-          ero.display12Hr = 0
-          ero.displayMin = 0
-        }
-
-        ero.display24Hr = Number(rawclock.slice(0, 2))
-        ero.display12Hr = ero.display24Hr > 12 ? ero.display24Hr - 12 : ero.display24Hr
-        ero.displayMin = Number(rawclock.slice(3, 5))
-        ero.totalMin = (ero.display24Hr * 60) + ero.displayMin
-        
-      },
-      setGoldSaucerClockState() {
-        const now = new Date();
-        const curTime: number = (now.getMinutes() * 60) + now.getSeconds()
-        let results: any = [true, 0]
-
-        if (curTime >= 0 && curTime < 600) {
-          results = [true, 600 - curTime]
-        } else if (curTime >= 600 && curTime < 1200) {
-          results = [false, 1200 - curTime]
-        } else if (curTime >= 1200 && curTime < 1800) {
-          results = [true, 1800 - curTime]
-        } else if (curTime >= 1800 && curTime < 2400) {
-          results = [false, 2400 - curTime]
-        } else if (curTime >= 2400 && curTime < 3000) {
-          results = [true, 3000 - curTime]
-        } else if (curTime >= 3000 && curTime < 3600) {
-          results = [false, 3600 - curTime]
-        }
-        
-        this.goldSaucer.active = results[0]
-        this.goldSaucer.minutes = results[1]
-      },
-      setTimerData() {
-        for (const d in timerRaw) {
-          let obj = timerRaw[d]
-          let st: any = [obj.start0, obj.start1, obj.start2]
-          let en: any = [obj.end0, obj.end1, obj.end2]
-          let myTimerData = {
-            "ID": obj.ID,
-            "displayRanges12Hr": this.getRangeTimes(true, st, en),
-            "displayRanges24Hr": this.getRangeTimes(false, st, en),
-            "stateActive": false as boolean,
-            "minutes": 0 as number,
-            "countdown": '' as String,
+          if (curMin > s && curMin <= e) {
+            // Inside this window
+            active    = true;
+            minsUntil = e - curMin;
+            resolved  = true;
+            break;
           }
-          this.timerList[d] = myTimerData
-        }
-      },
-      getRangeTimes(format12Hr: boolean, s: any, e: any) {
-        let dur: any = []
-        for (const i in [0,1,2]) {
-          if (s[i] != e[i]) {
-            if (format12Hr) {
-              let a: string = `${this.get12HourClock(s[i], 0)} - ${this.get12HourClock(e[i], 0)}`
-              dur.push(a)
-            } else {
-              let a: string = `${this.get24HourClock(s[i], 0)} - ${this.get24HourClock(e[i], 0)}`
-              dur.push(a)
-            }
-          }
-        } 
-        return dur
-      },
-      get12HourClock(hr: number, min: number) {
-        let newhr: number, 
-            newmin: string, 
-            daytime: string
-        
-        newhr = hr > 12 ? hr - 12 : hr
-        newhr = newhr == 0 ? 12 : newhr
-        newmin = min < 10 ? `0${min}` : min.toString()
-        daytime = hr >= 12 && hr < 24 ? 'PM' : 'AM'
-        return `${newhr}:${newmin} ${daytime}`
-      },
-      get24HourClock(hr: number, min: number) {
-        let newhr: string,
-            newmin: string
-
-        newhr = hr < 10 ? `0${hr}` : hr.toString()
-        newmin = min < 10 ? `0${min}` : min.toString()
-        return `${newhr}:${newmin}`
-      },
-      getTimerCountdown() {
-        let currentMinutes = this.eorzeaClock.totalMin
-
-        for (const d in timerRaw) {
-          let obj  = timerRaw[d]
-          let startArr: any = [obj.start0 * 60, obj.start1 * 60, obj.start2 * 60]
-          let endArr: any = [obj.end0 * 60, obj.end1 * 60, obj.end2 * 60]
-
-          if (obj.sets == 1) {
-            if (currentMinutes <= startArr[0]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[0] - currentMinutes
-            } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[0] - currentMinutes
-            } else {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
-            }
-          }
-
-          else if (obj.sets == 2) {
-            if (currentMinutes <= startArr[0]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[0] - currentMinutes
-            } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[0] - currentMinutes
-            } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[1] - currentMinutes
-            } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[1] - currentMinutes
-            } else {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
-            }
-          }
-
-          else if (obj.sets == 3) {
-            if (currentMinutes <= startArr[0]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[0] - currentMinutes
-            } else if (currentMinutes > startArr[0] && currentMinutes <= endArr[0]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[0] - currentMinutes
-            } else if (currentMinutes > startArr[0] && currentMinutes <= startArr[1]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[1] - currentMinutes
-            } else if (currentMinutes > startArr[1] && currentMinutes <= endArr[1]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[1] - currentMinutes
-            } else if (currentMinutes > startArr[1] && currentMinutes <= startArr[2]) {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = startArr[2] - currentMinutes
-            } else if (currentMinutes > startArr[2] && currentMinutes <= endArr[2]) {
-              this.timerList[d].stateActive = true
-              this.timerList[d].minutes = endArr[2] - currentMinutes
-            } else {
-              this.timerList[d].stateActive = false
-              this.timerList[d].minutes = (1440 - currentMinutes) + startArr[0]
-            }
-          }
-
-          this.timerList[d].minutes = this.timerList[d].minutes * 3
-          this.timerList[d].countdown = this.formatTimeRemaining(this.timerList[d].minutes)
-        }
-      },
-      enableClockIntervalCount() {
-        //Every 1 tick
-        this.intervalTicks = this.intervalTicks >= 30 ? 0 : this.intervalTicks + 1
-        this.setGoldSaucerClockState();
-        for (const d in this.timerList) {
-          this.timerList[d].minutes = this.timerList[d].minutes - 1
-          if (this.timerList[d].minutes <= 0) {this.getTimerCountdown(); break;}
-          this.timerList[d].countdown = this.formatTimeRemaining(this.timerList[d].minutes)
         }
 
-        //Every 3 ticks
-        if (this.intervalTicks % 3 == 0) {
-          this.setEorzeaClock()
-          this.intervalTicks = 0
+        if (!resolved) {
+          // Past all windows — wrap to next Eorzea day
+          active    = false;
+          minsUntil = (1440 - curMin) + starts[0];
         }
 
-        //Update weather conditions
-        if (this.eorzeaClock.totalMin == 0 && this.eorzeaClock.totalMin < 2) {this.createWeatherList()}
-        if (this.eorzeaClock.totalMin == 480 && this.eorzeaClock.totalMin < 482) {this.createWeatherList()}
-        if (this.eorzeaClock.totalMin == 960 && this.eorzeaClock.totalMin < 962) {this.createWeatherList()}
+        // Eorzea minutes → real-time seconds (1 Eorzea min ≈ 3 real seconds)
+        const seconds = minsUntil * 3;
 
-      },
-      formatTimeRemaining(total: number) {
-        let h = Math.floor(total / 3600);
-        let m = Math.floor((total - (h * 3600)) / 60 );
-        let s = Math.floor(total - ((h * 3600) + (m * 60)));
-        if (h > 0) {return `${h}h ${m}m ${s}s`}
-        else if (m > 0) {return `${m}m ${s}s`}
-        return `${s}s`
-      },
-      changeTracked(e: any) {
-        let node: any = this.ffxivData[e.job];
+        this.timerList[d].stateActive = active;
+        this.timerList[d].seconds     = seconds;
+        this.timerList[d].countdown   = this.formatDuration(seconds);
+      });
+    },
 
-        //Change the node's tracking state
-        let index = node.findIndex(o => o.ID == e.ID)
-        node[index].tracked = !node[index].tracked
+    // ─── Clock Tick (1 s interval) ────────────────────────────────────────────
 
-        //Add or remove node from the trackinglist array
-        if (node[index].tracked) {
-          this.trackinglist.push(node[index])
-        } else {
-          this.trackinglist = this.trackinglist.filter((o: any) => o.ID != e.ID)
+    onClockTick() {
+      this.intervalTicks = this.intervalTicks >= 30 ? 0 : this.intervalTicks + 1;
+
+      // Update Gold Saucer every tick
+      this.setGoldSaucerState();
+
+      // Decrement timer countdowns; recalc when any expires
+      let needsRecalc = false;
+      for (const entry of this.timerList) {
+        entry.seconds -= 1;
+        if (entry.seconds <= 0) {
+          needsRecalc = true;
+          break;
         }
+        entry.countdown = this.formatDuration(entry.seconds);
+      }
+      if (needsRecalc) this.recalcTimerCountdowns();
 
-      },
-      openDetails(e: any) {
-        this.openDetailSidebar = !this.openDetailSidebar
-        this.detailsPanel = e
-      },
-  }
-}
+      // Update Eorzea clock every 3 ticks (~3 s = 1 Eorzea minute)
+      if (this.intervalTicks % 3 === 0) {
+        this.setEorzeaClock();
+      }
+
+      // Refresh weather at each of the three daily Eorzea weather-change points
+      // Using a 2-minute tolerance window to handle slight tick drift
+      for (const boundary of WEATHER_CHANGE_EORZEA_MINUTES) {
+        if (this.eorzeaClock.totalMin >= boundary && this.eorzeaClock.totalMin < boundary + 2) {
+          this.createWeatherList();
+          break;
+        }
+      }
+    },
+
+    // ─── Utilities ────────────────────────────────────────────────────────────
+
+    formatDuration(totalSeconds: number): string {
+      const s = Math.max(0, Math.floor(totalSeconds));
+      const h = Math.floor(s / 3600);
+      const m = Math.floor((s % 3600) / 60);
+      const sec = s % 60;
+      if (h > 0) return `${h}h ${m}m ${sec}s`;
+      if (m > 0) return `${m}m ${sec}s`;
+      return `${sec}s`;
+    },
+
+    // ─── Tracking & Details ───────────────────────────────────────────────────
+
+    changeTracked(e: { job: string; ID: number }) {
+      const nodes: any[] | undefined = (this.ffxivData as any)[e.job];
+      if (!nodes) {
+        console.error(`changeTracked: unknown job "${e.job}"`);
+        return;
+      }
+      const index = nodes.findIndex((o) => o.ID === e.ID);
+      if (index === -1) return;
+
+      nodes[index].tracked = !nodes[index].tracked;
+
+      if (nodes[index].tracked) {
+        this.trackinglist.push(nodes[index]);
+      } else {
+        this.trackinglist = this.trackinglist.filter((o: any) => o.ID !== e.ID);
+      }
+    },
+
+    openDetails(e: any) {
+      this.openDetailSidebar = !this.openDetailSidebar;
+      this.detailsPanel = e;
+    },
+  },
+};
 </script>
 
 <style scoped lang="scss">
@@ -601,67 +566,70 @@ export default {
     display: flex;
     flex-wrap: wrap;
 
+    // Extended — full-width sidebar
     &.menustate_extended {
-      .tracking_bar {padding-left: 1rem;}
-      .sidebar {width: $sidebarWidthExpand; left: 0;}
-      .menu_Btn {left: $sidebarWidthExpand - 16px;}
+      .trackingbar { padding-left: 1rem; }
+      .sidebar     { width: $sidebarWidthExpand; left: 0; }
+      .menu_Btn    { left: calc(#{$sidebarWidthExpand} - 16px); }
       .main_content {
         width: calc(100% - #{$sidebarWidthExpand});
         margin-left: $sidebarWidthExpand;
       }
     }
 
+    // Compact — collapsed sidebar
     &.menustate_compact {
-      .tracking_bar {padding-left: 1rem;}
-      .menu_Btn {left: $sidebarWidthCollapse - 16px;}
+      .trackingbar { padding-left: 1rem; }
+      .menu_Btn    { left: calc(#{$sidebarWidthCollapse} - 16px); }
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
         margin-left: $sidebarWidthCollapse;
-      } 
+      }
     }
 
+    // Overlay-extended — sidebar floats over compact layout
     &.menustate_overlay-extended {
-      .tracking_bar {padding-left: 1rem;}
-      .sidebar {width: $sidebarWidthExpand; left: 0;}
-      .menu_Btn {left: $sidebarWidthExpand - 16px;}
+      .trackingbar { padding-left: 1rem; }
+      .sidebar     { width: $sidebarWidthExpand; left: 0; }
+      .menu_Btn    { left: calc(#{$sidebarWidthExpand} - 16px); }
       .main_content {
         width: calc(100% - #{$sidebarWidthCollapse});
         margin-left: $sidebarWidthCollapse;
-      } 
+      }
     }
 
+    // Hidden-extended — sidebar off-screen, button at edge
     &.menustate_hidden-extended {
-      .tracking_bar {padding-left: 30px;}
-      .sidebar {left: -$sidebarWidthExpand + 1px;}
-      .menu_Btn {left: 1.5rem;}
+      .trackingbar { padding-left: 30px; }
+      .sidebar     { left: calc(-#{$sidebarWidthExpand} + 1px); }
+      .menu_Btn    { left: 1.5rem; }
       .main_content {
         width: 100%;
         margin-left: 0;
-      } 
+      }
     }
 
+    // Mobile-extended — sidebar visible, overlaid on full-width content
     &.menustate_mobile-extended {
-      .tracking_bar {padding-left: 30px;}
-      .sidebar {width: $sidebarWidthExpand;}
-      .menu_Btn {left: 1.5rem;}
+      .trackingbar { padding-left: 30px; }
+      .sidebar     { width: $sidebarWidthExpand; }
+      .menu_Btn    { left: 1.5rem; }
       .main_content {
         width: 100%;
         margin-left: 0;
-      } 
+      }
     }
   }
-
-
-
 
   .menu_Btn {
     position: fixed;
     top: 100px;
-    transition: all .23s ease;
+    transition: left 0.23s ease;
     z-index: 101;
     width: 32px;
     height: 32px;
-    &.tracking_pos {top: 17px}
+
+    &.tracking_pos { top: 17px; }
   }
 
   main {
@@ -671,14 +639,6 @@ export default {
     margin-left: $sidebarWidthExpand;
   }
 
-  .details_pos {
-    position: fixed;
-    right: -300px;
-    top: $trackingbarHeight;
-    height: calc(100vh - $trackingbarHeight);
-    width: 300px;
-    border-left: 1px solid $borderColor;
-    transform: all .23s ease;
-    &.show {right: 0}
-  }
+  // Note: .details_pos was dead code — detailspane position is controlled
+  // by the component itself, not by an app-level class.
 </style>
