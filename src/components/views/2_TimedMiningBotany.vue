@@ -4,31 +4,33 @@
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
-                <div v-for="d in groupFilter()" :key="d[1]" :class="[`filterbar_group`]">
-                    <toggleFilterBtn 
-                        v-for="e in d" :key="e[1]"
-                        :name="e[1]"
-                        :icon="e[1]"
-                        :enabled="e[2] ? true : null"
-                        @click="changeFilter(e)"/>
+                <div v-for="(group, groupKey) in groupedFilters" :key="groupKey" class="filterbar_group">
+                    <toggleFilterBtn
+                        v-for="filter in group" :key="filter.name"
+                        :name="filter.name"
+                        :icon="filter.name"
+                        :enabled="filter.enabled || null"
+                        @click="changeFilter(filter)" />
                 </div>
 
-                <div :class="[`filterbar_group`]">
-                    <inputSearchBar :modelValue="searchName" @selected="filterByInputValue"/>
-                    <toggleFilterBtn 
-                        :name="'Reset'"
+                <div class="filterbar_group">
+                    <inputSearchBar :modelValue="searchName" @selected="filterByInputValue" />
+                    <toggleFilterBtn
+                        name="Reset"
                         :enabled="true"
-                        @click="resetFilters()"/>
+                        @click="resetFilters" />
                 </div>
             </div>
         </div>
 
-        <!-- Pagenation -->
+        <!-- Pagination -->
         <ul class="body_content-group pagenation">
-            <li class="pagenation_item" v-for="(d, index) in compiledDataForTable" :key="d.ID" 
-                @click="arraySet = Number(index)"
-                :class="{'pageActive': arraySet == Number(index)}">
-                {{ Number(index) + 1 }}
+            <li
+                v-for="(_, index) in compiledDataForTable" :key="index"
+                class="pagenation_item"
+                :class="{ pageActive: arraySet === index }"
+                @click="arraySet = index">
+                {{ index + 1 }}
             </li>
         </ul>
 
@@ -46,52 +48,50 @@
                 </li>
             </ul>
 
-            <hr class="rdrTable_split"/>
+            <hr class="rdrTable_split" />
 
             <ul class="rdrTable_body">
-                <li v-for="d in compiledDataForTable[arraySet]" :key="d.ID" 
+                <li
+                    v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
                     :data-rowAndTimeActive="activeList[d.ID]"
                     class="rdrTable_row">
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_row-tracking" >
-                        <toggleTrackingBtn 
-                            :trackingEnabled="d.tracked" 
+                    <div class="rdrTable_row-tracking">
+                        <toggleTrackingBtn
+                            :trackingEnabled="d.tracked"
                             class="hasContext"
-                            :data-context="`Track Node`"
-                            @click="$emit('changeTracked', d)"/>
-                        <toggleDetailsBtn 
-                            v-if="windowWidth != 'mobile'" 
-                            @click="$emit('openDetails', d)"
+                            data-context="Track Node"
+                            @click="$emit('changeTracked', d)" />
+                        <toggleDetailsBtn
+                            v-if="windowWidth !== 'mobile'"
                             class="hasContext"
-                            :data-context="`View Details`"/>
+                            data-context="View Details"
+                            @click="$emit('openDetails', d)" />
                     </div>
 
                     <!-- NAME -->
-                    <div class="rdrTable_row-name" >
+                    <div class="rdrTable_row-name">
                         <div>
                             <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
-                            <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImageURL('collectability')" />
-                            <img class="iconSize2" v-if="d.usage == 'customdelivery'" :src="getIconImageURL('customdelivery')" />
+                            <img v-if="d.usage === 'aetherial'" class="iconSize2" :src="getIconImageURL('collectability')" />
+                            <img v-if="d.usage === 'customdelivery'" class="iconSize2" :src="getIconImageURL('customdelivery')" />
                         </div>
                     </div>
 
                     <!-- ATTRIBUTES -->
                     <div class="rdrTable_row-attributes">
                         <div>
-                            <!-- JOB NAME -->
-                            <span class="hasContext" :data-context="`${d.job_sub.charAt(0).toUpperCase() + d.job_sub.slice(1)}`">
-                                <img class="iconSize" :src="getIconImageURL(d.job_sub)"  />
+                            <span class="hasContext" :data-context="capitalize(d.job_sub)">
+                                <img class="iconSize" :src="getIconImageURL(d.job_sub)" />
                             </span>
-                            
-                            <!-- USAGE -->
-                            <span class="hasContext" v-if="d.usage" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
+
+                            <span v-if="d.usage" class="hasContext" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
                                 <img class="iconSize" :src="getIconImageURL(fetchUsageImgName(d.usage, d.usage_info))" />
                             </span>
 
-                            <!-- FOLKLORE -->
-                            <span class="hasContext" :data-context="`Requires ${d.tomb}`" v-if="d.node_name == 'Legendary'">
+                            <span v-if="d.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${d.tomb}`">
                                 <img class="iconSize" :src="getIconImageURL('folklore')" />
                             </span>
                         </div>
@@ -99,17 +99,17 @@
 
                     <!-- LEVEL -->
                     <div class="rdrTable_row-level">
-                        {{`Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
+                        {{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}
                     </div>
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <timeDisplay :timerList="timerList" :timeId="d.time" @timeActive="(e: any) => sendTimerState(e, d.ID)"/>
+                        <timeDisplay :timerList="timerList" :timeId="d.time" @timeActive="(e) => sendTimerState(e, d.ID)" />
                     </div>
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area">
-                        <areaDisplay :node="d"/>
+                        <areaDisplay :node="d" />
                     </div>
                 </li>
             </ul>
@@ -123,7 +123,7 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImageURL(name: string) {
+    function getIconImageURL(name: string): string {
         return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
 </script>
@@ -132,161 +132,170 @@
     import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
     import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
     import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-    import inputSearchBar from '../ui/buttons/inputSearchBar.vue';
+    import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
     import timeDisplay from '../ui/displayTime.vue'
     import areaDisplay from '../ui/displayArea.vue'
 
+    // Filter shape for clarity and type safety
+    interface Filter {
+        group: string
+        name: string
+        enabled: boolean
+    }
+
+    const PAGE_SIZE = 50
+
     export default {
         name: "Timed Mining/Botany",
-        components: {toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay},
+        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay },
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'openDetails'],
+
         data() {
             return {
-                compiledDataForTable: [] as any,
-                allTimedNodes: [] as any,
-                totalArraySets: 0 as number,
+                compiledDataForTable: [] as any[][],
+                allTimedNodes: [] as any[],
                 arraySet: 0 as number,
                 displayNoNodesFound: false as boolean,
                 searchName: '' as string,
-                showOnlyActive: false as boolean,
-                filters: [] as any, //[Group, Name, State]
-                filterList: {} as any,
-                activeList: {} as any
+                filters: [] as Filter[],
+                activeList: {} as Record<string, any>,
             }
         },
+
+        computed: {
+            // Build grouped filter object once; recomputed only when filters change
+            groupedFilters(): Record<string, Filter[]> {
+                return {
+                    job: this.filters.filter(f => f.group === 'job'),
+                    usage: this.filters.filter(f => f.group === 'usage'),
+                    expansion: this.filters.filter(f => f.group === 'expansion'),
+                }
+            },
+        },
+
         created() {
-            let r = this.ffxivData.miner.filter((o: any) => o.time)
-            let b = this.ffxivData.botany.filter((o: any) => o.time)
-            this.allTimedNodes = [...r, ...b]
-            this.createFilterList() //Run Once
+            const miner = this.ffxivData.miner.filter((o: any) => o.time)
+            const botany = this.ffxivData.botany.filter((o: any) => o.time)
+            this.allTimedNodes = [...miner, ...botany]
+            this.createFilterList()
             this.sortNodesIntoGroup(this.allTimedNodes)
         },
+
         methods: {
+            // ─── Helpers ────────────────────────────────────────────────────────
+
+            capitalize(str: string): string {
+                return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
+            },
+
+            getUniqueByKey(array: any[], key: string): any[] {
+                const seen = new Set()
+                return array.filter(obj => {
+                    if (seen.has(obj[key])) return false
+                    seen.add(obj[key])
+                    return true
+                })
+            },
+
+            // ─── Filter Initialisation ───────────────────────────────────────────
+
             createFilterList() {
-                //Search for all Job names within AllTimedNodes
-                let jobList = this.allTimedNodes.filter((obj: any, index: any) => 
-                    index === this.allTimedNodes.findIndex((o: any) => obj.job === o.job)
-                );
+                const toFilters = (arr: any[], group: string): Filter[] =>
+                    this.getUniqueByKey(arr, group).map(o => ({ group, name: o[group], enabled: true }))
 
-                //Search for all Job names within AllTimedNodes
-                let usageList = this.allTimedNodes.filter((obj: any, index: any) => 
-                    index === this.allTimedNodes.findIndex((o: any) => obj.usage === o.usage)
-                );
+                const jobFilters = toFilters(this.allTimedNodes, 'job')
+                const usageFilters = toFilters(this.allTimedNodes, 'usage')
+                const expansionFilters = toFilters(this.ffxivData.expansion, 'expansion')
 
-                //Search for all Expansion names within AllTimedNodes
-                let expansionList = this.ffxivData.expansion.filter((obj: any, index: any) => 
-                    index === this.ffxivData.expansion.findIndex((o: any) => obj.expansion === o.expansion)
-                );
-
-                jobList = jobList.map((o => ['job', o.job, true]))
-                usageList = usageList.map((o => ['usage', o.usage, true]))
-                expansionList = expansionList.map((o => ['expansion', o.expansion, true]))
-                this.filters = [...jobList, ...usageList, ...expansionList]
+                this.filters = [...jobFilters, ...usageFilters, ...expansionFilters]
             },
-            sortNodesIntoGroup(array: any) {
-                const result = [];
-                let arrayLength = array.length;
-                for (let i = 0; i < arrayLength; i += 50) {
-                    result.push(array.slice(i, i + 50));
-                }
-                this.compiledDataForTable = result;
-                this.displayNoNodesFound = result.length == 0 ? true : false;
-                this.totalArraySets = this.compiledDataForTable.length
-            },
-            groupFilter() {
-                let newArr = []
-                let arr = this.filters
-                let jobBundle = arr.filter((o: any) => o[0] == 'job')
-                let usageBundle = arr.filter((o: any) => o[0] == 'usage')
-                let expansionBundle = arr.filter((o: any) => o[0] == 'expansion')
-                newArr = [jobBundle, usageBundle, expansionBundle]
-                return newArr
-            },
-            changeFilter(filterArray: any) {
 
-                let hold = this.allTimedNodes
-                this.searchName = '';
-                for (const d in this.filters) {
-                    if (this.filters[d][1] == filterArray[1]) {
-                        this.filters[d][2] = !this.filters[d][2]
-                    }
+            // ─── Pagination ──────────────────────────────────────────────────────
+
+            sortNodesIntoGroup(array: any[]) {
+                const result: any[][] = []
+                for (let i = 0; i < array.length; i += PAGE_SIZE) {
+                    result.push(array.slice(i, i + PAGE_SIZE))
                 }
-                
-                //Switch Values
-                for (const d in this.filters) {
-                    if (!this.filters[d][2]) {
-                        hold = hold.filter((o: any) => o[this.filters[d][0]] != this.filters[d][1])
-                    }
-                }
-                this.sortNodesIntoGroup(hold)
+                this.compiledDataForTable = result
+                this.displayNoNodesFound = result.length === 0
+            },
+
+            // ─── Filter Actions ──────────────────────────────────────────────────
+
+            changeFilter(filter: Filter) {
+                filter.enabled = !filter.enabled
+                this.searchName = ''
                 this.arraySet = 0
+                this.applyFilters()
             },
+
             resetFilters() {
-                for (const d in this.filters) {
-                    this.filters[d][2] = true
-                }
-                this.searchName = '';
+                this.filters.forEach(f => { f.enabled = true })
+                this.searchName = ''
+                this.arraySet = 0
                 this.sortNodesIntoGroup(this.allTimedNodes)
             },
-            checkIfNewGroup(index: number) {
-                if (index == 0) {return this.filters[0][0]}
-                let sendGroupName = this.filters[index][0] != this.filters[index - 1][0] ? this.filters[index][0] : null
-                return sendGroupName
+
+            applyFilters() {
+                const disabledFilters = this.filters.filter(f => !f.enabled)
+                if (disabledFilters.length === 0) {
+                    this.sortNodesIntoGroup(this.allTimedNodes)
+                    return
+                }
+                const filtered = this.allTimedNodes.filter(node =>
+                    disabledFilters.every(f => node[f.group] !== f.name)
+                )
+                this.sortNodesIntoGroup(filtered)
             },
-            checkActiveState(timerID: string) {
-                return this.timerList.find((o: any) => o.ID === timerID).stateActive ? true : null;
+
+            filterByInputValue(value: string) {
+                this.searchName = value
+                this.arraySet = 0
+                this.filters.forEach(f => { f.enabled = true })
+
+                if (!value || !value.trim()) {
+                    this.sortNodesIntoGroup(this.allTimedNodes)
+                    return
+                }
+
+                const search = value.trim().toLowerCase()
+                const byName = this.allTimedNodes.filter(
+                    (o: any) => o.name?.toLowerCase().includes(search)
+                )
+                const byAetherial = this.allTimedNodes.filter((o: any) => {
+                    if (o.usage !== 'aetherial') return false
+                    const { result1, result2, result3 } = o.usage_info
+                    return [result1, result2, result3].some(
+                        (r: string) => r?.toLowerCase().includes(search)
+                    )
+                })
+
+                this.sortNodesIntoGroup([...new Set([...byName, ...byAetherial])])
             },
-            fetchUsageImgName(usage: any, info: any) {
-                if (usage == 'scripts') {return `${info}gatherscripts`}
-                if (usage == 'crafting') {return `sq_crafting`}
+
+            // ─── Display Helpers ─────────────────────────────────────────────────
+
+            fetchUsageImgName(usage: string, info: any): string {
+                if (usage === 'scripts') return `${info}gatherscripts`
+                if (usage === 'crafting') return 'sq_crafting'
                 return usage
             },
-            fetchUsageAttrName(usage: string, info: any) {
-                if (usage == 'aetherial') {
-                    let resultName1 = info.result1.charAt(0).toUpperCase() + info.result1.slice(1)
-                    let resultName2 = info.result2.charAt(0).toUpperCase() + info.result2.slice(1)
-                    let resultName3 = info.result3.charAt(0).toUpperCase() + info.result3.slice(1)
-                    return `${resultName1}, ${resultName2}, ${resultName3}`
+
+            fetchUsageAttrName(usage: string, info: any): string {
+                if (usage === 'aetherial') {
+                    const { result1, result2, result3 } = info
+                    return [result1, result2, result3].map(this.capitalize).join(', ')
                 }
-                if (usage == 'customdelivery') {return `Deliver to ${info}`}
-                if (usage == 'scripts') {return `${info.charAt(0).toUpperCase() + info.slice(1)} Gather Scripts`}
-                return usage.charAt(0).toUpperCase() + usage.slice(1)
+                if (usage === 'customdelivery') return `Deliver to ${info}`
+                if (usage === 'scripts') return `${this.capitalize(info)} Gather Scripts`
+                return this.capitalize(usage)
             },
-            filterByInputValue(e: any) {
-                this.searchName = e;
-                this.arraySet = 0
-                for (const d in this.filters) {
-                    this.filters[d][2] = true
-                }
-                
-                if (this.searchName && this.searchName.trim() !== "") {
-                    const search = this.searchName.trim().toLowerCase();
-                    let foundName = this.allTimedNodes.filter((o: any) => o.name && o.name.toLowerCase().includes(search));
-                    let aetherialList = this.allTimedNodes.filter((o: any) => o.usage == 'aetherial');
-                    let foundAetherial = []
-                    if (aetherialList.length > 0) {
-                        for (const d in aetherialList) {
-                            let usageGroup = aetherialList[d].usage_info
-                            if (usageGroup.result1.toLowerCase().includes(search)) {
-                                foundAetherial.push(aetherialList[d])
-                            }
-                            if (usageGroup.result2.toLowerCase().includes(search)) {
-                                foundAetherial.push(aetherialList[d])
-                            }
-                            if (usageGroup.result3.toLowerCase().includes(search)) {
-                                foundAetherial.push(aetherialList[d])
-                            }
-                        }
-                    }
-                    let hold = [...new Set([...foundName, ...foundAetherial])];
-                    this.sortNodesIntoGroup(hold)
-                }
-            },
+
             sendTimerState(timeState: any, id: string) {
                 this.activeList[id] = timeState
-            }
-        }
+            },
+        },
     }
 </script>
-

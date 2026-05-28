@@ -1,30 +1,37 @@
 <template>
-    <div :class="[`sightseeVistas body_content`, windowWidth]">
+    <div :class="['sightseeVistas body_content', windowWidth]">
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
-                <toggleFilterBtn 
-                    v-for="(d, index) in filters" :key="d[1]" 
-                    :name="d[1]" 
-                    :icon="d[1]"
-                    :enabled="!d[2] ? true : null"
-                    @click="changeFilter(index)"/>
+                <toggleFilterBtn
+                    v-for="(d, index) in filters"
+                    :key="d.name"
+                    :name="d.name"
+                    :icon="d.name"
+                    :enabled="d.enabled || null"
+                    @click="changeFilter(index)"
+                />
             </div>
         </div>
 
         <!-- Expansion Notes -->
         <div class="body_content-group vistaNote">
-            <p v-if="filterSelected == 'A Realm Reborn'">To Unlock vista's 21-80, you MUST complete all 20 in the log.</p>
-            <br v-if="filterSelected == 'A Realm Reborn'"/>
+            <template v-if="filterSelected === 'A Realm Reborn'">
+                <p>To Unlock vista's 21-80, you MUST complete all 20 in the log.</p>
+                <br />
+            </template>
             <p>
-                Each vista discovered will grant you <span class="expColor">{{ fetchVistaData('vista_exp') }}</span> <img class="iconSize" :src="getIconImageURL('exp')" />
-                when you're between levels <span class="levelColor">{{ fetchVistaData('vista_min') }}-{{ fetchVistaData('vista_max') }}</span>.
+                Each vista discovered will grant you
+                <span class="expColor">{{ currentExpansionData.vista_exp }}</span>
+                <img class="iconSize" :src="getIconImageURL('exp')" />
+                when you're between levels
+                <span class="levelColor">{{ currentExpansionData.vista_min }}-{{ currentExpansionData.vista_max }}</span>.
             </p>
         </div>
 
         <!-- Table -->
-        <div :class="[`body_content-group rdrTable`, windowWidth]">
+        <div :class="['body_content-group rdrTable', windowWidth]">
 
             <ul class="rdrTable_header">
                 <li class="rdrTable_row">
@@ -41,23 +48,27 @@
             <hr class="rdrTable_split" />
 
             <ul class="rdrTable_body">
-                <li v-for="d in allVistaNodes[filterSelected]" :key="d.ID" 
-                :data-rowActive="activeTime[d.ID] && activeWeather[d.ID] ? true : null"
-                class="rdrTable_row">
-
+                <li
+                    v-for="d in currentVistaNodes"
+                    :key="d.ID"
+                    :data-rowActive="activeTime[d.ID] && activeWeather[d.ID] || null"
+                    class="rdrTable_row"
+                >
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking">
-                        <toggleTrackingBtn 
-                            :trackingEnabled="d.tracked" 
+                        <toggleTrackingBtn
                             v-if="d.time"
+                            :trackingEnabled="d.tracked"
                             class="hasContext"
-                            :data-context="`Track Node`"
-                            @click="$emit('changeTracked', d)"/>
-                        <toggleDetailsBtn 
-                            v-if="windowWidth != 'mobile'" 
+                            data-context="Track Node"
+                            @click="$emit('changeTracked', d)"
+                        />
+                        <toggleDetailsBtn
+                            v-if="windowWidth !== 'mobile'"
+                            class="hasContext"
+                            data-context="View Details"
                             @click="$emit('openDetails', d)"
-                            class="hasContext"
-                            :data-context="`View Details`"/>
+                        />
                     </div>
 
                     <!-- NO -->
@@ -72,18 +83,20 @@
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <timeDisplay 
-                            :timerList="timerList" 
-                            :timeId="d.time" 
-                            @timeActive="(e: any) => sendTimerState(e, d.ID, 'timer')"/>
+                        <timeDisplay
+                            :timerList="timerList"
+                            :timeId="d.time"
+                            @timeActive="(e) => sendTimerState(e, d.ID, 'timer')"
+                        />
                     </div>
 
                     <!-- WEATHER -->
                     <div class="rdrTable_row-weather">
-                        <weatherDisplay 
-                            :weatherList="weatherList" 
-                            :node="d" 
-                            @weatherActive="(e: any) => sendTimerState(e, d.ID, 'weather')"/>
+                        <weatherDisplay
+                            :weatherList="weatherList"
+                            :node="d"
+                            @weatherActive="(e) => sendTimerState(e, d.ID, 'weather')"
+                        />
                     </div>
 
                     <!-- EMOTE -->
@@ -94,21 +107,14 @@
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area">
-                        <areaDisplay :node="d"/>
+                        <areaDisplay :node="d" />
                     </div>
                 </li>
             </ul>
-            
+
         </div>
     </div>
 </template>
-
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        name = name.toLocaleLowerCase()
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
 
 <script lang="ts">
     import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
@@ -118,116 +124,99 @@
     import weatherDisplay from '../ui/displayWeather.vue'
     import areaDisplay from '../ui/displayArea.vue'
 
+    // Filter shape kept explicit; replaces opaque tuple indexing.
+    interface Filter {
+        group: string
+        name: string
+        enabled: boolean
+    }
+
     export default {
-        name: "Sightseeing Vistas",
-        components: {toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay},
+        name: "SightseeingVistas",
+
+        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay },
+
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+
         emits: ['changeTracked', 'openDetails'],
+
         data() {
             return {
-                allVistaNodes: {} as any,
-                filters: [] as any, //[Group, Name, State]
+                filters: [] as Filter[],
                 filterSelected: '' as string,
-                activeTime: {} as any,
-                activeWeather: {} as any,
+                activeTime: {} as Record<string, boolean>,
+                activeWeather: {} as Record<string, boolean>,
             }
         },
-        created() {
-            this.createFilterList() //Run Once
-            this.groupVistaLogsByExpansion() //Run Once
+
+        computed: {
+            // Derives unique expansion list once; no duplicate logic between old methods.
+            uniqueExpansions(): string[] {
+                const seen = new Set<string>()
+                const result: string[] = []
+                for (const item of this.ffxivData.sightseeing) {
+                    if (!seen.has(item.expansion)) {
+                        seen.add(item.expansion)
+                        result.push(item.expansion)
+                    }
+                }
+                return result
+            },
+
+            // Groups all vista nodes by expansion name, computed once and cached.
+            allVistaNodes(): Record<string, any[]> {
+                const grouped: Record<string, any[]> = {}
+                for (const expansion of this.uniqueExpansions) {
+                    grouped[expansion] = this.ffxivData.sightseeing.filter(
+                        (o: any) => o.expansion === expansion
+                    )
+                }
+                return grouped
+            },
+
+            // Active vista list for the selected filter; avoids repeated map lookups in the template.
+            currentVistaNodes(): any[] {
+                return this.allVistaNodes[this.filterSelected] ?? []
+            },
+
+            // Replaces fetchVistaData(); recomputes only when filterSelected changes.
+            currentExpansionData(): any {
+                return this.ffxivData.expansion.find(
+                    (o: any) => o.expansion === this.filterSelected
+                ) ?? {}
+            },
         },
+
+        created() {
+            this.initFilters()
+        },
+
         methods: {
-            createFilterList() {
-                //Search for all Expansion names within Sightseeing Logs
-                const expansionList = this.ffxivData.sightseeing.filter((obj: any, index: any) => 
-                    index === this.ffxivData.sightseeing.findIndex((o: any) => obj.expansion === o.expansion)
-                );
-
-                //Append and set default filter list
-                for (const d in expansionList) {
-                    this.filters[d] = ['expansion', expansionList[d].expansion, true]
-                }
-
-                //Set defaualt filer value
-                this.filters[0][2] = false
-                this.filterSelected = this.filters[0][1]
+            initFilters() {
+                this.filters = this.uniqueExpansions.map((name, i) => ({
+                    group: 'expansion',
+                    name,
+                    enabled: i === 0,
+                }))
+                this.filterSelected = this.filters[0]?.name ?? ''
             },
-            groupVistaLogsByExpansion() {
-                //Create list of easch Expansion name
-                let vistaList = this.ffxivData.sightseeing
-                const expansionList = vistaList.filter((obj: any, index: any) => 
-                    index === vistaList.findIndex((o: any) => obj.expansion === o.expansion)
-                );
 
-                //Group each vista by found expansion name
-                for (const d in expansionList) {
-                    this.allVistaNodes[expansionList[d].expansion] = vistaList.filter((o: any) => o.expansion == expansionList[d].expansion)
-                }
+            changeFilter(arrayIndex: number) {
+                this.filters.forEach((f, i) => { f.enabled = i === arrayIndex })
+                this.filterSelected = this.filters[arrayIndex].name
             },
-            changeFilter(arrayIndex: any) {
-                //Set all values to Disabled
-                for (const d in this.filters) {this.filters[d][2] = true}
 
-                //Set new filter to enable
-                this.filters[arrayIndex][2] = false
-                this.filterSelected = this.filters[arrayIndex][1]
-
+            getIconImageURL(name: string): string {
+                return new URL(`/src/assets/icons/${name.toLowerCase()}.webp`, import.meta.url).href
             },
-            fetchVistaData(type: string) {
-                let results = this.ffxivData.expansion.find((o: any) => o.expansion == this.filterSelected)
-                return results[type]
-            },
-            fetchTimerCountdown(time: string) {
-                if (time) {
-                    let results = this.timerList.find((o: any) => o.ID == time).countdown
-                    return results
-                }
-                return 'Any Time'
-            },
-            checkTimeActive(type: string, arr: any) {
 
-                if (type == 'weather1' || type == 'weather2') {
-                    let curWeather = this.weatherList[arr.area.mapcode]
-                    let triggerWeather = arr[type]
-                    if (curWeather == triggerWeather) {return true}
-                    return null
-                }
-
-                if (type == 'time' && arr.time) {
-                    let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                    results = results ? true : null
-                    return results
-                }
-                return null
-            },
-            checkRowActive(arr: any) {
-                let match1: boolean
-                let match2: boolean
-
-                //Match1 - Get Time State
-                if (arr.time) {
-                    let currentTimeState = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                    match1 = currentTimeState ? true : null
-                }
-
-                //Match2 - Get Weather State
-                if (arr.weather1) {
-                    let curWeather = this.weatherList[arr.area.mapcode]
-                    let condition1 = arr.weather1 == curWeather ? true :  false
-                    let condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true :  false
-                    match2 = condition1 || condition2 ? true : false
-                }
-
-                if (!arr.weather1) {return match1}
-                return match1 == match2 ? true : null
-            },
-            sendTimerState(timeState: any, id: string, type: string) {
-                if (type == 'timer') {
+            sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
+                if (type === 'timer') {
                     this.activeTime[id] = timeState
-                } else if (type == 'weather') {
+                } else {
                     this.activeWeather[id] = timeState
                 }
-            }
-        }
+            },
+        },
     }
 </script>

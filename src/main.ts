@@ -19,7 +19,6 @@ const router = createRouter({
         { path: '/', redirect: '/timedMiningBotany' },
         { path: '/eorzeaoverview', component: home },
         { path: '/timedMiningBotany', component: timedNodes, props: true },
-        // { path: '/timedFishing', component: fishing, props: true },
         { path: '/sightseeing', component: sightseeing, props: true },
         { path: '/aetherCurrents', component: aetherCurrents, props: true },
         { path: '/blueMageAbilities', component: blueMageSpells, props: true },
