@@ -127,12 +127,12 @@
 </template>
 
 <script lang="ts" setup>
-function getVistaPreviewImgSmall(expansion: string, no: number): string {
-    return new URL(
-        `/src/assets/sightseeing/${expansion}/ss${expansion}${no}.webp`,
-        import.meta.url
-    ).href
-}
+// function getVistaPreviewImgSmall(expansion: string, no: number): string {
+//     return new URL(
+//         `/src/assets/sightseeing/${expansion}/ss${expansion}${no}.webp`,
+//         import.meta.url
+//     ).href
+// }
 </script>
 
 <script lang="ts">
