@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <radialGradient id="bg" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" stop-color="#1f1644"/>
+      <stop offset="100%" stop-color="#0e0b22"/>
+    </radialGradient>
+    <clipPath id="clip">
+      <circle cx="16" cy="16" r="14"/>
+    </clipPath>
+  </defs>
+  <circle cx="16" cy="16" r="14" fill="url(#bg)"/>
+  <g clip-path="url(#clip)">
+    <circle cx="16" cy="16" r="4.5" fill="none" stroke="#1D9E75" stroke-width="0.7" stroke-opacity="0.75"/>
+    <circle cx="16" cy="16" r="8"   fill="none" stroke="#1D9E75" stroke-width="0.5" stroke-opacity="0.5"/>
+    <circle cx="16" cy="16" r="12"  fill="none" stroke="#1D9E75" stroke-width="0.4" stroke-opacity="0.3"/>
+    <line x1="16" y1="3"  x2="16" y2="29" stroke="#1D9E75" stroke-width="0.3" stroke-opacity="0.25"/>
+    <line x1="3"  y1="16" x2="29" y2="16" stroke="#1D9E75" stroke-width="0.3" stroke-opacity="0.25"/>
+    <line x1="16" y1="16" x2="24" y2="9"  stroke="#5DCAA5" stroke-width="1.2" stroke-linecap="round" stroke-opacity="0.9"/>
+    <circle cx="22.5" cy="10.5" r="1.8" fill="#5DCAA5" opacity="0.95"/>
+    <circle cx="10.5" cy="12.5" r="1.2" fill="#AFA9EC" opacity="0.85"/>
+    <circle cx="19"   cy="21"   r="1"   fill="#5DCAA5" opacity="0.7"/>
+  </g>
+  <circle cx="16" cy="16" r="14" fill="none" stroke="#534AB7" stroke-width="0.8"/>
+  <circle cx="16" cy="16" r="0.8" fill="#5DCAA5"/>
+</svg>

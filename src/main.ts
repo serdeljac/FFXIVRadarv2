@@ -30,4 +30,4 @@ const router = createRouter({
     linkExactActiveClass: 'currentPage'
 })
 
-createApp(App).use(router).mount('body')
+createApp(App).use(router).mount('#app')

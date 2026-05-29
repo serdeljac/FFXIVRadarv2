@@ -35,7 +35,7 @@
         <!-- Footer -->
         <footer>
             <donateBtn :sidebarLayout="sidebarLayout"/>
-            <p>&copy; 2023 FFXIV Radar. All rights reserved. <br />This site not built with AI.</p>
+            <p>&copy; 2023 FFXIV Radar. All rights reserved.</p>
         </footer>
     </aside>
 </template>
