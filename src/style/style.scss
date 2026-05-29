@@ -71,7 +71,7 @@ main {
     animation: rowActiveAnimation 0.7s linear infinite;
 }
 
-*[data-mapIconActive] {
+*[data-map-icon-active] {
     z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
     opacity: 0.5;
