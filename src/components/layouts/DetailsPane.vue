@@ -2,7 +2,24 @@
     <aside class="details">
 
         <div class="details_close">
-            <trashButton @click="$emit('closeDetails', false)" />
+            <div class="details_close-btn">
+                <closeDetailsBtn
+                    class="hasContext"
+                    data-context="Close"
+                    @click="$emit('openDetails', node)"/>
+            </div>
+
+            <div class="details_close-name">
+                <p v-if="isGathering" class="details_content-name">
+                    <iconAndText :text="`${node.name} - Lv. ${node.level} ${stars(node.stars)}`" :icon="node.job_sub" />
+                </p>
+                <p v-else-if="node.job === 'sightseeing'" class="details_content-name">
+                    <iconAndText :text="`${node.name}`" :icon="node.job_sub" />
+                </p>
+                <p v-else-if="node.job === 'aethercurrents'" class="details_content-name">
+                    <iconAndText :text="`Aether Current #${node.order}`" :icon="node.job_sub" />
+                </p>
+            </div>
         </div>
 
         <div class="details_map">
@@ -11,8 +28,7 @@
                 class="miniMap"
                 :ffxivData="ffxivData"
                 :focusNode="node"
-                :singleOnly="true"
-            />
+                :singleOnly="true"/>
         </div>
 
         <div class="details_location">
@@ -25,22 +41,25 @@
             <!-- ── Gathering (Miner / Botany) ───────────────────────── -->
             <template v-if="isGathering">
 
-                <div class="details_content-name">
-                    <p>{{ node.name }}</p>
-                    <p>Lv. {{ node.level }} {{ stars(node.stars) }}</p>
-                </div>
-
-                <div class="details_content-pairedCells">
-                    <div class="isBlock">
-                        <p>Requirement:</p>
-                        <p>{{ capitalize(node.job_sub) }} – Lv. {{ node.node_level }}</p>
-                        <p v-if="node.tomb">{{ node.tomb }}</p>
-                    </div>
-
-                    <div class="isBlock" :data-row-and-time-active="isRowActive(node, 'time') || null">
-                        <p class="timeDisplay">Time:</p>
-                        <p class="timeDisplay">{{ timerCountdown(node.time) }}</p>
-                    </div>
+                <div class="details_content-requirements">
+                    <ul>
+                        <li>
+                            <p>{{ `${node.job_sub}:` }}</p>
+                            <p> {{ node.node_level }}</p>
+                        </li>
+                        <li>
+                            <p>Perception: </p>
+                            <p>{{ node.perception ? node.perception : '???' }}</p>
+                        </li>
+                        <li :data-rowActive="isTimeActive">
+                            <p>Active:</p>
+                            <p :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</p>
+                        </li>
+                        <li>
+                            <p>Tomb:</p>
+                            <p>{{ node.tomb }}</p>
+                        </li>
+                    </ul>
                 </div>
 
                 <div class="isBlock" v-if="node.usage === 'aetherial'">
@@ -66,40 +85,43 @@
             <!-- ── Sightseeing ─────────────────────────────────────── -->
             <template v-else-if="node.job === 'sightseeing'">
 
-                <div class="details_content-name">
-                    <iconAndText :text="node.name" :icon="node.job_sub" />
+                <div class="details_content-requirements">
+                    <ul>
+                        <li>
+                            <p>EXP Earned: </p>
+                            <p>{{ getVistaInfo('exp') }}</p>
+                        </li>
+                        <li>
+                            <p>Level Range: </p>
+                            <p>{{ getVistaInfo('level')}}</p>
+                        </li>
+                        <li :data-rowActive="isTimeAndWeatherActive">
+                            <p>Active:</p>
+                            <p class="timeAndWeather">
+                                <span :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</span>
+                                <span :data-timeActive="isWeather1Active">{{ node.weather1 }}</span>
+                                <span v-if="node.weather2" :data-timeActive="isWeather2Active">{{ node.weather2 }}</span>
+                            </p>
+                        </li>
+                        <li>
+                            <p>Emote:</p>
+                            <p><iconAndText :text="node.emote" :icon="node.emote" /></p>
+                        </li>
+                    </ul>
                 </div>
 
-                <div class="details_content-previewImg">
-                    <img :src="vistaPreviewImg" />
-                </div>
+                <div class="details_content-previewAndGuide">
+                    <div>
+                        <img :src="vistaPreviewImg" />
+                    </div>
 
-                <div class="details_content-notes">
                     <p>
                         <span v-if="node.mount">[Flying Mount Required]</span>
                         {{ node.notes }}
                     </p>
+
                 </div>
 
-                <div class="details_content-pairedCells">
-                    <div class="isBlock" :data-row-and-time-active="isRowActive(node, 'weather') || null">
-                        <p class="timeDisplay">Weather:</p>
-                        <template v-if="node.weather1">
-                            <p :data-time-active="isWeatherActive('weather1', node) || null">{{ node.weather1 }}</p>
-                            <p v-if="node.weather2" :data-time-active="isWeatherActive('weather2', node) || null">{{ node.weather2 }}</p>
-                        </template>
-                        <p v-else>Any Weather</p>
-                    </div>
-
-                    <div class="isBlock" :data-row-and-time-active="isRowActive(node, 'time') || null">
-                        <p class="timeDisplay">Time:</p>
-                        <p class="timeDisplay">{{ timerCountdown(node.time) }}</p>
-                    </div>
-                </div>
-
-                <div class="details_content-emote isBlock">
-                    <iconAndText :text="node.emote" :icon="node.emote" />
-                </div>
 
             </template>
 
@@ -107,7 +129,7 @@
             <template v-else-if="node.job === 'aethercurrents'">
 
                 <div class="details_content-name">
-                    <iconAndText :text="`Aether Current #${node.order}`" :icon="node.job_sub" />
+                    
                 </div>
 
                 <div class="details_content-questName isBlock" v-if="node.name">
@@ -138,7 +160,7 @@
 <script lang="ts">
 import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
-import trashButton from '../ui/trashButton.vue'
+import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 
 // Module-level pure helper — no need to recreate per instance
 function capitalize(str: string): string {
@@ -150,10 +172,11 @@ function stars(count: number): string {
     return '★'.repeat(Math.max(0, count ?? 0))
 }
 
+
 export default {
     name: 'DetailsPane',
 
-    components: { mapDisplay, iconAndText, trashButton },
+    components: { mapDisplay, iconAndText, closeDetailsBtn },
 
     props: ['ffxivData', 'node', 'timerList', 'weatherList'],
 
@@ -171,6 +194,7 @@ export default {
             // return getVistaPreviewImgSmall(this.node.area.icon, this.node.no)
         },
 
+
         otherMaterials(): any[] {
             const { node_code, name, job } = this.node
             const matches = this.ffxivData[job].filter(
@@ -178,6 +202,31 @@ export default {
             )
             return matches.length ? matches : [{ name: 'None', ID: '000' }]
         },
+
+        isTimeActive(): boolean {
+            const timeState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : null
+            return timeState
+        },
+
+        isWeather1Active(): boolean {
+            const weatherState = this.weatherList[this.node.area.mapcode] == this.node.weather1 ? true : null
+            return weatherState
+        },
+
+        isWeather2Active(): boolean {
+            const weatherState = this.weatherList[this.node.area.mapcode] == this.node.weather2 ? true : null
+            return weatherState
+        },
+
+        isTimeAndWeatherActive(): boolean {
+            const timeState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : false
+            const weatherState1 = this.weatherList[this.node.area.mapcode] == this.node.weather1 ? true : false
+            const weatherState2 = this.weatherList[this.node.area.mapcode] == this.node.weather2 ? true : false
+            let match = timeState && (weatherState1 || weatherState2) ? true : null
+            return match
+        }
+
+
     },
 
     methods: {
@@ -187,6 +236,17 @@ export default {
         timerCountdown(time: string): string {
             if (!time) return 'Any Time'
             return this.timerList.find((o: any) => o.ID === time)?.countdown ?? 'Any Time'
+        },
+
+        
+        getVistaInfo(type: string) {
+            let expFound = this.ffxivData.expansion.find((o: any) => o.expansion == this.node.expansion)
+            if (type == 'exp') {
+                return expFound.vista_exp == 0 ? 'None' : expFound.vista_exp
+            }
+            else if (type == 'level') {
+                return `LV. ${expFound.vista_min} - ${expFound.vista_max}`
+            }
         },
 
         isRowActive(node: any, type: 'time' | 'weather'): boolean {
@@ -207,98 +267,3 @@ export default {
     },
 }
 </script>
-
-<style scoped lang="scss">
-.details {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    width: calc(400px + 2rem);
-    height: calc(100vh - $trackingbarHeight);
-    padding: 0.25rem 1rem;
-    background-color: $bodyBackgroundColor;
-    border-left: 1px solid $borderColor;
-    display: flex;
-    flex-direction: column;
-    overflow-y: auto;
-    overflow-x: hidden;
-
-    &_close {
-        margin-top: 1rem;
-        img { cursor: pointer; }
-    }
-
-    &_map {
-        height: 400px;
-        margin-top: 1rem;
-    }
-
-    .miniMap {
-        transform: scale(0.5);
-        transform-origin: top left;
-    }
-
-    &_location {
-        text-align: center;
-        margin-top: 0.5rem;
-    }
-
-    &_content {
-        margin-top: 1rem;
-
-        &-name {
-            font-size: 1.2rem;
-            text-align: center;
-            background-color: $borderColor;
-            padding: 0.2rem 0;
-        }
-
-        .isBlock {
-            border: 1px solid #fff;
-            padding: 0.5rem;
-            text-align: center;
-            margin-top: 1rem;
-        }
-
-        &-pairedCells {
-            display: flex;
-            width: 100%;
-            justify-content: space-around;
-            gap: 0 10px;
-
-            & > div {
-                display: flex;
-                justify-content: center;
-                width: 50%;
-                text-align: center;
-                flex-direction: column;
-            }
-        }
-
-        &-previewImg {
-            display: flex;
-            justify-content: center;
-            margin-top: 1rem;
-
-            img {
-                width: 160px;
-                aspect-ratio: 1 / 1;
-                border: 1px solid #fff;
-                cursor: pointer;
-            }
-        }
-
-        &-notes {
-            margin-top: 0.5rem;
-            width: 100%;
-            text-align: center;
-            span { font-weight: bold; }
-        }
-
-        &-questName,
-        &-unlockName {
-            h3 { margin-bottom: 0.3rem; }
-        }
-    }
-}
-</style>

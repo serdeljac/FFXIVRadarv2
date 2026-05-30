@@ -109,3 +109,17 @@
         }
     }
 </script>
+
+<style scoped lang="scss">
+    .rdrTable_row-area, .rdrTable_row-notes, .rdrTable_row-enemy {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        justify-items: center;
+        &>p {
+            height: 24px;
+            display: flex;
+            align-items: center;
+        }
+    }
+</style>

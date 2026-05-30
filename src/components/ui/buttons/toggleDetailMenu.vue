@@ -21,11 +21,9 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
-        transition: fill .07s linear;
+        path {transition: fill .07s linear;}
 
         &:hover path {
-            -webkit-filter: drop-shadow( 0px 0px 4px rgba(255, 255, 255, 0.7));
-            filter: drop-shadow( 0px 0px 4px rgba(255, 255, 255, 0.7));
             fill: $iconColorHover !important;
         }
     }

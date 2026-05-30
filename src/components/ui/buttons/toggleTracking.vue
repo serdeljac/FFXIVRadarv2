@@ -21,14 +21,13 @@
         align-items: center;
         justify-content: center;
         cursor: pointer;
+        path {transition: fill .07s linear;}
 
         &.tracked path {
             fill: #fff;
         }
 
         &:hover path {
-            -webkit-filter: drop-shadow( 0px 0px 4px rgba(255, 255, 255, 1));
-            filter: drop-shadow( 0px 0px 4px rgba(255, 255, 255, 1));
             fill: #fff !important;
         }
     }

@@ -37,7 +37,7 @@
       :ffxivData="ffxivData"
       :timerList="timerList"
       :weatherList="weatherList"
-      @closeDetails="(e: any) => (openDetailSidebar = e)" />
+      @openDetails="openDetails" />
 
   </div>
 </template>
@@ -554,8 +554,15 @@ export default {
     },
 
     openDetails(e: any) {
-      this.openDetailSidebar = !this.openDetailSidebar;
-      this.detailsPanel = e;
+      if (this.detailsPanel.ID == e.ID) {
+        this.openDetailSidebar = false;
+        this.detailsPanel = []; 
+      } else {
+        this.openDetailSidebar = true
+        this.detailsPanel = e;
+      }
+      // this.openDetailSidebar = !this.openDetailSidebar;
+      
     },
   },
 };

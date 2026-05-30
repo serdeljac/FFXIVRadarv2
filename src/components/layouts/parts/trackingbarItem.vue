@@ -3,7 +3,8 @@
 
         <div class="toprow">
             <btnTracking :trackingEnabled="node.tracked" @click="$emit('changeTracked', node)"/>
-            <p>{{ `${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
+            <p v-if="isGathering">{{ `${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
+            <p v-if="node.job == 'sightseeing'">{{ node.name }}</p>
             <btnToggleDetails :direction="'open'" @click="$emit('openDetails', node)"/>
         </div>
 
@@ -46,7 +47,10 @@
                     return results
                 }
                 return '--:--'
-            }
+            },
+            isGathering(): boolean {
+                return this.node.job === 'miner' || this.node.job === 'botany'
+            },
         }
     }
 </script>
