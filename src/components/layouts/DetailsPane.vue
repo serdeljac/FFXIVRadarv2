@@ -180,7 +180,7 @@ export default {
 
     props: ['ffxivData', 'node', 'timerList', 'weatherList'],
 
-    emits: ['closeDetails'],
+    emits: ['openDetails'],
 
     computed: {
         // Avoids repeating the two-job OR condition across template and logic
