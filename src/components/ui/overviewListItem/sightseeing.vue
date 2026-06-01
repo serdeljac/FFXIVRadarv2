@@ -26,9 +26,7 @@
 
             <div class="overviewListItem_body">
 
-                <div class="previewImg">
-                    <img v-if="checkImgAvailable(node.area.icon, node.no)" :src="getVistaPreviewImgSmall(node.area.icon, node.no)" />
-                </div>
+                <div class="previewImg" :id="`previewImg${node.ID}`"></div>
 
                 <div class="overviewListItem_contents">
 
@@ -55,27 +53,13 @@
     </ul>
 </template>
 
-<script lang="ts" setup>
-    function checkImgAvailable(expansion: string, no: number) {
-        let results = new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
-        let state = results.split("/").pop() == 'undefined' ? null : true
-        return state
-    };
-    function getVistaPreviewImgSmall(expansion: string, no: number) {
-        return new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
-    }
-    // function getVistaPreviewImgLarge(expansion: string, no: number) {
-    //     return new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
-    // }
-    // function getIconImg(name: string) {
-    //     return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    // }
-</script>
+
 
 <script lang="ts">
     import displayAreaText from '../../ui/displayAreaText.vue';
     import iconAndText from '../../ui/iconAndText.vue';
     import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
+    import axios from 'axios'
 
     export default {
         name: 'List Item - Sightseeing',
@@ -125,42 +109,73 @@
 
                 if (!arr.weather1) {return match1}
                 return match1 == match2 ? true : null
-            }
+            },
+            async loadVistaPreviewImg(): Promise<void> {
+                const CACHE_NAME = 'ffxivmap_vista'
+                let expansion = this.data[0].expansion.replace(/[-,'\s]/g, '').toLowerCase()
+                const els = Array.from(document.getElementsByClassName('previewImg')) as HTMLElement[]
+
+                if (!els.length) return
+
+                const cache = await caches.open(CACHE_NAME)  // open cache once, outside the loop
+                const l = this.data.length
+
+                for (let i = 0; i < l; i++) {
+                    const d = this.data[i]
+                    const imageUrl = `https://ffxivradarvista.s3.ca-central-1.amazonaws.com/${expansion}/small/${d.no}.webp`
+                    const curEle = els[i]
+
+                    try {
+                        const cached = await cache.match(imageUrl)
+
+                        if (cached) {
+                            const blob = await cached.blob()
+                            curEle.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
+                            continue  // ← was `return`, which exited the entire loop early
+                        }
+
+                        const response = await axios.get<Blob>(imageUrl, {
+                            responseType: 'blob',
+                            timeout: 5000,
+                        })
+                        const blob = response.data
+                        await cache.put(
+                            imageUrl,
+                            new Response(blob, { headers: { 'Content-Type': blob.type } })
+                        )
+                        curEle.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
+
+                    } catch (error: any) {
+                        curEle.style.backgroundImage = `url('/src/assets/blankmap.webp')`
+                        console.error(`EorzeaMap: failed to load vista image for "${d.no}": ${error.message}`)
+                    }
+                }
+            },
         },
-        
+        mounted() {
+            this.loadVistaPreviewImg()
+        },
+        watch: {
+            'data'() {
+                this.loadVistaPreviewImg()
+            },
+        }
     }
 </script>
 
 <style scoped lang="scss">
-    @keyframes pulse {
-        0% {transform: scale(1)}
-        50% {transform: scale(1.1)}
-        100% {transform: scale(1)}
-    }
-
     .previewImg {
+        background-size: cover;
+        aspect-ratio: 1 / 1;
+        border: 1px solid #fff;
+        cursor: pointer;
+        transition: all 0.07 linear;
+        user-select: none;
         width: 100px;
         height: 100px;
-        aspect-ratio: 1/1;
-
-        border: 1px solid #fff;
-        border-radius: $borderRadius;
-        &::before {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            content: 'Loading...';
-            position: absolute;
-            z-index: 9;
-            width: 100px;
-            height: 100px;
-            color: grey;
-            animation: pulse 1s linear infinite;
-        }
-        img {
-            width: 100%;
-            position: relative;
-            z-index: 10
+        &:hover {
+            box-shadow: inset 0px 0px 4px #fff,
+            0px 0px 4px #fff;
         }
     }
 
@@ -169,7 +184,6 @@
         &.compact {
             .overviewListItem_body {
                 display: block;
-                .previewImg {margin: auto;}
                 .notes {text-align: center;}
             }
         }

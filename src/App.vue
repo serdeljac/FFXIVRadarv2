@@ -37,7 +37,13 @@
       :ffxivData="ffxivData"
       :timerList="timerList"
       :weatherList="weatherList"
-      @openDetails="openDetails" />
+      @openDetails="openDetails" 
+      @openVistaImg="openVistaImg"/>
+
+    <vistaLarge 
+      v-if="openVistaImgDisplay"
+      @click="openVistaImg(vistaImg)"
+      :node="vistaImg"/>
 
   </div>
 </template>
@@ -54,6 +60,7 @@ import sidebar from './components/layouts/Sidebar.vue';
 import trackingBar from './components/layouts/TrackingBar.vue';
 import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
 import detailspane from './components/layouts/DetailsPane.vue';
+import vistaLarge from './components/layouts/ExpandVistaImg.vue'
 
 // JSON Data
 import areaRaw from './assets/json/areas.json';
@@ -81,7 +88,7 @@ const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 export default {
   name: 'AppRoot',
 
-  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner },
+  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge },
 
   data() {
     return {
@@ -107,15 +114,20 @@ export default {
         totalMin: 0 as number,
       },
       goldSaucer: {
-        seconds: 0 as number,   // renamed from `minutes` — value was always seconds
+        seconds: 0 as number,
         active: false as boolean,
       },
+      intervalTicks: 0 as number,
       timerList: [] as any[],
       weatherList: {} as Record<string, any>,
-      intervalTicks: 0 as number,
+      
       detailsPanel: {} as any,
-      trackinglist: [] as any[],
       openDetailSidebar: false as boolean,
+
+      vistaImg: [] as any,
+      openVistaImgDisplay: false as boolean,
+
+      trackinglist: [] as any[],
       _clockInterval: null as ReturnType<typeof setInterval> | null,
       _resizeHandler: null as (() => void) | null,
     };
@@ -561,9 +573,17 @@ export default {
         this.openDetailSidebar = true
         this.detailsPanel = e;
       }
-      // this.openDetailSidebar = !this.openDetailSidebar;
-      
     },
+
+    openVistaImg(e: any) {
+      if (this.vistaImg.ID == e.ID) {
+        this.vistaImg = []
+        this.openVistaImgDisplay = false
+      } else {
+        this.vistaImg = e
+        this.openVistaImgDisplay = true
+      }
+    }
   },
 };
 </script>

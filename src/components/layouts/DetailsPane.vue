@@ -32,7 +32,9 @@
         </div>
 
         <div class="details_location">
-            <h3>{{ node.area.region }} &gt; {{ node.area.zone }}</h3>
+            <h3>{{ node.area.region }} &gt; {{ node.area.zone }}<br />
+                <span v-if="node.area.issubarea">{{node.point}}</span>
+            </h3>
             <h4>(x{{ node.x }}, y{{ node.y }})</h4>
         </div>
 
@@ -111,18 +113,13 @@
                 </div>
 
                 <div class="details_content-previewAndGuide">
-                    <div>
-                        <img :src="vistaPreviewImg" />
-                    </div>
+                    <div class="vistaPreviewImg" id="vistapreview" @click="$emit('openVistaImg', node)"></div>
 
                     <p>
                         <span v-if="node.mount">[Flying Mount Required]</span>
                         {{ node.notes }}
                     </p>
-
                 </div>
-
-
             </template>
 
             <!-- ── Aether Currents ─────────────────────────────────── -->
@@ -148,52 +145,28 @@
     </aside>
 </template>
 
-<script lang="ts" setup>
-// function getVistaPreviewImgSmall(expansion: string, no: number): string {
-//     return new URL(
-//         `/src/assets/sightseeing/${expansion}/ss${expansion}${no}.webp`,
-//         import.meta.url
-//     ).href
-// }
-</script>
-
 <script lang="ts">
 import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
+import axios from 'axios'
 
-// Module-level pure helper — no need to recreate per instance
-function capitalize(str: string): string {
-    if (!str) return ''
-    return str.charAt(0).toUpperCase() + str.slice(1)
-}
+const CACHE_NAME = 'ffxivmap_vista'
+
 
 function stars(count: number): string {
     return '★'.repeat(Math.max(0, count ?? 0))
 }
 
-
 export default {
     name: 'DetailsPane',
-
     components: { mapDisplay, iconAndText, closeDetailsBtn },
-
     props: ['ffxivData', 'node', 'timerList', 'weatherList'],
-
-    emits: ['openDetails'],
-
+    emits: ['openDetails', 'openVistaImg'],
     computed: {
-        // Avoids repeating the two-job OR condition across template and logic
         isGathering(): boolean {
             return this.node.job === 'miner' || this.node.job === 'botany'
         },
-
-        // Cached image URL — only recalculated when node changes
-        vistaPreviewImg(): string {
-            return ''
-            // return getVistaPreviewImgSmall(this.node.area.icon, this.node.no)
-        },
-
 
         otherMaterials(): any[] {
             const { node_code, name, job } = this.node
@@ -225,13 +198,46 @@ export default {
             let match = timeState && (weatherState1 || weatherState2) ? true : null
             return match
         }
-
-
     },
 
     methods: {
-        capitalize,
         stars,
+
+        async loadVistaPreviewImg(): Promise<void> {
+            let expansion = this.node.expansion.replace(/[-,'\s]/g, '').toLowerCase()
+            let no = this.node.no.toString()
+            const imageUrl = `https://ffxivradarvista.s3.ca-central-1.amazonaws.com/${expansion}/small/${no}.webp`            
+            const el = document.getElementById('vistapreview')
+            
+            if (!el) return
+
+            try {
+                const cache = await caches.open(CACHE_NAME)
+                const cached = await cache.match(imageUrl)
+
+                if (cached) {
+                    const blob = await cached.blob()
+                    const url = `url('${URL.createObjectURL(blob)}')`
+                    el.style.backgroundImage = url
+                    return
+                }
+
+                const response = await axios.get<Blob>(imageUrl, {
+                    responseType: 'blob',
+                    timeout: 5000,
+                })
+                const blob = response.data
+                await cache.put(
+                    imageUrl,
+                    new Response(blob, { headers: { 'Content-Type': blob.type } })
+                )
+                const url = `url('${URL.createObjectURL(blob)}')`
+                el.style.backgroundImage = url
+            } catch (error: any) {
+                el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
+                console.error(`EorzeaMap: failed to vista image map for "${this.node.no}": ${error.message}`)
+            }
+        },
 
         timerCountdown(time: string): string {
             if (!time) return 'Any Time'
@@ -265,5 +271,13 @@ export default {
             return this.weatherList[node.area.mapcode] === node[field]
         },
     },
+    mounted() {
+        this.loadVistaPreviewImg()
+    },
+    watch: {
+        'node.ID'() {
+            this.loadVistaPreviewImg()
+        },
+    }
 }
 </script>

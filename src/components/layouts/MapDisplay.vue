@@ -207,7 +207,7 @@ export default {
                 }
             } catch (error: any) {
                 for (const el of els) {
-                    el.style.backgroundImage = `url('/src/assets/blankmap.jpg')`
+                    el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
                 }
                 console.error(`EorzeaMap: failed to load map for "${zone}": ${error.message}`)
             }

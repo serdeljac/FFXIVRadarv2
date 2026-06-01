@@ -426,11 +426,19 @@ Details Menu
             margin-top: 1rem;
             gap: 10px;
 
-            img {
-                width: 160px;
+            .vistaPreviewImg {
+                background-size: cover;
                 aspect-ratio: 1 / 1;
                 border: 1px solid #fff;
                 cursor: pointer;
+                transition: all 0.07 linear;
+                user-select: none;
+                width: 160px;
+                height: 160px;
+                &:hover {
+                    box-shadow: inset 0px 0px 4px #fff,
+                    0px 0px 4px #fff;
+                }
             }
             p {
                 text-align: center;
