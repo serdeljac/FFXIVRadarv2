@@ -27,6 +27,7 @@
         :windowWidth="windowWidth"
         :timerList="timerList"
         :weatherList="weatherList"
+        @openVistaImg="(e: any) => openVistaImg(e)"
         @openDetails="openDetails"
         @changeTracked="changeTracked" />
     </main>

@@ -9,8 +9,8 @@
         v-if="focusNode"
         :ffxivData="ffxivData"
         :focusNode="focusNode"
-        :singleOnly="false"
         :mapSize="columnLayout"
+        :originClass="'page'"
         class="mapDisplay_root" />
     </div>
 
@@ -87,6 +87,7 @@
           :weatherList="weatherList"
           :focusNode="focusNode"
           :windowWidth="windowWidth"
+          @openVistaImg="(e: any) => $emit('openVistaImg', e)"
           @changeTracked="(e: any) => $emit('changeTracked', e)"
           @focusNode="(e: any) => (focusNode = e)" />
 
@@ -201,7 +202,7 @@ export default {
   },
 
   props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
-  emits: ['changeTracked'],
+  emits: ['changeTracked', 'openVistaImg'],
 
   data() {
     return {
@@ -303,7 +304,7 @@ export default {
 
       // Auto-select the first tab that has data, preserving JOB_KEYS order
       this.tabSelected = '';
-      this.focusNode   = null;
+      this.focusNode = null;
       for (const key of JOB_KEYS) {
         if (this.zoneNodes[key].length > 0) {
           this.tabSelected = key;

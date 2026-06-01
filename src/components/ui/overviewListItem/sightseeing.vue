@@ -26,7 +26,7 @@
 
             <div class="overviewListItem_body">
 
-                <div class="previewImg" :id="`previewImg${node.ID}`"></div>
+                <div class="previewImg" :id="`previewImg${node.ID}`" @click="$emit('openVistaImg', node)"></div>
 
                 <div class="overviewListItem_contents">
 
@@ -53,8 +53,6 @@
     </ul>
 </template>
 
-
-
 <script lang="ts">
     import displayAreaText from '../../ui/displayAreaText.vue';
     import iconAndText from '../../ui/iconAndText.vue';
@@ -65,7 +63,12 @@
         name: 'List Item - Sightseeing',
         components: {displayAreaText, iconAndText, toggleTrackingBtn},
         props: ['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'],
-        emits: ['focusNode', 'changeTracked'],
+        emits: ['focusNode', 'changeTracked', 'openVistaImg'],
+        data() {
+            return {
+                storeFocusedNode: {} as any
+            }
+        },
         methods: {
             fetchTimerCountdowns(time: string) {
                 if (time) {
@@ -113,7 +116,9 @@
             async loadVistaPreviewImg(): Promise<void> {
                 const CACHE_NAME = 'ffxivmap_vista'
                 let expansion = this.data[0].expansion.replace(/[-,'\s]/g, '').toLowerCase()
+                await this.$nextTick() // ensure DOM is up to date
                 const els = Array.from(document.getElementsByClassName('previewImg')) as HTMLElement[]
+                
 
                 if (!els.length) return
 
@@ -153,13 +158,16 @@
             },
         },
         mounted() {
+            this.storeFocusedNode = this.focusNode
             this.loadVistaPreviewImg()
         },
         watch: {
             'data'() {
-                this.loadVistaPreviewImg()
-            },
-        }
+                this.$nextTick(() => {
+            this.loadVistaPreviewImg()
+        })
+    }
+        },
     }
 </script>
 

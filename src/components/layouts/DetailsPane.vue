@@ -28,7 +28,8 @@
                 class="miniMap"
                 :ffxivData="ffxivData"
                 :focusNode="node"
-                :singleOnly="true"/>
+                :originClass="'details'"
+                />
         </div>
 
         <div class="details_location">

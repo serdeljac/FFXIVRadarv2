@@ -2,56 +2,56 @@
     <div class="mapDisplay" :style="{ width: mapSize + 'px', height: mapSize + 'px' }">
         <div
             class="mapDisplay_background"
+            :id="`originalFrom_${originClass}`"
             :style="{ transform: `scale(${mapScale})` }"
         ></div>
 
         <div class="mapDisplay_overlay" :style="{ transform: `scale(${mapScale})` }">
 
-            <div class="mapDisplay_pointSelect" v-if="focusNode.area.issubarea">
-                <div v-for="d in pointSelection" :key="d.ID">
-                    <input @click="pointSelected = d.point" type="radio" :id="d.ID" :name="d.area" :value="d.point" class="radio_point" :checked="d.point == pointSelected ? true : null">
-                    <label :for="d.ID">{{ d.point }}</label><br>
+            <div class="mapDisplay_pointSelect" v-if="focusNode.area.issubarea && originClass !== 'details'">
+
+                <div class="radio-button" v-for="d in pointSelection" :key="d.ID">
+                    <input 
+                        type="radio" 
+                        @click="pointSelected = d.point"
+                        :id="d.ID"
+                        :value="d.point"
+                        name="radio-group"
+                        :checked="d.point == pointSelected ? true : null"
+                        class="radio-button__input"  >
+                    <label class="radio-button__label" :for="d.ID">
+                        <span class="radio-button__custom"></span>
+                        {{ d.point }}
+                    </label>
                 </div>
+                
             </div>
 
-
-            <div
-                v-for="d in aetheryteNodes"
-                :key="d.ID"
-                class="mapIcon aetheryte"
-                :style="{ transform: `translate(${getCoordinates(d)})` }"
-            >
+            <div v-for="d in aetheryteNodes" :key="d.ID"
+                :class="[`mapIcon aetheryte`, {'hide': pointSelected && d.point != pointSelected}]"
+                :style="{ transform: `translate(${getCoordinates(d)})` }">
                 <img :src="getIconImg(d.job, 'aetheryte')" />
             </div>
 
-            <div
-                v-for="d in unchainedNodes"
-                :key="d.ID"
-                class="mapIcon"
+            <div v-for="d in unchainedNodes" :key="d.ID"
+                :class="[`mapIcon`, {'hide': pointSelected && d.point != pointSelected}]"
                 :data-map-icon-active="d.node_code === focusNode.node_code || null"
-                :style="{ transform: `translate(${getCoordinates(d)})` }"
-            >
+                :style="{ transform: `translate(${getCoordinates(d)})` }">
                 <img :src="getIconImg(d.job, d.job_sub)" />
             </div>
 
-            <div
-                v-for="d in chainedNodes"
-                :key="d.ID"
+            <div v-for="d in chainedNodes" :key="d.ID"
                 class="mapIcon"
                 :data-map-icon-active="d.chain_set === focusNode.chain_set || null"
                 :data-chain-no="d.chain_no"
-                :style="{ transform: `translate(${getCoordinates(d)})` }"
-            >
+                :style="{ transform: `translate(${getCoordinates(d)})` }">
                 <img :src="getIconImg(d.job, d.job_sub)" />
             </div>
 
-            <div
-                v-for="d in huntNodes"
-                :key="`${d.transx}-${d.transy}`"
+            <div v-for="d in huntNodes" :key="`${d.transx}-${d.transy}`"
                 class="mapIcon"
                 :data-map-icon-active="isActiveRank(d.ranks) || null"
-                :style="{ transform: `translate(${getCoordinates(d)})` }"
-            >
+                :style="{ transform: `translate(${getCoordinates(d)})` }">
                 <img :src="getIconImg(d.job, d.job_sub)" />
             </div>
         </div>
@@ -59,44 +59,34 @@
 </template>
 
 <script lang="ts" setup>
-// Pure function — no reactive dependencies, safe as a module-level utility
-function getIconImg(jobName: string, subJob: string): string {
-    let name: string
-    if (jobName === 'fates') {
-        name = `fate_${subJob}`
-    } else if (jobName === 'eliteHunts') {
-        name = subJob === 'SS' ? 'hunts_ss' : 'hunts'
-    } else {
-        name = subJob
+    function getIconImg(jobName: string, subJob: string): string {
+        let name: string
+        if (jobName === 'fates') {
+            name = `fate_${subJob}`
+        } else if (jobName === 'eliteHunts') {
+            name = subJob === 'SS' ? 'hunts_ss' : 'hunts'
+        } else {
+            name = subJob
+        }
+        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
     }
-    return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-}
 </script>
 
 <script lang="ts">
-import axios from 'axios'
+    import axios from 'axios'
 
-const CACHE_NAME = 'ffxivmap_cache'
-
-// Normalise a zone name to the S3 key format
-function toS3Key(zone: string): string {
-    return zone.replace(/[-,'\s]/g, '').toLowerCase()
-}
-
-export default {
+    export default {
     name: 'EorzeaMap',
-
-    props: ['ffxivData', 'focusNode', 'singleOnly', 'mapSize'],
-
+    props: ['ffxivData', 'focusNode', 'originClass', 'mapSize'],
     data() {
         return {
             pointSelection: [] as any,
-            pointSelected: '' as string
+            pointSelected: '' as string,
+            storeFocusedNode: {} as any
         }
     },
 
     computed: {
-        // Derived scalar used in multiple bindings — computed once per change
         mapScale(): number {
             return this.mapSize / 800
         },
@@ -167,14 +157,27 @@ export default {
             return rank.includes(this.focusNode.rank)
         },
 
+        getMapName(node: any): string {
+            const name = node.area.zone.replace(/[-,'\s]/g, '').toLowerCase()
+            let addPoint = this.pointSelected ? this.pointSelected.toString().toLowerCase().replace(/\s/g, '') : ''
+            if (this.originClass == 'details' && this.focusNode.area.issubarea) {
+                addPoint = this.focusNode.point.toString().toLowerCase().replace(/\s/g, '')
+
+            }
+            return `${name}${addPoint}`
+        },
+
         async loadMap(zone: string): Promise<void> {
-            if (this.focusNode.area.issubarea) {
-                zone = `${zone}${this.pointSelected.toString().toLowerCase().replace(/\s/g, '')}`
+            const CACHE_NAME = 'ffxivmap_cache'
+            let el = document.getElementById('originalFrom_page')
+            const mapname = this.getMapName(this.focusNode)
+            const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${mapname}.webp`
+
+            if (this.originClass == 'details') {
+                el = document.getElementById('originalFrom_details')
             }
 
-            const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${toS3Key(zone)}.webp`
-            const els = Array.from(document.getElementsByClassName('mapDisplay_background')) as HTMLElement[]
-            if (!els.length) return
+            if (!el) return
 
             try {
                 const cache = await caches.open(CACHE_NAME)
@@ -183,10 +186,7 @@ export default {
                 if (cached) {
                     const blob = await cached.blob()
                     const url = `url('${URL.createObjectURL(blob)}')`
-                    for (const el of els) {
-                        el.style.backgroundImage = url
-                    }
-                    
+                    if (el) el.style.backgroundImage = url
                     return
                 }
 
@@ -195,42 +195,38 @@ export default {
                     timeout: 5000,
                 })
                 const blob = response.data
-                // Store in cache before creating the object URL to avoid a
-                // second blob allocation for the cache.put call
                 await cache.put(
                     imageUrl,
                     new Response(blob, { headers: { 'Content-Type': blob.type } })
                 )
                 const url = `url('${URL.createObjectURL(blob)}')`
-                for (const el of els) {
-                    el.style.backgroundImage = url
-                }
+                el.style.backgroundImage = url
             } catch (error: any) {
-                for (const el of els) {
-                    el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
-                }
+                if (el) el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
                 console.error(`EorzeaMap: failed to load map for "${zone}": ${error.message}`)
             }
         },
     },
 
     mounted() {
+        this.storeFocusedNode = this.focusNode
         this.loadMap(this.focusNode.area.zone)
     },
 
-    // Use a watcher instead of updated() so we only reload when the zone
-    // actually changes, not on every re-render triggered by anything else.
     watch: {
-        'focusNode.area.point'(newZone: string) {
+        'focusNode.ID'(newZone: string) {
             if (this.focusNode.area.issubarea) {
-                console.log('found!')
                 this.pointSelection = this.ffxivData.areas.filter((o: any) => o.area == this.focusNode.area.area)
                 this.pointSelected = this.pointSelection[0].point
             } else {
                 this.pointSelection = []
                 this.pointSelected = ''
             }
-            this.loadMap(newZone)
+
+            if (this.storeFocusedNode.area.zone !== this.focusNode.area.zone) {
+                this.loadMap(newZone)
+            }
+            this.storeFocusedNode = this.focusNode
         },
         'pointSelected'() {
             let mapSelect = this.focusNode.area.zone
@@ -248,12 +244,75 @@ export default {
         background-size: cover;
     }
 
-    &_pointSelect > div{
-        padding: 4px 2rem 4px 0;
+    &_pointSelect {
         display: flex;
-        justify-content: end;
-        width: 100%;
+        flex-direction: column;
+        position: absolute;
+        background-color: rgba(0, 0, 0, 0.502);
+        padding: 0.5rem;
+
+        label:hover {text-decoration: underline;}
+
+/* From Uiverse.io by gharsh11032000 */ 
+        .radio-button-container {
+        display: flex;
+        align-items: center;
+        gap: 24px;
+        }
+
+        .radio-button {
+        display: inline-block;
+        position: relative;
         cursor: pointer;
+        }
+
+        .radio-button__input {
+        position: absolute;
+        opacity: 0;
+        width: 0;
+        height: 0;
+        }
+
+        .radio-button__label {
+        display: inline-block;
+        padding-left: 30px;
+        margin-bottom: 10px;
+        position: relative;
+        font-size: 15px;
+        color: #f2f2f2;
+        font-weight: 600;
+        cursor: pointer;
+        text-transform: uppercase;
+        transition: all 0.3s ease;
+        }
+
+        .radio-button__custom {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        border: 2px solid #678dff;
+        transition: all 0.3s ease;
+        }
+
+        .radio-button__input:checked + .radio-button__label .radio-button__custom {
+        background-color: #4c8bf5;
+        border-color: transparent;
+        transform: scale(0.8);
+        box-shadow: 0 0 20px #4c8bf580;
+        }
+
+        .radio-button__input:checked + .radio-button__label {
+        color: #fff;
+        }
+
+        .radio-button__label:hover .radio-button__custom {
+        transform: scale(1.2);
+        border-color: #4c8bf5;
+        box-shadow: 0 0 20px #4c8bf580;
+        }
     }
 
     & > div {
@@ -267,6 +326,7 @@ export default {
     .mapIcon {
         z-index: 10;
         position: absolute;
+        &.hide {display: none}
 
         img {
             width: $iconSize;

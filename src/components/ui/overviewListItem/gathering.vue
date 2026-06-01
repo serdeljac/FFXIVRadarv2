@@ -97,6 +97,11 @@
                 return null
             },
         },
+        watch: {
+            'data'() {
+                this.groupNodes() 
+            }
+        }
     }
 </script>
 
