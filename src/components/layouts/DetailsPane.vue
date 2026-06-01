@@ -47,15 +47,15 @@
                             <p>{{ `${node.job_sub}:` }}</p>
                             <p> {{ node.node_level }}</p>
                         </li>
-                        <li>
+                        <li v-if="node.perception">
                             <p>Perception: </p>
-                            <p>{{ node.perception ? node.perception : '???' }}</p>
+                            <p>{{ node.perception }}</p>
                         </li>
                         <li :data-rowActive="isTimeActive">
                             <p>Active:</p>
                             <p :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</p>
                         </li>
-                        <li>
+                        <li v-if="node.tomb">
                             <p>Tomb:</p>
                             <p>{{ node.tomb }}</p>
                         </li>

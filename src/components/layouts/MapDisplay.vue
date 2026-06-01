@@ -2,11 +2,19 @@
     <div class="mapDisplay" :style="{ width: mapSize + 'px', height: mapSize + 'px' }">
         <div
             class="mapDisplay_background"
-            id="ffmap"
             :style="{ transform: `scale(${mapScale})` }"
         ></div>
 
         <div class="mapDisplay_overlay" :style="{ transform: `scale(${mapScale})` }">
+
+            <div class="mapDisplay_pointSelect" v-if="focusNode.area.issubarea">
+                <div v-for="d in pointSelection" :key="d.ID">
+                    <input @click="pointSelected = d.point" type="radio" :id="d.ID" :name="d.area" :value="d.point" class="radio_point" :checked="d.point == pointSelected ? true : null">
+                    <label :for="d.ID">{{ d.point }}</label><br>
+                </div>
+            </div>
+
+
             <div
                 v-for="d in aetheryteNodes"
                 :key="d.ID"
@@ -80,10 +88,22 @@ export default {
 
     props: ['ffxivData', 'focusNode', 'singleOnly', 'mapSize'],
 
+    data() {
+        return {
+            pointSelection: [] as any,
+            pointSelected: '' as string
+        }
+    },
+
     computed: {
         // Derived scalar used in multiple bindings — computed once per change
         mapScale(): number {
             return this.mapSize / 800
+        },
+
+        pointArea(): any[] {
+            let results = this.ffxivData.areas.filter((o: any) => o.area == this.focusNode.area.area)
+            return results
         },
 
         aetheryteNodes(): any[] {
@@ -148,9 +168,13 @@ export default {
         },
 
         async loadMap(zone: string): Promise<void> {
+            if (this.focusNode.area.issubarea) {
+                zone = `${zone}${this.pointSelected.toString().toLowerCase().replace(/\s/g, '')}`
+            }
+
             const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${toS3Key(zone)}.webp`
-            const el = document.getElementById('ffmap')
-            if (!el) return
+            const els = Array.from(document.getElementsByClassName('mapDisplay_background')) as HTMLElement[]
+            if (!els.length) return
 
             try {
                 const cache = await caches.open(CACHE_NAME)
@@ -158,7 +182,11 @@ export default {
 
                 if (cached) {
                     const blob = await cached.blob()
-                    el.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
+                    const url = `url('${URL.createObjectURL(blob)}')`
+                    for (const el of els) {
+                        el.style.backgroundImage = url
+                    }
+                    
                     return
                 }
 
@@ -173,9 +201,14 @@ export default {
                     imageUrl,
                     new Response(blob, { headers: { 'Content-Type': blob.type } })
                 )
-                el.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
+                const url = `url('${URL.createObjectURL(blob)}')`
+                for (const el of els) {
+                    el.style.backgroundImage = url
+                }
             } catch (error: any) {
-                el.style.backgroundImage = `url('/src/assets/blankmap.jpg')`
+                for (const el of els) {
+                    el.style.backgroundImage = `url('/src/assets/blankmap.jpg')`
+                }
                 console.error(`EorzeaMap: failed to load map for "${zone}": ${error.message}`)
             }
         },
@@ -188,9 +221,21 @@ export default {
     // Use a watcher instead of updated() so we only reload when the zone
     // actually changes, not on every re-render triggered by anything else.
     watch: {
-        'focusNode.area.zone'(newZone: string) {
+        'focusNode.area.point'(newZone: string) {
+            if (this.focusNode.area.issubarea) {
+                console.log('found!')
+                this.pointSelection = this.ffxivData.areas.filter((o: any) => o.area == this.focusNode.area.area)
+                this.pointSelected = this.pointSelection[0].point
+            } else {
+                this.pointSelection = []
+                this.pointSelected = ''
+            }
             this.loadMap(newZone)
         },
+        'pointSelected'() {
+            let mapSelect = this.focusNode.area.zone
+            this.loadMap(mapSelect)
+        }
     },
 }
 </script>
@@ -198,6 +243,18 @@ export default {
 <style scoped lang="scss">
 .mapDisplay {
     position: relative;
+
+    .mapDisplay_background {
+        background-size: cover;
+    }
+
+    &_pointSelect > div{
+        padding: 4px 2rem 4px 0;
+        display: flex;
+        justify-content: end;
+        width: 100%;
+        cursor: pointer;
+    }
 
     & > div {
         width: 800px;

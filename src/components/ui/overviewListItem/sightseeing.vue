@@ -12,10 +12,12 @@
                     :icon="`${node.job_sub}`"/>
 
                 <div class="forceright">
-                    <img 
-                        v-if="node.time" 
-                        :class="[`iconSize trackingIcon`, {'remove': node.tracked}]" :src="getIconImg('alarm')" 
-                        @click="$emit('changeTracked', node)"/>
+                    <toggleTrackingBtn
+                            v-if="node.time" 
+                            :trackingEnabled="node.tracked"
+                            class="hasContext"
+                            data-context="Track Node"
+                            @click="$emit('changeTracked', node)" />
                     <p>{{ fetchTimerCountdowns(node.time) }}</p>
                 </div>
             </div>
@@ -65,18 +67,19 @@
     // function getVistaPreviewImgLarge(expansion: string, no: number) {
     //     return new URL(`/src/assets/sightseeing/${expansion}/ss${expansion}${no.toString()}.webp`, import.meta.url).href
     // }
-    function getIconImg(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
+    // function getIconImg(name: string) {
+    //     return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+    // }
 </script>
 
 <script lang="ts">
     import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue'
+    import iconAndText from '../../ui/iconAndText.vue';
+    import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
 
     export default {
         name: 'List Item - Sightseeing',
-        components: {displayAreaText, iconAndText},
+        components: {displayAreaText, iconAndText, toggleTrackingBtn},
         props: ['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked'],
         methods: {

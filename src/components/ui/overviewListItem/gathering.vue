@@ -23,10 +23,12 @@
             <div class="overviewListItem_body">
                 <ul class="overviewListItem_list">
                     <li v-for="d in material" :key="d.ID" >
-                        <img 
+                        <toggleTrackingBtn
                             v-if="d.time" 
-                            :class="[`iconSize trackingIcon`, {'remove': d.tracked}]" :src="getIconImg('alarm')" 
-                            @click="$emit('changeTracked', d)"/>
+                            :trackingEnabled="d.tracked"
+                            class="hasContext"
+                            data-context="Track Node"
+                            @click="$emit('changeTracked', d)" />
                         {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
                         <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImg('collectability')" />
                         <img class="iconSize2" v-if="d.usage == 'customdelivery'" :src="getIconImg('customdelivery')" />
@@ -46,11 +48,12 @@
 
 <script lang="ts">
     import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue'
+    import iconAndText from '../../ui/iconAndText.vue';
+    import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
 
     export default {
         name: 'List Item - Gathering',
-        components: {displayAreaText, iconAndText},
+        components: {displayAreaText, iconAndText, toggleTrackingBtn},
         props: ['data', 'timerList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked'],
         data() {

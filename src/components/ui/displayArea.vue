@@ -2,7 +2,7 @@
     <div class="displayArea">
         <img :src="getIconImageURL(node.area.icon)" />
         <p>
-            {{ `${node.area.region} > ${node.area.area}` }}
+            {{ `${node.area.region} > ${node.area.zone}` }}
             <span class="cord">{{ `(x${node.x}, y${node.y})` }}</span>
         </p>
     </div>

@@ -1,11 +1,13 @@
 <template>
-    <div :class="[`container`, `${sidebarLayout}`]">
+
+  <div :class="[`container`, `${sidebarLayout}`]" @click="openDonate">
         <button class="buymecoffee_btn button">
             <img :src="getIconImg('coffee')" />
             <p v-if="sidebarLayout != 'compact'">Buy me a coffee!</p>
         </button>
     </div>
 </template>
+
 
 <script lang="ts" setup>
     function getIconImg(name: string) {
@@ -14,10 +16,37 @@
 </script>
 
 <script lang="ts">
-    export default {
-        name: "Dontate Button",
-        props: ['sidebarLayout']
+const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
+
+export default {
+  name: 'DonateButton',
+  props: ['sidebarLayout'],
+
+  data() {
+    return {
+      beating: false,
+      beatInterval: null
     }
+  },
+
+  mounted() {
+    // Subtle heartbeat animation loop
+    this.beatInterval = setInterval(() => {
+      this.beating = true
+      setTimeout(() => { this.beating = false }, 300)
+    }, 2800)
+  },
+
+  beforeUnmount() {
+    clearInterval(this.beatInterval)
+  },
+
+  methods: {
+    openDonate() {
+      window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
+    }
+  }
+}
 </script>
 
 <style scoped lang="scss">
