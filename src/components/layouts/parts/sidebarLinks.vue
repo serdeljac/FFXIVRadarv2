@@ -67,7 +67,13 @@
             name: 'Private Policy',
             icon: 'privatepolicy',
             link: 'PrivatePolicy',
-        }
+        },
+        // {
+        //     id: 11,
+        //     name: 'FFXIV API',
+        //     icon: 'ffxivapi',
+        //     link: 'ffxivAPI',
+        // }
     ]
 
     function getIconImageURL(name: string) {

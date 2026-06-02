@@ -207,7 +207,7 @@ export default {
         async loadVistaPreviewImg(): Promise<void> {
             let expansion = this.node.expansion.replace(/[-,'\s]/g, '').toLowerCase()
             let no = this.node.no.toString()
-            const imageUrl = `https://ffxivradarvista.s3.ca-central-1.amazonaws.com/${expansion}/small/${no}.webp`            
+            const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/${expansion}/small/${no}.webp`            
             const el = document.getElementById('vistapreview')
             
             if (!el) return

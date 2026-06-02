@@ -16,7 +16,7 @@ import axios from 'axios'
             async loadVistaImg(): Promise<void> {
                 let expansion = this.node.expansion.replace(/[-,'\s]/g, '').toLowerCase()
                 let no = this.node.no.toString()
-                const imageUrl = `https://ffxivradarvista.s3.ca-central-1.amazonaws.com/${expansion}/large/${no}.webp`            
+                const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/${expansion}/large/${no}.webp`            
                 const el = document.getElementById('imgDisplay') as HTMLImageElement | null
                 const CACHE_NAME = 'ffxivmap_vista'
                 

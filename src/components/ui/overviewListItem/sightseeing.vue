@@ -127,7 +127,7 @@
 
                 for (let i = 0; i < l; i++) {
                     const d = this.data[i]
-                    const imageUrl = `https://ffxivradarvista.s3.ca-central-1.amazonaws.com/${expansion}/small/${d.no}.webp`
+                    const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/${expansion}/small/${d.no}.webp`
                     const curEle = els[i]
 
                     try {
