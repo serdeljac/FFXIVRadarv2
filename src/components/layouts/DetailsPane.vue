@@ -114,7 +114,7 @@
                 </div>
 
                 <div class="details_content-previewAndGuide">
-                    <div class="vistaPreviewImg" id="vistapreview" @click="$emit('openVistaImg', node)"></div>
+                    <vistaSmallAPI :node="node" :size="'medium'" @click="$emit('openVistaImg', node)"/>
 
                     <p>
                         <span v-if="node.mount">[Flying Mount Required]</span>
@@ -150,9 +150,8 @@
 import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
-import axios from 'axios'
+import vistaSmallAPI from '../API/vistaImg.vue'
 
-const CACHE_NAME = 'ffxivmap_vista'
 
 
 function stars(count: number): string {
@@ -161,7 +160,7 @@ function stars(count: number): string {
 
 export default {
     name: 'DetailsPane',
-    components: { mapDisplay, iconAndText, closeDetailsBtn },
+    components: { mapDisplay, iconAndText, closeDetailsBtn, vistaSmallAPI },
     props: ['ffxivData', 'node', 'timerList', 'weatherList'],
     emits: ['openDetails', 'openVistaImg'],
     computed: {
@@ -204,42 +203,6 @@ export default {
     methods: {
         stars,
 
-        async loadVistaPreviewImg(): Promise<void> {
-            let expansion = this.node.expansion.replace(/[-,'\s]/g, '').toLowerCase()
-            let no = this.node.no.toString()
-            const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/${expansion}/small/${no}.webp`            
-            const el = document.getElementById('vistapreview')
-            
-            if (!el) return
-
-            try {
-                const cache = await caches.open(CACHE_NAME)
-                const cached = await cache.match(imageUrl)
-
-                if (cached) {
-                    const blob = await cached.blob()
-                    const url = `url('${URL.createObjectURL(blob)}')`
-                    el.style.backgroundImage = url
-                    return
-                }
-
-                const response = await axios.get<Blob>(imageUrl, {
-                    responseType: 'blob',
-                    timeout: 5000,
-                })
-                const blob = response.data
-                await cache.put(
-                    imageUrl,
-                    new Response(blob, { headers: { 'Content-Type': blob.type } })
-                )
-                const url = `url('${URL.createObjectURL(blob)}')`
-                el.style.backgroundImage = url
-            } catch (error: any) {
-                el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
-                console.error(`EorzeaMap: failed to vista image map for "${this.node.no}": ${error.message}`)
-            }
-        },
-
         timerCountdown(time: string): string {
             if (!time) return 'Any Time'
             return this.timerList.find((o: any) => o.ID === time)?.countdown ?? 'Any Time'
@@ -272,13 +235,5 @@ export default {
             return this.weatherList[node.area.mapcode] === node[field]
         },
     },
-    mounted() {
-        this.loadVistaPreviewImg()
-    },
-    watch: {
-        'node.ID'() {
-            this.loadVistaPreviewImg()
-        },
-    }
 }
 </script>

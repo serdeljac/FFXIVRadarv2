@@ -26,7 +26,7 @@
 
             <div class="overviewListItem_body">
 
-                <div class="previewImg" :id="`previewImg${node.ID}`" @click="$emit('openVistaImg', node)"></div>
+                <vistaSmallAPI :node="node" :size="'small'" @click="$emit('openVistaImg', node)"/>
 
                 <div class="overviewListItem_contents">
 
@@ -57,18 +57,13 @@
     import displayAreaText from '../../ui/displayAreaText.vue';
     import iconAndText from '../../ui/iconAndText.vue';
     import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
-    import axios from 'axios'
+    import vistaSmallAPI from '../../API/vistaImg.vue'
 
     export default {
         name: 'List Item - Sightseeing',
-        components: {displayAreaText, iconAndText, toggleTrackingBtn},
+        components: {displayAreaText, iconAndText, toggleTrackingBtn, vistaSmallAPI},
         props: ['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked', 'openVistaImg'],
-        data() {
-            return {
-                storeFocusedNode: {} as any
-            }
-        },
         methods: {
             fetchTimerCountdowns(time: string) {
                 if (time) {
@@ -113,60 +108,6 @@
                 if (!arr.weather1) {return match1}
                 return match1 == match2 ? true : null
             },
-            async loadVistaPreviewImg(): Promise<void> {
-                const CACHE_NAME = 'ffxivmap_vista'
-                let expansion = this.data[0].expansion.replace(/[-,'\s]/g, '').toLowerCase()
-                await this.$nextTick() // ensure DOM is up to date
-                const els = Array.from(document.getElementsByClassName('previewImg')) as HTMLElement[]
-                
-
-                if (!els.length) return
-
-                const cache = await caches.open(CACHE_NAME)  // open cache once, outside the loop
-                const l = this.data.length
-
-                for (let i = 0; i < l; i++) {
-                    const d = this.data[i]
-                    const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/${expansion}/small/${d.no}.webp`
-                    const curEle = els[i]
-
-                    try {
-                        const cached = await cache.match(imageUrl)
-
-                        if (cached) {
-                            const blob = await cached.blob()
-                            curEle.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
-                            continue  // ← was `return`, which exited the entire loop early
-                        }
-
-                        const response = await axios.get<Blob>(imageUrl, {
-                            responseType: 'blob',
-                            timeout: 5000,
-                        })
-                        const blob = response.data
-                        await cache.put(
-                            imageUrl,
-                            new Response(blob, { headers: { 'Content-Type': blob.type } })
-                        )
-                        curEle.style.backgroundImage = `url('${URL.createObjectURL(blob)}')`
-
-                    } catch (error: any) {
-                        curEle.style.backgroundImage = `url('/src/assets/blankmap.webp')`
-                        console.error(`EorzeaMap: failed to load vista image for "${d.no}": ${error.message}`)
-                    }
-                }
-            },
-        },
-        mounted() {
-            this.storeFocusedNode = this.focusNode
-            this.loadVistaPreviewImg()
-        },
-        watch: {
-            'data'() {
-                this.$nextTick(() => {
-            this.loadVistaPreviewImg()
-        })
-    }
         },
     }
 </script>

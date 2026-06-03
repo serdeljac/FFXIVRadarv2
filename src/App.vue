@@ -27,6 +27,8 @@
         :windowWidth="windowWidth"
         :timerList="timerList"
         :weatherList="weatherList"
+        :mapName="`Ul'dah`"
+
         @openVistaImg="(e: any) => openVistaImg(e)"
         @openDetails="openDetails"
         @changeTracked="changeTracked" />

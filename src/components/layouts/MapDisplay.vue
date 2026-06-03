@@ -1,10 +1,10 @@
 <template>
     <div class="mapDisplay" :style="{ width: mapSize + 'px', height: mapSize + 'px' }">
-        <div
-            class="mapDisplay_background"
-            :id="`originalFrom_${originClass}`"
-            :style="{ transform: `scale(${mapScale})` }"
-        ></div>
+
+        <mapImgAPI 
+            :mapScale="mapScale" 
+            :mapName="focusNode.area.zone"
+            :variant="focusNode.area.variant ? focusNode.area.variant : '00'" />
 
         <div class="mapDisplay_overlay" :style="{ transform: `scale(${mapScale})` }">
 
@@ -73,16 +73,16 @@
 </script>
 
 <script lang="ts">
-    import axios from 'axios'
+    import mapImgAPI from '../API/mapImg.vue'
 
     export default {
     name: 'EorzeaMap',
     props: ['ffxivData', 'focusNode', 'originClass', 'mapSize'],
+    components: { mapImgAPI },
     data() {
         return {
             pointSelection: [] as any,
             pointSelected: '' as string,
-            storeFocusedNode: {} as any
         }
     },
 
@@ -157,81 +157,6 @@
             return rank.includes(this.focusNode.rank)
         },
 
-        getMapName(node: any): string {
-            const name = node.area.zone.replace(/[-,'\s]/g, '').toLowerCase()
-            let addPoint = this.pointSelected ? this.pointSelected.toString().toLowerCase().replace(/\s/g, '') : ''
-            if (this.originClass == 'details' && this.focusNode.area.issubarea) {
-                addPoint = this.focusNode.point.toString().toLowerCase().replace(/\s/g, '')
-
-            }
-            return `${name}${addPoint}`
-        },
-
-        async loadMap(zone: string): Promise<void> {
-            const CACHE_NAME = 'ffxivmap_cache'
-            let el = document.getElementById('originalFrom_page')
-            const mapname = this.getMapName(this.focusNode)
-            const imageUrl = `https://ffxivradarmaps.s3.ca-central-1.amazonaws.com/${mapname}.webp`
-
-            if (this.originClass == 'details') {
-                el = document.getElementById('originalFrom_details')
-            }
-
-            if (!el) return
-
-            try {
-                const cache = await caches.open(CACHE_NAME)
-                const cached = await cache.match(imageUrl)
-
-                if (cached) {
-                    const blob = await cached.blob()
-                    const url = `url('${URL.createObjectURL(blob)}')`
-                    if (el) el.style.backgroundImage = url
-                    return
-                }
-
-                const response = await axios.get<Blob>(imageUrl, {
-                    responseType: 'blob',
-                    timeout: 5000,
-                })
-                const blob = response.data
-                await cache.put(
-                    imageUrl,
-                    new Response(blob, { headers: { 'Content-Type': blob.type } })
-                )
-                const url = `url('${URL.createObjectURL(blob)}')`
-                el.style.backgroundImage = url
-            } catch (error: any) {
-                if (el) el.style.backgroundImage = `url('/src/assets/blankmap.webp')`
-                console.error(`EorzeaMap: failed to load map for "${zone}": ${error.message}`)
-            }
-        },
-    },
-
-    mounted() {
-        this.storeFocusedNode = this.focusNode
-        this.loadMap(this.focusNode.area.zone)
-    },
-
-    watch: {
-        'focusNode.ID'(newZone: string) {
-            if (this.focusNode.area.issubarea) {
-                this.pointSelection = this.ffxivData.areas.filter((o: any) => o.area == this.focusNode.area.area)
-                this.pointSelected = this.pointSelection[0].point
-            } else {
-                this.pointSelection = []
-                this.pointSelected = ''
-            }
-
-            if (this.storeFocusedNode.area.zone !== this.focusNode.area.zone) {
-                this.loadMap(newZone)
-            }
-            this.storeFocusedNode = this.focusNode
-        },
-        'pointSelected'() {
-            let mapSelect = this.focusNode.area.zone
-            this.loadMap(mapSelect)
-        }
     },
 }
 </script>
@@ -240,20 +165,14 @@
 .mapDisplay {
     position: relative;
 
-    .mapDisplay_background {
-        background-size: cover;
-    }
-
     &_pointSelect {
         display: flex;
         flex-direction: column;
         position: absolute;
         background-color: rgba(0, 0, 0, 0.502);
         padding: 0.5rem;
-
         label:hover {text-decoration: underline;}
 
-/* From Uiverse.io by gharsh11032000 */ 
         .radio-button-container {
         display: flex;
         align-items: center;

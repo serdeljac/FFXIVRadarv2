@@ -187,8 +187,9 @@ async function doSearch() {
     const url = `${BASE}/api/search?sheets=Map&fields=Id,PlaceName,PlaceName.Name,PlaceNameRegion,PlaceNameRegion.Name,SizeFactor&query=${q}&limit=20`
     const res = await fetch(url)
     if (!res.ok) throw new Error(`API error ${res.status}`)
+    
     const data = await res.json()
-
+console.log(data)
     const seen = new Set()
     results.value = (data.results || [])
       .map(r => {
