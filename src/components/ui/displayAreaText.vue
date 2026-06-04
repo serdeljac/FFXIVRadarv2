@@ -1,21 +1,17 @@
 <template>
     <div :class="[`btn_area hasContext`, {'hasBackground': excludeBackground}]" :data-context="`${areaObj.expansion.charAt(0).toUpperCase() + areaObj.expansion.slice(1)} > ${areaObj.area.zone}`">
-        <img class="iconSize" :src="getIconImageURL(areaObj.area.icon)"/>
+        <iconImgAPI :name="areaObj.area.icon"/>
         <p>{{ `${areaObj.area.area}` }}</p>
         <span class="cord">{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+    import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: "Display Area in Text",
-        props: ['areaObj', 'excludeBackground']
+        props: ['areaObj', 'excludeBackground'],
+        components: {iconImgAPI},
     }
 </script>
 
@@ -36,12 +32,6 @@
         padding: 4px 8px;
         background-color: $buttonBackgroundColor;
         &:hover {background-color: $buttonBackgroundColorHover;}
-    }
-    
-    
-
-    .cord {
-       
     }
 }
 </style>

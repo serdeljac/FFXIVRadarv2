@@ -74,7 +74,6 @@ main {
 }
 
 *[data-map-icon-active] {
-    z-index: 20 !important;
     animation: mapIconActiveAnimation 0.7s linear infinite;
     opacity: 0.5;
 }
@@ -106,7 +105,8 @@ Default Styles
 }
 
 .iconSize3 {
-    width: 180px;
+    width: 170px;
+    height: 120px;
     margin: 0 4px;
 }
 
@@ -191,7 +191,7 @@ Sidebar
     overflow: hidden auto;
     background-color: $bodyBackgroundColor;
     min-height: 600px;
-    z-index: 100;
+    z-index: 9;
     &.compact {width: $sidebarWidthCollapse}
     &.mobile {display: block;}
 
@@ -234,7 +234,6 @@ Sidebar
             padding: 0.5rem 0;
         }
 
-        img {width: 20px;}
         .currentPage div {background-color: $borderColor;}
     }
 
@@ -264,7 +263,7 @@ Trackingbar
     top: 0;
     left: 0;
     width: 100%;
-    z-index: 100;
+    z-index: 20;
     border-bottom: 1px solid $borderColor;
     display: flex;
     gap: 10px;
@@ -542,7 +541,6 @@ Across all Router Views
             font-size: 0.75rem;
             white-space: nowrap;
             opacity: 0;
-            z-index:999;
             pointer-events: none;
             transition: opacity 0.3s ease-in-out;
         }

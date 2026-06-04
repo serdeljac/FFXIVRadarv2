@@ -2,26 +2,20 @@
 
   <div :class="[`container`, `${sidebarLayout}`]" @click="openDonate">
         <button class="buymecoffee_btn button">
-            <img :src="getIconImg('coffee')" />
+            <iconImgAPI :name="'coffee'"/>
             <p v-if="sidebarLayout != 'compact'">Buy me a coffee!</p>
         </button>
     </div>
 </template>
 
-
-<script lang="ts" setup>
-    function getIconImg(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+import iconImgAPI from '../API/iconImg.vue';
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
 
 export default {
   name: 'DonateButton',
   props: ['sidebarLayout'],
-
+  components: {iconImgAPI},
   data() {
     return {
       beating: false,
@@ -63,7 +57,10 @@ export default {
   align-items: center;
   font-weight: bold;
   font-style: italic;
-  img {width: 50px;}
+  img {
+    width: 40px;
+    height: 40px;
+  }
 }
 .container {
   position: relative;
@@ -92,7 +89,6 @@ export default {
   inset: 0;
   margin: auto;
   border-radius: 0.9em;
-  z-index: -10;
   filter: blur(0);
   transition: filter 0.4s ease;
 }

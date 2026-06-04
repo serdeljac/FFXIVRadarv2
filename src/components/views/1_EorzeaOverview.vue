@@ -10,7 +10,6 @@
         :ffxivData="ffxivData"
         :focusNode="focusNode"
         :mapSize="columnLayout"
-        :originClass="'page'"
         class="mapDisplay_root" />
     </div>
 

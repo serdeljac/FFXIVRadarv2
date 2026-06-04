@@ -52,13 +52,13 @@
                             data-context="View Details"
                             @click="$emit('openDetails', d)"
                         />
-                        <img v-if="d.name" class="iconSize" :src="getIconImageURL(`quest_${d.name_type}`)" :alt="d.name" />
+                        <iconImgAPI v-if="d.name" :name="`quest_${d.name_type}`"/>
                         <p>{{ d.name ? `${d.name} - Lv.${d.name_level}` : `Aether Current #${d.no}` }}</p>
                     </div>
 
                     <!-- UNLOCK CONDITION -->
                     <div v-if="!isMobile || d.unlock" class="rdrTable_row-unlock">
-                        <img v-if="d.unlock" class="iconSize" :src="getIconImageURL(`quest_${d.unlock_type}`)" :alt="d.unlock" />
+                        <iconImgAPI v-if="d.unlock" :name="`quest_${d.unlock_type}`"/>
                         <p v-if="d.unlock">{{ `${d.unlock} - Lv.${d.unlock_level}` }}</p>
                     </div>
 
@@ -72,20 +72,15 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string): string {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
     import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
     import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
     import areaDisplay from '../ui/displayArea.vue'
+    import iconImgAPI from '../API/iconImg.vue';
 
     export default {
         name: 'AetherCurrents',
-        components: { toggleFilterBtn, toggleDetailsBtn, areaDisplay },
+        components: { toggleFilterBtn, toggleDetailsBtn, areaDisplay, iconImgAPI },
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['openDetails'],
         data() {

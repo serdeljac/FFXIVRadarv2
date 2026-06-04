@@ -8,7 +8,7 @@
                     <!-- List -->
                     <div class="zoneSelect_group" v-for="(regions, expansionIndex) in zoneList" :key="expansionIndex">
                         <h3 class="zoneSelect_list-expansion">
-                            <img class="iconSize" :src="getIconImageURL(regions[Object.keys(regions)[0]][0].icon)" />
+                            <iconImgAPI :name="regions[Object.keys(regions)[0]][0].icon"/>
                             {{ expansionIndex }}
                         </h3>
                         <hr />
@@ -27,17 +27,13 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+    import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: 'Zone Select',
         props: ['zoneList', 'windowWidth'],
         emits: ['zoneSelected', 'closeMenu'],
+        components: {iconImgAPI},
     }
 </script>
 
@@ -50,13 +46,13 @@
             top: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 998;
+            z-index: 100;
             background-color: rgba(0, 0, 0, 0.5);
         }
 
         &_foreground {
             @extend .zoneSelect_background;
-            z-index: 999;
+            z-index: 100;
             margin: 2rem 8rem;
             width: calc(100vw - 16rem);
             height: calc(100vh - 4rem);

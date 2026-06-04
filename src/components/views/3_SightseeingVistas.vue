@@ -24,7 +24,7 @@
             <p>
                 Each vista discovered will grant you
                 <span class="expColor">{{ currentExpansionData.vista_exp }}</span>
-                <img class="iconSize" :src="getIconImageURL('exp')" />
+                <iconImgAPI :name="'exp'"/>
                 when you're between levels
                 <span class="levelColor">{{ currentExpansionData.vista_min }}-{{ currentExpansionData.vista_max }}</span>.
             </p>
@@ -101,7 +101,7 @@
 
                     <!-- EMOTE -->
                     <div class="rdrTable_row-emote">
-                        <img class="iconSize" :src="getIconImageURL(d.emote)" />
+                        <iconImgAPI :name="d.emote.toLowerCase()"/>
                         <p>{{ d.emote }}</p>
                     </div>
 
@@ -123,6 +123,7 @@
     import timeDisplay from '../ui/displayTime.vue'
     import weatherDisplay from '../ui/displayWeather.vue'
     import areaDisplay from '../ui/displayArea.vue'
+    import iconImgAPI from '../API/iconImg.vue';
 
     // Filter shape kept explicit; replaces opaque tuple indexing.
     interface Filter {
@@ -134,7 +135,7 @@
     export default {
         name: "SightseeingVistas",
 
-        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay },
+        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay, iconImgAPI },
 
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
 
@@ -204,10 +205,6 @@
             changeFilter(arrayIndex: number) {
                 this.filters.forEach((f, i) => { f.enabled = i === arrayIndex })
                 this.filterSelected = this.filters[arrayIndex].name
-            },
-
-            getIconImageURL(name: string): string {
-                return new URL(`/src/assets/icons/${name.toLowerCase()}.webp`, import.meta.url).href
             },
 
             sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {

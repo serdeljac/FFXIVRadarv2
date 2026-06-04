@@ -29,9 +29,10 @@
                             class="hasContext"
                             data-context="Track Node"
                             @click="$emit('changeTracked', d)" />
+
                         {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
-                        <img class="iconSize2" v-if="d.usage == 'aetherial'" :src="getIconImg('collectability')" />
-                        <img class="iconSize2" v-if="d.usage == 'customdelivery'" :src="getIconImg('customdelivery')" />
+                        <iconImgAPI class="iconSize2" v-if="d.usage == 'aetherial'" :name="'collectability'"/>
+                        <iconImgAPI class="iconSize2" v-if="d.usage == 'customdelivery'" :name="'customdelivery'"/>
                     </li>
                 </ul>
                 <p class="tombRequire" v-if="material[0].tomb">{{ `Requires ${material[0].tomb}` }}</p>
@@ -40,20 +41,15 @@
     </ul>
 </template>
 
-<script lang="ts" setup>
-    function getIconImg(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
     import displayAreaText from '../../ui/displayAreaText.vue';
     import iconAndText from '../../ui/iconAndText.vue';
     import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
+    import iconImgAPI from '../../API/iconImg.vue';
 
     export default {
         name: 'List Item - Gathering',
-        components: {displayAreaText, iconAndText, toggleTrackingBtn},
+        components: {displayAreaText, iconAndText, toggleTrackingBtn, iconImgAPI},
         props: ['data', 'timerList', 'focusNode', 'windowWidth'],
         emits: ['focusNode', 'changeTracked'],
         data() {

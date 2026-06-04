@@ -11,7 +11,6 @@
         <div class="bottomrow">
             <p>{{ `${node.area.region} > ${node.area.zone}` }}</p>
             <timeDisplay :timeId="node.time" :timerList="timerList"/>
-            
         </div>
     </div>
 </template>

@@ -26,7 +26,7 @@
 
             <div class="overviewListItem_body">
 
-                <vistaSmallAPI :node="node" :size="'small'" @click="$emit('openVistaImg', node)"/>
+                <vistaSmallAPI :node="node" :size="'small'" @click="$emit('openVistaImg', node);"/>
 
                 <div class="overviewListItem_contents">
 

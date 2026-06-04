@@ -4,11 +4,11 @@
             <router-link :to="`/${a.link}`">
 
                 <div v-if="sidebarLayout == 'compact'" :class="['linkList-collapse']">
-                    <img :src="getIconImageURL(`sq_${a.icon}`)" />
+                    <iconImgAPI :name="`sq_${a.icon}`"/>
                 </div>
 
                 <div v-else :class="['linkList-extended']" >
-                    <img :src="getIconImageURL(`sq_${a.icon}`)" />
+                    <iconImgAPI :name="`sq_${a.icon}`"/>
                     <p>{{ a.name }}</p>
                 </div>
 
@@ -18,6 +18,7 @@
 </template>
 
 <script lang="ts" setup>
+    import iconImgAPI from '../../API/iconImg.vue';
     const link_list = [
         {
             id: 1,
@@ -68,22 +69,13 @@
             icon: 'privatepolicy',
             link: 'PrivatePolicy',
         },
-        // {
-        //     id: 11,
-        //     name: 'FFXIV API',
-        //     icon: 'ffxivapi',
-        //     link: 'ffxivAPI',
-        // }
     ]
-
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
 </script>
 
 <script lang="ts">
     export default {
         name: "List Items",
         props: ['sidebarLayout'],
+        components: {iconImgAPI},
     }
 </script>

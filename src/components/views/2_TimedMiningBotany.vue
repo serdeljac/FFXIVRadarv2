@@ -75,8 +75,8 @@
                         <div>
                             <p>{{ d.name }}</p>
                             <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
-                            <img v-if="d.usage === 'aetherial'" class="iconSize2" :src="getIconImageURL('collectability')" />
-                            <img v-if="d.usage === 'customdelivery'" class="iconSize2" :src="getIconImageURL('customdelivery')" />
+                            <iconImgAPI v-if="d.usage === 'aetherial'" class="iconSize2" :name="'collectability'"/>
+                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/>
                         </div>
                     </div>
 
@@ -84,15 +84,15 @@
                     <div class="rdrTable_row-attributes">
                         <div>
                             <span class="hasContext" :data-context="capitalize(d.job_sub)">
-                                <img class="iconSize" :src="getIconImageURL(d.job_sub)" />
+                                <iconImgAPI :name="d.job_sub"/>
                             </span>
 
                             <span v-if="d.usage" class="hasContext" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                                <img class="iconSize" :src="getIconImageURL(fetchUsageImgName(d.usage, d.usage_info))" />
+                                <iconImgAPI :name="fetchUsageImgName(d.usage, d.usage_info)"/>
                             </span>
 
                             <span v-if="d.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${d.tomb}`">
-                                <img class="iconSize" :src="getIconImageURL('folklore')" />
+                                <iconImgAPI :name="'folklore'"/>
                             </span>
                         </div>
                     </div>
@@ -122,12 +122,6 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string): string {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
     import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
     import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
@@ -135,6 +129,7 @@
     import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
     import timeDisplay from '../ui/displayTime.vue'
     import areaDisplay from '../ui/displayArea.vue'
+    import iconImgAPI from '../API/iconImg.vue';
 
     // Filter shape for clarity and type safety
     interface Filter {
@@ -147,7 +142,7 @@
 
     export default {
         name: "Timed Mining/Botany",
-        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay },
+        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay, iconImgAPI },
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'openDetails'],
 

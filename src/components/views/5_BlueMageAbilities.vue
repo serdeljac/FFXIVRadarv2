@@ -104,7 +104,7 @@
                     ? [...this.ffxivData.bluemageData]
                     : this.ffxivData.bluemageData.filter(
                         (d: any) => d.category.includes(filt)
-                      )
+                    )
             }
         }
     }

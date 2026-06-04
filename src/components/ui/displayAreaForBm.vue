@@ -1,6 +1,6 @@
 <template>
     <div class="iconToText">
-        <img class="iconSize" :src="getIconImageURL(bmData)"/>
+        <iconImgAPI :name="getIconImageURL(bmData)"/>
         <p>
             {{ bmData[2][0] }}
             <span v-if="bmData[2][1]" class="cord">{{ `(x${bmData[2][1]}, y${bmData[2][2]})` }}</span>
@@ -10,17 +10,18 @@
 
 <script lang="ts" setup>
     function getIconImageURL(data: any) {
-        if (data[1]) {
-            return new URL(`/src/assets/icons/sq_${data[1]}.webp`, import.meta.url).href
-        }
-        return new URL(`/src/assets/icons/sq_${data[0]}.webp`, import.meta.url).href
+        const name = data[1] ? `sq_${data[1]}` : `sq_${data[0]}`
+        return name
     }
+
 </script>
 
 <script lang="ts">
+    import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: "Icon & Text Blue Mage",
         props: ['bmData'],
+        components: {iconImgAPI}
     }
 </script>
 

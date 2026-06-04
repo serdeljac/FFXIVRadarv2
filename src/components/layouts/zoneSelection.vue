@@ -9,21 +9,21 @@
             <div class="zoneSelect_wrapper">
                 <div class="zoneSelect_groupExpansions" v-for="(region, expansionIndex) in zoneList" :key="expansionIndex">
                     <h3 class="zoneSelect_titleExpansion">
-                        <img class="iconSize3" :src="getIconImageURL(expansionIndex.toString())"/>
+                        <iconImgAPI class="iconSize3" :name="expansionIndex.toString().toLowerCase().replace(/ /g,'')"/>
                     </h3>
                     <div class="zoneSelect_groupRegions">
                         <div  v-for="(zones, regionIndex) in region" :key="regionIndex">
                             <ul>
                                 <li>
                                     <h3 class="zoneSelect_titleRegion">
-                                        <img class="iconSize2" :src="getIconImageURL(zones[0].regionicon)"/>
+                                        <iconImgAPI class="iconSize2" :name="zones[0].regionicon.toLowerCase().replace(/ /g,'')"/>
                                         {{ regionIndex }}
                                     </h3>
                                 </li>
                                 <li v-for="d in zones" :key="d.ID" 
                                     class="selectable"
                                     @click="$emit('zoneSelected', d); $emit('closeMenu', false)">
-                                    <img class="iconSize2" :src="getIconImageURL(d.type ? d.type : 'world')"/>
+                                    <iconImgAPI class="iconSize2" :name="d.type ? d.type : 'world'"/>
                                     {{ d.zone }}
                                 </li>
                             </ul>
@@ -35,18 +35,13 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        name = name.toLowerCase().replace(/ /g,'')
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+    import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: 'Zone Select',
         props: ['zoneList', 'windowWidth'],
         emits: ['zoneSelected', 'closeMenu'],
+        components: {iconImgAPI},
     }
 </script>
 
@@ -71,13 +66,13 @@
             top: 0;
             width: 100vw;
             height: 100vh;
-            z-index: 998;
+            z-index: 100;
             background-color: rgba(0, 0, 0, 0.5);
         }
 
         &_foreground {
             @extend .zoneSelect_background;
-            z-index: 999;
+            z-index: 100;
             margin: 2rem 8rem;
             width: calc(100vw - 16rem);
             height: calc(100vh - 4rem);

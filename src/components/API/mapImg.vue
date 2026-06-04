@@ -1,13 +1,14 @@
 <template>
-    <div class="map-wrapper">
+    <div :class="[`map-wrapper`, {'loadOrError': isLoading || hasError}]" :style="{ transform: `scale(${mapScale})` }">
+      
         <!-- Loading state -->
-        <div class="mapDisplay_background map-loader" v-if="isLoading" :style="{ transform: `scale(${mapScale})` }">
+        <div class="mapDisplay_background map-loader" v-if="isLoading" >
             <div class="loader-spinner"></div>
             <span class="loader-text">Loading map…</span>
         </div>
 
         <!-- Error state -->
-        <div class="mapDisplay_background  map-error" v-else-if="hasError" :style="{ transform: `scale(${mapScale})`}">
+        <div class="mapDisplay_background map-error" v-else-if="hasError">
             <span>⚠ Failed to load map</span>
         </div>
 
@@ -17,8 +18,6 @@
             :src="mapImageUrl"
             :alt="resolvedMapName"
             v-if="mapImageUrl"
-            :id="`originalFrom_${originClass}`"
-            :style="{ transform: `scale(${mapScale})`, opacity: imageReady ? 1 : 0 }"
             @load="onImageLoad"
             @error="onImageError"
         />
@@ -26,90 +25,99 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from 'vue'
 
-const props = defineProps({
-  mapName: {
-    type: String,
-    required: true,
-  },
-  variant: {
-    type: String,
-    default: '00',
-  },
-  mapScale: {
-    type: Number,
-    default: 1,
-  },
-  originClass: {
-    type: String,
-    default: '',
-  },
-})
+  //Imports
+  import { ref, watch, onMounted } from 'vue'
 
-const BASE_URL = 'https://v2.xivapi.com'
-const CACHE_NAME = 'ffxivmap_maps'
+  //Variables and constants
+  const BASE_URL = 'https://v2.xivapi.com'
+  const CACHE_NAME = 'ffxivmap_maps'
+  const mapImageUrl = ref(null)
+  const resolvedMapName = ref('')
+  const isLoading = ref(false)
+  const hasError = ref(false)
+  const imageReady = ref(false)
+  //Remember, when using ref(), the value stored is in <variable name>.value
 
-const mapImageUrl = ref(null)
-const resolvedMapName = ref('')
-const isLoading = ref(false)
-const hasError = ref(false)
-const imageReady = ref(false)
+  //Props with default values
+  const props = defineProps({
+    mapName: {type: String, required: true},
+    variant: {type: String, default: '00'},
+    mapScale: {type: Number, default: 1},
+  })
 
-function onImageLoad() {
-  imageReady.value = true
-  isLoading.value = false
-}
+  //Lifecycle hooks
+  onMounted(() => loadMap(props.mapName))
+  watch(() => [props.mapName, props.variant], ([name]) => loadMap(name))
 
-function onImageError() {
-  hasError.value = true
-  isLoading.value = false
-  mapImageUrl.value = null
-}
+  //Methods
 
-async function loadMap(name) {
-  mapImageUrl.value = null
-  resolvedMapName.value = ''
-  isLoading.value = true
-  hasError.value = false
-  imageReady.value = false
+  async function loadMap(name) {
+    //Set default values for the loading state
+    mapImageUrl.value = null
+    resolvedMapName.value = ''
+    isLoading.value = true
+    hasError.value = false
+    imageReady.value = false
 
-  if (!name) {
-    isLoading.value = false
-    return
+    //Validate there's a name to be sent before checking the API
+    if (!name) {
+      console.error('Failed to find map: missing map name')
+      isLoading.value = false
+      hasError.value = true
+      return
+    }
+
+    try {
+      const query = encodeURIComponent(`PlaceName.Name~"${name}"`)
+      const searchUrl = `${BASE_URL}/api/search?sheets=Map&query=${query}&fields=Id,PlaceName.Name&limit=1`
+
+      //Check to see if image can be searched
+      const searchRes = await fetch(searchUrl)
+      if (!searchRes.ok) throw new Error('Search request failed, possible fault with the API, network, or Name')
+
+      //Check if there's any results
+      const searchData = await searchRes.json()
+      const firstResult = searchData?.results?.[0]
+      if (!firstResult) throw new Error(`No results found, using name: ${name}`);
+
+      //Check the searched map for it's ID. It is needed to be pulled from the server
+      const rawId = firstResult.fields?.Id
+      if (!rawId) throw new Error('Missing map ID, possible fault with the API')
+
+
+      //When all is OK, assign the following values to trigger the image load. 
+      // The ID is used to pull the image from the server, and the name is used for the alt text of the image. 
+      // The mapScale is used to scale the image up or down depending on the zoom level of the mapDisplay component. 
+      // The isLoading state will stay true until the onImageLoad method is triggered, which happens when the image is fully loaded. 
+      // If there's an error during this process, the onImageError method will be triggered, which will set the hasError state to true and display an error message instead of the image.
+      const idBase = rawId.split('/')[0]
+      resolvedMapName.value = firstResult.fields?.PlaceName?.fields?.Name ?? name
+      mapImageUrl.value = `${BASE_URL}/api/asset/map/${idBase}/${props.variant}`
+    } catch (err) {
+      console.error('[loadMap]', err)
+      hasError.value = true
+      isLoading.value = false
+    }
   }
 
-  try {
-    
-    const query = encodeURIComponent(`PlaceName.Name~"${name}"`)
-    const searchUrl = `${BASE_URL}/api/search?sheets=Map&query=${query}&fields=Id,PlaceName.Name&limit=1`
+  //Triggered @load when the image is fully loaded, then change the following values
+  function onImageLoad() {
+    imageReady.value = true
+    isLoading.value = false
+  }
 
-    const searchRes = await fetch(searchUrl)
-    if (!searchRes.ok) throw new Error('Search request failed')
-
-    const searchData = await searchRes.json()
-    const firstResult = searchData?.results?.[0]
-    if (!firstResult) throw new Error('No results found')
-
-    const rawId = firstResult.fields?.Id
-    if (!rawId) throw new Error('Missing map ID')
-
-    const idBase = rawId.split('/')[0]
-    resolvedMapName.value = firstResult.fields?.PlaceName?.fields?.Name ?? name
-    mapImageUrl.value = `${BASE_URL}/api/asset/map/${idBase}/${props.variant}`
-    // isLoading stays true until onImageLoad fires
-  } catch (err) {
-    console.error('[loadMap]', err)
+  //Triggered @error when the image cannot load, then change the following values
+  function onImageError() {
     hasError.value = true
     isLoading.value = false
+    mapImageUrl.value = null
   }
-}
-
-onMounted(() => loadMap(props.mapName))
-watch(() => [props.mapName, props.variant], ([name]) => loadMap(name))
 </script>
 
 <style scoped>
+.loadOrError {z-index: 80;}
+
 .map-wrapper {
     position: relative;
     width: 800px;
@@ -129,7 +137,7 @@ watch(() => [props.mapName, props.variant], ([name]) => loadMap(name))
     color: #e0d6c2;
     font-family: sans-serif;
     font-size: 14px;
-    z-index: 999;
+    z-index: 120;
 }
 
 .loader-spinner {

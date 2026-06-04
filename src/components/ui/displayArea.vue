@@ -1,6 +1,6 @@
 <template>
     <div class="displayArea">
-        <img :src="getIconImageURL(node.area.icon)" />
+        <iconImgAPI :name="node.area.icon"/>
         <p>
             {{ `${node.area.region} > ${node.area.zone}` }}
             <span class="cord">{{ `(x${node.x}, y${node.y})` }}</span>
@@ -8,16 +8,12 @@
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: "Area Display",
-        props: ['node']
+        props: ['node'],
+        components: {iconImgAPI}
     }
 </script>
 

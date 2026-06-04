@@ -1,21 +1,17 @@
 <template>
     <div :class="[`iconAndText`, addClass, {'notext': !text}]" :chainNo="chainNo ? chainNo : null">
-        <img :class="[`iconSize`]" :src="getIconImageURL(fetchIconName)"/>
-        <img v-if="secIcon" :class="[`iconSize`]" :src="getIconImageURL(secIcon)"/>
+        <iconImgAPI :name="fetchIconName"/>
+        <iconImgAPI v-if="secIcon" :name="secIcon"/>
         <p v-if="text">{{ text }}</p>
     </div>
 </template>
 
-<script lang="ts" setup>
-    function getIconImageURL(name: string) {
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
-    }
-</script>
-
 <script lang="ts">
+    import iconImgAPI from '../API/iconImg.vue';
     export default {
         name: "Icon & Text",
         props: ['icon', 'text', 'addClass', 'chainNo', 'secIcon'],
+        components: {iconImgAPI},
         computed: {
             fetchIconName() {
                 if (this.icon == 'Crafting') {return `sq_${this.icon}`}

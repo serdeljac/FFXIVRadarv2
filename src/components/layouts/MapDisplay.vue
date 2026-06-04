@@ -30,14 +30,14 @@
             <div v-for="d in aetheryteNodes" :key="d.ID"
                 :class="[`mapIcon aetheryte`, {'hide': pointSelected && d.point != pointSelected}]"
                 :style="{ transform: `translate(${getCoordinates(d)})` }">
-                <img :src="getIconImg(d.job, 'aetheryte')" />
+                <iconImgAPI class="mapIconImg" :name="getIconImg(d.job, 'aetheryte')"/>
             </div>
 
             <div v-for="d in unchainedNodes" :key="d.ID"
                 :class="[`mapIcon`, {'hide': pointSelected && d.point != pointSelected}]"
                 :data-map-icon-active="d.node_code === focusNode.node_code || null"
                 :style="{ transform: `translate(${getCoordinates(d)})` }">
-                <img :src="getIconImg(d.job, d.job_sub)" />
+                <iconImgAPI class="mapIconImg" :name="getIconImg(d.job, d.job_sub)"/>
             </div>
 
             <div v-for="d in chainedNodes" :key="d.ID"
@@ -45,14 +45,14 @@
                 :data-map-icon-active="d.chain_set === focusNode.chain_set || null"
                 :data-chain-no="d.chain_no"
                 :style="{ transform: `translate(${getCoordinates(d)})` }">
-                <img :src="getIconImg(d.job, d.job_sub)" />
+                <iconImgAPI class="mapIconImg" :name="getIconImg(d.job, d.job_sub)"/>
             </div>
 
             <div v-for="d in huntNodes" :key="`${d.transx}-${d.transy}`"
                 class="mapIcon"
                 :data-map-icon-active="isActiveRank(d.ranks) || null"
                 :style="{ transform: `translate(${getCoordinates(d)})` }">
-                <img :src="getIconImg(d.job, d.job_sub)" />
+                <iconImgAPI class="mapIconImg" :name="getIconImg(d.job, d.job_sub)"/>
             </div>
         </div>
     </div>
@@ -68,17 +68,18 @@
         } else {
             name = subJob
         }
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+        return name
     }
 </script>
 
 <script lang="ts">
     import mapImgAPI from '../API/mapImg.vue'
+    import iconImgAPI from '../API/iconImg.vue';
 
     export default {
     name: 'EorzeaMap',
     props: ['ffxivData', 'focusNode', 'originClass', 'mapSize'],
-    components: { mapImgAPI },
+    components: { mapImgAPI, iconImgAPI },
     data() {
         return {
             pointSelection: [] as any,
@@ -165,6 +166,11 @@
 .mapDisplay {
     position: relative;
 
+    &_overlay {
+        position: relative;
+        z-index: 10;
+    }
+
     &_pointSelect {
         display: flex;
         flex-direction: column;
@@ -243,7 +249,6 @@
     }
 
     .mapIcon {
-        z-index: 10;
         position: absolute;
         &.hide {display: none}
 

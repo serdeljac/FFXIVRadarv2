@@ -1,6 +1,6 @@
 <template>
     <button :class="[`btn`]" :disabled="disabled" :enabled="enabled">
-        <img v-if="icon" :src="getIconImageURL(icon)"/>
+        <iconImgAPI :name="getIconImageURL(icon)" v-if="name != 'Reset'"/>
         {{ fetchName }}
     </button>
 </template>
@@ -16,14 +16,16 @@
         name = name == 'shadowbringers' ? 'sbs' : name
         name = name == 'endwalker' ? 'ewr' : name
         name = name == 'dawntrail' ? 'dtl' : name
-        return new URL(`/src/assets/icons/${name}.webp`, import.meta.url).href
+        return name
     }
 </script>
 
 <script lang="ts">
+import iconImgAPI from '../../API/iconImg.vue';
     export default {
         name: "Filter Toggle Button",
         props: ['name', 'icon', 'disabled', 'enabled'],
+        components: { iconImgAPI },
         computed: {
             fetchName() {
                 let properName = this.name.charAt(0).toUpperCase() + this.name.slice(1)

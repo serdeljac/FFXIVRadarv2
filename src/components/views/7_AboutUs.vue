@@ -1,5 +1,9 @@
 <template>
     <div :class="[`aboutUs body_content`, windowWidth]">
+        
+        <!-- <characterInfo :name="'miner'" /> -->
+
+
         <div class="body_content-group">
             <h1>~ About Us ~</h1>
 
@@ -33,8 +37,10 @@
 </template>
 
 <script lang="ts">
+    import characterInfo from '../API/iconImg.vue';
     export default {
         name: "About Us",
         props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        components: {characterInfo}
     }
 </script>
