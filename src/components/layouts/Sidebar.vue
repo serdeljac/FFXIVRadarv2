@@ -41,7 +41,7 @@
 </template>
 
 <script lang="ts">
-    import donateBtn from '../ui/donateNow.vue'
+    import donateBtn from '../ui/buttons/donate.vue'
     import sidebarLinks from './parts/sidebarLinks.vue'
 
     export default {

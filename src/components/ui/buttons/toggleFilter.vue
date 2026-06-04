@@ -1,6 +1,6 @@
 <template>
     <button :class="[`btn`]" :disabled="disabled" :enabled="enabled">
-        <iconImgAPI :name="getIconImageURL(icon)" v-if="name != 'Reset'"/>
+        <iconImgAPI :name="getIconImageURL(icon)" v-if="!noicon"/>
         {{ fetchName }}
     </button>
 </template>
@@ -24,7 +24,7 @@
 import iconImgAPI from '../../API/iconImg.vue';
     export default {
         name: "Filter Toggle Button",
-        props: ['name', 'icon', 'disabled', 'enabled'],
+        props: ['name', 'icon', 'disabled', 'enabled', 'noicon'],
         components: { iconImgAPI },
         computed: {
             fetchName() {

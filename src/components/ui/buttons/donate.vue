@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts">
-import iconImgAPI from '../API/iconImg.vue';
+import iconImgAPI from '../../API/iconImg.vue';
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
 
 export default {
@@ -57,6 +57,8 @@ export default {
   align-items: center;
   font-weight: bold;
   font-style: italic;
+  z-index: 50;
+  position: relative;
   img {
     width: 40px;
     height: 40px;
@@ -68,6 +70,8 @@ export default {
   background: linear-gradient(90deg, #03a9f4, #f441a5);
   border-radius: 0.9em;
   width: 200px;
+  z-index: 50;
+  cursor: pointer;
 
   &.compact {
     width: 50px;
@@ -91,14 +95,18 @@ export default {
   border-radius: 0.9em;
   filter: blur(0);
   transition: filter 0.4s ease;
+  z-index: 40;
 }
 
 .container:hover::before {
   background: linear-gradient(90deg, #03a9f4, #f441a5);
   filter: blur(1.2em);
+  z-index: 40;
+  
 }
 
 .container:active::before {
   filter: blur(0.2em);
+  z-index: 40;
 }
 </style>

@@ -8,6 +8,7 @@
                     v-for="(d, index) in filters"
                     :key="d[1]"
                     :name="d[1]"
+                    :noicon="true"
                     :enabled="d[2] || null"
                     @click="changeFilter(index)"
                 />

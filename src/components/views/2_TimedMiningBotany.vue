@@ -16,7 +16,8 @@
                 <div class="filterbar_group">
                     <inputSearchBar :modelValue="searchName" @selected="filterByInputValue" />
                     <toggleFilterBtn
-                        name="Reset"
+                        :name="'Reset'"
+                        :noicon="true"
                         :enabled="true"
                         @click="resetFilters" />
                 </div>
