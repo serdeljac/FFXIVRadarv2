@@ -1,5 +1,5 @@
 <template>
-    <div :class="[`privatePolicy body_content`, windowWidth]">
+    <div :class="[`policy body_content`, windowWidth]">
 
         <div class="group">
             <h1>~FFXIV RADAR Private Policy~</h1> 
