@@ -21,42 +21,42 @@
 
       <!-- Nav grid -->
       <nav class="nav-grid">
-        <a href="/1_EorzeaOverview"    class="nav-btn" style="--i:0">
+        <a href="/eorzeaoverview"    class="nav-btn" style="--i:0">
           <span class="nav-icon">🌍</span>
           <span class="nav-label">Eorzea Overview</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/2_TimedMiningBotany"       class="nav-btn featured" style="--i:1">
+        <a href="/timedMiningBotany"       class="nav-btn featured" style="--i:1">
           <span class="nav-icon">⏰</span>
           <span class="nav-label">Timed Mining / Botany</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/3_SightseeingVistas" class="nav-btn" style="--i:2">
+        <a href="/sightseeing" class="nav-btn" style="--i:2">
           <span class="nav-icon">🔭</span>
           <span class="nav-label">Sightseeing Log</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/4_AetherCurrents"      class="nav-btn" style="--i:3">
+        <a href="/aetherCurrents"      class="nav-btn" style="--i:3">
           <span class="nav-icon">✨</span>
           <span class="nav-label">Aether Currents</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/5_BlueMageAbilities"   class="nav-btn" style="--i:4">
+        <a href="/blueMageAbilities"   class="nav-btn" style="--i:4">
           <span class="nav-icon">💙</span>
           <span class="nav-label">Blue Mage Abilities</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/6_RadarNews"        class="nav-btn" style="--i:5">
+        <a href="/news"        class="nav-btn" style="--i:5">
           <span class="nav-icon">📡</span>
           <span class="nav-label">FFXIV Radar News</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/7_AboutUs"       class="nav-btn" style="--i:6">
+        <a href="/aboutUs"       class="nav-btn" style="--i:6">
           <span class="nav-icon">📖</span>
           <span class="nav-label">About Us</span>
           <span class="nav-arrow">→</span>
         </a>
-        <a href="/8_PrivatePolicy"     class="nav-btn" style="--i:7">
+        <a href="/privatePolicy"     class="nav-btn" style="--i:7">
           <span class="nav-icon">🔒</span>
           <span class="nav-label">Privacy Policy</span>
           <span class="nav-arrow">→</span>

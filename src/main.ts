@@ -23,7 +23,7 @@ const router = createRouter({
     { path: "/sightseeing", component: sightseeing, props: true },
     { path: "/aetherCurrents", component: aetherCurrents, props: true },
     { path: "/blueMageAbilities", component: blueMageSpells, props: true },
-    { path: "/News", component: news, props: true },
+    { path: "/news", component: news, props: true },
     { path: "/aboutUs", component: aboutUs, props: true },
     { path: "/privatePolicy", component: privatePolicy, props: true },
     { path: "/:pathMatch(.*)*", component: pageNotFound }, //pathMatch can changeb to whatever

@@ -24,50 +24,50 @@
             id: 1,
             name: 'Eorzea Overview',
             icon: 'eorzeamap',
-            link: 'EorzeaOverview',
+            link: 'eorzeaoverview',
         },
         
         {
             id: 2,
             name: 'Timed Mining/Botany',
             icon: 'gathering',
-            link: 'TimedMiningBotany',
+            link: 'timedMiningBotany',
         },
         {
             id: 4,
             name: 'Sightseeing',
             icon: 'sightseeing',
-            link: 'Sightseeing',
+            link: 'sightseeing',
         },
         {
             id: 6,
             name: 'Aether Currents',
             icon: 'aethercurrents',
-            link: 'AetherCurrents',
+            link: 'aetherCurrents',
         },
         {
             id: 7,
             name: 'Blue Mage Abilities',
             icon: 'bluemage',
-            link: 'BlueMageAbilities',
+            link: 'blueMageAbilities',
         },
         {
             id: 8,
             name: 'FFXIV Radar News',
             icon: 'news',
-            link: 'News',
+            link: 'news',
         },
         {
             id: 9,
             name: 'About Us',
             icon: 'about',
-            link: 'AboutUs',
+            link: 'aboutUs',
         },
         {
             id: 10,
             name: 'Private Policy',
             icon: 'privatepolicy',
-            link: 'PrivatePolicy',
+            link: 'privatePolicy',
         },
     ]
 </script>
