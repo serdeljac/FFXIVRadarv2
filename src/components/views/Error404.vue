@@ -35,6 +35,7 @@
 <script>
 export default {
   name: 'NotFound404',
+  props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
   mounted() {
     this.initStars()
   },

@@ -1,6 +1,7 @@
 <template>
   <Analytics />
   <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
+    <starCanvas />
 
     <trackingBar
       :class="[`trackingbar`, sidebarLayout, windowWidth]"
@@ -22,16 +23,19 @@
 
     <main :class="[`main_content`]" @click="toggleForceMenu">
       <promotionBanner />
+      <Transition name="fade" mode="out-in">
       <router-view
+        :key="$route.path"
         :ffxivData="ffxivData"
         :windowWidth="windowWidth"
         :timerList="timerList"
         :weatherList="weatherList"
-        :mapName="`Ul'dah`"
+        :eorzeaClock="eorzeaClock"
 
         @openVistaImg="(e: any) => openVistaImg(e)"
         @openDetails="openDetails"
         @changeTracked="changeTracked" />
+    </Transition>
     </main>
 
     <detailspane
@@ -64,6 +68,7 @@ import trackingBar from './components/layouts/TrackingBar.vue';
 import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
 import detailspane from './components/layouts/DetailsPane.vue';
 import vistaLarge from './components/layouts/ExpandVistaImg.vue'
+import starCanvas from './components/ui/starCanvas.vue'
 
 // JSON Data
 import areaRaw from './assets/json/areas.json';
@@ -91,7 +96,7 @@ const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 export default {
   name: 'AppRoot',
 
-  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge },
+  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas },
 
   data() {
     return {
@@ -592,6 +597,16 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.2s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
   .app_container {
     display: flex;
     flex-wrap: wrap;
@@ -664,9 +679,10 @@ export default {
 
   main {
     padding: 1rem 1.5rem $paddingSize 1.5rem;
-    min-height: 100vh;
     margin-top: $trackingbarHeight;
     margin-left: $sidebarWidthExpand;
+    position: relative;
+    z-index: 2;
   }
 
   // Note: .details_pos was dead code — detailspane position is controlled

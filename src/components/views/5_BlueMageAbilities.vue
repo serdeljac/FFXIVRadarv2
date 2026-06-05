@@ -72,7 +72,7 @@
     export default {
         name: "Blue Mage Abilities",
         components: { toggleFilterBtn, areaDisplayBM },
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
         data() {
             return {
                 filters: [] as [string, string, boolean][],

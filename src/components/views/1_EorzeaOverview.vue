@@ -200,7 +200,7 @@ export default {
     mapDisplay,
   },
 
-  props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+  props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
   emits: ['changeTracked', 'openVistaImg'],
 
   data() {

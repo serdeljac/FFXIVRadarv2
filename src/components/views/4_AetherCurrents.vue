@@ -81,7 +81,7 @@
     export default {
         name: 'AetherCurrents',
         components: { toggleFilterBtn, toggleDetailsBtn, areaDisplay, iconImgAPI },
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['openDetails'],
         data() {
             return {

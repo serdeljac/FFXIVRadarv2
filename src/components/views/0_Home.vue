@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <canvas ref="starCanvas" class="star-canvas"></canvas>
+    
     <div class="scanlines"></div>
 
     <div class="content">
@@ -14,7 +14,7 @@
         <p class="tagline">Your aetheric compass for Eorzea</p>
         <div class="clock-row">
           <span class="clock-label">Eorzea Clock</span>
-          <span class="clock-time">{{ eorzeanTime }}</span>
+          <span class="clock-time">{{ `${eorzeaClock.display24Hr}:${clockMinute}` }}</span>
         </div>
         <div class="divider"></div>
       </header>
@@ -64,7 +64,7 @@
       </nav>
 
       <footer class="page-footer">
-        <a href="https://buymeacoffee.com" target="_blank" class="coffee-btn">
+        <a href="https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC" target="_blank" class="coffee-btn">
           <span>☕</span> Buy me a coffee!
         </a>
         <p class="footer-copy">© 2023 FFXIV Radar. All rights reserved.</p>
@@ -75,60 +75,21 @@
 </template>
 
 <script>
+const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
+
 export default {
   name: 'HomePage',
-  data() {
-    return { eorzeanTime: '00:00' }
-  },
-  mounted() {
-    this.initStars()
-    this.startClock()
-  },
-  beforeUnmount() {
-    cancelAnimationFrame(this._frame)
-  },
-  methods: {
-    startClock() {
-      const tick = () => {
-        const ms = Date.now() * 20.571428571
-        const s  = Math.floor(ms / 1000)
-        const h  = Math.floor(s / 3600) % 24
-        const m  = Math.floor((s % 3600) / 60)
-        this.eorzeanTime = String(h).padStart(2,'0') + ':' + String(m).padStart(2,'0')
-        setTimeout(tick, 1000)
+  props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
+  computed: {
+    clockMinute() {
+        let m = this.eorzeaClock.displayMin
+        let fix = m < 10 ? `0${m}` : m
+        return fix
       }
-      tick()
-    },
-    initStars() {
-      const canvas = this.$refs.starCanvas
-      const ctx    = canvas.getContext('2d')
-      let stars    = []
-      const resize = () => {
-        canvas.width  = window.innerWidth
-        canvas.height = window.innerHeight
-        stars = Array.from({ length: 220 }, () => ({
-          x: Math.random() * canvas.width,
-          y: Math.random() * canvas.height,
-          r: Math.random() * 1.3 + 0.2,
-          base: Math.random() * 0.55 + 0.2,
-          speed: Math.random() * 0.7 + 0.3,
-        }))
-      }
-      const draw = () => {
-        ctx.clearRect(0, 0, canvas.width, canvas.height)
-        const t = Date.now() / 1000
-        stars.forEach(s => {
-          const a = s.base + Math.sin(t * s.speed) * 0.12
-          ctx.beginPath()
-          ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2)
-          ctx.fillStyle = `rgba(180,210,255,${a})`
-          ctx.fill()
-        })
-        this._frame = requestAnimationFrame(draw)
-      }
-      window.addEventListener('resize', resize)
-      resize()
-      draw()
+  },
+    methods: {
+    openDonate() {
+      window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
     }
   }
 }
@@ -146,11 +107,10 @@ export default {
   --text:   #c8d8f0;
   --border: rgba(45,212,191,0.15);
 
-  min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  background: #0b0d1a;
+    
   color: var(--text);
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;

@@ -40,7 +40,7 @@
     import characterInfo from '../API/iconImg.vue';
     export default {
         name: "About Us",
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
         components: {characterInfo}
     }
 </script>

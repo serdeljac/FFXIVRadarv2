@@ -88,7 +88,10 @@ main {
 Default Styles
 *********************************************************/
 
-
+.star-canvas {
+    position: fixed;
+    z-index: 1;
+}
 
 .iconSize {
     width: 24px;
@@ -330,12 +333,13 @@ Details Menu
     right: 0;
     bottom: 0;
     width: calc(400px + 2rem);
-    height: calc(100vh - $trackingbarHeight);
+    height: calc(100vh - $trackingbarHeight - 1px);
     padding: 0.25rem 1rem;
     background-color: $bodyBackgroundColor;
     border-left: 1px solid $borderColor;
     display: flex;
     flex-direction: column;
+    z-index: 999;
 
     &_close {
             display: flex;

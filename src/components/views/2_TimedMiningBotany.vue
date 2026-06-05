@@ -144,7 +144,7 @@
     export default {
         name: "Timed Mining/Botany",
         components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay, iconImgAPI },
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
         emits: ['changeTracked', 'openDetails'],
 
         data() {

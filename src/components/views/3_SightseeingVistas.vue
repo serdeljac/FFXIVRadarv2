@@ -137,7 +137,7 @@
 
         components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay, iconImgAPI },
 
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
 
         emits: ['changeTracked', 'openDetails'],
 

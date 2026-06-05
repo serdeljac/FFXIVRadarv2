@@ -309,6 +309,6 @@
 <script lang="ts">
     export default {
         name: "Private Policy",
-        props: ['ffxivData', 'timerList', 'windowWidth', 'weatherList'],
+        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
     }
 </script>

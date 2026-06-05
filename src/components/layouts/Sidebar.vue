@@ -57,7 +57,7 @@
         computed: {
             clockMinute() {
                 let m = this.eorzeaClock.displayMin
-                let fix = m < 10 ? `${m}0` : m
+                let fix = m < 10 ? `0${m}` : m
                 return fix
             }
         }
