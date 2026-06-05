@@ -21,46 +21,16 @@
 
       <!-- Nav grid -->
       <nav class="nav-grid">
-        <a href="/eorzeaoverview"    class="nav-btn" style="--i:0">
-          <span class="nav-icon">🌍</span>
-          <span class="nav-label">Eorzea Overview</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/timedMiningBotany"       class="nav-btn featured" style="--i:1">
-          <span class="nav-icon">⏰</span>
-          <span class="nav-label">Timed Mining / Botany</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/sightseeing" class="nav-btn" style="--i:2">
-          <span class="nav-icon">🔭</span>
-          <span class="nav-label">Sightseeing Log</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/aetherCurrents"      class="nav-btn" style="--i:3">
-          <span class="nav-icon">✨</span>
-          <span class="nav-label">Aether Currents</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/blueMageAbilities"   class="nav-btn" style="--i:4">
-          <span class="nav-icon">💙</span>
-          <span class="nav-label">Blue Mage Abilities</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/news"        class="nav-btn" style="--i:5">
-          <span class="nav-icon">📡</span>
-          <span class="nav-label">FFXIV Radar News</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/aboutUs"       class="nav-btn" style="--i:6">
-          <span class="nav-icon">📖</span>
-          <span class="nav-label">About Us</span>
-          <span class="nav-arrow">→</span>
-        </a>
-        <a href="/privatePolicy"     class="nav-btn" style="--i:7">
-          <span class="nav-icon">🔒</span>
-          <span class="nav-label">Privacy Policy</span>
-          <span class="nav-arrow">→</span>
-        </a>
+
+        <router-link 
+          v-for="l in links" :key="l.link" 
+          :to="`/${l.link}`"  
+          :class="[`nav-btn`, {'featured': l.featured}]">
+            <iconImgAPI :name="`sq_${l.icon}`"/>
+            <span class="nav-label">{{ l.label }}</span>
+            <span class="nav-arrow">→</span>
+          </router-link>
+        
       </nav>
 
       <footer class="page-footer">
@@ -74,12 +44,67 @@
   </div>
 </template>
 
+<script setup>
+const links = [
+  {
+    link: 'eorzeaoverview',
+    featured: true,
+    label: 'Eorzea Overview',
+    icon: 'eorzeamap'
+  },
+  {
+    link: 'timedMiningBotany',
+    featured: true,
+    label: 'Timed Mining / Botany',
+    icon: 'gathering'
+  },
+  {
+    link: 'sightseeing',
+    featured: false,
+    label: 'Sightseeing',
+    icon: 'sightseeing'
+  },
+  {
+    link: 'aetherCurrents',
+    featured: false,
+    label: 'Aether Currents',
+    icon: 'aethercurrents'
+  },
+  {
+    link: 'blueMageAbilities',
+    featured: false,
+    label: 'Blue Mage Abilities',
+    icon: 'bluemage'
+  },
+  {
+    link: 'news',
+    featured: false,
+    label: 'FFXIV Radar News',
+    icon: 'news'
+  },
+  {
+    link: 'aboutUs',
+    featured: false,
+    label: 'About Us',
+    icon: 'about'
+  },
+  {
+    link: 'privatePolicy',
+    featured: false,
+    label: 'Privacy Policy',
+    icon: 'privatepolicy'
+  },
+]
+</script>
+
 <script>
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
+import iconImgAPI from '../API/iconImg.vue';
 
 export default {
   name: 'HomePage',
   props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
+  components: {iconImgAPI},
   computed: {
     clockMinute() {
         let m = this.eorzeaClock.displayMin
