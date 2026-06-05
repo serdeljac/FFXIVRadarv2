@@ -1,5 +1,4 @@
 <template>
-  <Analytics />
   <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
     <starCanvas />
 
@@ -23,19 +22,22 @@
 
     <main :class="[`main_content`]" @click="toggleForceMenu">
       <promotionBanner />
-      <Transition name="fade" mode="out-in">
-      <router-view
-        :key="$route.path"
-        :ffxivData="ffxivData"
-        :windowWidth="windowWidth"
-        :timerList="timerList"
-        :weatherList="weatherList"
-        :eorzeaClock="eorzeaClock"
+      <router-view v-slot="{ Component }">
+  <Transition name="fade" mode="out-in">
+    <component
+      :is="Component"
+      :key="$route.path"
+      :ffxivData="ffxivData"
+      :windowWidth="windowWidth"
+      :timerList="timerList"
+      :weatherList="weatherList"
+      :eorzeaClock="eorzeaClock"
 
-        @openVistaImg="(e: any) => openVistaImg(e)"
-        @openDetails="openDetails"
-        @changeTracked="changeTracked" />
-    </Transition>
+      @openVistaImg="(e: any) => openVistaImg(e)"
+      @openDetails="openDetails"
+      @changeTracked="changeTracked" />
+  </Transition>
+</router-view>
     </main>
 
     <detailspane
@@ -59,7 +61,8 @@
 // APIs
 import EorzeaTime from 'eorzea-time';
 import EorzeaWeather from 'eorzea-weather';
-import { Analytics } from '@vercel/analytics/vue';
+import { inject } from '@vercel/analytics';
+inject();
 
 // Components
 import promotionBanner from './components/layouts/PromotionBanner.vue';
