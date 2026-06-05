@@ -3,7 +3,8 @@ import { createRouter, createWebHistory } from 'vue-router'
 import './style/style.scss';
 import App from './App.vue'
 
-const home = () => import('./components/views/1_EorzeaOverview.vue')
+const home = () => import("./components/views/0_Home.vue");
+const eorzeaOverview = () => import("./components/views/1_EorzeaOverview.vue");
 const timedNodes = () => import('./components/views/2_TimedMiningBotany.vue')
 const sightseeing = () => import('./components/views/3_SightseeingVistas.vue')
 const aetherCurrents = () => import('./components/views/4_AetherCurrents.vue')
@@ -14,20 +15,20 @@ const privatePolicy = () => import('./components/views/8_PrivatePolicy.vue')
 const pageNotFound = () => import('./components/views/Error404.vue')
 
 const router = createRouter({
-    history: createWebHistory(),
-    routes: [
-        { path: '/', redirect: '/timedMiningBotany' },
-        { path: '/eorzeaoverview', component: home },
-        { path: '/timedMiningBotany', component: timedNodes, props: true },
-        { path: '/sightseeing', component: sightseeing, props: true },
-        { path: '/aetherCurrents', component: aetherCurrents, props: true },
-        { path: '/blueMageAbilities', component: blueMageSpells, props: true },
-        { path: '/News', component: news, props: true },
-        { path: '/aboutUs', component: aboutUs, props: false},
-        { path: '/privatePolicy', component: privatePolicy, props: false },
-        { path: '/:pathMatch(.*)*', component: pageNotFound } //pathMatch can changeb to whatever
-    ],
-    linkExactActiveClass: 'currentPage'
-})
+  history: createWebHistory(),
+  routes: [
+    { path: "/", component: home, props: true },
+    { path: "/eorzeaoverview", component: eorzeaOverview, props: true },
+    { path: "/timedMiningBotany", component: timedNodes, props: true },
+    { path: "/sightseeing", component: sightseeing, props: true },
+    { path: "/aetherCurrents", component: aetherCurrents, props: true },
+    { path: "/blueMageAbilities", component: blueMageSpells, props: true },
+    { path: "/News", component: news, props: true },
+    { path: "/aboutUs", component: aboutUs, props: true },
+    { path: "/privatePolicy", component: privatePolicy, props: true },
+    { path: "/:pathMatch(.*)*", component: pageNotFound }, //pathMatch can changeb to whatever
+  ],
+  linkExactActiveClass: "currentPage",
+});
 
 createApp(App).use(router).mount('#app')

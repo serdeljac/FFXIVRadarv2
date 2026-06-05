@@ -22,6 +22,12 @@
     const link_list = [
         {
             id: 1,
+            name: 'Home',
+            icon: 'eorzeamap',
+            link: '/',
+        },
+        {
+            id: 1,
             name: 'Eorzea Overview',
             icon: 'eorzeamap',
             link: 'EorzeaOverview',

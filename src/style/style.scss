@@ -296,6 +296,7 @@ Trackingbar
         display: grid;
         gap: 10px;
         grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+        padding-right: 1rem;
     }
 
     &_item {

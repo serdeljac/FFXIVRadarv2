@@ -655,7 +655,7 @@ export default {
     position: fixed;
     top: 100px;
     transition: left 0.23s ease;
-    z-index: 10;
+    z-index: 9999;
     width: 32px;
     height: 32px;
 
