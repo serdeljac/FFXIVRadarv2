@@ -12,6 +12,7 @@
     "@next/bundle-analyzer": "^16.2.7",
     "@paypal/paypal-js": "^9.7.0",
     "@vercel/analytics": "^2.0.1",
+    "@vercel/speed-insights": "^2.0.0",
     "@vueuse/integrations": "^14.3.0",
     "axios": "^1.16.1",
     "eorzea-time": "^3.0.0",

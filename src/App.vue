@@ -1,4 +1,5 @@
 <template>
+  <SpeedInsights />
   <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
     <starCanvas />
 
@@ -62,6 +63,7 @@
 import EorzeaTime from 'eorzea-time';
 import EorzeaWeather from 'eorzea-weather';
 import { inject } from '@vercel/analytics';
+import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
 
 // Components
@@ -99,7 +101,7 @@ const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 export default {
   name: 'AppRoot',
 
-  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas },
+  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
 
   data() {
     return {
