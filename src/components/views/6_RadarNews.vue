@@ -8,57 +8,6 @@
 
         <!-- This will eventually be grabbed from a server -->
         <div class="body_content-group">
-            <div class="bulleton">
-
-                <div class="bulleton_profileImg">
-                    <img :src="getIconImageURL('profile')"/>
-                </div>
-                <div class="bulleton_content">
-                    <h2>V1.1 - Updated Sightseeing/Fate data</h2>
-                    <p class="bulleton_postdate">Posted: May 2, 2026 @ 14:22 PST</p>
-                    <hr />
-                    <div class="bulleton_details">
-                        <ol class="bulleton_list-tier1">
-                            <li>
-                                <p>Added sightseeing log data for A Realm Reborn #14-20 and #44-80</p>
-                                <ul class="bulleton_list-tier2">
-                                    <li>Notes are added</li>
-                                    <li>Fixed 'Mount Required'</li>
-                                    <li>Added preview and full size images</li>
-                                </ul>
-                            </li>
-                            <li>
-                                <p>Added proper icon locations on the map for fates</p>
-                                <ul class="bulleton_list-tier2">
-                                    <li>Added proper icon placement data</li>
-                                    <li>Changed coordinates to more accurate locations</li>
-                                </ul>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bulleton">
-                <div class="bulleton_profileImg">
-                    <img :src="getIconImageURL('profile')"/>
-                </div>
-                <div class="bulleton_content">
-                    <h2>V1.0.1 - About Us &amp; content improvements</h2>
-                    <p class="bulleton_postdate">Posted: June 12, 2026 @ 10:00 PST</p>
-                    <hr />
-                    <div class="bulleton_details">
-                        <ol class="bulleton_list-tier1">
-                            <li>
-                                <p>Expanded the About Us page with a full description of all tools and how the data is maintained</p>
-                            </li>
-                            <li>
-                                <p>Added introductory text to all feature pages (Eorzea Overview, Timed Mining/Botany, Sightseeing Log, Aether Currents, Blue Mage Abilities) to help new players understand each tool</p>
-                            </li>
-                        </ol>
-                    </div>
-                </div>
-            </div>
 
             <div class="bulleton">
                 <div class="bulleton_profileImg">
@@ -66,7 +15,18 @@
                 </div>
                 <div class="bulleton_content">
                     <h2>v1.0 - Site has officially been launched!</h2>
-                    <p class="bulleton_postdate">Posted: May 1, 2026 @ 16:43 PST</p>
+                    <p class="bulleton_postdate">Posted: June 12, 2026 @ 18:38 PST</p>
+                    <hr />
+                    <div class="bulleton_details">
+                        <ol class="bulleton_list-tier2">
+                            <li>
+                                <p>Welcome to FFXIV Radar. Please note some is still missing (ie Vista Images and Proper Fate Locations)</p>
+                            </li>
+                            <li>
+                                <p>There will be more updated coming soon and will also include the new expansion: Evercold!</p>
+                            </li>
+                        </ol>
+                    </div>
                 </div>
             </div>
         </div>
