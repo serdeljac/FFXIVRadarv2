@@ -1,6 +1,14 @@
 <template>
     <div :class="[`timedNodes body_content`, windowWidth]">
 
+        <!-- Page intro -->
+        <div class="body_content-group page-intro">
+            <h1>Timed Mining &amp; Botany Nodes</h1>
+            <p>
+                Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed <strong>Mining</strong> and <strong>Botany</strong> node across all expansions, showing the spawn time, zone, coordinates, item yields, and aetherial reduction results. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.
+            </p>
+        </div>
+
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">

@@ -44,6 +44,27 @@
                     <img :src="getIconImageURL('profile')"/>
                 </div>
                 <div class="bulleton_content">
+                    <h2>V1.0.1 - About Us &amp; content improvements</h2>
+                    <p class="bulleton_postdate">Posted: June 12, 2026 @ 10:00 PST</p>
+                    <hr />
+                    <div class="bulleton_details">
+                        <ol class="bulleton_list-tier1">
+                            <li>
+                                <p>Expanded the About Us page with a full description of all tools and how the data is maintained</p>
+                            </li>
+                            <li>
+                                <p>Added introductory text to all feature pages (Eorzea Overview, Timed Mining/Botany, Sightseeing Log, Aether Currents, Blue Mage Abilities) to help new players understand each tool</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bulleton">
+                <div class="bulleton_profileImg">
+                    <img :src="getIconImageURL('profile')"/>
+                </div>
+                <div class="bulleton_content">
                     <h2>v1.0 - Site has officially been launched!</h2>
                     <p class="bulleton_postdate">Posted: May 1, 2026 @ 16:43 PST</p>
                 </div>

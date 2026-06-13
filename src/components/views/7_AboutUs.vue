@@ -9,27 +9,39 @@
 
                 <div class="about">
 
+                <h2>What is FFXIV Radar?</h2>
                 <p>
-                    This site was created for two main purposes: to showcase my skills as a web developer, and to aid my fellow FFXIV players my creating an easier way to navigate Eorzea in a simpler form. I started playing FFXIV a year after the day it was launched, and been on/off until a few years ago. Now I am playing all the way to Dawntrail (soon Evercold upon release).
+                    FFXIV Radar is a free, community-built companion tool for players of Final Fantasy XIV Online. It brings together essential in-game information — timed gathering nodes, sightseeing log locations, aether current quests, fate spawn points, elite hunt marks, and Blue Mage ability sources — into a single, easy-to-use reference that you can keep open alongside the game.
                 </p>
 
-                <div class="about_img">
-
-                </div>
-
+                <h2>Who made it?</h2>
                 <p>
-                    This site was built from scratch using Vite/Vue and Typescript, and will continue to expand. Most data was not gathered via API's, but rather collected manually through my playthroughs on an excel spreadsheet, then implemented into JSON code. With the help of some API’s (such as eorzea-weather and soon FFXIV API), I hope to create more detailed data that will continue to stay up to date with FFXIV updates and changes.
+                    This site was created by a FFXIV player and web developer based in British Columbia, Canada. I started playing FFXIV shortly after its original launch and have been adventuring through Eorzea ever since — all the way through A Realm Reborn, Heavensward, Stormblood, Shadowbringers, Endwalker, and Dawntrail. The frustration of constantly alt-tabbing to wikis and spreadsheets was the spark that led to building FFXIV Radar.
+                </p>
+                <p>
+                    The site was built from scratch using Vite, Vue 3, and TypeScript. Most of the underlying data was collected manually during my own playthroughs — documented in spreadsheets and then converted to structured JSON — so every entry has been personally verified in-game. Weather data is powered by the eorzea-weather library, which accurately replicates the Eorzea weather simulation engine.
                 </p>
 
-                <div class="about_img">
+                <h2>What tools does FFXIV Radar include?</h2>
+                <ul>
+                    <li><strong>Eorzea Overview</strong> — An interactive zone map showing gathering nodes, sightseeing vistas, fate spawn locations, elite hunt marks, and aether currents for every zone in the game. Switch zones from the built-in zone picker or use the search bar to find any resource by name.</li>
+                    <li><strong>Timed Mining &amp; Botany</strong> — A filterable, paginated list of all timed gathering nodes (unspoiled nodes and ephemeral nodes), showing spawn windows, locations, item yields, and whether you’re currently tracking them.</li>
+                    <li><strong>Sightseeing Log</strong> — A full tracker for the in-game Sightseeing Log quest, covering all expansions. Each entry includes the required weather, time of day, emote, and mount conditions, plus preview images for the vista location.</li>
+                    <li><strong>Aether Currents</strong> — A checklist of every aether current quest and field current location, organised by expansion and region, so you can track which zones you’ve fully attuned.</li>
+                    <li><strong>Blue Mage Abilities</strong> — A reference table listing every Blue Magic spell, the enemy or NPC you need to learn it from, the minimum level required, and the location where that enemy can be found.</li>
+                </ul>
 
-                </div>
-
+                <h2>How is the data maintained?</h2>
                 <p>
-                    Thank you for all the support from players who tested and gave me feedback on changes. There is still much more work to be done and will be ongoing. Please check the FFXIV Radar News section for the latest changes.
+                    Data is updated manually as new FFXIV patches and expansions release. Because the information is hand-verified rather than scraped from external databases, it tends to be more accurate for edge cases — things like exact node coordinates, correct emote conditions for sightseeing vistas, and Blue Mage enemy locations that wikis sometimes get wrong. Check the <strong>FFXIV Radar News</strong> section for a log of all recent data additions and corrections.
                 </p>
 
-                <p>Yours truly, the Almighty Viera 2026.</p>
+                <h2>Is it free?</h2>
+                <p>
+                    Yes, completely free with no registration required. If FFXIV Radar has saved you time or helped you complete a tricky log entry, a small coffee donation via PayPal is always appreciated — it helps cover hosting costs and motivates future updates.
+                </p>
+
+                <p>Yours truly, the Almighty Viera — 2026.</p>
             </div>
         </div>
 

@@ -1,6 +1,14 @@
 <template>
     <div :class="['blueMageAbilties body_content', windowWidth]">
 
+        <!-- Page intro -->
+        <div class="body_content-group page-intro">
+            <h1>Blue Mage Abilities</h1>
+            <p>
+                Blue Mage is FFXIV's Limited Job that learns spells by witnessing enemies use them in battle. With over 100 actions to collect, tracking down the right enemy in the right zone can be a challenge. This reference table lists every Blue Magic spell with the <strong>enemy or NPC</strong> to learn it from, the <strong>minimum Blue Mage level</strong> required to enter that area, and the <strong>exact zone and location</strong>. Filter by spell category or scroll through the full list to plan your learning route.
+            </p>
+        </div>
+
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">

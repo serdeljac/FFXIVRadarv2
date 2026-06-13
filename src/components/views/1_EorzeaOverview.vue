@@ -1,6 +1,14 @@
 <template>
   <section :class="[`eorzeaOverview body_content`, windowWidth]">
 
+    <!-- Page intro (visible to crawlers / readers, hidden visually on small screens via CSS) -->
+    <div class="body_content-group page-intro">
+      <h1>Eorzea Overview</h1>
+      <p>
+        Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view <strong>Mining nodes</strong>, <strong>Botany nodes</strong>, <strong>Sightseeing Log vistas</strong>, <strong>FATE spawn locations</strong>, <strong>Elite Hunt marks</strong>, and <strong>Aether Currents</strong> — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.
+      </p>
+    </div>
+
     <!-- Map Display -->
     <div
       class="body_content-group mapDisplay"
