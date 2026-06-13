@@ -1,6 +1,9 @@
 <template>
   <SpeedInsights />
-  <div :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
+  <div v-if="loading" class="app_loading">
+    <span class="app_loading-text">Loading Eorzea data…</span>
+  </div>
+  <div v-else :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
     <starCanvas />
 
     <trackingBar
@@ -75,21 +78,6 @@ import detailspane from './components/layouts/DetailsPane.vue';
 import vistaLarge from './components/layouts/ExpandVistaImg.vue'
 import starCanvas from './components/ui/starCanvas.vue'
 
-// JSON Data
-import areaRaw from './assets/json/areas.json';
-import expansionsRaw from './assets/json/data_expansions.json';
-import miningRaw from './assets/json/nodes_miner.json';
-import botanyRaw from './assets/json/nodes_botany.json';
-import aetherialRaw from './assets/json/data_aetherial.json';
-import aetheryteRaw from './assets/json/nodes_aetheryte.json';
-import sightseeingRaw from './assets/json/nodes_sightseeing.json';
-import huntsEliteRaw from './assets/json/data_hunts.json';
-import huntsPointsRaw from './assets/json/nodes_huntpoints.json';
-import aetherCurrentRaw from './assets/json/nodes_aethercurrent.json';
-import fatesRaw from './assets/json/nodes_fates.json';
-import blueMageRaw from './assets/json/data_bluemage.json';
-import timerRaw from './assets/json/data_timer.json';
-
 // Gold Saucer repeats every 20 real-time minutes (1200 seconds).
 // Active windows: [0–600), [1200–1800), [2400–3000)
 const GS_CYCLE = 1200; // seconds
@@ -100,11 +88,10 @@ const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 
 export default {
   name: 'AppRoot',
-
   components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
-
   data() {
     return {
+      loading: true as boolean,
       windowWidth: '' as string,
       sidebarLayout: 'extended' as string,
       ffxivData: {
@@ -146,13 +133,14 @@ export default {
     };
   },
 
-  created() {
+  async created() {
     // Bind resize handler once so the same reference can be removed on unmount
     this._resizeHandler = this.onWindowResize.bind(this);
     window.addEventListener('resize', this._resizeHandler);
     this.onWindowResize();
 
-    this.setupInitialFFXIVData();
+    await this.setupInitialFFXIVData();
+    this.loading = false;
 
     this._clockInterval = setInterval(() => {
       this.onClockTick();
@@ -214,25 +202,55 @@ export default {
 
     // ─── Initial Data Setup ───────────────────────────────────────────────────
 
-    setupInitialFFXIVData() {
-      this.setAreaData();
+    async setupInitialFFXIVData() {
+      const [
+        { default: areaRaw },
+        { default: expansionsRaw },
+        { default: miningRaw },
+        { default: botanyRaw },
+        { default: aetherialRaw },
+        { default: aetheryteRaw },
+        { default: sightseeingRaw },
+        { default: huntsEliteRaw },
+        { default: huntsPointsRaw },
+        { default: aetherCurrentRaw },
+        { default: fatesRaw },
+        { default: blueMageRaw },
+        { default: timerRaw },
+      ] = await Promise.all([
+        import('./assets/json/areas.json'),
+        import('./assets/json/data_expansions.json'),
+        import('./assets/json/nodes_miner.json'),
+        import('./assets/json/nodes_botany.json'),
+        import('./assets/json/data_aetherial.json'),
+        import('./assets/json/nodes_aetheryte.json'),
+        import('./assets/json/nodes_sightseeing.json'),
+        import('./assets/json/data_hunts.json'),
+        import('./assets/json/nodes_huntpoints.json'),
+        import('./assets/json/nodes_aethercurrent.json'),
+        import('./assets/json/nodes_fates.json'),
+        import('./assets/json/data_bluemage.json'),
+        import('./assets/json/data_timer.json'),
+      ]);
+
+      this.setAreaData(areaRaw, expansionsRaw);
       this.ffxivData.expansion = expansionsRaw as any[];
-      this.setMiningAndBotanyData(miningRaw, 'miner');
-      this.setMiningAndBotanyData(botanyRaw, 'botany');
-      this.setAetheryteData();
-      this.setSightseeingData();
-      this.setEliteHuntsData();
-      this.setAetherCurrentData();
-      this.setFatesData();
-      this.setBlueMageData();
+      this.setMiningAndBotanyData(miningRaw, 'miner', aetherialRaw);
+      this.setMiningAndBotanyData(botanyRaw, 'botany', aetherialRaw);
+      this.setAetheryteData(aetheryteRaw);
+      this.setSightseeingData(sightseeingRaw);
+      this.setEliteHuntsData(huntsEliteRaw, huntsPointsRaw);
+      this.setAetherCurrentData(aetherCurrentRaw);
+      this.setFatesData(fatesRaw);
+      this.setBlueMageData(blueMageRaw);
       // Clock must be set before timers so totalMin is available
       this.setEorzeaClock();
       this.createWeatherList();
       this.setGoldSaucerState();
-      this.setTimerData(); // builds list + calculates initial countdown
+      this.setTimerData(timerRaw); // builds list + calculates initial countdown
     },
 
-    setAreaData() {
+    setAreaData(areaRaw: any[], expansionsRaw: any[]) {
       const areas = (areaRaw as any[]).map((obj) => ({
         ...obj,
         issubarea: obj.issubarea === 1,
@@ -253,7 +271,7 @@ export default {
       }
     },
 
-    setMiningAndBotanyData(arr: any[], job: string) {
+    setMiningAndBotanyData(arr: any[], job: string, aetherialRaw: any[]) {
       const areas = this.ffxivData.areas;
 
       const getUsageInfo = (obj: any): any => {
@@ -286,7 +304,7 @@ export default {
       (this.ffxivData as any)[job] = processed;
     },
 
-    setAetheryteData() {
+    setAetheryteData(aetheryteRaw: any[]) {
       this.ffxivData.aetheryte = (aetheryteRaw as any[]).map((obj) => ({
         ...obj,
         point: obj.point || false,
@@ -296,7 +314,7 @@ export default {
       }));
     },
 
-    setSightseeingData() {
+    setSightseeingData(sightseeingRaw: any[]) {
       this.ffxivData.sightseeing = (sightseeingRaw as any[]).map((obj) => ({
         ...obj,
         job: 'sightseeing',
@@ -312,7 +330,7 @@ export default {
       }));
     },
 
-    setEliteHuntsData() {
+    setEliteHuntsData(huntsEliteRaw: any[], huntsPointsRaw: any[]) {
       const getPointsData = (zone: string, rank: string): any[] =>
         (huntsPointsRaw as any[]).filter((o) => o.zone === zone && o.ranks.includes(rank));
 
@@ -333,7 +351,7 @@ export default {
       });
     },
 
-    setAetherCurrentData() {
+    setAetherCurrentData(aetherCurrentRaw: any[]) {
       this.ffxivData.aethercurrents = (aetherCurrentRaw as any[]).map((obj) => ({
         ...obj,
         job: 'aethercurrents',
@@ -342,7 +360,7 @@ export default {
       }));
     },
 
-    setFatesData() {
+    setFatesData(fatesRaw: any[]) {
       this.ffxivData.fates = (fatesRaw as any[]).map((obj) => ({
         ...obj,
         job: 'fates',
@@ -351,7 +369,7 @@ export default {
       }));
     },
 
-    setBlueMageData() {
+    setBlueMageData(blueMageRaw: any[]) {
       // Build type-filter list (unique type1 values)
       const seenTypes = new Set<string>();
       const filters: any[] = [['type1', 'All', true]];
@@ -433,13 +451,17 @@ export default {
 
     // ─── Timers ───────────────────────────────────────────────────────────────
 
-    setTimerData() {
+    setTimerData(timerRaw: any[]) {
       this.timerList = (timerRaw as any[]).map((obj) => ({
         ID:               obj.ID,
         displayRanges12Hr: this.buildRangeStrings(true,  [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
         displayRanges24Hr: this.buildRangeStrings(false, [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
+        // Raw timing fields kept so recalcTimerCountdowns can run without re-importing JSON
+        start0: obj.start0, start1: obj.start1, start2: obj.start2,
+        end0:   obj.end0,   end1:   obj.end1,   end2:   obj.end2,
+        sets:   obj.sets,
         stateActive: false as boolean,
-        seconds:     0 as number,   // renamed from `minutes` — unit is seconds
+        seconds:     0 as number,
         countdown:   '' as string,
       }));
       this.recalcTimerCountdowns();
@@ -466,7 +488,7 @@ export default {
     recalcTimerCountdowns() {
       const curMin = this.eorzeaClock.totalMin;
 
-      (timerRaw as any[]).forEach((obj, d) => {
+      this.timerList.forEach((obj: any, d: number) => {
         const starts = [obj.start0 * 60, obj.start1 * 60, obj.start2 * 60];
         const ends   = [obj.end0   * 60, obj.end1   * 60, obj.end2   * 60];
         const sets   = obj.sets as number;
@@ -602,6 +624,21 @@ export default {
 </script>
 
 <style scoped lang="scss">
+.app_loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  width: 100vw;
+}
+.app_loading-text {
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 1.1rem;
+  letter-spacing: 0.08em;
+  color: #2dd4bf;
+  opacity: 0.8;
+}
+
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.2s ease;
