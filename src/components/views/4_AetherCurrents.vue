@@ -1,6 +1,14 @@
 <template>
     <div :class="['aetherCurrents body_content', windowWidth]">
 
+        <!-- Page intro -->
+        <div class="body_content-group page-intro">
+            <h1>Aether Currents</h1>
+            <p>
+                Aether Currents must be attuned before you can fly in each zone introduced from Heavensward onward. Each zone has a set of currents to collect — some are rewards from specific quests, while others are hidden out in the open world at fixed coordinates. This tracker lists every aether current quest and field current for each expansion zone, with the unlock requirements and location so you can get airborne as quickly as possible.
+            </p>
+        </div>
+
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">

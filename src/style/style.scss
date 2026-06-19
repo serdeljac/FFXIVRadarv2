@@ -801,6 +801,8 @@ Across all Router Views
             padding: 0 20px;
         }
 
+        li {margin-bottom: 8px;}
+
         .bulleton_list-tier1 > li {
             list-style-type: decimal;
             margin-bottom: 0.5rem;
@@ -808,7 +810,7 @@ Across all Router Views
 
         .bulleton_list-tier2 > li {
             list-style-type: circle;
-            list-style-position: inside;
+            
         }
     }
 }
@@ -829,7 +831,9 @@ Across all Router Views
         text-align: center;
         margin: 2rem auto;
     }
-    p {margin-bottom: 2rem;}
+    h2 {margin: 20px 0px;}
+    p,ul {margin-bottom: 1rem;}
+    li {margin: 6px 0;}
 }
 
 

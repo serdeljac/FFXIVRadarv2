@@ -1,6 +1,14 @@
 <template>
     <div :class="['sightseeVistas body_content', windowWidth]">
 
+        <!-- Page intro -->
+        <div class="body_content-group page-intro">
+            <h1>Sightseeing Log</h1>
+            <p>
+                The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required <strong>Eorzea time window</strong>, <strong>weather condition</strong>, <strong>emote</strong>, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log.
+            </p>
+        </div>
+
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
