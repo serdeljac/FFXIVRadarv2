@@ -145,7 +145,7 @@
 
     methods: {
         getCoordinates(node: any): string {
-            if (node.transx != null) {
+            if (node.transx) {
                 return `${node.transx}px, ${node.transy}px`
             }
             const { mapsize } = node.area

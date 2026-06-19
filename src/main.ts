@@ -12,6 +12,7 @@ const blueMageSpells = () => import('./components/views/5_BlueMageAbilities.vue'
 const news = () => import('./components/views/6_RadarNews.vue')
 const aboutUs = () => import('./components/views/7_AboutUs.vue')
 const privatePolicy = () => import('./components/views/8_PrivatePolicy.vue')
+const testBuild = () => import("./components/views/99_TestBuildPage.vue");
 const pageNotFound = () => import('./components/views/Error404.vue')
 
 const router = createRouter({
@@ -26,6 +27,7 @@ const router = createRouter({
     { path: "/news", component: news, props: true },
     { path: "/aboutUs", component: aboutUs, props: true },
     { path: "/privatePolicy", component: privatePolicy, props: true },
+    { path: "/testPage", component: testBuild, props: true },
     { path: "/:pathMatch(.*)*", component: pageNotFound }, //pathMatch can changeb to whatever
   ],
   linkExactActiveClass: "currentPage",

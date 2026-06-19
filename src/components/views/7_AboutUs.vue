@@ -33,6 +33,10 @@
             </div>
         </div>
 
+        <div class="body_content-group">
+            
+        </div>
+
     </div>
 </template>
 
