@@ -33,6 +33,22 @@
         
       </nav>
 
+      <div class="home_content">
+        <h2>Welcome to FFXIVRadar</h2>
+        <p>FFXIVRadar is a gathering companion tool designed to help Final Fantasy XIV players find, track, and plan their gathering activities more efficiently. Whether you are searching for a specific crafting material, preparing for a gathering session, or simply exploring the world of Eorzea, FFXIVRadar provides an organized way to discover important node locations and related information.</p>
+        <p>Finding the right resource can sometimes mean searching through multiple areas, remembering spawn locations, or waiting for limited-time gathering opportunities. FFXIVRadar brings this information together in one place by allowing players to search for items directly or explore interactive maps that display gathering nodes and useful details.</p>  
+        <p>The interactive map system allows you to select a specific region and view available gathering locations with relevant node data. This makes it easier to understand where resources are located, plan efficient routes, and spend more time gathering instead of manually searching for information.
+</p>
+        <p>Many valuable resources in Final Fantasy XIV appear only during specific windows, making timing an important part of gathering. FFXIVRadar includes tracking tools for timed nodes, allowing players to monitor available and upcoming gathering opportunities directly from the site interface.
+</p>
+        <p>Whether you are a new player learning gathering, a crafter collecting materials, or an experienced player optimizing your resource routes, FFXIVRadar is built to make gathering information easier to access. The goal is simple: provide a reliable, convenient tool that helps players spend less time looking for nodes and more time enjoying the game.</p>
+        </div>
+
+
+
+
+
+
       <footer class="page-footer">
         <a href="https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC" target="_blank" class="coffee-btn">
           <span>☕</span> Buy me a coffee!

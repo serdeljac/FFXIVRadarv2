@@ -4,6 +4,11 @@ import vue from "@vitejs/plugin-vue";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [vue()],
+  server: {
+    // Honor a PORT supplied by the environment (e.g. preview tooling); fall back
+    // to Vite's default otherwise.
+    port: process.env.PORT ? Number(process.env.PORT) : undefined,
+  },
   css: {
     preprocessorOptions: {
       scss: {
