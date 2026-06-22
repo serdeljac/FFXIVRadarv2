@@ -705,13 +705,6 @@ Across all Router Views
 *********************************************************/
 .eorzeaOverview {
 
-    &.desktop-small,
-    &.desktop-large {
-        .mapContext {
-            width: calc(100% - 660px);
-        }
-    }
-
     .mapContext {
         min-width: 400px;
         display: flex;

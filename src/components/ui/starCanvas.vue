@@ -4,7 +4,7 @@
 
 <script>
     export default {
-        name: "COMP_NAME",
+        name: "Star Canvas",
         mounted() {
             this.initStars()
         },

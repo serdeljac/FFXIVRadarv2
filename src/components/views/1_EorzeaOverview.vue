@@ -86,18 +86,77 @@
 
                 <!-- Zone table for the selected data layer -->
                 <div v-if="selectedData" class="leafletMap_table">
-                    <table v-if="tableRows.length">
+
+                    <!-- Gathering (mining/botany): one row per item; the timer
+                         spans the whole node and is centered. -->
+                    <table v-if="isGathering && tableRows.length">
+                        <thead>
+                            <tr>
+                                <th>Item</th>
+                                <th>Track</th>
+                                <th>Attribute</th>
+                                <th>Usage</th>
+                                <th>Timer</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <template v-for="(group, gi) in tableRows" :key="gi">
+                                <tr
+                                    v-for="(it, ii) in group._items"
+                                    :key="it.ID"
+                                    class="leafletMap_tableRow"
+                                    :class="{
+                                        'leafletMap_tableRow--active': group.node_code === selectedCode,
+                                        'leafletMap_groupStart': ii === 0,
+                                    }"
+                                    @click="selectTableRow(group)">
+                                    <td class="leafletMap_cellItem">
+                                        <img
+                                            v-if="itemIcons[it.name]"
+                                            :src="itemIcons[it.name]"
+                                            :alt="it.name"
+                                            class="leafletMap_itemImg" />
+                                        <span>{{ it.name }} - Lv. {{ it.level }}{{ it.stars ? ' ' + '★'.repeat(it.stars) : '' }}</span>
+                                    </td>
+                                    <td class="leafletMap_cellTrack">
+                                        <toggleTrackingBtn
+                                            v-if="it.time"
+                                            :trackingEnabled="it.tracked"
+                                            @click.stop="$emit('changeTracked', it)" />
+                                    </td>
+                                    <td class="leafletMap_cellMeta">{{ it.attribute || '-' }}</td>
+                                    <td class="leafletMap_cellMeta">{{ formatUsage(it.usage) }}</td>
+                                    <td
+                                        v-if="ii === 0"
+                                        :rowspan="group._items.length"
+                                        class="leafletMap_cellTimer">
+                                        <timeDisplay v-if="group.time" :timerList="timerList" :timeId="group.time" />
+                                        <span v-else>-</span>
+                                    </td>
+                                </tr>
+                            </template>
+                        </tbody>
+                    </table>
+
+                    <!-- Other data types: one row per node. -->
+                    <table v-else-if="tableRows.length">
                         <thead>
                             <tr>
                                 <th v-for="c in tableColumns" :key="c.key">{{ c.label }}</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="(row, ri) in tableRows" :key="ri">
+                            <tr
+                                v-for="(row, ri) in tableRows"
+                                :key="ri"
+                                class="leafletMap_tableRow"
+                                :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
+                                @click="selectTableRow(row)">
                                 <td v-for="c in tableColumns" :key="c.key">{{ formatCell(row[c.key]) }}</td>
                             </tr>
                         </tbody>
                     </table>
+
                     <p v-else class="leafletMap_tableEmpty">No {{ dataLabel }} in this zone.</p>
                 </div>
 
@@ -130,12 +189,23 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import PageHeader from '../ui/displayPageHeader.vue'
+import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+import timeDisplay from '../ui/displayTime.vue'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
 
-// ffxivData is injected into every router view by App.vue.
-const props = defineProps<{ ffxivData: any }>()
+// Injected into every router view by App.vue. defineProps is authoritative in
+// <script setup>, so every prop the template uses must be declared here.
+const props = defineProps<{
+    ffxivData: any
+    eorzeaClock?: any
+    timerList?: any[]
+    windowWidth?: string
+    weatherList?: any
+}>()
+// Tracking is handled globally by App.vue, same as the timed mining/botany page.
+defineEmits(['changeTracked', 'openDetails'])
 
 // ─── Config ───────────────────────────────────────────────────────────────
 const BASE_URL = 'https://v2.xivapi.com'
@@ -185,17 +255,13 @@ const TABLE_COLUMNS: Record<DataType, { key: string; label: string }[]> = {
     ],
     mining: [
         { key: 'name', label: 'Item' },
-        { key: 'node_name', label: 'Node' },
         { key: 'node_level', label: 'Lv' },
-        { key: 'stars', label: 'Stars' },
-        { key: 'group', label: 'Group' },
+        { key: 'time', label: 'Timer' },
     ],
     botany: [
         { key: 'name', label: 'Item' },
-        { key: 'node_name', label: 'Node' },
         { key: 'node_level', label: 'Lv' },
-        { key: 'stars', label: 'Stars' },
-        { key: 'group', label: 'Group' },
+        { key: 'time', label: 'Timer' },
     ],
     fates: [
         { key: 'name', label: 'FATE' },
@@ -243,6 +309,21 @@ const selectedData = ref<DataType | ''>('')
 const tableRows = ref<any[]>([])
 const tableColumns = computed(() => (selectedData.value ? TABLE_COLUMNS[selectedData.value] : []))
 const dataLabel = computed(() => DATA_TYPES.find((t) => t.key === selectedData.value)?.label ?? '')
+// Gathering tables (mining/botany) use a custom per-item layout with a spanning timer.
+const isGathering = computed(() => selectedData.value === 'mining' || selectedData.value === 'botany')
+// 'crafting' is the default/no-op usage, shown as a dash.
+function formatUsage(usage: string): string {
+    return !usage || usage === 'crafting' ? '-' : usage
+}
+// Selection: clicking a map icon or a table row highlights both. `selectedCode`
+// (a node_code, unique per table row) drives the table highlight; `selectedMarkers`
+// carries the active CSS class on the map; `nodeMarkers` links each node to its marker.
+const selectedCode = ref<string | null>(null)
+let selectedMarkers: L.Marker[] = []
+const nodeMarkers = new Map<any, L.Marker>()
+// Elite hunts only: a hunt appears at several spawn points, so it maps to the
+// full list of markers representing those points.
+const huntMarkers = new Map<any, L.Marker[]>()
 
 // Details for a clicked location: one group per node found there (a shared hunt
 // spawn point can host several hunts), each the local node merged with FFXIVAPI
@@ -284,16 +365,13 @@ onMounted(async () => {
     })
 
     // A layer per icon type. Marker layers follow their checkboxes. Data layers
-    // are always on the map so any data icon can be clicked to focus its table;
-    // the radio only drives which table shows, not map visibility.
+    // stay off the map until one is chosen via the radio — only the selected
+    // data type's icons are shown.
     for (const { key } of ICON_TYPES) {
         typeLayers[key] = L.layerGroup()
     }
     for (const { key } of MARKER_TYPES) {
         if (filters[key]) typeLayers[key].addTo(map)
-    }
-    for (const { key } of DATA_TYPES) {
-        typeLayers[key].addTo(map)
     }
 
     await loadZone(selectedZone.value)
@@ -354,6 +432,9 @@ async function loadZone(zoneName: string) {
     isLoading.value = true
     hasError.value = false
     clearDetails()
+    selectMarker(null)
+    nodeMarkers.clear()
+    huntMarkers.clear()
     for (const { key } of ICON_TYPES) {
         typeLayers[key]?.clearLayers()
         counts[key] = 0
@@ -497,10 +578,19 @@ function toggleType(key: IconType) {
     else typeLayers[key].remove()
 }
 
-// Radio handler / data-icon click: focus the table on this data type. All data
-// layers stay visible, so this only drives the table — not map visibility.
+// Radio handler / data-icon click: show only this data type's icons and fill
+// the table from it. Other data layers are hidden.
 function selectDataLayer(key: DataType) {
+    // Switching to a different type clears any lingering highlight; clicking an
+    // icon of the already-selected type keeps the selection it just made.
+    if (selectedData.value !== key) selectMarker(null)
     selectedData.value = key
+    if (map) {
+        for (const { key: dk } of DATA_TYPES) {
+            if (dk === key) typeLayers[dk].addTo(map)
+            else typeLayers[dk].remove()
+        }
+    }
     buildTable()
 }
 
@@ -517,12 +607,58 @@ function buildTable() {
         (arr ?? []).filter((n: any) => (path === 'zone' ? n.zone === zone : n.area?.zone === zone))
     const sources: Record<DataType, any[]> = {
         sightseeing: byZone(d.sightseeing, 'zone'),
-        mining: byZone(d.miner, 'areaZone'),
-        botany: byZone(d.botany, 'areaZone'),
+        // A gathering node yields several items that share a node_code, so group
+        // them into one row listing every item at that node.
+        mining: groupByNodeCode(byZone(d.miner, 'areaZone')),
+        botany: groupByNodeCode(byZone(d.botany, 'areaZone')),
         fates: byZone(d.fates, 'zone'),
         eliteHunts: byZone(d.eliteHunts, 'areaZone'),
     }
     tableRows.value = sources[key]
+
+    // Gathering rows list their items with game icons — fetch any not yet cached.
+    if (key === 'mining' || key === 'botany') {
+        for (const row of tableRows.value) {
+            for (const it of row._items ?? []) ensureItemIcon(it.name)
+        }
+    }
+}
+
+// Item game icons (xivapi), looked up by item name and cached across zones so
+// repeated materials (e.g. shards) are only fetched once.
+const itemIcons = reactive<Record<string, string | null>>({})
+async function ensureItemIcon(name: string) {
+    if (name in itemIcons) return
+    itemIcons[name] = null // reserve so we don't fetch the same name twice
+    try {
+        const query = encodeURIComponent(`Name="${name}"`)
+        const res = await fetch(`${BASE_URL}/api/search?sheets=Item&query=${query}&fields=Icon.path&limit=1`)
+        if (!res.ok) return
+        const data = await res.json()
+        const path = data?.results?.[0]?.fields?.Icon?.path
+        if (path) itemIcons[name] = mapMarkerIconUrl(path)
+    } catch {
+        /* leave null — the row still shows the name + tracker */
+    }
+}
+
+// Collapse nodes sharing a node_code into one row whose `name` lists every item.
+// `_items` keeps the underlying nodes for marker lookup.
+function groupByNodeCode(nodes: any[]): any[] {
+    const groups = new Map<string, any>()
+    for (const n of nodes) {
+        const code = n.node_code
+        const existing = groups.get(code)
+        if (existing) {
+            existing._items.push(n)
+            existing.name += `, ${n.name}`
+            // The group's timer reflects any timed item, not just the first.
+            if (!existing.time && n.time) existing.time = n.time
+        } else {
+            groups.set(code, { ...n, _items: [n] })
+        }
+    }
+    return [...groups.values()]
 }
 
 // Render a table cell value, blanking out empty / falsey fields.
@@ -553,8 +689,58 @@ function makeMarker(
             className: 'leafletMap_tooltip',
         })
     }
-    if (onClick) marker.on('click', onClick)
+    // Only clickable (data) markers participate in selection — map markers like
+    // aetherytes pass no onClick, so clicking them does nothing.
+    if (onClick) {
+        marker.on('click', () => {
+            selectMarker(marker)
+            onClick()
+        })
+    }
     return marker
+}
+
+// Register the node(s) a marker represents so a table-row click can find it, and
+// remember which row to highlight when the marker itself is clicked.
+function registerNodeMarker(marker: L.Marker, nodes: any[], repRow: any) {
+    ;(marker as any)._repRow = repRow
+    for (const n of nodes) nodeMarkers.set(n, marker)
+}
+
+// Highlight a set of markers on the map (and a table row), clearing the
+// previous selection. Most types select a single marker; elite hunts select
+// every spawn-point marker for the chosen hunt.
+function selectMarkers(markers: L.Marker[], repRow: any) {
+    for (const m of selectedMarkers) m.getElement()?.classList.remove('leafletMap_markerIcon--active')
+    selectedMarkers = markers
+    for (const m of markers) m.getElement()?.classList.add('leafletMap_markerIcon--active')
+    selectedCode.value = repRow?.node_code ?? null
+}
+
+// Convenience for the single-marker types.
+function selectMarker(marker: L.Marker | null) {
+    selectMarkers(marker ? [marker] : [], marker ? (marker as any)._repRow : null)
+}
+
+// Elite hunts: highlight all spawn-point markers for a hunt and pan to the first.
+function selectHunt(hunt: any) {
+    const markers = huntMarkers.get(hunt) ?? []
+    selectMarkers(markers, hunt)
+    if (markers.length && map) map.panTo(markers[0].getLatLng())
+}
+
+// Table-row click: highlight the row, animate its marker(s), and pan to them.
+function selectTableRow(row: any) {
+    if (selectedData.value === 'eliteHunts') {
+        selectHunt(row)
+        return
+    }
+    // Grouped (gathering) rows carry their underlying nodes in `_items`.
+    const lookup = row._items ? row._items[0] : row
+    const marker = nodeMarkers.get(lookup) ?? null
+    selectMarker(marker)
+    selectedCode.value = row.node_code ?? null
+    if (marker && map) map.panTo(marker.getLatLng())
 }
 
 // Convert a sheet icon path ("ui/icon/060000/060453.tex") to a PNG asset URL.
@@ -592,10 +778,12 @@ function renderSightseeing(zone: string) {
     for (const n of nodes) {
         const latlng = nodeLatLng(n)
         if (!latlng) continue
-        makeMarker(latlng, `${ICON_CDN}/sightseeing.webp`, n.name, () => {
+        const m = makeMarker(latlng, `${ICON_CDN}/sightseeing.webp`, n.name, () => {
             selectDataLayer('sightseeing')
             showNodeDetails(n, fetchVistaApi)
-        }).addTo(layer)
+        })
+        registerNodeMarker(m, [n], n)
+        m.addTo(layer)
         count++
     }
     counts.sightseeing = count
@@ -623,10 +811,12 @@ function renderGathering(zone: string, job: 'miner' | 'botany', typeKey: IconTyp
         const latlng = nodeLatLng(here[0])
         if (!latlng) continue
         const label = here.map((n) => n.name).join(', ')
-        makeMarker(latlng, `${ICON_CDN}/${here[0].job_sub}.webp`, label, () => {
+        const m = makeMarker(latlng, `${ICON_CDN}/${here[0].job_sub}.webp`, label, () => {
             selectDataLayer(typeKey as DataType)
             showNodeDetails(here, fetchItemApi)
-        }).addTo(layer)
+        })
+        registerNodeMarker(m, here, here[0])
+        m.addTo(layer)
         count++
     }
     counts[typeKey] = count
@@ -641,10 +831,12 @@ function renderFates(zone: string) {
     for (const n of nodes) {
         const latlng = nodeLatLng(n)
         if (!latlng) continue
-        makeMarker(latlng, `${ICON_CDN}/fate_${n.job_sub}.webp`, n.name, () => {
+        const m = makeMarker(latlng, `${ICON_CDN}/fate_${n.job_sub}.webp`, n.name, () => {
             selectDataLayer('fates')
             showNodeDetails(n, fetchFateApi)
-        }).addTo(layer)
+        })
+        registerNodeMarker(m, [n], n)
+        m.addTo(layer)
         count++
     }
     counts.fates = count
@@ -677,10 +869,19 @@ function renderEliteHunts(zone: string) {
         if (!latlng) continue
         const iconName = here.some((h) => h.rank === 'SS') ? 'hunts_ss' : 'hunts'
         const label = here.map((h) => `${h.name} (${h.rank})`).join(', ')
-        makeMarker(latlng, `${ICON_CDN}/${iconName}.webp`, label, () => {
+        const m = makeMarker(latlng, `${ICON_CDN}/${iconName}.webp`, label, () => {
             selectDataLayer('eliteHunts')
+            // Highlight every spawn point for the hunt(s) at this icon, not just one.
+            selectHunt(here[0])
             showNodeDetails(here, fetchHuntApi)
-        }).addTo(layer)
+        })
+        ;(m as any)._repRow = here[0]
+        // Index this marker under every hunt that spawns at this position.
+        for (const hunt of here) {
+            if (!huntMarkers.has(hunt)) huntMarkers.set(hunt, [])
+            huntMarkers.get(hunt)!.push(m)
+        }
+        m.addTo(layer)
         count++
     }
     counts.eliteHunts = count
@@ -839,8 +1040,7 @@ function clearDetails() {
 
 <script lang="ts">
 export default {
-    name: 'TestBuildPage',
-    props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
+    name: 'Eorzea Overview',
     methods: {
         getNodeTitle(data: any) {
 
@@ -1238,9 +1438,53 @@ export default {
         vertical-align: top;
     }
 
+    tbody tr {
+        cursor: pointer;
+    }
+
     tbody tr:hover td {
         background: rgba(45, 212, 191, 0.05);
     }
+
+    tbody tr.leafletMap_tableRow--active td {
+        background: rgba(45, 212, 191, 0.18);
+        box-shadow: inset 3px 0 0 $teal;
+    }
+}
+
+/* Gathering table cells. Each item is its own row; the timer cell uses rowspan
+   to span the node and is centered. */
+.leafletMap_cellItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+.leafletMap_itemImg {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 1px #000);
+}
+.leafletMap_cellTrack {
+    text-align: center;
+}
+.leafletMap_cellTrack > * {
+    display: inline-flex;
+}
+.leafletMap_cellMeta {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: #5a6e90;
+    white-space: nowrap;
+    text-transform: capitalize;
+}
+.leafletMap_cellTimer {
+    text-align: center;
+    vertical-align: middle;
+}
+/* Stronger divider between gathering nodes than between items within a node. */
+.leafletMap_table tbody tr.leafletMap_groupStart td {
+    border-top: 1px solid rgba(45, 212, 191, 0.25);
 }
 
 .leafletMap_tableEmpty {
@@ -1287,6 +1531,21 @@ export default {
 /* Crisp marker icons with a subtle shadow so they read against the map. */
 :deep(.leafletMap_markerIcon) {
     filter: drop-shadow(0 0 2px #000);
+}
+
+/* Selected icon — pulses with a teal halo so it stands out from the rest.
+   Animating `filter` (not `transform`) leaves Leaflet's positioning intact. */
+:deep(.leafletMap_markerIcon--active) {
+    z-index: 1000 !important;
+    animation: leafletMap_iconPulse 1s ease-in-out infinite;
+}
+@keyframes leafletMap_iconPulse {
+    0%, 100% {
+        filter: drop-shadow(0 0 2px #000) drop-shadow(0 0 4px #2dd4bf);
+    }
+    50% {
+        filter: drop-shadow(0 0 3px #000) drop-shadow(0 0 14px #2dd4bf) brightness(1.5);
+    }
 }
 
 /* Hover label above each icon — styled to match the homepage's nav buttons. */
