@@ -5,29 +5,15 @@
     </p>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Time Display",
-        props: ['timeId', 'timerList'],
-        emits: ['timeActive'],
-        data() {
-            return {
-                active: false as boolean,
-                timer: '' as string
-            }
-        },
-        computed: {
-            fetchTimer() {
-                if (this.timeId) {
-                    let results = this.timerList.find((o: any) => o.ID == this.timeId)
-                    this.active = results.stateActive
-                    
-                    return results.countdown
-                }
-                return 'Any Time'
-            }
-        }
-    }
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+const props = defineProps(['timeId', 'timerList'])
+defineEmits(['timeActive'])
+
+const result = computed(() => (props.timeId ? props.timerList.find((o: any) => o.ID == props.timeId) : null))
+const active = computed(() => !!result.value?.stateActive)
+const fetchTimer = computed(() => (props.timeId ? result.value?.countdown : 'Any Time'))
 </script>
 
 <style scoped lang="scss">

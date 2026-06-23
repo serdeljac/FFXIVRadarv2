@@ -6,12 +6,6 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Menu Button",
-    }
-</script>
-
 <style scoped lang="scss">
     .menu_Btn {
         cursor: pointer;

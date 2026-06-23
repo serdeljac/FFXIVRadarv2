@@ -41,64 +41,47 @@
     </ul>
 </template>
 
-<script lang="ts">
-    import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue';
-    import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
-    import iconImgAPI from '../../API/iconImg.vue';
+<script lang="ts" setup>
+import { ref, watch } from 'vue'
+import iconAndText from '../../ui/iconAndText.vue'
+import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
+import iconImgAPI from '../../API/iconImg.vue'
 
-    export default {
-        name: 'List Item - Gathering',
-        components: {displayAreaText, iconAndText, toggleTrackingBtn, iconImgAPI},
-        props: ['data', 'timerList', 'focusNode', 'windowWidth'],
-        emits: ['focusNode', 'changeTracked'],
-        data() {
-            return {
-                nodeList: {} as any,
-            }
-        },
-        created() {
-            //Create and object where property is the node_code and the contents are the materials
-            this.groupNodes() 
-        },
-        methods: {
-            fetchTimerCountdowns(time: string) {
-                if (time) {
-                    let results = this.timerList.find((o: any) => o.ID == time).countdown
-                    return results
-                }
-                return 'Any Time'
-            },
-            groupNodes() {
-                let groupedNodes: any = {}
+const props = defineProps(['data', 'timerList', 'focusNode', 'windowWidth'])
+defineEmits(['focusNode', 'changeTracked'])
 
-                //Fetch each unique node_code
-                let fetchNodeCodes = this.data.filter((obj: any, index: any) => 
-                    index === this.data.findIndex((o: any) => obj.node_code === o.node_code)
-                );
+const nodeList = ref<any>({})
 
-                //Filter each material based on the found node_code
-                for (const d in fetchNodeCodes) {
-                    let nodeCode = fetchNodeCodes[d].node_code
-                    let materials = this.data.filter((o: any) => o.node_code == nodeCode)
-                    materials.sort((a, b) => b.isshard + a.isshard);
-                    groupedNodes[nodeCode] = materials
-                }
+function fetchTimerCountdowns(time: string) {
+    if (time) return props.timerList.find((o: any) => o.ID == time).countdown
+    return 'Any Time'
+}
 
-                this.nodeList = groupedNodes
-            },
-            checkRowActive(arr: any) {
-                let currentTime = arr.time ? this.timerList.find((o: any) => o.ID == arr.time).stateActive : null
-                if (currentTime) {return true}
-                return null
-            },
-        },
-        watch: {
-            'data'() {
-                this.groupNodes() 
-            }
-        }
+// Build an object keyed by node_code whose contents are that node's materials.
+function groupNodes() {
+    const groupedNodes: any = {}
+
+    const fetchNodeCodes = props.data.filter((obj: any, index: number) =>
+        index === props.data.findIndex((o: any) => obj.node_code === o.node_code)
+    )
+
+    for (const d in fetchNodeCodes) {
+        const nodeCode = fetchNodeCodes[d].node_code
+        const materials = props.data.filter((o: any) => o.node_code == nodeCode)
+        materials.sort((a: any, b: any) => b.isshard + a.isshard)
+        groupedNodes[nodeCode] = materials
     }
+
+    nodeList.value = groupedNodes
+}
+
+function checkRowActive(arr: any) {
+    const currentTime = arr.time ? props.timerList.find((o: any) => o.ID == arr.time).stateActive : null
+    return currentTime ? true : null
+}
+
+groupNodes()
+watch(() => props.data, groupNodes)
 </script>
 
 <style scoped lang="scss">

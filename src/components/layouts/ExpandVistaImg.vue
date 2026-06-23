@@ -4,15 +4,10 @@
     </div>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
 import vistaSmallAPI from '../API/vistaImg.vue'
 
-    export default {
-        name: "Expand Vista Image",
-        props: ['node'],
-        components: { vistaSmallAPI },
-
-    }
+defineProps(['node'])
 </script>
 
 <style scoped lang="scss">

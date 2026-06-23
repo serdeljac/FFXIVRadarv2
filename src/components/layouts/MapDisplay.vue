@@ -59,106 +59,72 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImg(jobName: string, subJob: string): string {
-        let name: string
-        if (jobName === 'fates') {
-            name = `fate_${subJob}`
-        } else if (jobName === 'eliteHunts') {
-            name = subJob === 'SS' ? 'hunts_ss' : 'hunts'
-        } else {
-            name = subJob
-        }
-        return name
+import { ref, computed } from 'vue'
+import mapImgAPI from '../API/mapImg.vue'
+import iconImgAPI from '../API/iconImg.vue'
+
+const props = defineProps(['ffxivData', 'focusNode', 'originClass', 'mapSize'])
+
+const pointSelection = ref<any>([])
+const pointSelected = ref('')
+
+const mapScale = computed(() => props.mapSize / 800)
+
+const aetheryteNodes = computed<any[]>(() =>
+    props.ffxivData.aetheryte.filter((o: any) => o.zone === props.focusNode.area.zone)
+)
+
+const unchainedNodes = computed<any[]>(() => {
+    if (props.focusNode.job === 'eliteHunts') return []
+    return props.ffxivData[props.focusNode.job].filter(
+        (o: any) => o.area.zone === props.focusNode.area.zone && !o.chain_set
+    )
+})
+
+const chainedNodes = computed<any[]>(() => {
+    if (props.focusNode.job === 'eliteHunts') return []
+    return props.ffxivData[props.focusNode.job].filter(
+        (o: any) => o.area.zone === props.focusNode.area.zone && !!o.chain_set
+    )
+})
+
+const huntNodes = computed<any[]>(() => {
+    if (props.focusNode.job !== 'eliteHunts') return []
+
+    // Collect all spawn points for this zone
+    const rawPoints: any[] = props.ffxivData.eliteHunts
+        .filter((o: any) => o.area.zone === props.focusNode.area.zone)
+        .flatMap((o: any) =>
+            o.points.map((p: any) => ({ ...p, job: 'eliteHunts', job_sub: o.rank }))
+        )
+
+    // Deduplicate by pixel position using a Map keyed on "x,y"
+    const seen = new Map<string, any>()
+    for (const p of rawPoints) {
+        const key = `${p.transx},${p.transy}`
+        if (!seen.has(key)) seen.set(key, p)
     }
-</script>
+    return [...seen.values()]
+})
 
-<script lang="ts">
-    import mapImgAPI from '../API/mapImg.vue'
-    import iconImgAPI from '../API/iconImg.vue';
+function getIconImg(jobName: string, subJob: string): string {
+    if (jobName === 'fates') return `fate_${subJob}`
+    if (jobName === 'eliteHunts') return subJob === 'SS' ? 'hunts_ss' : 'hunts'
+    return subJob
+}
 
-    export default {
-    name: 'EorzeaMap',
-    props: ['ffxivData', 'focusNode', 'originClass', 'mapSize'],
-    components: { mapImgAPI, iconImgAPI },
-    data() {
-        return {
-            pointSelection: [] as any,
-            pointSelected: '' as string,
-        }
-    },
+function getCoordinates(node: any): string {
+    if (node.transx) {
+        return `${node.transx}px, ${node.transy}px`
+    }
+    const { mapsize } = node.area
+    const x = Math.floor((node.x / mapsize) * 800)
+    const y = Math.floor((node.y / mapsize) * 800)
+    return `${x}px, ${y}px`
+}
 
-    computed: {
-        mapScale(): number {
-            return this.mapSize / 800
-        },
-
-        pointArea(): any[] {
-            let results = this.ffxivData.areas.filter((o: any) => o.area == this.focusNode.area.area)
-            return results
-        },
-
-        aetheryteNodes(): any[] {
-            return this.ffxivData.aetheryte.filter(
-                (o: any) => o.zone === this.focusNode.area.zone
-            )
-        },
-
-        unchainedNodes(): any[] {
-            if (this.focusNode.job === 'eliteHunts') return []
-            return this.ffxivData[this.focusNode.job].filter(
-                (o: any) =>
-                    o.area.zone === this.focusNode.area.zone && !o.chain_set
-            )
-        },
-
-        chainedNodes(): any[] {
-            if (this.focusNode.job === 'eliteHunts') return []
-            return this.ffxivData[this.focusNode.job].filter(
-                (o: any) =>
-                    o.area.zone === this.focusNode.area.zone && !!o.chain_set
-            )
-        },
-
-        huntNodes(): any[] {
-            if (this.focusNode.job !== 'eliteHunts') return []
-
-            // Collect all spawn points for this zone
-            const rawPoints: any[] = this.ffxivData.eliteHunts
-                .filter((o: any) => o.area.zone === this.focusNode.area.zone)
-                .flatMap((o: any) =>
-                    o.points.map((p: any) => ({
-                        ...p,
-                        job: 'eliteHunts',
-                        job_sub: o.rank,
-                    }))
-                )
-
-            // Deduplicate by pixel position using a Map keyed on "x,y"
-            const seen = new Map<string, any>()
-            for (const p of rawPoints) {
-                const key = `${p.transx},${p.transy}`
-                if (!seen.has(key)) seen.set(key, p)
-            }
-            return [...seen.values()]
-        },
-    },
-
-    methods: {
-        getCoordinates(node: any): string {
-            if (node.transx) {
-                return `${node.transx}px, ${node.transy}px`
-            }
-            const { mapsize } = node.area
-            const x = Math.floor((node.x / mapsize) * 800)
-            const y = Math.floor((node.y / mapsize) * 800)
-            return `${x}px, ${y}px`
-        },
-
-        isActiveRank(rank: string): boolean {
-            return rank.includes(this.focusNode.rank)
-        },
-
-    },
+function isActiveRank(rank: string): boolean {
+    return rank.includes(props.focusNode.rank)
 }
 </script>
 

@@ -15,41 +15,25 @@
     </div>
 </template>
 
-<script lang="ts">
-    import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
-    import btnTracking from '../../ui/buttons/toggleTracking.vue'
-    import timeDisplay from '../../ui/displayTime.vue'
+<script lang="ts" setup>
+import { computed } from 'vue'
+import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
+import btnTracking from '../../ui/buttons/toggleTracking.vue'
+import timeDisplay from '../../ui/displayTime.vue'
 
-    export default {
-        name: "Trackingbar Item",
-        props: ['timerList', 'weatherList', 'node'],
-        emits: ['changeTracked', 'openDetails'],
-        components: { btnToggleDetails, btnTracking, timeDisplay},
-        computed: {
-            getActiveState() {
-                let timerState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : null;
-                
-                if (this.node.job == 'sightseeing') {
-                    let curW = this.weatherList[this.node.area.mapcode]
-                    let weather1 = this.node.weather1
-                    let weather2 = this.node.weather2
+const props = defineProps(['timerList', 'weatherList', 'node'])
+defineEmits(['changeTracked', 'openDetails'])
 
-                    let weatherState = curW == weather1 || curW == weather2 ? true : null
-                    let compare = timerState && weatherState ? true : null
-                    return compare
-                }
-                return timerState
-            },
-            getTimer() {
-                if (this.node.time) {
-                    let results = this.timerList.find((o: any) => o.ID == this.node.time).countdown
-                    return results
-                }
-                return '--:--'
-            },
-            isGathering(): boolean {
-                return this.node.job === 'miner' || this.node.job === 'botany'
-            },
-        }
+const getActiveState = computed(() => {
+    const timerState = props.timerList.find((o: any) => o.ID === props.node.time).stateActive ? true : null
+
+    if (props.node.job == 'sightseeing') {
+        const curW = props.weatherList[props.node.area.mapcode]
+        const weatherState = curW == props.node.weather1 || curW == props.node.weather2 ? true : null
+        return timerState && weatherState ? true : null
     }
+    return timerState
+})
+
+const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
 </script>

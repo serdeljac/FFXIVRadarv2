@@ -11,12 +11,13 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { onMounted } from 'vue'
 
 onMounted(() => {
   try {
-    (window.adsbygoogle = window.adsbygoogle || []).push({})
+    const w = window as any
+    ;(w.adsbygoogle = w.adsbygoogle || []).push({})
   } catch (e) {
     console.error('AdSense error:', e)
   }

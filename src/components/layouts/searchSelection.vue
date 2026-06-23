@@ -27,14 +27,11 @@
     </div>
 </template>
 
-<script lang="ts">
-    import iconImgAPI from '../API/iconImg.vue';
-    export default {
-        name: 'Zone Select',
-        props: ['zoneList', 'windowWidth'],
-        emits: ['zoneSelected', 'closeMenu'],
-        components: {iconImgAPI},
-    }
+<script lang="ts" setup>
+import iconImgAPI from '../API/iconImg.vue'
+
+defineProps(['zoneList', 'windowWidth'])
+defineEmits(['zoneSelected', 'closeMenu'])
 </script>
 
 <style scoped lang="scss">

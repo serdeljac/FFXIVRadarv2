@@ -19,6 +19,9 @@
 
 <script lang="ts" setup>
     import iconImgAPI from '../../API/iconImg.vue';
+
+    defineProps(['sidebarLayout'])
+
     const link_list = [
         {
             id: 1,
@@ -70,12 +73,4 @@
             link: 'privatePolicy',
         },
     ]
-</script>
-
-<script lang="ts">
-    export default {
-        name: "List Items",
-        props: ['sidebarLayout'],
-        components: {iconImgAPI},
-    }
 </script>

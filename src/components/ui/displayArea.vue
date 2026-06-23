@@ -8,13 +8,10 @@
     </div>
 </template>
 
-<script lang="ts">
-import iconImgAPI from '../API/iconImg.vue';
-    export default {
-        name: "Area Display",
-        props: ['node'],
-        components: {iconImgAPI}
-    }
+<script lang="ts" setup>
+import iconImgAPI from '../API/iconImg.vue'
+
+defineProps(['node'])
 </script>
 
 <style scoped lang="scss">

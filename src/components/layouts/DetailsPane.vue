@@ -146,94 +146,47 @@
     </aside>
 </template>
 
-<script lang="ts">
+<script lang="ts" setup>
+import { computed } from 'vue'
 import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 import vistaSmallAPI from '../API/vistaImg.vue'
 
-
+const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
+defineEmits(['openDetails', 'openVistaImg'])
 
 function stars(count: number): string {
     return '★'.repeat(Math.max(0, count ?? 0))
 }
 
-export default {
-    name: 'DetailsPane',
-    components: { mapDisplay, iconAndText, closeDetailsBtn, vistaSmallAPI },
-    props: ['ffxivData', 'node', 'timerList', 'weatherList'],
-    emits: ['openDetails', 'openVistaImg'],
-    computed: {
-        isGathering(): boolean {
-            return this.node.job === 'miner' || this.node.job === 'botany'
-        },
+const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
 
-        otherMaterials(): any[] {
-            const { node_code, name, job } = this.node
-            const matches = this.ffxivData[job].filter(
-                (o: any) => o.node_code === node_code && o.name !== name
-            )
-            return matches.length ? matches : [{ name: 'None', ID: '000' }]
-        },
+const otherMaterials = computed<any[]>(() => {
+    const { node_code, name, job } = props.node
+    const matches = props.ffxivData[job].filter((o: any) => o.node_code === node_code && o.name !== name)
+    return matches.length ? matches : [{ name: 'None', ID: '000' }]
+})
 
-        isTimeActive(): boolean {
-            const timeState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : null
-            return timeState
-        },
+const isTimeActive = computed(() => (props.timerList.find((o: any) => o.ID === props.node.time)?.stateActive ? true : null))
+const isWeather1Active = computed(() => (props.weatherList[props.node.area.mapcode] == props.node.weather1 ? true : null))
+const isWeather2Active = computed(() => (props.weatherList[props.node.area.mapcode] == props.node.weather2 ? true : null))
 
-        isWeather1Active(): boolean {
-            const weatherState = this.weatherList[this.node.area.mapcode] == this.node.weather1 ? true : null
-            return weatherState
-        },
+const isTimeAndWeatherActive = computed(() => {
+    const timeState = props.timerList.find((o: any) => o.ID === props.node.time)?.stateActive ? true : false
+    const weatherState1 = props.weatherList[props.node.area.mapcode] == props.node.weather1
+    const weatherState2 = props.weatherList[props.node.area.mapcode] == props.node.weather2
+    return timeState && (weatherState1 || weatherState2) ? true : null
+})
 
-        isWeather2Active(): boolean {
-            const weatherState = this.weatherList[this.node.area.mapcode] == this.node.weather2 ? true : null
-            return weatherState
-        },
+function timerCountdown(time: string): string {
+    if (!time) return 'Any Time'
+    return props.timerList.find((o: any) => o.ID === time)?.countdown ?? 'Any Time'
+}
 
-        isTimeAndWeatherActive(): boolean {
-            const timeState = this.timerList.find((o: any) => o.ID === this.node.time).stateActive ? true : false
-            const weatherState1 = this.weatherList[this.node.area.mapcode] == this.node.weather1 ? true : false
-            const weatherState2 = this.weatherList[this.node.area.mapcode] == this.node.weather2 ? true : false
-            let match = timeState && (weatherState1 || weatherState2) ? true : null
-            return match
-        }
-    },
-
-    methods: {
-        stars,
-
-        timerCountdown(time: string): string {
-            if (!time) return 'Any Time'
-            return this.timerList.find((o: any) => o.ID === time)?.countdown ?? 'Any Time'
-        },
-
-        
-        getVistaInfo(type: string) {
-            let expFound = this.ffxivData.expansion.find((o: any) => o.expansion == this.node.expansion)
-            if (type == 'exp') {
-                return expFound.vista_exp == 0 ? 'None' : expFound.vista_exp
-            }
-            else if (type == 'level') {
-                return `LV. ${expFound.vista_min} - ${expFound.vista_max}`
-            }
-        },
-
-        isRowActive(node: any, type: 'time' | 'weather'): boolean {
-            if (type === 'time') {
-                if (!node.time) return false
-                return !!this.timerList.find((o: any) => o.ID === node.time)?.stateActive
-            }
-            if (type === 'weather') {
-                const cur = this.weatherList[node.area.mapcode]
-                return cur === node.weather1 || cur === node.weather2
-            }
-            return false
-        },
-
-        isWeatherActive(field: 'weather1' | 'weather2', node: any): boolean {
-            return this.weatherList[node.area.mapcode] === node[field]
-        },
-    },
+function getVistaInfo(type: string) {
+    const expFound = props.ffxivData.expansion.find((o: any) => o.expansion == props.node.expansion)
+    if (type == 'exp') return expFound.vista_exp == 0 ? 'None' : expFound.vista_exp
+    if (type == 'level') return `LV. ${expFound.vista_min} - ${expFound.vista_max}`
 }
 </script>

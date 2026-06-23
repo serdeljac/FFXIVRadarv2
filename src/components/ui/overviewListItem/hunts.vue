@@ -42,16 +42,11 @@
     </ul>
 </template>
 
-<script lang="ts">
-    import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue'
+<script lang="ts" setup>
+import iconAndText from '../../ui/iconAndText.vue'
 
-    export default {
-        name: 'List Item - Hunts',
-        components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode', 'windowWidth'],
-        emits: ['focusNode'],
-    }
+defineProps(['data', 'focusNode', 'windowWidth'])
+defineEmits(['focusNode'])
 </script>
 
 <style scoped lang="scss"> 

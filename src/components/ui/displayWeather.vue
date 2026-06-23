@@ -6,35 +6,17 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Time Display",
-        props: ['node', 'weatherList'],
-        emits: ['weatherActive'],
-        data() {
-            return {
-                weather1Active: false as boolean,
-                weather2Active: false as boolean,
-                timer: '' as string,
-            }
-        },
-        computed: {
-            fetchWeather1() {
-                let nodeWeather = this.node.weather1
-                let currentWeather = this.weatherList[this.node.area.mapcode]
-                let weather = nodeWeather ? nodeWeather : 'Any Weather'
-                this.weather1Active = nodeWeather == currentWeather ? true : false
-                return weather
-            },
-            fetchWeather2() {
-                let nodeWeather = this.node.weather2
-                let currentWeather = this.weatherList[this.node.area.mapcode]
-                let weather = nodeWeather ? nodeWeather : ''
-                this.weather2Active = nodeWeather == currentWeather ? true : false
-                return weather
-            },
-        }
-    }
+<script lang="ts" setup>
+import { computed } from 'vue'
+
+const props = defineProps(['node', 'weatherList'])
+defineEmits(['weatherActive'])
+
+const currentWeather = computed(() => props.weatherList[props.node.area.mapcode])
+const weather1Active = computed(() => props.node.weather1 == currentWeather.value)
+const weather2Active = computed(() => props.node.weather2 == currentWeather.value)
+const fetchWeather1 = computed(() => (props.node.weather1 ? props.node.weather1 : 'Any Weather'))
+const fetchWeather2 = computed(() => (props.node.weather2 ? props.node.weather2 : ''))
 </script>
 
 <style scoped lang="scss">

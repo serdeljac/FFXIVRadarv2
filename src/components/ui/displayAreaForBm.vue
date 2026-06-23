@@ -9,20 +9,13 @@
 </template>
 
 <script lang="ts" setup>
-    function getIconImageURL(data: any) {
-        const name = data[1] ? `sq_${data[1]}` : `sq_${data[0]}`
-        return name
-    }
+import iconImgAPI from '../API/iconImg.vue'
 
-</script>
+defineProps(['bmData'])
 
-<script lang="ts">
-    import iconImgAPI from '../API/iconImg.vue';
-    export default {
-        name: "Icon & Text Blue Mage",
-        props: ['bmData'],
-        components: {iconImgAPI}
-    }
+function getIconImageURL(data: any) {
+    return data[1] ? `sq_${data[1]}` : `sq_${data[0]}`
+}
 </script>
 
 <style scoped lang="scss">

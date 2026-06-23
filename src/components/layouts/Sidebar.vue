@@ -40,26 +40,17 @@
     </aside>
 </template>
 
-<script lang="ts">
-    import donateBtn from '../ui/buttons/donate.vue'
-    import sidebarLinks from './parts/sidebarLinks.vue'
+<script lang="ts" setup>
+import { ref, computed } from 'vue'
+import donateBtn from '../ui/buttons/donate.vue'
+import sidebarLinks from './parts/sidebarLinks.vue'
 
-    export default {
-        name: 'Sidebar',
-        props: ['sidebarLayout', 'eorzeaClock'],
-        components: {sidebarLinks, donateBtn},
-        data() {
-            return {
-                forceExpanded: true,
-                clockIs24Format: true as boolean,
-            }
-        },
-        computed: {
-            clockMinute() {
-                let m = this.eorzeaClock.displayMin
-                let fix = m < 10 ? `0${m}` : m
-                return fix
-            }
-        }
-    }
+const props = defineProps(['sidebarLayout', 'eorzeaClock'])
+
+const clockIs24Format = ref(true)
+
+const clockMinute = computed(() => {
+    const m = props.eorzeaClock.displayMin
+    return m < 10 ? `0${m}` : m
+})
 </script>

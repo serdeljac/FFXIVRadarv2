@@ -6,13 +6,10 @@
     </div>
 </template>
 
-<script lang="ts">
-    import iconImgAPI from '../API/iconImg.vue';
-    export default {
-        name: "Display Area in Text",
-        props: ['areaObj', 'excludeBackground'],
-        components: {iconImgAPI},
-    }
+<script lang="ts" setup>
+import iconImgAPI from '../API/iconImg.vue'
+
+defineProps(['areaObj', 'excludeBackground'])
 </script>
 
 <style scoped lang="scss">

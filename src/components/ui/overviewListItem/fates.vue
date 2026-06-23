@@ -45,47 +45,36 @@
     </ul>
 </template>
 
-<script lang="ts">
-import displayAreaText from '../../ui/displayAreaText.vue';
+<script lang="ts" setup>
+import { reactive } from 'vue'
 import iconAndText from '../../ui/iconAndText.vue'
 
-    export default {
-        name: 'List Item - Fates',
-        components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode', 'windowWidth'],
-        emits: ['focusNode'],
-        data() {
-            return {
-                nodeList: {} as any,
-            }
-        },
-        created() {
-            //Seperate data into two sets: individual fates and chained fates
-            this.groupNodes()
-        },
-        methods: {
-            groupNodes() {
-                //Filter out the chain sets and append
-                let noChainList = this.data.filter((o: any) => !o.chain_set)
-                this.nodeList['nochainset'] = noChainList
+const props = defineProps(['data', 'focusNode', 'windowWidth'])
+defineEmits(['focusNode'])
 
-                //Filter only chain sets and get unique chain set no
-                let chainList = this.data.filter((o: any) => o.chain_set)
-                chainList = chainList.filter((obj: any, index: any) => 
-                    index === chainList.findIndex((o: any) => obj.chain_set === o.chain_set)
-                );
+const nodeList = reactive<any>({})
 
-                //Group each set into an object by the chain_set no
-                let groupedChainSet: any = {}
-                for (const d in chainList) {
-                    let curSet = chainList[d].chain_set
-                    let foundSet = this.data.filter((o:any) => o.chain_set == curSet)
-                    groupedChainSet[curSet] = foundSet
-                }
-                this.nodeList['chainset'] = groupedChainSet
-            },
-        },
+// Separate data into two sets: individual fates and chained fates.
+function groupNodes() {
+    // Non-chained fates
+    nodeList.nochainset = props.data.filter((o: any) => !o.chain_set)
+
+    // Unique chain sets
+    let chainList = props.data.filter((o: any) => o.chain_set)
+    chainList = chainList.filter((obj: any, index: number) =>
+        index === chainList.findIndex((o: any) => obj.chain_set === o.chain_set)
+    )
+
+    // Group each set into an object keyed by chain_set
+    const groupedChainSet: any = {}
+    for (const d in chainList) {
+        const curSet = chainList[d].chain_set
+        groupedChainSet[curSet] = props.data.filter((o: any) => o.chain_set == curSet)
     }
+    nodeList.chainset = groupedChainSet
+}
+
+groupNodes()
 </script>
 
 <style scoped lang="scss">

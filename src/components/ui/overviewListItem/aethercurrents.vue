@@ -35,35 +35,23 @@
     </ul>
 </template>
 
-<script lang="ts">
-    import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue'
+<script lang="ts" setup>
+import { reactive } from 'vue'
+import iconAndText from '../../ui/iconAndText.vue'
 
-    export default {
-        name: 'List Item - Aether Currents',
-        components: {displayAreaText, iconAndText},
-        props: ['data', 'focusNode', 'windowWidth'],
-        emits: ['focusNode'],
-        data() {
-            return {
-                nodeList: {} as any,
-            }
-        },
-        created() {
-            this.groupNodes()
-        },
-        methods: {
-            groupNodes() {
-                //Filter by only non-quest nodes
-                let noQuestNodes = this.data.filter((o: any) => !o.name)
-                this.nodeList['noquest'] = noQuestNodes
+const props = defineProps(['data', 'focusNode', 'windowWidth'])
+defineEmits(['focusNode'])
 
-                //Filter by only quest nodes
-                let questNodes = this.data.filter((o: any) => o.name)
-                this.nodeList['quest'] = questNodes
-            },
-        }
-    }
+const nodeList = reactive<any>({})
+
+function groupNodes() {
+    // Non-quest nodes
+    nodeList.noquest = props.data.filter((o: any) => !o.name)
+    // Quest nodes
+    nodeList.quest = props.data.filter((o: any) => o.name)
+}
+
+groupNodes()
 </script>
 
 <style scoped lang="scss">

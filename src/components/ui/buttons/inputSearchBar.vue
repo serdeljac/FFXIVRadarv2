@@ -2,20 +2,19 @@
     <input id="searchBox" ref="searchBox" type="text" :value="modelValue" @input="inputValue" placeholder="Search..." />
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Filter Search",
-        props: ['modelValue'],
-        emits: ['selected'],
-        methods: {
-            inputValue(event: any) {
-                this.$emit('selected', event.target.value);
-            },
-        },
-        mounted() {
-            (this.$refs.searchBox as HTMLInputElement).focus()
-        },
-    }
+<script lang="ts" setup>
+import { ref, onMounted } from 'vue'
+
+defineProps(['modelValue'])
+const emit = defineEmits(['selected'])
+
+const searchBox = ref<HTMLInputElement | null>(null)
+
+function inputValue(event: Event) {
+    emit('selected', (event.target as HTMLInputElement).value)
+}
+
+onMounted(() => searchBox.value?.focus())
 </script>
 
 <style scoped lang="scss">

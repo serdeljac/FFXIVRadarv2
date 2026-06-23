@@ -6,11 +6,8 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Toggle Tracking",
-        props: ['trackingEnabled']
-    }
+<script lang="ts" setup>
+defineProps(['trackingEnabled'])
 </script>
 
 <style scoped lang="scss">

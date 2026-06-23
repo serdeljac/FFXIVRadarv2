@@ -8,38 +8,15 @@
     </div>
 </template>
 
-<script lang="ts">
-import iconImgAPI from '../../API/iconImg.vue';
+<script lang="ts" setup>
+import iconImgAPI from '../../API/iconImg.vue'
+
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
 
-export default {
-  name: 'DonateButton',
-  props: ['sidebarLayout'],
-  components: {iconImgAPI},
-  data() {
-    return {
-      beating: false,
-      beatInterval: null
-    }
-  },
+defineProps(['sidebarLayout'])
 
-  mounted() {
-    // Subtle heartbeat animation loop
-    this.beatInterval = setInterval(() => {
-      this.beating = true
-      setTimeout(() => { this.beating = false }, 300)
-    }, 2800)
-  },
-
-  beforeUnmount() {
-    clearInterval(this.beatInterval)
-  },
-
-  methods: {
-    openDonate() {
-      window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
-    }
-  }
+function openDonate() {
+  window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
 }
 </script>
 

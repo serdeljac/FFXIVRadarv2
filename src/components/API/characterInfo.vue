@@ -173,7 +173,7 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 import { ref, computed, watch, onMounted } from 'vue'
 
 // ─── Props ───────────────────────────────────────────────────────────────────
@@ -233,13 +233,13 @@ const localServer = ref(props.initialServer)
 
 // status: idle | loading | results | empty | error | detail
 const status      = ref('idle')
-const results     = ref([])
-const character   = ref(null)
-const selectedId  = ref(null)
+const results     = ref<any[]>([])
+const character   = ref<any>(null)
+const selectedId  = ref<any>(null)
 const detailLoading = ref(false)
 const errorMsg    = ref('')
 const lastQuery   = ref({ name: '', server: '' })
-const prevResults = ref([])   // kept so "back" can restore the list
+const prevResults = ref<any[]>([])   // kept so "back" can restore the list
 
 // ─── Server list ─────────────────────────────────────────────────────────────
 
@@ -277,7 +277,7 @@ const sortedJobs = computed(() => {
 
 const gearItems = computed(() => {
   if (!character.value?.GearSet?.Gear) return []
-  const slotMap = {
+  const slotMap: Record<string, string> = {
     MainHand: 'Main hand', OffHand: 'Off hand',
     Head: 'Head', Body: 'Body', Hands: 'Hands',
     Waist: 'Belt', Legs: 'Legs', Feet: 'Feet',
@@ -296,13 +296,13 @@ const gearItems = computed(() => {
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
-function apiUrl(path) {
+function apiUrl(path: string) {
   const url = new URL(`${BASE}${path}`)
   if (props.apiKey) url.searchParams.set('private_key', props.apiKey)
   return url.toString()
 }
 
-async function apiFetch(path) {
+async function apiFetch(path: string) {
   const res = await fetch(apiUrl(path))
   if (!res.ok) throw new Error(`XIVAPI returned ${res.status}`)
   return res.json()
@@ -342,14 +342,14 @@ async function search() {
     if (data.Results.length === 1) {
       await selectCharacter(data.Results[0])
     }
-  } catch (e) {
+  } catch (e: any) {
     errorMsg.value = e.message ?? 'Failed to reach XIVAPI. Check your network or try again.'
     status.value = 'error'
     emit('error', errorMsg.value)
   }
 }
 
-async function selectCharacter(char) {
+async function selectCharacter(char: any) {
   selectedId.value = char.ID
   status.value = 'detail'
   detailLoading.value = true
@@ -359,7 +359,7 @@ async function selectCharacter(char) {
     const data = await apiFetch(`/character/${char.ID}?extended=1&data=CJ,GS`)
     character.value = data.Character
     emit('character-selected', data.Character)
-  } catch (e) {
+  } catch (e: any) {
     errorMsg.value = e.message ?? 'Failed to load character profile.'
     status.value = 'error'
     emit('error', errorMsg.value)
@@ -387,7 +387,7 @@ watch(() => props.initialName,   v => { localName.value   = v })
 watch(() => props.initialServer, v => { localServer.value = v })
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 /* ── tokens ── */
 .xiv-search {
   --xiv-accent: #c8a96e;

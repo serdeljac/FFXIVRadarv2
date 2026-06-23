@@ -24,7 +24,7 @@
     </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
 
   //Imports
   import { ref, watch, onMounted } from 'vue'
@@ -32,7 +32,7 @@
   //Variables and constants
   const BASE_URL = 'https://v2.xivapi.com'
   const CACHE_NAME = 'ffxivmap_maps'
-  const mapImageUrl = ref(null)
+  const mapImageUrl = ref<string | null>(null)
   const resolvedMapName = ref('')
   const isLoading = ref(false)
   const hasError = ref(false)
@@ -52,7 +52,7 @@
 
   //Methods
 
-  async function loadMap(name) {
+  async function loadMap(name: string) {
     //Set default values for the loading state
     mapImageUrl.value = null
     resolvedMapName.value = ''
@@ -115,7 +115,7 @@
   }
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .loadOrError {z-index: 80;}
 
 .map-wrapper {

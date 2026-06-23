@@ -6,12 +6,6 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Close Details",
-    }
-</script>
-
 <style scoped lang="scss">
     .closeDetailsBtn {
         width: 26px;

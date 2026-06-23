@@ -6,27 +6,17 @@
     </div>
 </template>
 
-<script lang="ts">
-    import iconImgAPI from '../API/iconImg.vue';
-    export default {
-        name: "Icon & Text",
-        props: ['icon', 'text', 'addClass', 'chainNo', 'secIcon'],
-        components: {iconImgAPI},
-        computed: {
-            fetchIconName() {
-                if (this.icon == 'Crafting') {return `sq_${this.icon}`}
-                else if (this.icon == 'eliteHunts') {return 'hunts'}
-                let toLowerCaseName = this.icon.toLowerCase()
-                return toLowerCaseName
-            },
-            fetchOtherIconName() {
-                if (this.secIcon == 'Crafting') {return `sq_${this.secIcon}`}
-                else if (this.secIcon == 'eliteHunts') {return 'hunts'}
-                let toLowerCaseName = this.secIcon.toLowerCase()
-                return toLowerCaseName
-            }
-        },
-    }
+<script lang="ts" setup>
+import { computed } from 'vue'
+import iconImgAPI from '../API/iconImg.vue'
+
+const props = defineProps(['icon', 'text', 'addClass', 'chainNo', 'secIcon'])
+
+const fetchIconName = computed(() => {
+    if (props.icon == 'Crafting') return `sq_${props.icon}`
+    if (props.icon == 'eliteHunts') return 'hunts'
+    return props.icon.toLowerCase()
+})
 </script>
 
 <style scoped lang="scss">

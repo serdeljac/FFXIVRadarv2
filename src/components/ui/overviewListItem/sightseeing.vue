@@ -53,63 +53,51 @@
     </ul>
 </template>
 
-<script lang="ts">
-    import displayAreaText from '../../ui/displayAreaText.vue';
-    import iconAndText from '../../ui/iconAndText.vue';
-    import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue';
-    import vistaSmallAPI from '../../API/vistaImg.vue'
+<script lang="ts" setup>
+import iconAndText from '../../ui/iconAndText.vue'
+import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
+import vistaSmallAPI from '../../API/vistaImg.vue'
 
-    export default {
-        name: 'List Item - Sightseeing',
-        components: {displayAreaText, iconAndText, toggleTrackingBtn, vistaSmallAPI},
-        props: ['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'],
-        emits: ['focusNode', 'changeTracked', 'openVistaImg'],
-        methods: {
-            fetchTimerCountdowns(time: string) {
-                if (time) {
-                    let results = this.timerList.find((o: any) => o.ID == time).countdown
-                    return results
-                }
-                return 'Any Time'
-            },
-            checkTimeActive(type: string, arr: any) {
-                if (type == 'weather1' || type == 'weather2') {
-                    let curWeather = this.weatherList[arr.area.mapcode]
-                    let triggerWeather = arr[type]
-                    if (curWeather == triggerWeather) {return true}
-                    return null
-                }
+const props = defineProps(['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'])
+defineEmits(['focusNode', 'changeTracked', 'openVistaImg'])
 
-                if (type == 'time' && arr.time) {
-                    let results = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                    results = results ? true : null
-                    return results
-                }
-                return null
-            },
-            checkRowActive(arr: any) {
-                let match1: boolean
-                let match2: boolean
+function fetchTimerCountdowns(time: string) {
+    if (time) return props.timerList.find((o: any) => o.ID == time).countdown
+    return 'Any Time'
+}
 
-                //Match1 - Get Time State
-                if (arr.time) {
-                    let currentTimeState = this.timerList.find((o: any) => o.ID == arr.time).stateActive
-                    match1 = currentTimeState ? true : null
-                }
-
-                //Match2 - Get Weather State
-                if (arr.weather1) {
-                    let curWeather = this.weatherList[arr.mapcode]
-                    let condition1 = arr.weather1 == curWeather ? true :  false
-                    let condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true :  false
-                    match2 = condition1 || condition2 ? true : false
-                }
-
-                if (!arr.weather1) {return match1}
-                return match1 == match2 ? true : null
-            },
-        },
+function checkTimeActive(type: string, arr: any) {
+    if (type == 'weather1' || type == 'weather2') {
+        const curWeather = props.weatherList[arr.area.mapcode]
+        return curWeather == arr[type] ? true : null
     }
+
+    if (type == 'time' && arr.time) {
+        return props.timerList.find((o: any) => o.ID == arr.time).stateActive ? true : null
+    }
+    return null
+}
+
+function checkRowActive(arr: any) {
+    let match1: any
+    let match2: any
+
+    // Match1 — time state
+    if (arr.time) {
+        match1 = props.timerList.find((o: any) => o.ID == arr.time).stateActive ? true : null
+    }
+
+    // Match2 — weather state
+    if (arr.weather1) {
+        const curWeather = props.weatherList[arr.mapcode]
+        const condition1 = arr.weather1 == curWeather ? true : false
+        const condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true : false
+        match2 = condition1 || condition2 ? true : false
+    }
+
+    if (!arr.weather1) return match1
+    return match1 == match2 ? true : null
+}
 </script>
 
 <style scoped lang="scss">

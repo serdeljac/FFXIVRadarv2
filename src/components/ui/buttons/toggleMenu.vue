@@ -4,11 +4,8 @@
     </button>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Menu Button",
-        props: ['name', 'disabled', 'enabled']
-    }
+<script lang="ts" setup>
+defineProps(['name', 'disabled', 'enabled'])
 </script>
 
 <style scoped lang="scss">

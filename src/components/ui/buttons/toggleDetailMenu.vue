@@ -6,11 +6,8 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Toggle Details",
-        props: ['direction']
-    }
+<script lang="ts" setup>
+defineProps(['direction'])
 </script>
 
 <style scoped lang="scss">
