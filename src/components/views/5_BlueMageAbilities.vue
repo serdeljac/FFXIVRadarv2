@@ -1,13 +1,8 @@
 <template>
     <div :class="['blueMageAbilties body_content', windowWidth]">
 
-        <!-- Page intro -->
-        <div class="body_content-group page-intro">
-            <h1>Blue Mage Abilities</h1>
-            <p>
-                Blue Mage is FFXIV's Limited Job that learns spells by witnessing enemies use them in battle. With over 100 actions to collect, tracking down the right enemy in the right zone can be a challenge. This reference table lists every Blue Magic spell with the <strong>enemy or NPC</strong> to learn it from, the <strong>minimum Blue Mage level</strong> required to enter that area, and the <strong>exact zone and location</strong>. Filter by spell category or scroll through the full list to plan your learning route.
-            </p>
-        </div>
+        <!-- Header -->
+        <PageHeader :title="`Bluemage Abilities`" :tagline="pageTagLine"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
@@ -73,59 +68,79 @@
     </div>
 </template>
 
-<script lang="ts">
-    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-    import areaDisplayBM from '../ui/displayAreaForBm.vue';
+<script lang="ts" setup>
+import { ref } from 'vue'
+import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+import areaDisplayBM from '../ui/displayAreaForBm.vue'
+import PageHeader from '../ui/displayPageHeader.vue'
 
-    export default {
-        name: "Blue Mage Abilities",
-        components: { toggleFilterBtn, areaDisplayBM },
-        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-        data() {
-            return {
-                filters: [] as [string, string, boolean][],
-                filterSelected: 'All' as string,
-                appendData: [] as any[]
-            }
-        },
-        created() {
-            this.createFilterList()
-        },
-        methods: {
-            createFilterList() {
-                this.filters = this.ffxivData.bluemageFilters.map(
-                    (d: [string, string, boolean], i: number) => [d[0], d[1], i === 0]
-                )
-                this.filterSelected = 'All'
-                this.fetchBlueMageData()
-            },
-            changeFilter(arrayIndex: number) {
-                this.filters.forEach((d, i) => { d[2] = i === arrayIndex })
-                this.filterSelected = this.filters[arrayIndex][1]
-                this.fetchBlueMageData()
-            },
-            isVisibleEntry(entryType: string): boolean {
-                return this.filterSelected === 'All' || this.filterSelected === entryType
-            },
-            fetchBlueMageData() {
-                const filt = this.filterSelected
-                this.appendData = filt === 'All'
-                    ? [...this.ffxivData.bluemageData]
-                    : this.ffxivData.bluemageData.filter(
-                        (d: any) => d.category.includes(filt)
-                    )
-            }
-        }
-    }
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+
+const filters = ref<[string, string, boolean][]>([])
+const filterSelected = ref('All')
+const appendData = ref<any[]>([])
+const pageTagLine = "Blue Mage is FFXIV's Limited Job that learns spells by witnessing enemies use them in battle. With over 100 actions to collect, tracking down the right enemy in the right zone can be a challenge. This reference table lists every Blue Magic spell with the enemy or NPC to learn it from, the minimum Blue Mage level required to enter that area, and the exact zone and location. Filter by spell category or scroll through the full list to plan your learning route."
+
+function createFilterList() {
+    filters.value = props.ffxivData.bluemageFilters.map(
+        (d: [string, string, boolean], i: number) => [d[0], d[1], i === 0]
+    )
+    filterSelected.value = 'All'
+    fetchBlueMageData()
+}
+
+function changeFilter(arrayIndex: number) {
+    filters.value.forEach((d, i) => { d[2] = i === arrayIndex })
+    filterSelected.value = filters.value[arrayIndex][1]
+    fetchBlueMageData()
+}
+
+function isVisibleEntry(entryType: string): boolean {
+    return filterSelected.value === 'All' || filterSelected.value === entryType
+}
+
+function fetchBlueMageData() {
+    const filt = filterSelected.value
+    appendData.value = filt === 'All'
+        ? [...props.ffxivData.bluemageData]
+        : props.ffxivData.bluemageData.filter((d: any) => d.category.includes(filt))
+}
+
+createFilterList()
 </script>
 
 <style scoped lang="scss">
-    .rdrTable_row-area, .rdrTable_row-notes, .rdrTable_row-enemy {
+    .blueMageAbilties {
+        .rdrTable_row {
+            grid-template-columns: 140px 100px 300px 300px auto;
+        }
+
+        .rdrTable.mobile,
+        .rdrTable.tablet {
+            .rdrTable_header,
+            .rdrTable_split {
+                display: none;
+            }
+
+            .rdrTable_row {
+                grid-template-columns: auto auto;
+            }
+
+            .rdrTable_row-area {
+                grid-column: 1 / span 2;
+            }
+        }
+    }
+
+    .rdrTable_row-area,
+    .rdrTable_row-notes,
+    .rdrTable_row-enemy {
         display: flex;
         flex-direction: column;
         gap: 4px;
         justify-items: center;
-        &>p {
+
+        & > p {
             height: 24px;
             display: flex;
             align-items: center;

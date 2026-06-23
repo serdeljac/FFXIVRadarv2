@@ -1,8 +1,10 @@
 <template>
     <div :class="[`policy body_content`, windowWidth]">
 
+        <!-- Header -->
+        <PageHeader :title="`FFXIV RADAR Private Policy`" :tagline="pageTagLine"/>
+
         <div class="group">
-            <h1>~FFXIV RADAR Private Policy~</h1> 
             <h6>Effective Date: May 10, 2026 | Last Updated: May 10, 2026</h6>
             <hr class="header_bar"/>
         </div>
@@ -312,9 +314,69 @@
     </div>
 </template>
 
-<script lang="ts">
-    export default {
-        name: "Private Policy",
-        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-    }
+<script lang="ts" setup>
+import PageHeader from '../ui/displayPageHeader.vue'
+
+defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+
+const pageTagLine = ''
 </script>
+
+<style scoped lang="scss">
+    .policy {
+        width: 96%;
+        margin: 0 auto;
+
+        .group {
+            width: 96%;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 2rem auto;
+        }
+
+        h2,
+        h3,
+        h4,
+        h6 {
+            text-align: center;
+            margin-bottom: 0.5rem;
+        }
+
+        h4:not(.voidspace) {
+            margin-top: 1.5rem;
+        }
+
+        h4,
+        h5 {
+            font-weight: bold;
+        }
+
+        h5 {
+            margin-top: 1rem;
+        }
+
+        hr {
+            margin: 0.75rem;
+        }
+
+        p,
+        ul {
+            margin: 0.25rem 0;
+        }
+
+        .contact {
+            margin-bottom: 1rem;
+        }
+
+        ul {
+            margin-left: 2rem;
+        }
+
+        li {
+            list-style-type: circle;
+        }
+    }
+</style>

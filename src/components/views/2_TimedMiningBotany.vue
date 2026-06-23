@@ -1,13 +1,8 @@
 <template>
     <div :class="[`timedNodes body_content`, windowWidth]">
 
-        <!-- Page intro -->
-        <div class="body_content-group page-intro">
-            <h1>Timed Mining &amp; Botany Nodes</h1>
-            <p>
-                Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed <strong>Mining</strong> and <strong>Botany</strong> node across all expansions, showing the spawn time, zone, coordinates, item yields, and aetherial reduction results. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.
-            </p>
-        </div>
+        <!-- Header -->
+        <PageHeader :title="`Timed Mining & Botany`" :tagline="pageTagLine"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
@@ -131,175 +126,238 @@
     </div>
 </template>
 
-<script lang="ts">
-    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-    import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
-    import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-    import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
-    import timeDisplay from '../ui/displayTime.vue'
-    import areaDisplay from '../ui/displayArea.vue'
-    import iconImgAPI from '../API/iconImg.vue';
+<script lang="ts" setup>
+import { ref, reactive, computed } from 'vue'
+import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
+import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
+import timeDisplay from '../ui/displayTime.vue'
+import areaDisplay from '../ui/displayArea.vue'
+import iconImgAPI from '../API/iconImg.vue'
+import PageHeader from '../ui/displayPageHeader.vue'
 
-    // Filter shape for clarity and type safety
-    interface Filter {
-        group: string
-        name: string
-        enabled: boolean
+// Filter shape for clarity and type safety
+interface Filter {
+    group: string
+    name: string
+    enabled: boolean
+}
+
+const PAGE_SIZE = 50
+
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+defineEmits(['changeTracked', 'openDetails'])
+
+const compiledDataForTable = ref<any[][]>([])
+const allTimedNodes = ref<any[]>([])
+const arraySet = ref(0)
+const displayNoNodesFound = ref(false)
+const searchName = ref('')
+const filters = ref<Filter[]>([])
+const activeList = reactive<Record<string, any>>({})
+const pageTagLine = 'Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed Mining and Botany node across all expansions, showing the spawn time, zone, coordinates, item yields, and aetherial reduction results. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.'
+
+// Build grouped filter object once; recomputed only when filters change
+const groupedFilters = computed<Record<string, Filter[]>>(() => ({
+    job: filters.value.filter(f => f.group === 'job'),
+    usage: filters.value.filter(f => f.group === 'usage'),
+    expansion: filters.value.filter(f => f.group === 'expansion'),
+}))
+
+// ─── Helpers ────────────────────────────────────────────────────────────────
+
+function capitalize(str: string): string {
+    return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
+}
+
+function getUniqueByKey(array: any[], key: string): any[] {
+    const seen = new Set()
+    return array.filter(obj => {
+        if (seen.has(obj[key])) return false
+        seen.add(obj[key])
+        return true
+    })
+}
+
+// ─── Filter Initialisation ───────────────────────────────────────────────────
+
+function createFilterList() {
+    const toFilters = (arr: any[], group: string): Filter[] =>
+        getUniqueByKey(arr, group).map(o => ({ group, name: o[group], enabled: true }))
+
+    const jobFilters = toFilters(allTimedNodes.value, 'job')
+    const usageFilters = toFilters(allTimedNodes.value, 'usage')
+    const expansionFilters = toFilters(props.ffxivData.expansion, 'expansion')
+
+    filters.value = [...jobFilters, ...usageFilters, ...expansionFilters]
+}
+
+// ─── Pagination ────────────────────────────────────────────────────────────--
+
+function sortNodesIntoGroup(array: any[]) {
+    const result: any[][] = []
+    for (let i = 0; i < array.length; i += PAGE_SIZE) {
+        result.push(array.slice(i, i + PAGE_SIZE))
+    }
+    compiledDataForTable.value = result
+    displayNoNodesFound.value = result.length === 0
+}
+
+// ─── Filter Actions ──────────────────────────────────────────────────────────
+
+function changeFilter(filter: Filter) {
+    filter.enabled = !filter.enabled
+    searchName.value = ''
+    arraySet.value = 0
+    applyFilters()
+}
+
+function resetFilters() {
+    filters.value.forEach(f => { f.enabled = true })
+    searchName.value = ''
+    arraySet.value = 0
+    sortNodesIntoGroup(allTimedNodes.value)
+}
+
+function applyFilters() {
+    const disabledFilters = filters.value.filter(f => !f.enabled)
+    if (disabledFilters.length === 0) {
+        sortNodesIntoGroup(allTimedNodes.value)
+        return
+    }
+    const filtered = allTimedNodes.value.filter(node =>
+        disabledFilters.every(f => node[f.group] !== f.name)
+    )
+    sortNodesIntoGroup(filtered)
+}
+
+function filterByInputValue(value: string) {
+    searchName.value = value
+    arraySet.value = 0
+    filters.value.forEach(f => { f.enabled = true })
+
+    if (!value || !value.trim()) {
+        sortNodesIntoGroup(allTimedNodes.value)
+        return
     }
 
-    const PAGE_SIZE = 50
+    const search = value.trim().toLowerCase()
+    const byName = allTimedNodes.value.filter(
+        (o: any) => o.name?.toLowerCase().includes(search)
+    )
+    const byAetherial = allTimedNodes.value.filter((o: any) => {
+        if (o.usage !== 'aetherial') return false
+        const { result1, result2, result3 } = o.usage_info
+        return [result1, result2, result3].some(
+            (r: string) => r?.toLowerCase().includes(search)
+        )
+    })
 
-    export default {
-        name: "Timed Mining/Botany",
-        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, inputSearchBar, timeDisplay, areaDisplay, iconImgAPI },
-        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-        emits: ['changeTracked', 'openDetails'],
+    sortNodesIntoGroup([...new Set([...byName, ...byAetherial])])
+}
 
-        data() {
-            return {
-                compiledDataForTable: [] as any[][],
-                allTimedNodes: [] as any[],
-                arraySet: 0 as number,
-                displayNoNodesFound: false as boolean,
-                searchName: '' as string,
-                filters: [] as Filter[],
-                activeList: {} as Record<string, any>,
-            }
-        },
+// ─── Display Helpers ─────────────────────────────────────────────────────────
 
-        computed: {
-            // Build grouped filter object once; recomputed only when filters change
-            groupedFilters(): Record<string, Filter[]> {
-                return {
-                    job: this.filters.filter(f => f.group === 'job'),
-                    usage: this.filters.filter(f => f.group === 'usage'),
-                    expansion: this.filters.filter(f => f.group === 'expansion'),
-                }
-            },
-        },
+function fetchUsageImgName(usage: string, info: any): string {
+    if (usage === 'scripts') return `${info}gatherscripts`
+    if (usage === 'crafting') return 'sq_crafting'
+    return usage
+}
 
-        created() {
-            const miner = this.ffxivData.miner.filter((o: any) => o.time)
-            const botany = this.ffxivData.botany.filter((o: any) => o.time)
-            this.allTimedNodes = [...miner, ...botany]
-            this.createFilterList()
-            this.sortNodesIntoGroup(this.allTimedNodes)
-        },
-
-        methods: {
-            // ─── Helpers ────────────────────────────────────────────────────────
-
-            capitalize(str: string): string {
-                return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
-            },
-
-            getUniqueByKey(array: any[], key: string): any[] {
-                const seen = new Set()
-                return array.filter(obj => {
-                    if (seen.has(obj[key])) return false
-                    seen.add(obj[key])
-                    return true
-                })
-            },
-
-            // ─── Filter Initialisation ───────────────────────────────────────────
-
-            createFilterList() {
-                const toFilters = (arr: any[], group: string): Filter[] =>
-                    this.getUniqueByKey(arr, group).map(o => ({ group, name: o[group], enabled: true }))
-
-                const jobFilters = toFilters(this.allTimedNodes, 'job')
-                const usageFilters = toFilters(this.allTimedNodes, 'usage')
-                const expansionFilters = toFilters(this.ffxivData.expansion, 'expansion')
-
-                this.filters = [...jobFilters, ...usageFilters, ...expansionFilters]
-            },
-
-            // ─── Pagination ──────────────────────────────────────────────────────
-
-            sortNodesIntoGroup(array: any[]) {
-                const result: any[][] = []
-                for (let i = 0; i < array.length; i += PAGE_SIZE) {
-                    result.push(array.slice(i, i + PAGE_SIZE))
-                }
-                this.compiledDataForTable = result
-                this.displayNoNodesFound = result.length === 0
-            },
-
-            // ─── Filter Actions ──────────────────────────────────────────────────
-
-            changeFilter(filter: Filter) {
-                filter.enabled = !filter.enabled
-                this.searchName = ''
-                this.arraySet = 0
-                this.applyFilters()
-            },
-
-            resetFilters() {
-                this.filters.forEach(f => { f.enabled = true })
-                this.searchName = ''
-                this.arraySet = 0
-                this.sortNodesIntoGroup(this.allTimedNodes)
-            },
-
-            applyFilters() {
-                const disabledFilters = this.filters.filter(f => !f.enabled)
-                if (disabledFilters.length === 0) {
-                    this.sortNodesIntoGroup(this.allTimedNodes)
-                    return
-                }
-                const filtered = this.allTimedNodes.filter(node =>
-                    disabledFilters.every(f => node[f.group] !== f.name)
-                )
-                this.sortNodesIntoGroup(filtered)
-            },
-
-            filterByInputValue(value: string) {
-                this.searchName = value
-                this.arraySet = 0
-                this.filters.forEach(f => { f.enabled = true })
-
-                if (!value || !value.trim()) {
-                    this.sortNodesIntoGroup(this.allTimedNodes)
-                    return
-                }
-
-                const search = value.trim().toLowerCase()
-                const byName = this.allTimedNodes.filter(
-                    (o: any) => o.name?.toLowerCase().includes(search)
-                )
-                const byAetherial = this.allTimedNodes.filter((o: any) => {
-                    if (o.usage !== 'aetherial') return false
-                    const { result1, result2, result3 } = o.usage_info
-                    return [result1, result2, result3].some(
-                        (r: string) => r?.toLowerCase().includes(search)
-                    )
-                })
-
-                this.sortNodesIntoGroup([...new Set([...byName, ...byAetherial])])
-            },
-
-            // ─── Display Helpers ─────────────────────────────────────────────────
-
-            fetchUsageImgName(usage: string, info: any): string {
-                if (usage === 'scripts') return `${info}gatherscripts`
-                if (usage === 'crafting') return 'sq_crafting'
-                return usage
-            },
-
-            fetchUsageAttrName(usage: string, info: any): string {
-                if (usage === 'aetherial') {
-                    const { result1, result2, result3 } = info
-                    return [result1, result2, result3].map(this.capitalize).join(', ')
-                }
-                if (usage === 'customdelivery') return `Deliver to ${info}`
-                if (usage === 'scripts') return `${this.capitalize(info)} Gather Scripts`
-                return this.capitalize(usage)
-            },
-
-            sendTimerState(timeState: any, id: string) {
-                this.activeList[id] = timeState
-            },
-        },
+function fetchUsageAttrName(usage: string, info: any): string {
+    if (usage === 'aetherial') {
+        const { result1, result2, result3 } = info
+        return [result1, result2, result3].map(capitalize).join(', ')
     }
+    if (usage === 'customdelivery') return `Deliver to ${info}`
+    if (usage === 'scripts') return `${capitalize(info)} Gather Scripts`
+    return capitalize(usage)
+}
+
+function sendTimerState(timeState: any, id: string) {
+    activeList[id] = timeState
+}
+
+// ─── Init ────────────────────────────────────────────────────────────────────
+
+const miner = props.ffxivData.miner.filter((o: any) => o.time)
+const botany = props.ffxivData.botany.filter((o: any) => o.time)
+allTimedNodes.value = [...miner, ...botany]
+createFilterList()
+sortNodesIntoGroup(allTimedNodes.value)
 </script>
+
+<style scoped lang="scss">
+    .timedNodes {
+        &.mobile {
+            .filterbar :deep(.btn) {
+                margin: 6px 5px;
+            }
+
+            .pagenation_item {
+                margin: 3px 5px;
+            }
+        }
+
+        .pagenation {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+            width: 90%;
+
+            &_item {
+                width: 32px;
+                user-select: none;
+                aspect-ratio: 1 / 1;
+                border-radius: 4px;
+                background-color: $bodyBackgroundColor;
+                border: 1px solid $buttonBackgroundColor;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0.5rem 1rem;
+                margin: 0.5rem 1rem;
+                cursor: pointer;
+
+                &.pageActive {
+                    background-color: $buttonBackgroundColor;
+                }
+
+                &:hover {
+                    background-color: $buttonBackgroundColorHover;
+                }
+            }
+        }
+
+        // Default layout
+        .rdrTable_row {
+            grid-template-columns: 80px 400px 100px 100px 120px auto;
+        }
+
+        // Tablet view
+        .rdrTable.tablet {
+            .rdrTable_row {
+                grid-template-columns: 60px 200px 80px 80px 80px auto;
+            }
+        }
+
+        // Mobile view
+        .rdrTable.mobile {
+            .rdrTable_header,
+            .rdrTable_split {
+                display: none;
+            }
+
+            .rdrTable_row {
+                grid-template-columns: 60px auto;
+            }
+
+            .rdrTable_row-attributes,
+            .rdrTable_row-level {
+                display: none;
+            }
+        }
+    }
+</style>

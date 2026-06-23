@@ -1,7 +1,7 @@
 <template>
     <header class="pageHeader">
         <div class="pageHeader_titleRow">
-            <h1 class="pageHeader_title">{{ title.split(' ', 2)[0] }} <span class="accent">{{ title.split(' ', 2)[1] }}</span></h1>
+            <h1 class="pageHeader_title">{{ title.split(' ', 2)[0] }} <span class="accent">{{ fixtitle(title) }}</span></h1>
         </div>
         <p class="pageHeader_tagline">
             {{ tagline }}
@@ -14,6 +14,13 @@
     export default {
         name: "Page Header",
         props: ['title', 'tagline'],
+        methods: {
+            fixtitle(text: string) {
+                let firstSec = text.split(' ', 2)[0]
+                let secondSec = text.split(firstSec, 2)[1]
+                return secondSec
+            }
+        }
     }
 </script>
 

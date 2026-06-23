@@ -60,7 +60,17 @@
   </div>
 </template>
 
-<script setup>
+<script lang="ts" setup>
+import { computed } from 'vue'
+import iconImgAPI from '../API/iconImg.vue'
+
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+
+const clockMinute = computed(() => {
+  const m = props.eorzeaClock.displayMin
+  return m < 10 ? `0${m}` : m
+})
+
 const links = [
   {
     link: 'eorzeaoverview',
@@ -113,55 +123,20 @@ const links = [
 ]
 </script>
 
-<script>
-const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
-import iconImgAPI from '../API/iconImg.vue';
-
-export default {
-  name: 'HomePage',
-  props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-  components: {iconImgAPI},
-  computed: {
-    clockMinute() {
-        let m = this.eorzeaClock.displayMin
-        let fix = m < 10 ? `0${m}` : m
-        return fix
-      }
-  },
-    methods: {
-    openDonate() {
-      window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
-    }
-  }
-}
-</script>
-
-<style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
-
+<style scoped lang="scss">
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .home {
-  --teal:   #2dd4bf;
-  --teal-g: rgba(45,212,191,0.2);
-  --dim:    #5a6e90;
-  --text:   #c8d8f0;
-  --border: rgba(45,212,191,0.15);
-
   display: flex;
   align-items: center;
   justify-content: center;
     
-  color: var(--text);
+  color: $fontColor;
   font-family: 'Rajdhani', sans-serif;
   overflow: hidden;
   position: relative;
 }
 
-.star-canvas {
-  position: fixed; inset: 0;
-  pointer-events: none; z-index: 0;
-}
 .scanlines {
   position: fixed; inset: 0; z-index: 1; pointer-events: none;
   background: repeating-linear-gradient(
@@ -192,12 +167,12 @@ export default {
 }
 
 .logo-hex {
-  font-size: 2rem; color: var(--teal);
-  filter: drop-shadow(0 0 8px var(--teal-g));
+  font-size: 2rem; color: $teal;
+  filter: drop-shadow(0 0 8px $tealShadow);
   animation: hexPulse 3s ease-in-out infinite;
 }
 @keyframes hexPulse {
-  0%,100% { filter: drop-shadow(0 0 8px var(--teal-g)); }
+  0%,100% { filter: drop-shadow(0 0 8px $tealShadow); }
   50%      { filter: drop-shadow(0 0 18px rgba(45,212,191,0.5)); }
 }
 
@@ -208,14 +183,14 @@ export default {
   color: #e8f0ff;
 }
 .logo-text .accent {
-  color: var(--teal);
-  text-shadow: 0 0 24px var(--teal-g);
+  color: $teal;
+  text-shadow: 0 0 24px $tealShadow;
 }
 
 .tagline {
   font-family: 'Share Tech Mono', monospace;
   font-size: 0.78rem; letter-spacing: 0.13em;
-  color: var(--dim); text-transform: uppercase;
+  color: $dim; text-transform: uppercase;
 }
 
 .clock-row {
@@ -224,17 +199,17 @@ export default {
 }
 .clock-label {
   font-size: 0.72rem; text-transform: uppercase;
-  letter-spacing: 0.1em; color: var(--dim);
+  letter-spacing: 0.1em; color: $dim;
 }
 .clock-time {
   font-family: 'Share Tech Mono', monospace;
-  font-size: 1.55rem; color: var(--text);
+  font-size: 1.55rem; color: $fontColor;
   text-shadow: 0 0 14px rgba(180,210,255,0.2);
 }
 
 .divider {
   width: 180px; height: 1px; margin-top: 6px;
-  background: linear-gradient(90deg, transparent, var(--teal), transparent);
+  background: linear-gradient(90deg, transparent, $teal, transparent);
   opacity: 0.4;
   animation: expand 0.8s ease 0.2s both;
 }
@@ -255,9 +230,9 @@ export default {
   display: flex; align-items: center; gap: 13px;
   padding: 16px 18px;
   border-radius: 8px;
-  border: 1px solid var(--border);
+  border: 1px solid $buttonBorder;
   background: rgba(255,255,255,0.03);
-  text-decoration: none; color: var(--text);
+  text-decoration: none; color: $fontColor;
   font-size: 0.97rem; font-weight: 600;
   letter-spacing: 0.03em;
   transition: all 0.2s;
@@ -271,10 +246,10 @@ export default {
   content: '';
   position: absolute; left: 0; top: 0; bottom: 0;
   width: 3px; border-radius: 0 2px 2px 0;
-  background: var(--teal);
+  background: $teal;
   transform: scaleY(0);
   transition: transform 0.2s ease;
-  box-shadow: 0 0 8px var(--teal-g);
+  box-shadow: 0 0 8px $tealShadow;
 }
 
 .nav-btn:hover {
@@ -286,7 +261,7 @@ export default {
 }
 .nav-btn:hover::before { transform: scaleY(1); }
 .nav-btn:hover .nav-arrow {
-  color: var(--teal);
+  color: $teal;
   transform: translateX(3px);
 }
 
@@ -305,7 +280,7 @@ export default {
 }
 .nav-label { flex: 1; }
 .nav-arrow {
-  color: var(--dim); font-size: 0.9rem;
+  color: $dim; font-size: 0.9rem;
   transition: all 0.2s; flex-shrink: 0;
 }
 
@@ -321,7 +296,7 @@ export default {
   padding: 9px 20px; border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.1);
   background: rgba(255,255,255,0.04);
-  text-decoration: none; color: var(--dim);
+  text-decoration: none; color: $dim;
   font-family: 'Rajdhani', sans-serif;
   font-size: 0.9rem; font-weight: 600;
   letter-spacing: 0.04em;
@@ -330,11 +305,11 @@ export default {
 .coffee-btn:hover {
   background: rgba(255,255,255,0.08);
   border-color: rgba(255,255,255,0.2);
-  color: var(--text);
+  color: $fontColor;
 }
 
 .footer-copy {
-  font-size: 0.68rem; color: var(--dim);
+  font-size: 0.68rem; color: $dim;
   letter-spacing: 0.04em;
 }
 

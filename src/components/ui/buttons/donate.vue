@@ -46,7 +46,7 @@ export default {
 <style scoped lang="scss">
 .buymecoffee_btn {
     font-size: 1rem;
-  padding: 0.6em 0.8em;
+  padding: 0em 0.8em;
   border-radius: 0.5em;
   border: none;
   background-color: #000;

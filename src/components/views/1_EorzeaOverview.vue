@@ -194,7 +194,6 @@ import timeDisplay from '../ui/displayTime.vue'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
-
 // Injected into every router view by App.vue. defineProps is authoritative in
 // <script setup>, so every prop the template uses must be declared here.
 const props = defineProps<{
@@ -1038,21 +1037,6 @@ function clearDetails() {
 }
 </script>
 
-<script lang="ts">
-export default {
-    name: 'Eorzea Overview',
-    methods: {
-        getNodeTitle(data: any) {
-
-            console.table(data)
-            if (data.job == 'sightseeing') {
-                return data.name
-            }
-        },  
-    }
-}
-</script>
-
 <style scoped lang="scss">
 
 @keyframes leafletMap_spin {
@@ -1136,7 +1120,6 @@ export default {
         overflow: hidden;
         z-index: 1;
     }
-
 
 }
 
@@ -1313,40 +1296,7 @@ export default {
 
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* ── Clicked-vista detail panel ── */
-.leafletMap_vista {
-
-}
-
 .leafletMap_vistaHead {
     display: flex;
     align-items: baseline;
@@ -1496,23 +1446,6 @@ export default {
     font-size: 0.85rem;
     text-align: center;
 }
-
-/* ── Map stage ── */
-
-
-
-
-/* Loading / error overlay — covers the map while a new zone is loading. */
-
-
-
-
-
-
-
-
-/* Fade the overlay in/out as it appears and disappears. */
-
 
 /* Match Leaflet's controls to the dark teal theme. */
 :deep(.leaflet-container) {

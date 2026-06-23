@@ -1,13 +1,8 @@
 <template>
     <div :class="['sightseeVistas body_content', windowWidth]">
 
-        <!-- Page intro -->
-        <div class="body_content-group page-intro">
-            <h1>Sightseeing Log</h1>
-            <p>
-                The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required <strong>Eorzea time window</strong>, <strong>weather condition</strong>, <strong>emote</strong>, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log.
-            </p>
-        </div>
+        <!-- Header -->
+        <PageHeader :title="`Sightseeing Vistas`" :tagline="pageTagLine"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
@@ -124,104 +119,135 @@
     </div>
 </template>
 
-<script lang="ts">
-    import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-    import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
-    import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-    import timeDisplay from '../ui/displayTime.vue'
-    import weatherDisplay from '../ui/displayWeather.vue'
-    import areaDisplay from '../ui/displayArea.vue'
-    import iconImgAPI from '../API/iconImg.vue';
+<script lang="ts" setup>
+import { ref, reactive, computed } from 'vue'
+import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
+import timeDisplay from '../ui/displayTime.vue'
+import weatherDisplay from '../ui/displayWeather.vue'
+import areaDisplay from '../ui/displayArea.vue'
+import iconImgAPI from '../API/iconImg.vue'
+import PageHeader from '../ui/displayPageHeader.vue'
 
-    // Filter shape kept explicit; replaces opaque tuple indexing.
-    interface Filter {
-        group: string
-        name: string
-        enabled: boolean
+// Filter shape kept explicit; replaces opaque tuple indexing.
+interface Filter {
+    group: string
+    name: string
+    enabled: boolean
+}
+
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+defineEmits(['changeTracked', 'openDetails'])
+
+const filters = ref<Filter[]>([])
+const filterSelected = ref('')
+const activeTime = reactive<Record<string, boolean>>({})
+const activeWeather = reactive<Record<string, boolean>>({})
+const pageTagLine = "The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required Eorzea time window, weather condition, emote, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log."
+
+// Derives the unique expansion list once; no duplicate logic between methods.
+const uniqueExpansions = computed<string[]>(() => {
+    const seen = new Set<string>()
+    const result: string[] = []
+    for (const item of props.ffxivData.sightseeing) {
+        if (!seen.has(item.expansion)) {
+            seen.add(item.expansion)
+            result.push(item.expansion)
+        }
     }
+    return result
+})
 
-    export default {
-        name: "SightseeingVistas",
-
-        components: { toggleFilterBtn, toggleTrackingBtn, toggleDetailsBtn, timeDisplay, weatherDisplay, areaDisplay, iconImgAPI },
-
-        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-
-        emits: ['changeTracked', 'openDetails'],
-
-        data() {
-            return {
-                filters: [] as Filter[],
-                filterSelected: '' as string,
-                activeTime: {} as Record<string, boolean>,
-                activeWeather: {} as Record<string, boolean>,
-            }
-        },
-
-        computed: {
-            // Derives unique expansion list once; no duplicate logic between old methods.
-            uniqueExpansions(): string[] {
-                const seen = new Set<string>()
-                const result: string[] = []
-                for (const item of this.ffxivData.sightseeing) {
-                    if (!seen.has(item.expansion)) {
-                        seen.add(item.expansion)
-                        result.push(item.expansion)
-                    }
-                }
-                return result
-            },
-
-            // Groups all vista nodes by expansion name, computed once and cached.
-            allVistaNodes(): Record<string, any[]> {
-                const grouped: Record<string, any[]> = {}
-                for (const expansion of this.uniqueExpansions) {
-                    grouped[expansion] = this.ffxivData.sightseeing.filter(
-                        (o: any) => o.expansion === expansion
-                    )
-                }
-                return grouped
-            },
-
-            // Active vista list for the selected filter; avoids repeated map lookups in the template.
-            currentVistaNodes(): any[] {
-                return this.allVistaNodes[this.filterSelected] ?? []
-            },
-
-            // Replaces fetchVistaData(); recomputes only when filterSelected changes.
-            currentExpansionData(): any {
-                return this.ffxivData.expansion.find(
-                    (o: any) => o.expansion === this.filterSelected
-                ) ?? {}
-            },
-        },
-
-        created() {
-            this.initFilters()
-        },
-
-        methods: {
-            initFilters() {
-                this.filters = this.uniqueExpansions.map((name, i) => ({
-                    group: 'expansion',
-                    name,
-                    enabled: i === 0,
-                }))
-                this.filterSelected = this.filters[0]?.name ?? ''
-            },
-
-            changeFilter(arrayIndex: number) {
-                this.filters.forEach((f, i) => { f.enabled = i === arrayIndex })
-                this.filterSelected = this.filters[arrayIndex].name
-            },
-
-            sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
-                if (type === 'timer') {
-                    this.activeTime[id] = timeState
-                } else {
-                    this.activeWeather[id] = timeState
-                }
-            },
-        },
+// Groups all vista nodes by expansion name, computed once and cached.
+const allVistaNodes = computed<Record<string, any[]>>(() => {
+    const grouped: Record<string, any[]> = {}
+    for (const expansion of uniqueExpansions.value) {
+        grouped[expansion] = props.ffxivData.sightseeing.filter(
+            (o: any) => o.expansion === expansion
+        )
     }
+    return grouped
+})
+
+// Active vista list for the selected filter; avoids repeated map lookups in the template.
+const currentVistaNodes = computed(() => allVistaNodes.value[filterSelected.value] ?? [])
+
+// Replaces fetchVistaData(); recomputes only when filterSelected changes.
+const currentExpansionData = computed(
+    () => props.ffxivData.expansion.find((o: any) => o.expansion === filterSelected.value) ?? {}
+)
+
+function initFilters() {
+    filters.value = uniqueExpansions.value.map((name, i) => ({
+        group: 'expansion',
+        name,
+        enabled: i === 0,
+    }))
+    filterSelected.value = filters.value[0]?.name ?? ''
+}
+
+function changeFilter(arrayIndex: number) {
+    filters.value.forEach((f, i) => { f.enabled = i === arrayIndex })
+    filterSelected.value = filters.value[arrayIndex].name
+}
+
+function sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
+    if (type === 'timer') {
+        activeTime[id] = timeState
+    } else {
+        activeWeather[id] = timeState
+    }
+}
+
+initFilters()
 </script>
+
+<style scoped lang="scss">
+    .sightseeVistas {
+        .vistaNote {
+            text-align: center;
+            width: 100%;
+
+            p {
+                display: inline-flex;
+                align-items: center;
+                flex-wrap: wrap;
+                justify-content: center;
+
+                span {
+                    margin-left: 4px;
+                }
+
+                img {
+                    margin: 0 2px;
+                }
+            }
+        }
+
+        .rdrTable_row {
+            grid-template-columns: 80px 80px 300px 100px 120px 120px auto;
+        }
+
+        .rdrTable.tablet {
+            .rdrTable_row {
+                grid-template-columns: 80px 40px 100px 100px 120px 120px auto;
+            }
+        }
+
+        .rdrTable.mobile {
+            .rdrTable_header,
+            .rdrTable_split {
+                display: none;
+            }
+
+            .rdrTable_row {
+                grid-template-columns: 60px 100px auto;
+            }
+
+            .rdrTable_row-no {
+                display: none;
+            }
+        }
+    }
+</style>

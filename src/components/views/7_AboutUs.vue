@@ -1,11 +1,10 @@
 <template>
     <div :class="[`aboutUs body_content`, windowWidth]">
         
-        <!-- <characterInfo :name="'miner'" /> -->
-
+        <!-- Header -->
+        <PageHeader :title="`About Us`" :tagline="pageTagLine"/>
 
         <div class="body_content-group">
-            <h1>~ About Us ~</h1>
 
                 <div class="about">
 
@@ -52,11 +51,33 @@
     </div>
 </template>
 
-<script lang="ts">
-    import characterInfo from '../API/iconImg.vue';
-    export default {
-        name: "About Us",
-        props: ['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'],
-        components: {characterInfo}
-    }
+<script lang="ts" setup>
+import PageHeader from '../ui/displayPageHeader.vue'
+
+defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+
+const pageTagLine = ''
 </script>
+
+<style scoped lang="scss">
+    .aboutUs {
+        .about {
+            max-width: 800px;
+            min-width: 300px;
+            margin: 40px auto;
+        }
+
+        h2 {
+            margin: 20px 0;
+        }
+
+        p,
+        ul {
+            margin-bottom: 1rem;
+        }
+
+        li {
+            margin: 6px 0;
+        }
+    }
+</style>
