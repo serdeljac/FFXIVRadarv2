@@ -31,7 +31,7 @@
 
   //Variables and constants
   const BASE_URL = 'https://v2.xivapi.com'
-  const CACHE_NAME = 'ffxivmap_maps'
+  // const CACHE_NAME = 'ffxivmap_maps'
   const mapImageUrl = ref<string | null>(null)
   const resolvedMapName = ref('')
   const isLoading = ref(false)
