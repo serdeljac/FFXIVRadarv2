@@ -8,13 +8,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { isWeatherMatch } from '../../hooks/hooks'
 
 const props = defineProps(['node', 'weatherList'])
 defineEmits(['weatherActive'])
 
-const currentWeather = computed(() => props.weatherList[props.node.area.mapcode])
-const weather1Active = computed(() => props.node.weather1 == currentWeather.value)
-const weather2Active = computed(() => props.node.weather2 == currentWeather.value)
+const weather1Active = computed(() => isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1))
+const weather2Active = computed(() => isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2))
 const fetchWeather1 = computed(() => (props.node.weather1 ? props.node.weather1 : 'Any Weather'))
 const fetchWeather2 = computed(() => (props.node.weather2 ? props.node.weather2 : ''))
 </script>

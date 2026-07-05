@@ -1,5 +1,6 @@
 @import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
 *,
 a {
     box-sizing: border-box;
@@ -46,11 +47,11 @@ main {
 }
 
 .expColor {
-    color: $expColor
+    color: $expColor;
 }
 
 .levelColor {
-    color: $levelColor
+    color: $levelColor;
 }
 
 @keyframes timerActiveAnimation {
@@ -138,11 +139,6 @@ main {
     border-left: 4px solid rgb(96, 96, 231) !important;
 }
 
-
-/*********************************************************
-Default Styles
-*********************************************************/
-
 .star-canvas {
     position: fixed;
     z-index: 1;
@@ -193,7 +189,7 @@ Default Styles
     border-left: 4px solid transparent;
 
     &:hover {
-        background-color: $listBackgroundColorHover
+        background-color: $listBackgroundColorHover;
     }
 
     &_header {
@@ -228,22 +224,7 @@ Default Styles
             text-align: center;
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-/*********************************************************
-Sidebar
-*********************************************************/
 
 .sidebar {
     position: fixed;
@@ -261,7 +242,7 @@ Sidebar
     z-index: 9;
 
     &.compact {
-        width: $sidebarWidthCollapse
+        width: $sidebarWidthCollapse;
     }
 
     &.mobile {
@@ -312,13 +293,12 @@ Sidebar
             justify-content: center;
             user-select: none;
             transition: background-color 0.05s linear;
+            width: 100%;
+            padding: 0.5rem 0;
 
             &:hover {
                 background-color: $borderColorHover;
             }
-
-            width: 100%;
-            padding: 0.5rem 0;
         }
 
         .currentPage div {
@@ -339,14 +319,6 @@ Sidebar
         }
     }
 }
-
-
-
-
-
-/*********************************************************
-Trackingbar
-*********************************************************/
 
 .trackingbar {
     background-color: $bodyBackgroundColor;
@@ -370,7 +342,7 @@ Trackingbar
 
     &.mobile {
         .trackingbar_items {
-            display: none
+            display: none;
         }
     }
 
@@ -425,12 +397,6 @@ Trackingbar
     }
 }
 
-
-
-
-/*********************************************************
-Details Menu
-*********************************************************/
 .details {
     position: fixed;
     right: 0;
@@ -449,15 +415,15 @@ Details Menu
         align-items: center;
 
         &-btn {
-            img {
-                cursor: pointer;
-            }
-
             width: 40px;
             height: 42px;
             display: flex;
             align-items: center;
             justify-content: center;
+
+            img {
+                cursor: pointer;
+            }
         }
 
         &-name {
@@ -530,7 +496,7 @@ Details Menu
             justify-content: space-around;
             gap: 0 10px;
 
-            &>div {
+            & > div {
                 display: flex;
                 justify-content: center;
                 width: 50%;
@@ -586,13 +552,7 @@ Details Menu
     }
 }
 
-
-
-/*********************************************************
-Across all Router Views
-*********************************************************/
 .body_content {
-    margin-top: 20px;
     gap: 20px;
     width: 100%;
     display: flex;
@@ -601,7 +561,6 @@ Across all Router Views
 }
 
 .filterbar {
-
     .wrapper {
         display: flex;
         justify-content: center;
@@ -640,7 +599,7 @@ Across all Router Views
             background-color: $listBackgroundColor;
 
             &:hover {
-                background-color: $listBackgroundColorHover
+                background-color: $listBackgroundColorHover;
             }
 
             &-tracking {
@@ -649,7 +608,7 @@ Across all Router Views
 
             &-name {
                 p {
-                    display: inline-flex
+                    display: inline-flex;
                 }
 
                 span {
@@ -657,7 +616,7 @@ Across all Router Views
                 }
 
                 img {
-                    transform: translateY(2px)
+                    transform: translateY(2px);
                 }
             }
 

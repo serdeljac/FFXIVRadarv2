@@ -2,7 +2,7 @@
     <div :class="['sightseeVistas body_content', windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`Sightseeing Vistas`" :tagline="pageTagLine"/>
+        <PageHeader :title="`Sightseeing Vistas`" :tagline="pageTagLine" icon="sightseeing"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
@@ -204,10 +204,54 @@ initFilters()
 </script>
 
 <style scoped lang="scss">
+    @keyframes sightseeVistasRowPulse {
+        0%, 100% { background-color: rgba(45, 212, 191, 0.08); }
+        50%      { background-color: rgba(45, 212, 191, 0.22); }
+    }
+
     .sightseeVistas {
+        font-family: 'Rajdhani', sans-serif;
+        margin: 0 auto;
+
+        /* ── Filter bar ── */
+        .filterbar {
+            padding: 16px 20px;
+
+            :deep(.btn) {
+                border: 1px solid $buttonBorder;
+                background: rgba(255, 255, 255, 0.03);
+                color: $fontColor;
+                font-family: 'Rajdhani', sans-serif;
+                letter-spacing: 0.03em;
+                border-radius: 8px;
+                box-shadow: none;
+                transition: all 0.2s;
+
+                &[enabled] {
+                    background: rgba(45, 212, 191, 0.12) !important;
+                    border-color: rgba(45, 212, 191, 0.4);
+                    color: #e8f0ff;
+                }
+
+                &:hover:not([disabled]) {
+                    background: rgba(45, 212, 191, 0.07);
+                    border-color: rgba(45, 212, 191, 0.35);
+                    color: #e8f0ff;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+                }
+            }
+        }
+
+        /* ── Expansion note panel ── */
         .vistaNote {
             text-align: center;
             width: 100%;
+            max-width: 800px;
+            padding: 12px 20px;
+            border-radius: 10px;
+            border: 1px solid $buttonBorder;
+            background: rgba(255, 255, 255, 0.03);
 
             p {
                 display: inline-flex;
@@ -223,6 +267,63 @@ initFilters()
                     margin: 0 2px;
                 }
             }
+        }
+
+        /* ── Table ── */
+        .rdrTable {
+            border: 1px solid $buttonBorder;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px 12px 12px;
+
+            &_header .rdrTable_row p {
+                font-family: 'Share Tech Mono', monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: $teal;
+            }
+
+            &_split {
+                border: none;
+                border-top: 1px solid rgba(45, 212, 191, 0.15);
+                margin: 4px 0 8px;
+            }
+
+            &_body .rdrTable_row {
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid transparent;
+                transition: all 0.15s;
+
+                &:hover {
+                    background: rgba(45, 212, 191, 0.05);
+                    border-color: rgba(45, 212, 191, 0.15);
+                }
+            }
+
+            :deep(.trackingTriggerBtn path),
+            :deep(.toDetailsBtn path) {
+                fill: $dim;
+            }
+            :deep(.trackingTriggerBtn.tracked path) {
+                fill: $teal;
+            }
+            :deep(.trackingTriggerBtn:hover path),
+            :deep(.toDetailsBtn:hover path) {
+                fill: $teal !important;
+            }
+
+            .hasContext::before {
+                background: rgba(11, 18, 32, 0.95);
+                border: 1px solid rgba(45, 212, 191, 0.35);
+                color: #e8f0ff;
+                font-family: 'Rajdhani', sans-serif;
+            }
+        }
+
+        /* Teal glow for a vista that's currently in its time + weather window */
+        [data-rowActive] {
+            animation: sightseeVistasRowPulse 0.9s ease-in-out infinite;
         }
 
         .rdrTable_row {

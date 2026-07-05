@@ -152,13 +152,12 @@ import mapDisplay from './MapDisplay.vue'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 import vistaSmallAPI from '../API/vistaImg.vue'
+import { formatStars, isTimerActive, isWeatherMatch, getTimerCountdown } from '../../hooks/hooks.ts'
 
 const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'openVistaImg'])
 
-function stars(count: number): string {
-    return '★'.repeat(Math.max(0, count ?? 0))
-}
+const stars = formatStars
 
 const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
 
@@ -168,20 +167,19 @@ const otherMaterials = computed<any[]>(() => {
     return matches.length ? matches : [{ name: 'None', ID: '000' }]
 })
 
-const isTimeActive = computed(() => (props.timerList.find((o: any) => o.ID === props.node.time)?.stateActive ? true : null))
-const isWeather1Active = computed(() => (props.weatherList[props.node.area.mapcode] == props.node.weather1 ? true : null))
-const isWeather2Active = computed(() => (props.weatherList[props.node.area.mapcode] == props.node.weather2 ? true : null))
+const isTimeActive = computed(() => (isTimerActive(props.timerList, props.node.time) ? true : null))
+const isWeather1Active = computed(() => (isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1) ? true : null))
+const isWeather2Active = computed(() => (isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2) ? true : null))
 
 const isTimeAndWeatherActive = computed(() => {
-    const timeState = props.timerList.find((o: any) => o.ID === props.node.time)?.stateActive ? true : false
-    const weatherState1 = props.weatherList[props.node.area.mapcode] == props.node.weather1
-    const weatherState2 = props.weatherList[props.node.area.mapcode] == props.node.weather2
-    return timeState && (weatherState1 || weatherState2) ? true : null
+    const timeState = isTimerActive(props.timerList, props.node.time)
+    const weatherState = isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1)
+        || isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2)
+    return timeState && weatherState ? true : null
 })
 
 function timerCountdown(time: string): string {
-    if (!time) return 'Any Time'
-    return props.timerList.find((o: any) => o.ID === time)?.countdown ?? 'Any Time'
+    return getTimerCountdown(props.timerList, time)
 }
 
 function getVistaInfo(type: string) {

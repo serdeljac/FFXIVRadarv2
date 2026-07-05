@@ -46,6 +46,7 @@ import { ref, watch } from 'vue'
 import iconAndText from '../../ui/iconAndText.vue'
 import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
 import iconImgAPI from '../../API/iconImg.vue'
+import { getTimerCountdown, isTimerActive } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['data', 'timerList', 'focusNode', 'windowWidth'])
 defineEmits(['focusNode', 'changeTracked'])
@@ -53,8 +54,7 @@ defineEmits(['focusNode', 'changeTracked'])
 const nodeList = ref<any>({})
 
 function fetchTimerCountdowns(time: string) {
-    if (time) return props.timerList.find((o: any) => o.ID == time).countdown
-    return 'Any Time'
+    return getTimerCountdown(props.timerList, time)
 }
 
 // Build an object keyed by node_code whose contents are that node's materials.
@@ -76,8 +76,7 @@ function groupNodes() {
 }
 
 function checkRowActive(arr: any) {
-    const currentTime = arr.time ? props.timerList.find((o: any) => o.ID == arr.time).stateActive : null
-    return currentTime ? true : null
+    return isTimerActive(props.timerList, arr.time) ? true : null
 }
 
 groupNodes()

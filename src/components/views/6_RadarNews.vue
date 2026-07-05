@@ -2,7 +2,7 @@
     <div :class="[`radarNews body_content`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`FFXIV Radar News`" :tagline="pageTagLine"/>
+        <PageHeader :title="`FFXIV Radar News`" :tagline="pageTagLine" icon="news"/>
 
         <!-- This will eventually be grabbed from a server -->
         <div class="body_content-group">

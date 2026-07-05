@@ -24,26 +24,16 @@
 
 <script lang="ts" setup>
 import trackingbarItem from './parts/trackingbarItem.vue'
+import { isNodeActive } from '../../hooks/hooks.ts'
 
 const props = defineProps(['windowWidth', 'trackinglist', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'changeTracked'])
-
-function checkActiveState(arr: any) {
-    const timerState = props.timerList.find((o: any) => o.ID === arr.time).stateActive ? true : null
-
-    if (arr.job == 'sightseeing') {
-        const curW = props.weatherList[arr.area.mapcode]
-        const weatherState = curW == arr.weather1 || curW == arr.weather2 ? true : null
-        return timerState && weatherState ? true : null
-    }
-    return timerState
-}
 
 function sortTracklingList() {
     const newTrackingList: any[] = []
 
     for (const d in props.trackinglist) {
-        const state = checkActiveState(props.trackinglist[d])
+        const state = isNodeActive(props.trackinglist[d], props.timerList, props.weatherList)
         if (state) { newTrackingList.unshift(props.trackinglist[d]) }
         else { newTrackingList.push(props.trackinglist[d]) }
     }

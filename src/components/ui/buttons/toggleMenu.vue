@@ -12,7 +12,6 @@ defineProps(['name', 'disabled', 'enabled'])
     .btn {
         border: 1px solid $buttonBackgroundColor;
         background-color: $bodyBackgroundColor;
-        line-height: 1;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -20,7 +19,6 @@ defineProps(['name', 'disabled', 'enabled'])
         transition: background-color transform box-shadow 0.1s linear;
         border-radius: $borderRadius;
         height: 40px;
-        font-weight: bold;
         margin: 10px 0.5rem;
         &[enabled] {background-color: $buttonBackgroundColor;}
         &[disabled] {

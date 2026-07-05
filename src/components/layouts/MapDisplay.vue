@@ -226,7 +226,7 @@ function isActiveRank(rank: string): boolean {
         }
 
         &::before {
-            @extend .inheritChainNo;
+            @extend %inheritChainNo;
             content: attr(data-chain-no);
             transform: translate(2px, -1px);
         }

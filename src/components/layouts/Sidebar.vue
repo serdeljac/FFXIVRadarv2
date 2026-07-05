@@ -35,7 +35,7 @@
         <!-- Footer -->
         <footer>
             <donateBtn :sidebarLayout="sidebarLayout"/>
-            <p>&copy; 2023 FFXIV Radar. All rights reserved.</p>
+            <p>&copy; 2023&ndash;{{ currentYear }} FFXIV Radar.<br/>Not affiliated with Square Enix.</p>
         </footer>
     </aside>
 </template>
@@ -44,13 +44,12 @@
 import { ref, computed } from 'vue'
 import donateBtn from '../ui/buttons/donate.vue'
 import sidebarLinks from './parts/sidebarLinks.vue'
+import { padNumber } from '../../hooks/hooks.ts'
 
 const props = defineProps(['sidebarLayout', 'eorzeaClock'])
 
 const clockIs24Format = ref(true)
 
-const clockMinute = computed(() => {
-    const m = props.eorzeaClock.displayMin
-    return m < 10 ? `0${m}` : m
-})
+const clockMinute = computed(() => padNumber(props.eorzeaClock.displayMin))
+const currentYear = new Date().getFullYear()
 </script>

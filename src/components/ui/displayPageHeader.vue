@@ -1,7 +1,9 @@
 <template>
     <header class="pageHeader">
         <div class="pageHeader_titleRow">
-            <h1 class="pageHeader_title">{{ title.split(' ', 2)[0] }} <span class="accent">{{ fixtitle(title) }}</span></h1>
+            <h1 class="pageHeader_title">
+                <navIcon v-if="icon" :name="icon" class="pageHeader_icon"/>{{ title.split(' ', 2)[0] }} <span class="accent">{{ fixtitle(title) }}</span>
+            </h1>
         </div>
         <p class="pageHeader_tagline">
             {{ tagline }}
@@ -11,9 +13,12 @@
 </template>
 
 <script lang="ts">
+    import navIcon from './navIcon.vue'
+
     export default {
         name: "Page Header",
-        props: ['title', 'tagline'],
+        props: ['title', 'tagline', 'icon'],
+        components: { navIcon },
         methods: {
             fixtitle(text: string) {
                 let firstSec = text.split(' ', 2)[0]
@@ -46,6 +51,15 @@
             letter-spacing: 0.05em;
             color: #e8f0ff;
             margin: 0;
+
+            :deep(.navIcon) {
+                width: 1em;
+                height: 1em;
+                color: $teal;
+                vertical-align: -0.12em;
+                margin-right: 0.25em;
+                flex-shrink: 0;
+            }
         }
 
         .accent {

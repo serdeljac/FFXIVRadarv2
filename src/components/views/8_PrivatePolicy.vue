@@ -2,108 +2,91 @@
     <div :class="[`policy body_content`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`FFXIV RADAR Private Policy`" :tagline="pageTagLine"/>
+        <PageHeader :title="`FFXIV RADAR Private Policy`" :tagline="pageTagLine" icon="privatepolicy"/>
 
         <div class="group">
-            <h6>Effective Date: May 10, 2026 | Last Updated: May 10, 2026</h6>
+            <h6>Effective Date: May 10, 2026 | Last Updated: July 5, 2026</h6>
             <hr class="header_bar"/>
         </div>
 
         <div class="group">
-            <p>This Privacy Policy describes how FFXIV Radar, an individual operating in British Columbia, Canada, collects, uses, discloses, and protects your personal information when you visit our website at https://ffxivradar.com, use our application "FFXIV Radar," or otherwise engage with our services (collectively, the 'Services'). We appreciate your trust and are committed to handling your information with caution and respect. This document seeks to provide clarity on how we manage your data in compliance with applicable privacy laws.</p>
+            <p>This Privacy Policy describes how FFXIV Radar, a free companion tool for Final Fantasy XIV Online operated by an individual based in British Columbia, Canada, handles information when you visit our website at https://ffxivradar.com or use our application "FFXIV Radar" (collectively, the "Services"). FFXIV Radar does not require account registration and does not knowingly collect your name, email address, or other directly-identifying personal information.</p>
             <p>By accessing or using the Services, you acknowledge that you have read and understood this Privacy Policy. You agree to be bound by its terms and commit to complying with the practices described herein. If you do not agree with this Privacy Policy, you should not use our Services.</p>
-            <p>FFXIV Radar complies with the California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020 (collectively, "CCPA/CPRA"), the General Data Protection Regulation (EU) 2016/679 ("GDPR"), and the California Online Privacy Protection Act ("CalOPPA"). These legislative frameworks guide our data handling practices and empower you with specific rights over your personal information.</p>
+            <p>FFXIV Radar aims to align its data practices with the California Consumer Privacy Act of 2018, as amended by the California Privacy Rights Act of 2020 (collectively, "CCPA/CPRA"), the General Data Protection Regulation (EU) 2016/679 ("GDPR"), and the California Online Privacy Protection Act ("CalOPPA"). Because the Services do not collect directly-identifying personal information, most of what these frameworks apply to below relates to the limited technical and usage data described in Section 1.</p>
             <hr class="bar_section"/>
         </div>
 
-        
+
 
         <div class="group">
             <h4 class="voidspace">1. INFORMATION WE COLLECT</h4>
-            <h5>1.1 Personal Information You Provide Directly</h5>
-            
-            <p>We collect personal information that you provide voluntarily through various features on our website and application. This includes data you provide when you register, complete forms, participate in surveys, or otherwise communicate with us. Specific identifiers we may collect include, but are not limited to:</p>
+            <h5>1.1 Information You Provide Directly</h5>
 
-            <ul>
-                <li>Your name, email address, and contact information when registering an account.</li>
-                <li>Profile information, such as usernames or display names within our Services.</li>
-                <li>Other information you voluntarily provide to us through forms, surveys, or direct communications.</li>
-            </ul>
+            <p>FFXIV Radar does not require you to create an account, register, or submit any personal information to use the Services. We do not operate contact forms, newsletters, or surveys that collect your name, email address, or other personal details. If you choose to email us directly (for example, at hi@stjepanerdeljac.com), we will only have access to whatever information you include in that message.</p>
 
             <h5>1.2 Information Collected Automatically</h5>
 
             <p>
-                When you interact with our Services, we automatically collect certain information using technologies like cookies, web beacons, and pixels. These tools help us understand how our users navigate and use our Services, providing insights crucial for enhancing our offerings. The types of information automatically collected include:
+                When you visit the Services, our analytics and advertising providers automatically collect certain technical information via cookies and similar technologies. This is standard for any website and is not linked to your name or any other directly-identifying information by us. The types of information collected include:
             </p>
 
             <ul>
-                <li>Your Internet Protocol (IP) address, which can provide geographic location data.</li>
+                <li>Your Internet Protocol (IP) address, which can provide approximate geographic location data.</li>
                 <li>The type and version of web browser you use to access our Services.</li>
-                <li>Your operating system type and version, giving insights into technical compatibility.</li>
-                <li>The pages you visit, allowing us to assess the popularity of content and navigation paths.</li>
-                <li>The referring URL and other browsing history details prior to attending our site.</li>
-                <li>Date and time information of access to our Services, which assists in bandwidth planning and load balancing.</li>
-                <li>Unique device identifiers and similar data for managing your access to our resources.</li>
+                <li>Your operating system type and version.</li>
+                <li>The pages you visit and how long you spend on them.</li>
+                <li>The referring URL that directed you to our site.</li>
+                <li>Date and time information of your visit.</li>
             </ul>
 
-            <h5>1.3 Information from Third-Party Sources</h5>
+            <h5>1.3 Local Storage for Tracking Features</h5>
 
             <p>
-                We may receive information about you from third-party sources, such as social media platforms, third-party integrations, or partners and affiliates. This information is used to supplement our records or for improving our service offerings. We ensure any such data is collected and processed in accordance with the third parties’ privacy policies, and we strive to provide you with clear information regarding any such instances when they arise.
+                To let you track gathering nodes, sightseeing vistas, and other in-game timers, FFXIV Radar saves your selections in your browser's local storage. This data stays on your device only — it is never transmitted to us or to any third party, and clearing your browser data will remove it.
             </p>
 
-            <h5>1.4 Sensitive Personal Information</h5>
+            <h5>1.4 Information from Third-Party Sources</h5>
 
             <p>
-                We do not intentionally collect sensitive personal information such as racial or ethnic origins, political opinions, religious or philosophical beliefs, union memberships, genetic or biometric data, health details, or sexual orientation. If we inadvertently come into possession of such information, we will ensure it is handled with the highest level of confidentiality and care required by applicable law and, where necessary, promptly deleted or anonymized.
+                We do not purchase or receive personal information about you from data brokers or other third parties. The only information we receive about your visit comes from the analytics and advertising providers described in Section 3, each of which processes data under its own privacy policy.
             </p>
 
-            <h4>2. HOW WE USE YOUR INFORMATION</h4>
-            <h5>2.1 Service Delivery and Operations</h5>
+            <h5>1.5 Sensitive Personal Information</h5>
 
             <p>
-                We use the personal information collected to deliver and operate our Services efficiently and effectively. This includes activities such as account management and service personalization. Specifically, we may use your information for the following purposes:
+                We do not collect sensitive personal information, such as racial or ethnic origin, political opinions, religious or philosophical beliefs, union membership, genetic or biometric data, health details, or sexual orientation, and the Services have no feature that would allow us to do so.
             </p>
 
-            <ul>
-                <li>Creating and managing your FFXIV Radar account for personalized access.</li>
-                <li>Providing the core functionalities of the Services, including gaming-related insights and applications.</li>
-                <li>Processing any payments or financial transactions, if applicable.</li>
-                <li>Delivering digital content and updates inherent to the Services.</li>
-                <li>Sending transaction-related communications such as confirmation and invoices.</li>
-                <li>Communicating service-related information, updates, or conduct notices.</li>
-            </ul>
-
-            <h5>2.2 Communications and Marketing</h5>
+            <h4>2. HOW WE USE INFORMATION</h4>
+            <h5>2.1 Operating and Improving the Services</h5>
 
             <p>
-                Your information is also used to communicate with you, share updates or information about our products and services, and respond to any inquiries. This includes:
+                We use the limited technical information described in Section 1 to operate, maintain, and improve the Services. Specifically:
             </p>
 
             <ul>
-                <li>Sending you promotional emails and offering announcements that may be of interest to you.</li>
-                <li>Distributing newsletters with industry news, tips, and community highlights.</li>
-                <li>Responding to your inquiries, requests, or any other direct communication from you.</li>
-                <li>Providing opt-out instructions within our marketing communications for your convenience.</li>
-                <li>Collaborating with third-party advertising partners for display advertisements on other platforms.</li>
-                <li>Managing and executing remarketing and retargeting campaigns to reach out to you with tailored promotions.</li>
+                <li>Delivering the core functionality of the site, including maps, trackers, timers, and reference data.</li>
+                <li>Understanding aggregate traffic patterns and popular pages via Google Analytics and Vercel Analytics/Speed Insights.</li>
+                <li>Monitoring site performance and diagnosing technical issues.</li>
+                <li>Detecting and preventing abuse, bot traffic, or attacks against the Services.</li>
             </ul>
 
-            <h5>2.3 Analytics and Service Improvement</h5>
-
-            <p>We implement robust analysis to evaluate and improve our Services. This allows us to operate more beneficially and effectively:</p>
+            <h5>2.2 Advertising</h5>
 
             <ul>
-                <li>Analyzing traffic patterns and user behaviors using tools such as Google Analytics.</li>
-                <li>Understanding user experience and navigation preferences within our Services.</li>
-                <li>Monitoring and detecting fraudulent activities to safeguard our users.</li>
-                <li>Conducting comprehensive internal research to inform our service strategies.</li>
-                <li>Testing new features and service enhancements before broad deployment.</li>
+                <li>Displaying advertisements through Google AdSense to help cover hosting and development costs.</li>
+                <li>Google AdSense may use cookies to personalize ads based on your browsing activity across sites, subject to your ad settings and consent choices (see Section 3).</li>
             </ul>
+
+            <h5>2.3 Donations</h5>
+
+            <p>
+                If you choose to support FFXIV Radar through the "Buy me a coffee" PayPal link, your payment is processed entirely by PayPal. We do not receive, process, or store your payment card, billing address, or PayPal account details — that transaction is governed by PayPal's own privacy policy.
+            </p>
 
             <h5>2.4 Legal Compliance and Rights Protection</h5>
 
-            <p>We are committed to compliance and the protection of our legal rights. Your data may be used when necessary for the following:</p>
+            <p>Where necessary, we may use the limited information available to us for the following purposes:</p>
 
             <ul>
                 <li>Complying with applicable laws, legal processes, or governmental requests.</li>
@@ -116,95 +99,78 @@
             <h5>3.1 Google AdSense</h5>
 
             <p>
-                We use Google AdSense, an advertising service provided by Google LLC, to display advertisements on our website. Google AdSense uses cookies and similar technologies to serve ads based on your prior visits to this website and other sites on the internet. Google's use of advertising cookies enables it and its partners to serve ads to you based on your visit to our site and/or other sites on the internet. You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google's Ads Settings</a>. For more information on how Google uses data when you use our site, please visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses data when you use our partners' sites or apps</a>.
+                We use Google AdSense, an advertising service provided by Google LLC, to display advertisements on our website. Google AdSense uses cookies and similar technologies to serve ads based on your prior visits to this website and other sites on the internet. You may opt out of personalized advertising by visiting <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer">Google's Ads Settings</a>. For more information on how Google uses data when you use our site, please visit <a href="https://policies.google.com/technologies/partner-sites" target="_blank" rel="noopener noreferrer">How Google uses data when you use our partners' sites or apps</a>.
+            </p>
+
+            <h5>3.2 Vercel Analytics &amp; Speed Insights</h5>
+
+            <p>
+                We use Vercel Analytics and Vercel Speed Insights, services provided by Vercel Inc., to measure page views, traffic sources, and site performance such as load times. These tools are designed to operate without setting third-party tracking cookies and do not collect directly-identifying information. We use the aggregated data solely to understand how the Services are used and to improve performance.
             </p>
 
             <h5>3.3 Google Analytics</h5>
 
             <p>
-                We use Google Analytics, a web analytics service provided by Google Inc., to analyze traffic on our website. Google Analytics uses cookies that collect data about your use of our website, and this data is transmitted to Google servers for processing. Google uses this data to compile reports on website activity and provide other services related to internet usage. The reports generated by Google Analytics help us understand user behavior and improve site functionality.
-            </p>
-
-            <p>
-                According to Google's privacy policy, Google will not combine your IP address with any other data held by Google. You may opt-out of Google Analytics by downloading the browser add-on available at https://tools.google.com/dlpage/gaoptout. This add-on is designed to prevent the Google Analytics JavaScript (ga.js, analytics.js, dc.js) from sharing information with Google Analytics about visit activity.
+                We use Google Analytics, a web analytics service provided by Google LLC, to analyze traffic on our website. Google Analytics uses cookies that collect data about your use of our website, and this data is transmitted to Google servers for processing. According to Google's privacy policy, Google will not combine your IP address with any other data held by Google. You may opt out of Google Analytics by downloading the browser add-on available at https://tools.google.com/dlpage/gaoptout.
             </p>
 
             <h5>3.4 Types of Cookies We Use</h5>
 
-            <p>We apply different types of cookies to deliver the best possible experience and service customization:</p>
-
             <ul>
-                <li>Essential Cookies that ensure our Services operate as intended. Blocking these cookies might affect your ability to use certain features and services.</li>
-                <li>Functional Cookies that provide more personalized functionality and remember your preferences, enhancing the overall user experience on our site.</li>
-                <li>Analytics Cookies that help us refine and understand our site’s performance through the collection of usage statistics, thus facilitating quality improvements.</li>
-                <li>Advertising and Remarketing Cookies that enable us to deliver relevant advertisements to users and assess the effectiveness of advertising campaigns.</li>
+                <li>Essential Cookies that ensure our Services operate as intended. Blocking these cookies might affect your ability to use certain features.</li>
+                <li>Analytics Cookies (Google Analytics) that help us understand site usage and performance.</li>
+                <li>Advertising Cookies (Google AdSense) that enable relevant ads and measure ad performance.</li>
             </ul>
 
             <h5>3.5 Your Cookie Choices</h5>
 
             <p>
-                You can have full control over your cookie preferences using your browser's settings. You can choose to block all cookies, allow only certain types of cookies, or decide to clear cookies at any time. Those in the European Economic Area (EEA) can also manage preferences via consent mechanisms. For further assistance with managing cookies, you can visit allaboutcookies.org, a resource offering practical guidance.
+                You can control your cookie preferences using your browser's settings. You can choose to block all cookies, allow only certain types of cookies, or clear cookies at any time. Those in the European Economic Area (EEA) can also manage preferences via consent mechanisms. For further guidance, you can visit allaboutcookies.org.
             </p>
 
             <h4>4. HOW WE SHARE YOUR INFORMATION</h4>
 
             <p>
-                We do not sell your personal information. We do not share your personal information for cross-context behavioral advertising. Under specific circumstances outlined below, we may share your information with the following parties:
+                We do not sell your personal information, and we do not have any personal information to sell. We do not share personal information for cross-context behavioral advertising ourselves. The technical and usage data described above is shared only with:
             </p>
 
             <ul>
-                <li>Service Providers who assist us in operating our Services, website hosting, data analysis, and IT support.</li>
-                <li>Analytics Providers to assist in understanding user behavior and optimizing our site’s performance and features.</li>
-                <li>Advertising Partners within the scope of Consent for customizing ad content and campaigns.</li>
-                <li>Customer Support to address and resolve your inquiries and issues efficiently.</li>
+                <li>Analytics &amp; Hosting Providers (Google Analytics, Vercel Analytics/Speed Insights) to operate and understand use of the Services.</li>
+                <li>Advertising Partners (Google AdSense) to display and measure ads.</li>
+                <li>Payment Processor (PayPal) only if you choose to make a donation — that transaction happens directly between you and PayPal, not through us.</li>
                 <li>Legal Authorities when legally required to comply with applicable laws, regulations, legal processes, or enforceable governmental requests.</li>
-                <li>Business Transfers if we are involved in a merger, acquisition, or asset sale, your information may be transferred alongside business assets.</li>
-                <li>Explicit Consent where you provide consent for us to share your personal data for specific purposes.</li>
+                <li>Business Transfers, if the Services are ever transferred as part of a merger, acquisition, or asset sale.</li>
             </ul>
-
-            <p>
-                All parties with whom we share your information are bound by confidentiality and contractual obligations ensuring the protection of personal data in line with this Privacy Policy.
-            </p>
 
             <h4>5. DATA RETENTION</h4>
 
             <p>
-                We retain your personal information for as long as is necessary to fulfill the purposes outlined in this Privacy Policy, comply with legal obligations, resolve disputes, and enforce our agreements. Specific retention periods vary depending on the type of data:
+                FFXIV Radar does not operate user accounts or profiles, so there is no directly-identifying personal data for us to retain or delete on our own servers. Aggregated analytics and performance data collected via Google Analytics and Vercel Analytics/Speed Insights is retained according to each provider's own retention settings, described in their respective privacy policies. Any email correspondence you send us directly is kept only as long as necessary to respond to your inquiry.
             </p>
-
-            <ul>
-                <li>Your account information is retained for a period of three years after the closure of your account.</li>
-                <li>Transactional information is retained for a minimum of seven years to comply with tax accounting obligations.</li>
-                <li>Marketing-related data will be kept throughout your subscription period and for a reasonable period thereafter to ensure continuity in communications.</li>
-                <li>Support-related interactions may be stored for up to two years to allow for analysis and improvements.</li>
-                <li>Data necessary for the establishment, exercise, or defense of legal claims may be retained as required.</li>
-            </ul>
-
-            <p>When personal information is no longer needed for these purposes, we will securely delete or anonymize it unless further retention is required by law.</p>
 
             <h4>6. YOUR RIGHTS UNDER THE CALIFORNIA CONSUMER PRIVACY ACT (CCPA/CPRA)</h4>
 
             <p>
-                Under the CCPA and CPRA, California residents have specific rights concerning their personal information, as codified under Cal. Civ. Code § 1798.100 et seq. These rights are designed to give individuals greater control over their personal data.
+                Under the CCPA and CPRA, California residents have specific rights concerning their personal information, as codified under Cal. Civ. Code § 1798.100 et seq. Because we do not hold account-level personal information, requests below will generally relate to cookie and analytics data associated with your browser or device.
             </p>
 
             <h5>6.1 Right to Know</h5>
-            <p>You have the right to request details about the categories and specific pieces of personal information we have collected about you, the sources of that information, our purposes for collecting it, and the categories of third parties with whom we share such information.</p>
+            <p>You have the right to request details about the categories of information collected about you through the Services, the sources of that information, and the categories of third parties with whom it is shared.</p>
 
             <h5>6.2 Right to Delete</h5>
-            <p>You can request the deletion of personal information we have collected from you, subject to certain exceptions. For example, we may retain information to complete the transaction for which it was collected, to detect security incidents or prevent fraud, or to comply with legal obligations.</p>
+            <p>You can request deletion of any information we hold that is associated with you, subject to certain exceptions, such as information we must retain to comply with legal obligations.</p>
 
             <h5>6.3 Right to Correct</h5>
-            <p>You have the right to request us to correct inaccurate personal information that we maintain about you. We strive to ensure all the information we hold is accurate, complete, and current.</p>
+            <p>You have the right to request that we correct inaccurate personal information that we maintain about you.</p>
 
             <h5>6.4 Right to Opt-Out of Sale or Sharing</h5>
-            <p>We do not sell your personal information. Should our practices change, we will comply with your right to opt-out of sales and sharing for cross-context behavioral advertising and notify you of said changes.</p>
+            <p>We do not sell your personal information. Should our practices change, we will comply with your right to opt-out of sales and sharing for cross-context behavioral advertising and notify you of such changes.</p>
 
             <h5>6.5 Right to Limit Use of Sensitive Personal Information</h5>
-            <p>The CCPA/CPRA allows you to limit the use of your sensitive personal information in certain contexts. While we do not collect sensitive information as defined under CCPA/CPRA, we are committed to respecting consumer rights and limiting data usage.</p>
+            <p>We do not collect sensitive personal information as defined under CCPA/CPRA.</p>
 
             <h5>6.6 Right to Non-Discrimination</h5>
-            <p>You have the right not to receive discriminatory treatment for the exercise of the privacy rights conferred by the CCPA. We pledge our non-discriminatory practices and equal service provision regardless of privacy right exercise.</p>
+            <p>You have the right not to receive discriminatory treatment for exercising your privacy rights under the CCPA.</p>
 
             <ul>
                 <li>No change in service levels or pricing will be applied.</li>
@@ -214,88 +180,73 @@
             </ul>
 
             <h5>6.7 How to Exercise Your CCPA Rights</h5>
-            <p>If you wish to exercise any of your rights under the CCPA, please contact us via email at hi@stjepanerdeljac.com. We will endeavor to respond within 45 days of receipt. You may appoint an authorized agent to make a request on your behalf. To protect your privacy, we will verify your identity before processing any request.</p>
+            <p>If you wish to exercise any of your rights under the CCPA, please contact us via email at hi@stjepanerdeljac.com. We will endeavor to respond within 45 days of receipt. You may appoint an authorized agent to make a request on your behalf.</p>
 
             <h5>6.8 Categories of Personal Information Collected (CCPA Disclosure)</h5>
-            <p>FFXIV Radar collects information that falls within the following CCPA-defined categories:</p>
+            <p>FFXIV Radar's use of the Services falls within the following CCPA-defined category:</p>
 
             <ul>
-                <li>Identifiers, including your name, email address, and other contact details.</li>
-                <li>Internet or other electronic network activity, such as browsing history and interaction data on our site.</li>
-                <li>Commercial information related to engaged services or transactions.</li>
-                <li>Inferences drawn from the above categorial data to personalize user experiences.</li>
+                <li>Internet or other electronic network activity, such as browsing behavior and interaction data on our site, collected automatically via our analytics and advertising providers.</li>
             </ul>
 
             <h4>7. YOUR RIGHTS UNDER THE GENERAL DATA PROTECTION REGULATION (GDPR)</h4>
-            <p>If you are located in the European Economic Area (EEA), the UK, or Switzerland, you are entitled to specific rights under the GDPR regarding your personal data. These rights are guaranteed by the GDPR (EU) 2016/679 and facilitate greater control over your information.</p>
+            <p>If you are located in the European Economic Area (EEA), the UK, or Switzerland, you are entitled to specific rights under the GDPR regarding your personal data.</p>
 
             <h5>7.1 Data Controller</h5>
-            <p>The data controller for your personal information collected through our Services is FFXIV Radar, an individual operating in British Columbia, Canada. You can contact us via email at hi@stjepanerdeljac.com to exercise your rights or raise inquiries.</p>
+            <p>The data controller for information processed through our Services is FFXIV Radar, an individual operating in British Columbia, Canada. You can contact us via email at hi@stjepanerdeljac.com to exercise your rights or raise inquiries.</p>
 
             <h5>7.2 Legal Bases for Processing</h5>
-            <p>We rely on the following legal bases under the GDPR for the processing of your personal information:</p>
+            <p>We rely on the following legal bases under the GDPR:</p>
 
             <ul>
-                <li>Consent, as regulated under Article 6(1)(a), where we process data with your explicit consent, especially concerning marketing communications.</li>
-                <li>Contractual Necessity, per Article 6(1)(b), where processing is necessary for the performance of a contract to which you are a party.</li>
-                <li>Legitimate Interests, within the scope of Article 6(1)(f), allowing us to process data necessary for the fulfillment of our legitimate business interests while ensuring minimal privacy impact.</li>
-                <li>Legal Obligation, as outlined in Article 6(1)(c), mandating that we process data to comply with applicable legal directives.</li>
+                <li>Consent, as regulated under Article 6(1)(a), for advertising and analytics cookies where required.</li>
+                <li>Legitimate Interests, within the scope of Article 6(1)(f), for maintaining site security, understanding aggregate traffic, and improving the Services.</li>
+                <li>Legal Obligation, as outlined in Article 6(1)(c), where processing is required to comply with applicable legal directives.</li>
             </ul>
 
             <h5>7.3 Your GDPR Rights</h5>
             <p>Under the GDPR, you are provided with the following rights regarding your personal data:</p>
 
             <ul>
-                <li>Right of Access, as detailed in Article 15, permitting you to obtain confirmation of whether we process your personal data and access to this data.</li>
-                <li>Right to Rectification, under Article 16, which allows you to request correction of inaccuracies in your personal data.</li>
-                <li>Right to Erasure ('Right to be Forgotten'), as per Article 17, letting you request the deletion of personal data under certain conditions.</li>
+                <li>Right of Access, as detailed in Article 15, permitting you to obtain confirmation of whether we process your personal data.</li>
+                <li>Right to Rectification, under Article 16, allowing you to request correction of inaccuracies in your personal data.</li>
+                <li>Right to Erasure ('Right to be Forgotten'), as per Article 17, letting you request deletion of personal data under certain conditions.</li>
                 <li>Right to Restriction of Processing, specified in Article 18, entitling you to request the limitation of processing under certain circumstances.</li>
-                <li>Right to Data Portability, detailed in Article 20, allowing you to receive your personal data in a structured, commonly-used, and machine-readable format for transfer to another controller.</li>
-                <li>Right to Object, as per Article 21, enabling you to object to the processing of your data under certain conditions, including direct marketing.</li>
-                <li>Right to Withdraw Consent, outlined in Article 7(3), allowing you to withdraw consent at any time where processing relied upon such consent.</li>
-                <li>Right to Lodge a Complaint with a supervisory authority in accordance with your rights under GDPR can be exercised at any time.</li>
+                <li>Right to Data Portability, detailed in Article 20, allowing you to receive your personal data in a structured, commonly-used, machine-readable format.</li>
+                <li>Right to Object, as per Article 21, enabling you to object to the processing of your data under certain conditions.</li>
+                <li>Right to Withdraw Consent, outlined in Article 7(3), allowing you to withdraw consent at any time.</li>
+                <li>Right to Lodge a Complaint with a supervisory authority in accordance with your rights under GDPR.</li>
             </ul>
 
             <h5>7.4 International Data Transfers</h5>
-            <p>Your personal data may be transferred to and processed in countries outside the EEA, including Canada. FFXIV Radar employs appropriate safeguards, such as Standard Contractual Clauses (SCCs) and the UK International Data Transfer Agreement (IDTA), to ensure personal data is protected and complies with European data protection standards.</p>
+            <p>Your information may be transferred to and processed in countries outside the EEA, including Canada and the United States, by our service providers (Google, Vercel). These providers maintain their own safeguards, such as Standard Contractual Clauses (SCCs), for such transfers.</p>
 
             <h4>8. CALOPPA COMPLIANCE</h4>
             <p>The California Online Privacy Protection Act (CalOPPA) mandates transparency in the online environment regarding privacy practices. We align our operations with these requirements:</p>
 
             <ul>
-                <li>We permit anonymous visits and browsing to our website, offering users privacy in preliminary interactions.</li>
+                <li>We permit anonymous visits and browsing to our website, and no registration is required to use any part of the Services.</li>
                 <li>Our privacy policy link is prominently presented on our homepage and within the Services for ease of access.</li>
-                <li>Users will receive clear notifications of any changes to our privacy practices on our website.</li>
-                <li>We provide mechanisms for users to review and update their personal information if necessary.</li>
+                <li>Users will receive clear notice of any material changes to our privacy practices on our website.</li>
                 <li>Although we currently do not honor "Do Not Track" (DNT) signals, we include this notice in recognition of user preferences and expectations.</li>
             </ul>
 
             <h4>9. DO NOT TRACK SIGNALS</h4>
-            <p>At present, our Services do not respond to Do Not Track (DNT) signals. DNT is a privacy preference that users can set in certain web browsers, but there is no universally accepted standard or technological approach to implementing them. Consequently, we do not alter or modify our data collection practices in response to all DNT signals.</p>
-            <p>Nonetheless, we are committed to respecting Global Privacy Control (GPC) signals as required under the CCPA. This function allows users to communicate privacy preferences directly from their devices, and we honor them wherever possible, complying with applicable regulations.</p>
+            <p>At present, our Services do not respond to Do Not Track (DNT) signals. DNT is a privacy preference that users can set in certain web browsers, but there is no universally accepted standard or technological approach to implementing them. Consequently, we do not alter our data collection practices in response to DNT signals.</p>
+            <p>Nonetheless, we are committed to respecting Global Privacy Control (GPC) signals as required under the CCPA, and we honor them wherever technically possible.</p>
 
             <h4>10. DATA SECURITY</h4>
-            <p>FFXIV Radar is committed to safeguarding your personal data. To this end, various security measures are implemented to protect against unauthorized access, misuse, or disclosure:</p>
+            <p>The Services are served over HTTPS (TLS) via our hosting provider, Vercel, which encrypts data in transit between your browser and our servers. Because FFXIV Radar does not operate user accounts, there are no passwords or authentication credentials for us to store or protect, and we do not maintain a database of directly-identifying personal information.</p>
 
-            <ul>
-                <li>Transport Layer Security (TLS) and Secure Socket Layer (SSL) protocols are in place to secure information during data transmission.</li>
-                <li>Data encryption is employed for stored data to enhance security against breaches and unauthorized access.</li>
-                <li>Secure authentication procedures are enforced to verify user identities before account access is granted.</li>
-                <li>Role-based access controls ensure data is accessible only to authorized personnel based on job functions.</li>
-                <li>Regular security assessments and vulnerability tests are performed to identify potential threats and improve defenses.</li>
-                <li>Contractual Data Processing Agreements (DPAs) are executed with all relevant third parties to ensure adherence to security and confidentiality commitments.</li>
-            </ul>
-
-            <p>Despite these efforts, no internet-based operation can be perfectly secure. Users must also take precautions against unauthorized access to their personal devices and authentication credentials.</p>
+            <p>Despite these safeguards, no method of transmission over the internet is completely secure, and we cannot guarantee absolute security.</p>
 
             <h4>11. THIRD-PARTY LINKS AND SERVICES</h4>
-            <p>Our Services may contain links to third-party websites, plug-ins, applications, or services. We are not responsible for the privacy practices of these external sites, nor do we endorse or have control over their content, underlying policies, or services. We encourage you to read the privacy statements of any third-party websites you visit to understand how they collect, use, and protect your personal information.</p>
-            <p>Our inclusion of third-party links and services is intended for user convenience and potential enhancement of our offerings. Any interaction you have with these third parties is governed by their respective terms, and we disclaim any liabilities arising from engagements with third parties.</p>
+            <p>Our Services may contain links to third-party websites, plug-ins, applications, or services, including PayPal. We are not responsible for the privacy practices of these external sites, nor do we endorse or control their content, policies, or services. We encourage you to read the privacy statements of any third-party websites you visit.</p>
+            <p>Our inclusion of third-party links and services is intended for user convenience. Any interaction you have with these third parties is governed by their respective terms, and we disclaim any liabilities arising from engagements with third parties.</p>
 
             <h4>12. CHANGES TO THIS PRIVACY POLICY</h4>
-            <p>We reserve the right to change or update this Privacy Policy at any time to reflect our current practices or regulatory changes. All updates and amendments will be communicated to you by posting the modified policy on our website at https://ffxivradar.com. Users are encouraged to periodically review this policy for the latest information on our privacy practices.</p>
-            <p>In the event of material changes to the way we process personal information, we will provide a more prominent notice either on our website or through direct contact with you. Where required by law, we will obtain your consent for significant modifications to our privacy practices.</p>
-            <p>Your continuous use of our Services following the posting of changes to this Privacy Policy will signify your acceptance of those changes and the resulting updated terms.</p>
+            <p>We reserve the right to change or update this Privacy Policy at any time to reflect our current practices or regulatory changes. All updates will be communicated by posting the modified policy on our website at https://ffxivradar.com. Users are encouraged to periodically review this policy.</p>
+            <p>In the event of material changes to how we process information, we will provide a more prominent notice on our website. Your continued use of our Services following the posting of changes will signify your acceptance of those changes.</p>
 
             <h4>13. CONTACT US</h4>
             <p>If you have any questions, concerns, or comments regarding this Privacy Policy or wish to exercise your privacy rights, please contact us:</p>
@@ -305,9 +256,7 @@
                 <li>Email: hi@stjepanerdeljac.com</li>
             </ul>
 
-            <p>For CCPA requests, please include 'CCPA Request' in the subject line to ensure proper handling and categorization of your inquiry. This helps expedite processing in compliance with legal requirements.</p>
-            <p>For GDPR requests, please include 'GDPR Request' in the subject line for swift attention and action in accordance with the applicable regulatory framework.</p>
-            <p>We aim to provide a response to all inquiries within 30 days of receipt. Requests under CCPA and GDPR may require up to 45 days and one month, respectively, for a formal response, depending on their complexity and volume.</p>
+            <p>For CCPA requests, please include 'CCPA Request' in the subject line. For GDPR requests, please include 'GDPR Request' in the subject line. We aim to respond to all inquiries within 30 days of receipt; CCPA and GDPR requests may take up to 45 days and one month, respectively, depending on complexity.</p>
 
             <h4>— END OF PRIVACY POLICY —</h4>
         </div>

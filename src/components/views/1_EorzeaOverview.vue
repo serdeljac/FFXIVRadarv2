@@ -2,7 +2,7 @@
     <section :class="[`eorzeaOverview body_content leafletMap`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`Eorzea Overview`" :tagline="pageTagLine"/>
+        <PageHeader :title="`Eorzea Overview`" :tagline="pageTagLine" icon="eorzeamap"/>
 
         <!-- Content Layout -->
         <div class="body_content-group mapContext">
@@ -87,8 +87,6 @@
                 <!-- Zone table for the selected data layer -->
                 <div v-if="selectedData" class="leafletMap_table">
 
-                    <!-- Gathering (mining/botany): one row per item; the timer
-                         spans the whole node and is centered. -->
                     <table v-if="isGathering && tableRows.length">
                         <thead>
                             <tr>
@@ -159,25 +157,6 @@
 
                     <p v-else class="leafletMap_tableEmpty">No {{ dataLabel }} in this zone.</p>
                 </div>
-
-                <!-- Data Content: one object array per node at the clicked spot -->
-                <!-- <div
-                    v-for="(group, gi) in detailGroups"
-                    :key="gi"
-                    class="leafletMap_vista">
-                    <div class="leafletMap_vistaHead">
-                        <span class="leafletMap_vistaTitle">{{ group.name }}</span>
-                        <span v-if="detailLoading" class="leafletMap_vistaStatus">Loading…</span>
-                    </div>
-                    <p v-if="group.error" class="leafletMap_vistaError">⚠ {{ group.error }}</p>
-                    <div
-                        v-for="row in group.rows"
-                        :key="row.key"
-                        class="leafletMap_vistaRow">
-                        <span class="leafletMap_vistaKey">{{ row.key }}</span>
-                        <span class="leafletMap_vistaVal">{{ row.value }}</span>
-                    </div>
-                </div> -->
             </div>
 
         </div>
@@ -194,8 +173,6 @@ import timeDisplay from '../ui/displayTime.vue'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
-// Injected into every router view by App.vue. defineProps is authoritative in
-// <script setup>, so every prop the template uses must be declared here.
 const props = defineProps<{
     ffxivData: any
     eorzeaClock?: any
@@ -203,28 +180,17 @@ const props = defineProps<{
     windowWidth?: string
     weatherList?: any
 }>()
-// Tracking is handled globally by App.vue, same as the timed mining/botany page.
+
 defineEmits(['changeTracked', 'openDetails'])
 
 // ─── Config ───────────────────────────────────────────────────────────────
 const BASE_URL = 'https://v2.xivapi.com'
-// FFXIV map asset images from xivapi are 2048×2048 px, and MapMarker X/Y are
-// stored in that same 2048-unit space, so markers map 1:1 onto the overlay.
 const MAP_PX = 2048
-// The radar's node transx/transy were precomputed for an 800px map, so scale
-// them up to our 2048px overlay.
 const NODE_SCALE = MAP_PX / 800
 const ICON_SIZE = 28 // px, on-screen size of a marker icon
-// The app's own gathering/sightseeing icons live in this S3 bucket
-// (same source as components/API/iconImg.vue).
 const ICON_CDN = 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/icons'
 const DEFAULT_ZONE = 'Limsa Lominsa Lower Decks'
-// Generic "area point" markers — sub-area / district name flags (e.g. "Hawkers'
-// Round", "Bulwark Hall"). Excluded to reduce clutter.
 const AREA_POINT_ICON_IDS = new Set([60442])
-// The MapMarker `Type` field is 0 across the board, so icon types are derived
-// from the data we do have: the aetheryte has a distinctive icon id, the rest
-// split into named landmarks/shops vs. unlabelled markers.
 const AETHERYTE_ICON_IDS = new Set([60453])
 type IconType = 'aetheryte' | 'landmark' | 'other' | 'sightseeing' | 'mining' | 'botany' | 'fates' | 'eliteHunts'
 const ICON_TYPES: { key: IconType; label: string }[] = [
@@ -237,13 +203,10 @@ const ICON_TYPES: { key: IconType; label: string }[] = [
     { key: 'fates', label: 'FATEs' },
     { key: 'eliteHunts', label: 'Elite Hunts' },
 ]
-// Map-marker types stay as independent checkboxes; the data types act as a
-// single-select radio that also drives the zone table below.
 type DataType = 'sightseeing' | 'mining' | 'botany' | 'fates' | 'eliteHunts'
 const MARKER_TYPES = ICON_TYPES.filter((t) => ['aetheryte', 'landmark', 'other'].includes(t.key))
 const DATA_TYPES = ICON_TYPES.filter((t) => !['aetheryte', 'landmark', 'other'].includes(t.key))
 
-// Columns shown in the zone table for each data type (local fields).
 const TABLE_COLUMNS: Record<DataType, { key: string; label: string }[]> = {
     sightseeing: [
         { key: 'name', label: 'Vista' },

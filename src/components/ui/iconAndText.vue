@@ -32,7 +32,7 @@ const fetchIconName = computed(() => {
         &[chainno] {
             img {opacity: 0.7;}
             &::before {
-                @extend .inheritChainNo;
+                @extend %inheritChainNo;
             }
         }
     }

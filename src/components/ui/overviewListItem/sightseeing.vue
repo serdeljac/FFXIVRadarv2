@@ -57,45 +57,35 @@
 import iconAndText from '../../ui/iconAndText.vue'
 import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
 import vistaSmallAPI from '../../API/vistaImg.vue'
+import { getTimerCountdown, isTimerActive, isWeatherMatch } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'])
 defineEmits(['focusNode', 'changeTracked', 'openVistaImg'])
 
 function fetchTimerCountdowns(time: string) {
-    if (time) return props.timerList.find((o: any) => o.ID == time).countdown
-    return 'Any Time'
+    return getTimerCountdown(props.timerList, time)
 }
 
 function checkTimeActive(type: string, arr: any) {
     if (type == 'weather1' || type == 'weather2') {
-        const curWeather = props.weatherList[arr.area.mapcode]
-        return curWeather == arr[type] ? true : null
+        return isWeatherMatch(props.weatherList, arr.area.mapcode, arr[type]) ? true : null
     }
 
     if (type == 'time' && arr.time) {
-        return props.timerList.find((o: any) => o.ID == arr.time).stateActive ? true : null
+        return isTimerActive(props.timerList, arr.time) ? true : null
     }
     return null
 }
 
 function checkRowActive(arr: any) {
-    let match1: any
-    let match2: any
-
     // Match1 — time state
-    if (arr.time) {
-        match1 = props.timerList.find((o: any) => o.ID == arr.time).stateActive ? true : null
-    }
+    const match1 = arr.time ? (isTimerActive(props.timerList, arr.time) ? true : null) : undefined
 
     // Match2 — weather state
-    if (arr.weather1) {
-        const curWeather = props.weatherList[arr.mapcode]
-        const condition1 = arr.weather1 == curWeather ? true : false
-        const condition2 = (arr.weather2 == curWeather) && arr.weather2 ? true : false
-        match2 = condition1 || condition2 ? true : false
-    }
-
     if (!arr.weather1) return match1
+    const match2 = isWeatherMatch(props.weatherList, arr.area.mapcode, arr.weather1)
+        || isWeatherMatch(props.weatherList, arr.area.mapcode, arr.weather2)
+
     return match1 == match2 ? true : null
 }
 </script>

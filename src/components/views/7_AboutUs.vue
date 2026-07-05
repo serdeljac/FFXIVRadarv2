@@ -2,7 +2,7 @@
     <div :class="[`aboutUs body_content`, windowWidth]">
         
         <!-- Header -->
-        <PageHeader :title="`About Us`" :tagline="pageTagLine"/>
+        <PageHeader :title="`About Us`" :tagline="pageTagLine" icon="about"/>
 
         <div class="body_content-group">
 

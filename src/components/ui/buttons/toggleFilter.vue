@@ -39,7 +39,6 @@ import iconImgAPI from '../../API/iconImg.vue';
     .btn {
         border: 1px solid $buttonBackgroundColor;
         background-color: $bodyBackgroundColor;
-        line-height: 1;
         cursor: pointer;
         display: flex;
         align-items: center;
@@ -47,7 +46,6 @@ import iconImgAPI from '../../API/iconImg.vue';
         transition: all 0.1s linear;
         border-radius: $borderRadius;
         height: 40px;
-        font-weight: bold;
         margin: 10px 0.5rem;
         box-shadow: inset 0.4px 1px 2px rgba(255, 255, 255, 0.116),
                 0px 0px 3px $buttonBackgroundColorHover;

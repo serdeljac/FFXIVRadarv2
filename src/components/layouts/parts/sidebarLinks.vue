@@ -4,11 +4,11 @@
             <router-link :to="`/${a.link}`">
 
                 <div v-if="sidebarLayout == 'compact'" :class="['linkList-collapse']">
-                    <iconImgAPI :name="`sq_${a.icon}`"/>
+                    <navIcon :name="a.icon"/>
                 </div>
 
                 <div v-else :class="['linkList-extended']" >
-                    <iconImgAPI :name="`sq_${a.icon}`"/>
+                    <navIcon :name="a.icon"/>
                     <p>{{ a.name }}</p>
                 </div>
 
@@ -18,7 +18,7 @@
 </template>
 
 <script lang="ts" setup>
-    import iconImgAPI from '../../API/iconImg.vue';
+    import navIcon from '../../ui/navIcon.vue';
 
     defineProps(['sidebarLayout'])
 
@@ -74,3 +74,14 @@
         },
     ]
 </script>
+
+<style scoped lang="scss">
+    .linkList-extended :deep(.navIcon) {
+        margin-right: 2px;
+    }
+
+    a:hover :deep(.navIcon),
+    a.router-link-exact-active :deep(.navIcon) {
+        color: $teal;
+    }
+</style>

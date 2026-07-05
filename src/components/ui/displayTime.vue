@@ -7,13 +7,13 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
+import { isTimerActive, getTimerCountdown } from '../../hooks/hooks'
 
 const props = defineProps(['timeId', 'timerList'])
 defineEmits(['timeActive'])
 
-const result = computed(() => (props.timeId ? props.timerList.find((o: any) => o.ID == props.timeId) : null))
-const active = computed(() => !!result.value?.stateActive)
-const fetchTimer = computed(() => (props.timeId ? result.value?.countdown : 'Any Time'))
+const active = computed(() => isTimerActive(props.timerList, props.timeId))
+const fetchTimer = computed(() => getTimerCountdown(props.timerList, props.timeId))
 </script>
 
 <style scoped lang="scss">

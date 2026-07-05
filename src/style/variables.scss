@@ -1,4 +1,3 @@
-//Colors
 $fontColor: #c8d8f0;
 $bodyBackgroundColor: #121212;
 $expColor: gold;
@@ -14,12 +13,8 @@ $listBackgroundColorHover: rgb(47, 47, 47);
 $buttonBackgroundColor: #0c4e4e;
 $buttonBackgroundColorHover: #0e4747;
 
-$iconColor: rgb(157, 164, 106);
 $iconColorHover: rgb(230, 241, 146);
 
-
-
-//New Colors
 $teal: #2dd4bf;
 $tealShadow: rgba(45, 212, 191, 0.2);
 $dim: #5a6e90;
@@ -27,20 +22,16 @@ $buttonBorder: rgba(45, 212, 191, 0.15);
 $amber: #f59e0b;
 $red: #ef4444;
 
-
-//Measurements
 $sidebarWidthExpand: 270px;
 $sidebarWidthCollapse: 80px;
 $trackingbarHeight: 70px;
 
 $borderRadius: 4px;
 
-
 $paddingSize: 0.5rem;
 $iconSize: 26px;
 
-//Inherit
-.inheritChainNo {
+%inheritChainNo {
     display: block;
     content: attr(chainno);
     position: absolute;

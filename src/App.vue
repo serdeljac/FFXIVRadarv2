@@ -86,6 +86,26 @@ const GS_ACTIVE_WINDOW = 600; // seconds active per cycle
 // Eorzea weather changes at Eorzea-minute 0, 480, and 960
 const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 
+// Job categories that support tracking (have a `.tracked` flag + track button)
+const TRACKABLE_JOBS = ['miner', 'botany', 'sightseeing'] as const;
+
+// Tracked nodes are persisted to localStorage keyed by "job:ID" rather than
+// kept only in memory, so tracking survives page reloads.
+const TRACKING_STORAGE_KEY = 'ffxivradar_trackedNodes';
+
+function loadTrackedKeys(): Set<string> {
+  try {
+    const raw = localStorage.getItem(TRACKING_STORAGE_KEY);
+    return raw ? new Set(JSON.parse(raw)) : new Set();
+  } catch {
+    return new Set();
+  }
+}
+
+function saveTrackedKeys(keys: Set<string>) {
+  localStorage.setItem(TRACKING_STORAGE_KEY, JSON.stringify([...keys]));
+}
+
 export default {
   name: 'AppRoot',
   components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
@@ -140,6 +160,7 @@ export default {
     this.onWindowResize();
 
     await this.setupInitialFFXIVData();
+    this.restoreTrackedState();
     this.loading = false;
 
     this._clockInterval = setInterval(() => {
@@ -582,6 +603,24 @@ export default {
 
     // ─── Tracking & Details ───────────────────────────────────────────────────
 
+    // Restores tracked state from localStorage once ffxivData is loaded, so
+    // both the node `.tracked` flags and the tracking bar reflect what was
+    // tracked before the page was last closed.
+    restoreTrackedState() {
+      const trackedKeys = loadTrackedKeys();
+      if (trackedKeys.size === 0) return;
+
+      for (const job of TRACKABLE_JOBS) {
+        const nodes: any[] = (this.ffxivData as any)[job];
+        for (const node of nodes) {
+          if (trackedKeys.has(`${job}:${node.ID}`)) {
+            node.tracked = true;
+            this.trackinglist.push(node);
+          }
+        }
+      }
+    },
+
     changeTracked(e: { job: string; ID: number }) {
       const nodes: any[] | undefined = (this.ffxivData as any)[e.job];
       if (!nodes) {
@@ -591,12 +630,19 @@ export default {
       const index = nodes.findIndex((o) => o.ID === e.ID);
       if (index === -1) return;
 
-      nodes[index].tracked = !nodes[index].tracked;
+      const key = `${e.job}:${e.ID}`;
+      const trackedKeys = loadTrackedKeys();
 
-      if (nodes[index].tracked) {
+      if (!trackedKeys.has(key)) {
+        trackedKeys.add(key);
+        saveTrackedKeys(trackedKeys);
+        nodes[index].tracked = true;
         this.trackinglist.push(nodes[index]);
       } else {
-        this.trackinglist = this.trackinglist.filter((o: any) => o.ID !== e.ID);
+        trackedKeys.delete(key);
+        saveTrackedKeys(trackedKeys);
+        nodes[index].tracked = false;
+        this.trackinglist = this.trackinglist.filter((o: any) => !(o.ID === e.ID && o.job === e.job));
       }
     },
 
