@@ -1,12 +1,39 @@
-import { defineConfig } from "vite";
+import { defineConfig, type Plugin } from "vite";
 import vue from "@vitejs/plugin-vue";
 
-// https://vite.dev/config/
+function lodestoneDevApi(): Plugin {
+  return {
+    name: "ffxiv-radar:lodestone-dev-api",
+    configureServer(server) {
+      server.middlewares.use("/api/character", async (req, res) => {
+        if (req.method && req.method !== "GET") {
+          res.statusCode = 405;
+          res.setHeader("Allow", "GET");
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ error: "Method not allowed" }));
+          return;
+        }
+
+        try {
+          const mod = await server.ssrLoadModule("/api/_lodestone.ts");
+          const data = await mod.getCharacter();
+          res.statusCode = 200;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify(data));
+        } catch (err: any) {
+          console.error("[vite:lodestone-dev-api] failed to load Lodestone profile", err);
+          res.statusCode = 502;
+          res.setHeader("Content-Type", "application/json");
+          res.end(JSON.stringify({ error: err?.message ?? "Failed to load character profile" }));
+        }
+      });
+    },
+  };
+}
+
 export default defineConfig({
-  plugins: [vue()],
+  plugins: [vue(), lodestoneDevApi()],
   server: {
-    // Honor a PORT supplied by the environment (e.g. preview tooling); fall back
-    // to Vite's default otherwise.
     port: process.env.PORT ? Number(process.env.PORT) : undefined,
   },
   css: {

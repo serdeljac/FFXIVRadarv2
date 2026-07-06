@@ -17,6 +17,7 @@ function generateID() {
 }
 
 async function loadVistaPreviewImg(): Promise<void> {
+    
     const CACHE_NAME = 'ffxivmap_icons'
     const imageUrl = `https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/icons/${props.name}.webp`
     await nextTick()
@@ -24,6 +25,7 @@ async function loadVistaPreviewImg(): Promise<void> {
     if (!el) return
 
     try {
+        if (!props.name) { return }
         const cache = await caches.open(CACHE_NAME)
         const cached = await cache.match(imageUrl)
 

@@ -27,25 +27,35 @@
             <div class="eorzeaOverview_contentArea">
 
                 <!-- Filter: Zone Select -->
-                <div class="zoneSelect">
+                <div class="zoneSelect" ref="zoneSelectEl">
                     <span class="eorzeaOverview_filterLabel">Zone select</span>
-                    <select
-                        v-model="selectedZone"
-                        class="eorzeaOverview_select"
-                        @change="loadZone(selectedZone)">
-                        <optgroup
+                    <button
+                        type="button"
+                        class="eorzeaOverview_select eorzeaOverview_select--trigger"
+                        @click="isZoneListOpen = !isZoneListOpen">
+                        <iconImgAPI v-if="selectedZoneEntry" :name="selectedZoneEntry.type" class="eorzeaOverview_zoneIcon" />
+                        <span>{{ selectedZone }}</span>
+                    </button>
+                    <span class="eorzeaOverview_arrow">▾</span>
+
+                    <ul v-if="isZoneListOpen" class="eorzeaOverview_zoneList">
+                        <li
                             v-for="group in zoneGroups"
                             :key="group.expansion"
-                            :label="group.expansion">
-                            <option
+                            class="eorzeaOverview_zoneGroup">
+                            <span class="eorzeaOverview_zoneGroupLabel">{{ group.expansion }}</span>
+                            <button
                                 v-for="zone in group.zones"
                                 :key="zone.zone"
-                                :value="zone.zone">
-                                {{ zone.zone }}
-                            </option>
-                        </optgroup>
-                    </select>
-                    <span class="eorzeaOverview_arrow">▾</span>
+                                type="button"
+                                class="eorzeaOverview_zoneOption"
+                                :class="{ 'eorzeaOverview_zoneOption--active': zone.zone === selectedZone }"
+                                @click="selectZone(zone.zone)">
+                                <iconImgAPI :name="zone.type ? zone.type : 'world'" class="eorzeaOverview_zoneIcon" />
+                                <span>{{ zone.zone }}</span>
+                            </button>
+                        </li>
+                    </ul>
                 </div>
 
                 <!-- Filter: Map markers (multi-select checkboxes) -->
@@ -170,6 +180,7 @@ import 'leaflet/dist/leaflet.css'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import timeDisplay from '../ui/displayTime.vue'
+import iconImgAPI from '../API/iconImg.vue'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
@@ -244,6 +255,7 @@ const TABLE_COLUMNS: Record<DataType, { key: string; label: string }[]> = {
 // ─── Types ────────────────────────────────────────────────────────────────
 interface ZoneEntry {
     zone: string    // PlaceName used both as the display label and the map lookup key
+    type: string
     variant: string // two-digit xivapi asset variant, e.g. "00"
 }
 interface ZoneGroup {
@@ -262,6 +274,17 @@ const hasError = ref(false)
 const errorMsg = ref('')
 const selectedZone = ref(DEFAULT_ZONE)
 const zoneGroups = ref<ZoneGroup[]>([])
+// Custom zone dropdown (native <select><option> can't render an <img>, so the
+// icon-plus-label list is a plain button/list menu instead).
+const isZoneListOpen = ref(false)
+const zoneSelectEl = ref<HTMLElement | null>(null)
+const selectedZoneEntry = computed<ZoneEntry | null>(() => {
+    for (const group of zoneGroups.value) {
+        const match = group.zones.find((z) => z.zone === selectedZone.value)
+        if (match) return match
+    }
+    return null
+})
 // Which icon types are visible, and how many of each are on the current map.
 const filters = reactive<Record<IconType, boolean>>({ aetheryte: true, landmark: true, other: true, sightseeing: true, mining: true, botany: true, fates: true, eliteHunts: true })
 const counts = reactive<Record<IconType, number>>({ aetheryte: 0, landmark: 0, other: 0, sightseeing: 0, mining: 0, botany: 0, fates: 0, eliteHunts: 0 })
@@ -337,9 +360,13 @@ onMounted(async () => {
     }
 
     await loadZone(selectedZone.value)
+
+    document.addEventListener('click', onZoneSelectDocumentClick)
 })
 
 onBeforeUnmount(() => {
+    document.removeEventListener('click', onZoneSelectDocumentClick)
+
     // Tear down Leaflet to avoid leaks / duplicate maps on route change & HMR.
     if (map) {
         map.remove()
@@ -358,7 +385,7 @@ function buildZoneGroups() {
 
     for (const area of areas) {
         if (!area.inoverview) continue
-        const { expansion, zone } = area
+        const { expansion, zone, type } = area
         if (!byExpansion.has(expansion)) {
             byExpansion.set(expansion, new Map())
             order.push(expansion)
@@ -367,6 +394,7 @@ function buildZoneGroups() {
         if (!zones.has(zone)) {
             zones.set(zone, {
                 zone,
+                type,
                 variant: String(area.variant ?? 0).padStart(2, '0'),
             })
         }
@@ -376,6 +404,20 @@ function buildZoneGroups() {
         expansion,
         zones: [...byExpansion.get(expansion)!.values()],
     }))
+}
+
+// Zone list option click: set the zone, close the menu, load the map.
+function selectZone(zoneName: string) {
+    selectedZone.value = zoneName
+    isZoneListOpen.value = false
+    loadZone(zoneName)
+}
+
+// Close the zone dropdown when clicking anywhere outside it.
+function onZoneSelectDocumentClick(e: MouseEvent) {
+    if (isZoneListOpen.value && zoneSelectEl.value && !zoneSelectEl.value.contains(e.target as Node)) {
+        isZoneListOpen.value = false
+    }
 }
 
 function variantForZone(zoneName: string): string {
@@ -1093,6 +1135,10 @@ function clearDetails() {
     width: 100%;
 }
 
+.zoneSelect {
+    position: relative;
+}
+
 .eorzeaOverview {
 
     &_contentArea {
@@ -1127,31 +1173,31 @@ function clearDetails() {
         letter-spacing: 0.03em;
         cursor: pointer;
         transition: all 0.2s;
-    
+
         &:hover {
             background: rgba(45, 212, 191, 0.07);
             border-color: rgba(45, 212, 191, 0.35);
             color: #e8f0ff;
             cursor: pointer;
         }
-    
+
         &:focus {
             outline: none;
             border-color: $teal;
             box-shadow: 0 0 0 1px $tealShadow;
             cursor: pointer;
         }
-    
-        optgroup {
-            background: #0b1220;
-            color: $teal;
-            font-family: 'Cinzel', serif;
-        }
-    
-        option {
-            background: #0b1220;
-            font-family: 'Rajdhani', sans-serif;
-            cursor: pointer;
+
+        // The trigger is a <button> standing in for the old native <select>, so
+        // it needs its own text layout (a native select can't show an <img>
+        // inside its options, hence the custom dropdown below).
+        &--trigger {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            width: 100%;
+            text-align: left;
+            color: inherit;
         }
     }
 
@@ -1162,6 +1208,69 @@ function clearDetails() {
         color: $teal;
         pointer-events: none;
         font-size: 0.8rem;
+    }
+
+    &_zoneIcon {
+        width: 22px;
+        height: 22px;
+        flex-shrink: 0;
+        object-fit: contain;
+    }
+
+    &_zoneList {
+        position: absolute;
+        left: 0; right: 0;
+        top: 100%;
+        z-index: 30;
+        margin-top: 4px;
+        max-height: 320px;
+        overflow-y: auto;
+        list-style: none;
+        padding: 6px 0;
+        border-radius: 8px;
+        border: 1px solid $buttonBorder;
+        background: #0b1220;
+        box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45);
+    }
+
+    &_zoneGroup {
+        display: flex;
+        flex-direction: column;
+    }
+
+    &_zoneGroupLabel {
+        padding: 8px 16px 4px;
+        font-family: 'Cinzel', serif;
+        font-size: 0.78rem;
+        color: $teal;
+        text-transform: uppercase;
+        letter-spacing: 0.06em;
+    }
+
+    &_zoneOption {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        width: 100%;
+        padding: 8px 16px;
+        border: none;
+        background: none;
+        color: #c8d8f0;
+        font-family: 'Rajdhani', sans-serif;
+        font-size: 0.95rem;
+        text-align: left;
+        cursor: pointer;
+        transition: background 0.15s, color 0.15s;
+
+        &:hover {
+            background: rgba(45, 212, 191, 0.1);
+            color: #e8f0ff;
+        }
+
+        &--active {
+            background: rgba(45, 212, 191, 0.18);
+            color: #e8f0ff;
+        }
     }
 
     &_checkboxes {
