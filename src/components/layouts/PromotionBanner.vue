@@ -1,13 +1,12 @@
 <template>
-  <div class="ad-banner promotion_banner">
+  <div class="promotion_banner">
     <ins
-      class="adsbygoogle"
+      class="adsbygoogle promotion_banner-ins"
       style="display:block"
       data-ad-client="ca-pub-4825113460804714"
-      data-ad-slot="YOUR_AD_SLOT_ID"
+      data-ad-slot="3669528090"
       data-ad-format="auto"
-      data-full-width-responsive="true"
-    />
+      data-full-width-responsive="true" />
   </div>
 </template>
 
@@ -23,3 +22,19 @@ onMounted(() => {
   }
 })
 </script>
+
+<style scoped lang="scss">
+  .promotion_banner {
+    display: block;
+    width: 100%;
+    max-width: 728px;
+    aspect-ratio: 728 / 90;
+    text-align: center;
+    margin: 1rem auto;
+
+    &-ins {
+      width: 100%;
+      height: 100%;
+    }
+  }
+</style>
