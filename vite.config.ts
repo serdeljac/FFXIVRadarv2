@@ -34,7 +34,7 @@ function lodestoneDevApi(): Plugin {
 export default defineConfig({
   plugins: [vue(), lodestoneDevApi()],
   server: {
-    port: process.env.PORT ? Number(process.env.PORT) : undefined,
+    port: 6020,
   },
   css: {
     preprocessorOptions: {

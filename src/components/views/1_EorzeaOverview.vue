@@ -59,8 +59,9 @@
                 </div>
 
                 <!-- Filter: Map markers (multi-select checkboxes) -->
-                <div class="eorzeaOverview_checkboxes">
+                <div class="eorzeaOverview_checkboxes markertypes">
                     <span class="eorzeaOverview_filterLabel">Map markers</span>
+                    <div>
                     <label
                         v-for="t in MARKER_TYPES"
                         :key="t.key"
@@ -73,10 +74,11 @@
                         <span class="eorzeaOverview_checkbox-label">{{ t.label }}</span>
                         <span class="eorzeaOverview_checkbox-count">{{ counts[t.key] }}</span>
                     </label>
+                    </div>
                 </div>
 
                 <!-- Filter: Data layer (single-select radio) -->
-                <div class="eorzeaOverview_checkboxes">
+                <div class="eorzeaOverview_checkboxes datalayers">
                     <span class="eorzeaOverview_filterLabel">Data layer</span>
                     <label
                         v-for="t in DATA_TYPES"
@@ -203,20 +205,24 @@ const ICON_CDN = 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-
 const DEFAULT_ZONE = 'Limsa Lominsa Lower Decks'
 const AREA_POINT_ICON_IDS = new Set([60442])
 const AETHERYTE_ICON_IDS = new Set([60453])
-type IconType = 'aetheryte' | 'landmark' | 'other' | 'sightseeing' | 'mining' | 'botany' | 'fates' | 'eliteHunts'
+// The zone-exit arrow icon (adjacent zone name), the dungeon-entrance icon,
+// and the Crystal Tower alliance-raid entrance icon — all lead to another zone.
+const ZONE_EXIT_ICON_IDS = new Set([60441, 60414, 60428])
+type IconType = 'aetheryte' | 'zoneExit' | 'misc' | 'sightseeing' | 'mining' | 'botany' | 'fishing' | 'fates' | 'eliteHunts'
 const ICON_TYPES: { key: IconType; label: string }[] = [
     { key: 'aetheryte', label: 'Aetherytes' },
-    { key: 'landmark', label: 'Landmarks & Shops' },
-    { key: 'other', label: 'Other Markers' },
+    { key: 'zoneExit', label: 'Zone Exits' },
+    { key: 'misc', label: 'Misc' },
     { key: 'sightseeing', label: 'Sightseeing' },
     { key: 'mining', label: 'Mining' },
     { key: 'botany', label: 'Botany' },
+    { key: 'fishing', label: 'Fishing' },
     { key: 'fates', label: 'FATEs' },
     { key: 'eliteHunts', label: 'Elite Hunts' },
 ]
-type DataType = 'sightseeing' | 'mining' | 'botany' | 'fates' | 'eliteHunts'
-const MARKER_TYPES = ICON_TYPES.filter((t) => ['aetheryte', 'landmark', 'other'].includes(t.key))
-const DATA_TYPES = ICON_TYPES.filter((t) => !['aetheryte', 'landmark', 'other'].includes(t.key))
+type DataType = 'sightseeing' | 'mining' | 'botany' | 'fishing' | 'fates' | 'eliteHunts'
+const MARKER_TYPES = ICON_TYPES.filter((t) => ['aetheryte', 'zoneExit', 'misc'].includes(t.key))
+const DATA_TYPES = ICON_TYPES.filter((t) => !['aetheryte', 'zoneExit', 'misc'].includes(t.key))
 
 const TABLE_COLUMNS: Record<DataType, { key: string; label: string }[]> = {
     sightseeing: [
@@ -235,6 +241,12 @@ const TABLE_COLUMNS: Record<DataType, { key: string; label: string }[]> = {
         { key: 'name', label: 'Item' },
         { key: 'node_level', label: 'Lv' },
         { key: 'time', label: 'Timer' },
+    ],
+    fishing: [
+        { key: 'name', label: 'Spot' },
+        { key: 'level', label: 'Lv' },
+        { key: 'rare', label: 'Rare' },
+        { key: 'fish', label: 'Fish' },
     ],
     fates: [
         { key: 'name', label: 'FATE' },
@@ -286,12 +298,15 @@ const selectedZoneEntry = computed<ZoneEntry | null>(() => {
     return null
 })
 // Which icon types are visible, and how many of each are on the current map.
-const filters = reactive<Record<IconType, boolean>>({ aetheryte: true, landmark: true, other: true, sightseeing: true, mining: true, botany: true, fates: true, eliteHunts: true })
-const counts = reactive<Record<IconType, number>>({ aetheryte: 0, landmark: 0, other: 0, sightseeing: 0, mining: 0, botany: 0, fates: 0, eliteHunts: 0 })
+const filters = reactive<Record<IconType, boolean>>({ aetheryte: true, zoneExit: true, misc: false, sightseeing: true, mining: true, botany: true, fishing: true, fates: true, eliteHunts: true })
+const counts = reactive<Record<IconType, number>>({ aetheryte: 0, zoneExit: 0, misc: 0, sightseeing: 0, mining: 0, botany: 0, fishing: 0, fates: 0, eliteHunts: 0 })
 // The single selected data layer (radio). '' = none selected.
 const selectedData = ref<DataType | ''>('')
 // Rows for the zone table, populated from the selected data type's local nodes.
 const tableRows = ref<any[]>([])
+// Fishing has no local dataset — spots are fetched live from FFXIVAPI per
+// zone and cached here so buildTable() can read them synchronously.
+const fishingRows = ref<any[]>([])
 const tableColumns = computed(() => (selectedData.value ? TABLE_COLUMNS[selectedData.value] : []))
 const dataLabel = computed(() => DATA_TYPES.find((t) => t.key === selectedData.value)?.label ?? '')
 // Gathering tables (mining/botany) use a custom per-item layout with a spanning timer.
@@ -439,6 +454,7 @@ async function loadZone(zoneName: string) {
     selectMarker(null)
     nodeMarkers.clear()
     huntMarkers.clear()
+    fishingRows.value = []
     for (const { key } of ICON_TYPES) {
         typeLayers[key]?.clearLayers()
         counts[key] = 0
@@ -481,10 +497,12 @@ async function loadZone(zoneName: string) {
         buildTable()
 
         // The map is visible now — fetch its icons in the background so a slow
-        // marker request never blocks the map itself.
+        // marker request never blocks the map itself. Fishing spots have no
+        // local dataset, so they're fetched from FFXIVAPI the same way.
         if (meta.markerRange != null) {
             renderMapMarkers(meta.markerRange, token)
         }
+        renderFishing(zoneName, token)
     } catch (err: any) {
         if (token !== loadToken) return
         console.error('[LeafletMap] map load failed', err)
@@ -559,7 +577,7 @@ async function renderMapMarkers(range: number, token: number) {
 
             const latlng: L.LatLngExpression = [MAP_PX - f.Y, f.X]
             const name = (f.PlaceNameSubtext?.fields?.Name ?? '').replace(/\n/g, ' — ').trim()
-            const type = classifyMarker(iconId, name)
+            const type = classifyMarker(iconId, name, f.Type)
             makeMarker(latlng, mapMarkerIconUrl(iconPath), name).addTo(typeLayers[type])
             counts[type]++
         }
@@ -568,11 +586,19 @@ async function renderMapMarkers(range: number, token: number) {
     }
 }
 
-// Sort a marker into an icon type from the only reliable signals we have: the
-// aetheryte's distinctive icon/name, then whether the marker carries a label.
-function classifyMarker(iconId: number, name: string): IconType {
+// Sort a marker into an icon type from the signals available: the aetheryte's
+// distinctive icon, the zone-exit arrow / dungeon-entrance icons (explicit
+// IDs), and — since every beast tribe camp and trial/raid banner uses its own
+// unique per-content icon rather than a shared one — the sheet's `Type` field,
+// which is 1 exactly for these "notable region" banners (and 0 for ordinary
+// points). A Type-1 marker that actually carries an icon (as opposed to a
+// plain text-only sub-area label) is one of these banners, so it's grouped
+// into zoneExit alongside the explicit zone-line/dungeon icons.
+function classifyMarker(iconId: number, name: string, markerType: number): IconType {
     if (AETHERYTE_ICON_IDS.has(iconId) || /aetheryte/i.test(name)) return 'aetheryte'
-    return name ? 'landmark' : 'other'
+    if (ZONE_EXIT_ICON_IDS.has(iconId)) return 'zoneExit'
+    if (markerType === 1) return 'zoneExit'
+    return 'misc'
 }
 
 // Checkbox handler: show or hide a whole icon type by adding/removing its layer.
@@ -607,9 +633,15 @@ function buildTable() {
         tableRows.value = []
         return
     }
+    // Fishing has no local dataset — its rows are fetched from FFXIVAPI by
+    // renderFishing() and cached in fishingRows, keyed off the current zone.
+    if (key === 'fishing') {
+        tableRows.value = fishingRows.value
+        return
+    }
     const byZone = (arr: any[], path: 'zone' | 'areaZone') =>
         (arr ?? []).filter((n: any) => (path === 'zone' ? n.zone === zone : n.area?.zone === zone))
-    const sources: Record<DataType, any[]> = {
+    const sources: Record<Exclude<DataType, 'fishing'>, any[]> = {
         sightseeing: byZone(d.sightseeing, 'zone'),
         // A gathering node yields several items that share a node_code, so group
         // them into one row listing every item at that node.
@@ -846,6 +878,69 @@ function renderFates(zone: string) {
     counts.fates = count
 }
 
+// Fishing has no local dataset, so spots are pulled live from FFXIVAPI's
+// FishingSpot sheet, filtered to the current zone. FishingSpot's X/Z already
+// sit in the same 0-2048 map-pixel space as MapMarker's X/Y (verified against
+// known landmark positions), so they plot directly with no extra conversion.
+// Each spot becomes one table row listing every fish it can yield.
+async function renderFishing(zone: string, token: number) {
+    const layer = typeLayers.fishing
+    try {
+        const query = encodeURIComponent(`TerritoryType.PlaceName.Name~"${zone}"`)
+        const fields = 'PlaceName.Name,X,Z,Rare,GatheringLevel,Item[].Name'
+        const url = `${BASE_URL}/api/search?sheets=FishingSpot&query=${query}&fields=${fields}&limit=50`
+
+        const res = await fetch(url)
+        if (!res.ok) throw new Error(`Fishing lookup failed (${res.status})`)
+
+        const data = await res.json()
+        // A newer zone selection superseded this request — discard it.
+        if (token !== loadToken || !map) return
+
+        const results: any[] = data?.results ?? []
+        const rows: any[] = []
+        let count = 0
+
+        for (const r of results) {
+            const f = r.fields ?? {}
+            const name = f.PlaceName?.fields?.Name ?? ''
+            if (!name) continue
+
+            const fish = (f.Item ?? [])
+                .map((it: any) => it.fields?.Name)
+                .filter((n: string) => !!n)
+                .join(', ')
+
+            const row = {
+                name,
+                zone,
+                level: f.GatheringLevel ?? null,
+                rare: f.Rare ? '★ Rare' : '',
+                fish,
+                node_code: `fishing_${r.row_id}`,
+            }
+            rows.push(row)
+
+            const latlng: L.LatLngExpression = [MAP_PX - (f.Z ?? 0), f.X ?? 0]
+            const m = makeMarker(latlng, `${ICON_CDN}/fishing.webp`, name, () => {
+                selectDataLayer('fishing')
+                showNodeDetails(row, fetchFishingApi)
+            })
+            registerNodeMarker(m, [row], row)
+            m.addTo(layer)
+            count++
+        }
+
+        fishingRows.value = rows
+        counts.fishing = count
+        // Refresh the table if it was already showing (possibly stale/empty)
+        // fishing rows while this fetch was in flight.
+        if (selectedData.value === 'fishing') buildTable()
+    } catch (err) {
+        console.error('[LeafletMap] fishing load failed', err)
+    }
+}
+
 // Elite hunts come from ffxivData.eliteHunts: each hunt monster carries a `rank`
 // and a `points` array of spawn locations. We draw one icon per unique spawn
 // position; because several hunts can share a position, each icon carries *all*
@@ -975,6 +1070,13 @@ async function fetchItemApi(name: string): Promise<Record<string, any> | null> {
         api_description: (f.Description ?? '').trim() || null,
         api_icon: f.Icon?.path ? mapMarkerIconUrl(f.Icon.path) : null,
     }
+}
+
+// Fishing spots have no separate detail lookup — renderFishing() already
+// pulled everything (spot name, level, rarity, fish list) from FFXIVAPI up
+// front, so the click handler just re-displays that same row via mergeNode.
+async function fetchFishingApi(_name: string): Promise<Record<string, any> | null> {
+    return null
 }
 
 // Fetch the Fate row for a FATE node by name.
@@ -1277,9 +1379,26 @@ function clearDetails() {
         width: 100%;
         max-width: 600px;
         margin-top: 14px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-        gap: 8px;
+
+        // Map markers row: sits inline (3-across) when there's room, then
+        // reflows to 2-per-row and finally 1-per-row as the viewport narrows,
+        // so it never overflows or squishes the labels unreadably.
+        &.markertypes > div {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+
+            .eorzeaOverview_checkbox {
+                flex: 1 1 140px;
+                min-width: 120px;
+            }
+        }
+
+        &.datalayers {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 8px;
+        }
     }
 
     &_checkbox {
