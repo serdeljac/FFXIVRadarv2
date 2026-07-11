@@ -96,6 +96,89 @@
                     </label>
                 </div>
 
+                <!-- FIXED SIGHTSEEING TABLE -->
+                <div v-if="selectedData == 'sightseeing'" class="leafletMap_table sightseeingTable">
+                    <table v-if="tableRows.length">
+                        <thead>
+                            <tr>
+                                <th>Details</th>
+                                <th>Vista</th>
+                                <th>Timed</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                <tr
+                                    v-for="(row, ri) in tableRows"
+                                    :key="ri"
+                                    class="leafletMap_tableRow"
+                                    :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
+                                    :data-rowActive="isNodeActive(row, timerList, weatherList)"
+                                    @click="selectTableRow(row)">
+                                    <td class="leafletMap_tableRow--buttons">
+                                            <toggleTrackingBtn
+                                                v-if="row?.time"
+                                                :trackingEnabled="row?.tracked"
+                                                class="hasContext"
+                                                data-context="Track Node"
+                                                @click="$emit('changeTracked', row)"
+                                            />
+                                        <toggleDetailsBtn
+                                            v-if="windowWidth !== 'mobile' && detailRowSelected"
+                                            class="hasContext"
+                                            data-context="View Details"
+                                            @click="$emit('openDetails', detailRowSelected)"/>
+                                    </td>
+                                    <td>{{ row.name }}</td>
+                                    <td>{{ row.time || row.weather ? 'Specific' : 'Any' }}</td>
+                                </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- <div 
+                    v-if="detailRowSelected?.length != 0 && tableRows[0]?.job == 'sightseeing'" class="leafletMap_deatilBox">
+
+                    <div class="leafletMap_deatilBox--title">
+                        {{ `#${detailRowSelected?.no} - ${detailRowSelected?.name}` }}
+                        <span>{{ `(x${detailRowSelected?.x}, y${detailRowSelected?.y})` }}</span>
+                    </div>
+
+                    <div class="leafletMap_deatilBox--image">
+                        <vistaSmallAPI 
+                        v-if="detailRowSelected"
+                        :node="detailRowSelected" 
+                        :size="'small'" 
+                        @click="$emit('openVistaImg', detailRowSelected)"/>
+                    </div>
+
+                    <div class="leafletMap_deatilBox--require">
+                        <p class="leafletMap_deatilBox--type">
+                            {{ `Type: ${detailRowSelected?.type ? detailRowSelected?.emote : 'explore'}` }}
+                        </p>
+                        <p class="leafletMap_deatilBox--emote">
+                            {{ `Emote: ${detailRowSelected?.emote }`}}
+                        </p>
+                        <p class="leafletMap_deatilBox--time">
+                            {{ `Time:` }}
+                            <timeDisplay
+                                :timerList="timerList"
+                                :timeId="detailRowSelected?.time"
+                                @timeActive="(e) => sendTimerState(e, detailRowSelected?.ID, 'timer')"/>
+                        </p>
+                        <p class="leafletMap_deatilBox--weather">
+                            {{ `Weather:` }}
+                            <weatherDisplay
+                                v-if="detailRowSelected"
+                                :weatherList="weatherList"
+                                :node="detailRowSelected"
+                                @weatherActive="(e) => sendTimerState(e, detailRowSelected?.ID, 'weather')"/>
+                        </p>
+                    </div>
+                    
+            
+                </div> -->
+
+
                 <!-- Zone table for the selected data layer -->
                 <div v-if="selectedData" class="leafletMap_table">
 
@@ -148,7 +231,6 @@
                         </tbody>
                     </table>
 
-                    <!-- Other data types: one row per node. -->
                     <table v-else-if="tableRows.length">
                         <thead>
                             <tr>
@@ -159,6 +241,7 @@
                             <tr
                                 v-for="(row, ri) in tableRows"
                                 :key="ri"
+                                :data-rowActive="isNodeActive(row, timerList, weatherList)"
                                 class="leafletMap_tableRow"
                                 :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
                                 @click="selectTableRow(row)">
@@ -181,8 +264,12 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
+import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import timeDisplay from '../ui/displayTime.vue'
+import weatherDisplay from '../ui/displayWeather.vue'
 import iconImgAPI from '../API/iconImg.vue'
+import vistaSmallAPI from '../API/vistaImg.vue'
+import { isNodeActive } from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
@@ -194,7 +281,7 @@ const props = defineProps<{
     weatherList?: any
 }>()
 
-defineEmits(['changeTracked', 'openDetails'])
+defineEmits(['changeTracked', 'openDetails', 'openVistaImg'])
 
 // ─── Config ───────────────────────────────────────────────────────────────
 const BASE_URL = 'https://v2.xivapi.com'
@@ -286,6 +373,8 @@ const hasError = ref(false)
 const errorMsg = ref('')
 const selectedZone = ref(DEFAULT_ZONE)
 const zoneGroups = ref<ZoneGroup[]>([])
+const activeTime = reactive<Record<string, boolean>>({})
+const activeWeather = reactive<Record<string, boolean>>({})
 // Custom zone dropdown (native <select><option> can't render an <img>, so the
 // icon-plus-label list is a plain button/list menu instead).
 const isZoneListOpen = ref(false)
@@ -324,7 +413,7 @@ const nodeMarkers = new Map<any, L.Marker>()
 // Elite hunts only: a hunt appears at several spawn points, so it maps to the
 // full list of markers representing those points.
 const huntMarkers = new Map<any, L.Marker[]>()
-
+let detailRowSelected = ref<any | null>(null)
 // Details for a clicked location: one group per node found there (a shared hunt
 // spawn point can host several hunts), each the local node merged with FFXIVAPI
 // data into a flat array of { key, value } rows.
@@ -767,6 +856,7 @@ function selectHunt(hunt: any) {
 
 // Table-row click: highlight the row, animate its marker(s), and pan to them.
 function selectTableRow(row: any) {
+    detailRowSelected = row
     if (selectedData.value === 'eliteHunts') {
         selectHunt(row)
         return
@@ -823,6 +913,14 @@ function renderSightseeing(zone: string) {
         count++
     }
     counts.sightseeing = count
+}
+
+function sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
+    if (type === 'timer') {
+        activeTime[id] = timeState
+    } else {
+        activeWeather[id] = timeState
+    }
 }
 
 // Gathering nodes (miner / botany) come from ffxivData[job]; their `area` is
@@ -1570,6 +1668,7 @@ function clearDetails() {
         text-transform: uppercase;
         letter-spacing: 0.06em;
         white-space: nowrap;
+        border-bottom: 1px solid $teal;
     }
 
     tbody td {
@@ -1581,6 +1680,7 @@ function clearDetails() {
 
     tbody tr {
         cursor: pointer;
+        border-left: 3px solid transparent;
     }
 
     tbody tr:hover td {
@@ -1589,7 +1689,10 @@ function clearDetails() {
 
     tbody tr.leafletMap_tableRow--active td {
         background: rgba(45, 212, 191, 0.18);
-        box-shadow: inset 3px 0 0 $teal;
+    }
+
+    tbody .leafletMap_tableRow--buttons {
+        display: flex;
     }
 }
 
