@@ -118,6 +118,7 @@ export default {
         areas: [] as any[],
         miner: [] as any[],
         botany: [] as any[],
+        fishing: [] as any[],
         aetheryte: [] as any[],
         sightseeing: [] as any[],
         eliteHunts: [] as any[],
@@ -229,6 +230,7 @@ export default {
         { default: expansionsRaw },
         { default: miningRaw },
         { default: botanyRaw },
+        { default: fishingRaw },
         { default: aetherialRaw },
         { default: aetheryteRaw },
         { default: sightseeingRaw },
@@ -243,6 +245,7 @@ export default {
         import('./assets/json/data_expansions.json'),
         import('./assets/json/nodes_miner.json'),
         import('./assets/json/nodes_botany.json'),
+        import('./assets/json/nodes_fishing.json'),
         import('./assets/json/data_aetherial.json'),
         import('./assets/json/nodes_aetheryte.json'),
         import('./assets/json/nodes_sightseeing.json'),
@@ -258,6 +261,7 @@ export default {
       this.ffxivData.expansion = expansionsRaw as any[];
       this.setMiningAndBotanyData(miningRaw, 'miner', aetherialRaw);
       this.setMiningAndBotanyData(botanyRaw, 'botany', aetherialRaw);
+      this.setFishingData(fishingRaw);
       this.setAetheryteData(aetheryteRaw);
       this.setSightseeingData(sightseeingRaw);
       this.setEliteHuntsData(huntsEliteRaw, huntsPointsRaw);
@@ -323,6 +327,17 @@ export default {
       }));
 
       (this.ffxivData as any)[job] = processed;
+    },
+
+    setFishingData(fishingRaw: any[]) {
+      this.ffxivData.fishing = (fishingRaw as any[]).map((obj) => ({
+        ...obj,
+        tracked: false,
+        time: obj.time || false,
+        attribute: false,
+        usage: false,
+        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+      }))
     },
 
     setAetheryteData(aetheryteRaw: any[]) {

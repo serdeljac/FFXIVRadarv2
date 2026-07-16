@@ -2,7 +2,7 @@
     <div :class="[`timedNodes body_content`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`Timed Mining & Botany`" :tagline="pageTagLine" icon="gathering"/>
+        <PageHeader :title="`Timed Nodes`" :tagline="pageTagLine" icon="gathering"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
