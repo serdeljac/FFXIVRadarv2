@@ -1,17 +1,23 @@
 <template>
     <div class="displayArea">
-        <iconImgAPI :name="node.area.icon"/>
+        <iconImgAPI v-if="areaIcon" :name="areaIcon"/>
         <p>
-            {{ `${node.area.region} > ${node.area.zone}` }}
+            {{ areaLabel }}
             <span class="cord">{{ `(x${node.x}, y${node.y})` }}</span>
         </p>
     </div>
 </template>
 
 <script lang="ts" setup>
+import { computed } from 'vue'
 import iconImgAPI from '../API/iconImg.vue'
+import { formatAreaLabel } from '../../hooks/hooks.ts'
 
-defineProps(['node'])
+const props = defineProps(['node'])
+
+const areaLabel = computed(() => formatAreaLabel(props.node.area))
+// Bare spot names (fishing holes absent from areas.json) carry no expansion icon.
+const areaIcon = computed(() => props.node.area?.icon ?? '')
 </script>
 
 <style scoped lang="scss">

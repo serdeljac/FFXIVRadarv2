@@ -3,13 +3,13 @@
 
         <div class="toprow">
             <btnTracking :trackingEnabled="node.tracked" remove @click="$emit('changeTracked', node)"/>
-            <p v-if="isGathering">{{ `${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
+            <p v-if="hasLevelAndStars">{{ `${node.name} - Lv. ${node.level} ${'★★★★★'.slice(0, node.stars)}` }}</p>
             <p v-if="node.job == 'sightseeing'">{{ node.name }}</p>
             <btnToggleDetails :direction="'open'" @click="$emit('openDetails', node)"/>
         </div>
 
         <div class="bottomrow">
-            <p>{{ `${node.area.region} > ${node.area.zone}` }}</p>
+            <p>{{ areaLabel }}</p>
             <timeDisplay :timeId="node.time" :timerList="timerList"/>
         </div>
     </div>
@@ -20,12 +20,16 @@ import { computed } from 'vue'
 import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
 import btnTracking from '../../ui/buttons/toggleTracking.vue'
 import timeDisplay from '../../ui/displayTime.vue'
-import { isNodeActive } from '../../../hooks/hooks.ts'
+import { isNodeActive, formatAreaLabel } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['timerList', 'weatherList', 'node'])
 defineEmits(['changeTracked', 'openDetails'])
 
 const getActiveState = computed(() => isNodeActive(props.node, props.timerList, props.weatherList))
 
-const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
+// Gathered items and fish are all named per-item and share the same
+// "name - Lv. X ★★" heading; sightseeing vistas have no level.
+const hasLevelAndStars = computed(() => ['miner', 'botany', 'fishing'].includes(props.node.job))
+
+const areaLabel = computed(() => formatAreaLabel(props.node.area))
 </script>

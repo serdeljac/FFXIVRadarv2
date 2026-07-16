@@ -10,7 +10,7 @@
                 <closeDetailsBtn />
             </button>
 
-            <p v-if="isGathering" class="details_headerName">
+            <p v-if="isGathering || isFishing" class="details_headerName">
                 <iconAndText :text="`${node.name} - Lv. ${node.level} ${stars(node.stars)}`" :icon="node.job_sub" />
             </p>
             <p v-else-if="node.job === 'sightseeing'" class="details_headerName">
@@ -23,8 +23,9 @@
 
         <!-- Mini map: same Leaflet/CRS.Simple setup as 1_EorzeaOverview.vue,
              scoped to this node's zone with only the aetheryte(s) and the
-             focused node itself plotted. -->
-        <div class="details_mapStage">
+             focused node itself plotted. Hidden for nodes with no known zone
+             (fishing holes absent from areas.json) — there's no map to load. -->
+        <div v-if="hasMap" class="details_mapStage">
             <transition name="details_fade">
                 <div v-if="isMapLoading" class="details_mapOverlay">
                     <div class="details_mapSpinner"></div>
@@ -37,7 +38,7 @@
         </div>
 
         <div class="details_location">
-            <h3>{{ node.area.region }} &gt; {{ node.area.zone }}</h3>
+            <h3>{{ areaLabel }}</h3>
             <span v-if="node.area.issubarea" class="details_locationPoint">{{ node.point }}</span>
             <h4>(x{{ node.x }}, y{{ node.y }})</h4>
         </div>
@@ -79,6 +80,63 @@
 
                 <div class="details_panel">
                     <h3>Other Materials</h3>
+                    <ul>
+                        <li v-for="d in otherMaterials" :key="d.ID">
+                            {{ d.name }} – Lv. {{ d.level }} {{ stars(d.stars) }}
+                        </li>
+                    </ul>
+                </div>
+
+            </template>
+
+            <!-- ── Fishing ─────────────────────────────────────────── -->
+            <template v-else-if="isFishing">
+
+                <div class="details_requirements">
+                    <ul>
+                        <li v-if="node.bait">
+                            <p>Bait:</p>
+                            <p>{{ baitLabel }}</p>
+                        </li>
+                        <li v-if="node.hookset">
+                            <p>Hookset:</p>
+                            <p>{{ node.hookset }}</p>
+                        </li>
+                        <li v-if="node.bite">
+                            <p>Tug:</p>
+                            <p>{{ tugLabel }}</p>
+                        </li>
+                        <li :data-rowActive="isTimeActive">
+                            <p>Active:</p>
+                            <p :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="details_panel" v-if="moochChain.length">
+                    <h3>Mooch Chain</h3>
+                    <ul>
+                        <li v-for="(fish, i) in moochChain" :key="fish">{{ `${i + 1}. ${fish}` }}</li>
+                    </ul>
+                </div>
+
+                <!-- weatherchain* is the weather that must precede weather*, so
+                     the two lists read as "from → to" when a chain is present. -->
+                <div class="details_panel" v-if="requiredWeather.length">
+                    <h3>Weather</h3>
+                    <ul>
+                        <li v-if="precedingWeather.length">{{ precedingWeather.join(' / ') }} &rarr;</li>
+                        <li>{{ requiredWeather.join(' / ') }}</li>
+                    </ul>
+                </div>
+
+                <div class="details_panel" v-if="node.notes">
+                    <h3>Notes</h3>
+                    <p>{{ node.notes }}</p>
+                </div>
+
+                <div class="details_panel">
+                    <h3>Other Fish Here</h3>
                     <ul>
                         <li v-for="d in otherMaterials" :key="d.ID">
                             {{ d.name }} – Lv. {{ d.level }} {{ stars(d.stars) }}
@@ -146,13 +204,13 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue'
+import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 import vistaSmallAPI from '../API/vistaImg.vue'
-import { formatStars, isTimerActive, isWeatherMatch, getTimerCountdown } from '../../hooks/hooks.ts'
+import { formatStars, isTimerActive, isWeatherMatch, getTimerCountdown, formatAreaLabel } from '../../hooks/hooks.ts'
 
 const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'openVistaImg'])
@@ -160,6 +218,37 @@ defineEmits(['openDetails', 'openVistaImg'])
 const stars = formatStars
 
 const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
+const isFishing = computed(() => props.node.job === 'fishing')
+
+const areaLabel = computed(() => formatAreaLabel(props.node.area))
+
+// Fishing holes missing from areas.json resolve to a bare spot name, leaving no
+// zone to look a map image up by and no mapsize to place the marker with.
+const hasMap = computed(() => !!props.node?.area?.zone)
+
+// ─── Fishing helpers ────────────────────────────────────────────────────────
+// A bait of 'mooch' means the chain starts from another fish rather than a
+// real bait, so there's nothing concrete to name on the Bait row.
+const baitLabel = computed(() => (props.node.bait === 'mooch' ? 'Mooch' : props.node.bait))
+
+const TUG_LABELS: Record<number, string> = { 1: '! (light)', 2: '!! (medium)', 3: '!!! (heavy)' }
+const tugLabel = computed(() => TUG_LABELS[props.node.bite] ?? props.node.bite)
+
+// The catch order: the starting bait (unless it's itself a mooch), each mooch
+// step, then the fish being looked at.
+const moochChain = computed<string[]>(() => {
+    const { bait, mooch_name1, mooch_name2, mooch_name3, name } = props.node
+    if (!mooch_name1) return []
+    const start = bait && bait !== 'mooch' ? [bait] : []
+    return [...start, mooch_name1, mooch_name2, mooch_name3, name].filter(Boolean)
+})
+
+const requiredWeather = computed<string[]>(() =>
+    [props.node.weather1, props.node.weather2, props.node.weather3].filter(Boolean)
+)
+const precedingWeather = computed<string[]>(() =>
+    [props.node.weatherchain1, props.node.weatherchain2, props.node.weatherchain3].filter(Boolean)
+)
 
 const otherMaterials = computed<any[]>(() => {
     const { node_code, name, job } = props.node
@@ -219,41 +308,52 @@ const focusIconName = computed(() => {
     return jobSub
 })
 
-onMounted(() => {
-    if (!mapEl.value) return
+onMounted(() => loadMap())
 
-    map = L.map(mapEl.value, {
-        crs: L.CRS.Simple,
-        minZoom: -2,
-        maxZoom: 3,
-        zoomSnap: 0.25,
-        zoomControl: true,
-        attributionControl: false,
-        scrollWheelZoom: false,
-        wheelPxPerZoomLevel: 120,
-    })
-
-    loadMap()
-})
-
-onBeforeUnmount(() => {
-    if (map) {
-        map.remove()
-        map = null
-        overlay = null
-    }
-})
+onBeforeUnmount(() => destroyMap())
 
 // The parent (App.vue) swaps in a whole new node object on every selection,
 // so a shallow watch on the prop reference is enough to know when to reload.
 watch(() => props.node, () => loadMap())
 
+function destroyMap() {
+    if (map) map.remove()
+    map = null
+    overlay = null
+    activeMarkers = []
+}
+
 async function loadMap() {
-    if (!map || !props.node?.area) return
+    // Nodes with no known zone hide the map stage entirely; tear any existing
+    // map down so the next node with a zone starts from a clean canvas, and
+    // bump the token so a load still in flight discards its result.
+    if (!hasMap.value) {
+        loadToken++
+        destroyMap()
+        isMapLoading.value = false
+        return
+    }
 
     const token = ++loadToken
     isMapLoading.value = true
     mapHasError.value = false
+
+    // The stage is v-if'd on hasMap, so it may only now be entering the DOM.
+    await nextTick()
+    if (token !== loadToken || !mapEl.value) return
+
+    if (!map) {
+        map = L.map(mapEl.value, {
+            crs: L.CRS.Simple,
+            minZoom: -2,
+            maxZoom: 3,
+            zoomSnap: 0.25,
+            zoomControl: true,
+            attributionControl: false,
+            scrollWheelZoom: false,
+            wheelPxPerZoomLevel: 120,
+        })
+    }
 
     for (const m of activeMarkers) m.remove()
     activeMarkers = []

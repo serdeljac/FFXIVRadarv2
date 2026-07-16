@@ -157,7 +157,7 @@ const displayNoNodesFound = ref(false)
 const searchName = ref('')
 const filters = ref<Filter[]>([])
 const activeList = reactive<Record<string, any>>({})
-const pageTagLine = 'Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed Mining and Botany node across all expansions, showing the spawn time, zone, coordinates, item yields, and aetherial reduction results. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.'
+const pageTagLine = 'Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed Mining, Botany and Fishing node across all expansions, showing the spawn time, zone, coordinates, item yields, aetherial reduction results, and the bait and weather each fish requires. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.'
 
 // Build grouped filter object once; recomputed only when filters change
 const groupedFilters = computed<Record<string, Filter[]>>(() => ({
@@ -169,8 +169,12 @@ const groupedFilters = computed<Record<string, Filter[]>>(() => ({
 // ─── Filter Initialisation ───────────────────────────────────────────────────
 
 function createFilterList() {
+    // Fishing nodes have no usage, so drop the empty value rather than render
+    // a nameless toggle for it.
     const toFilters = (arr: any[], group: string): Filter[] =>
-        getUniqueByKey(arr, group).map(o => ({ group, name: o[group], enabled: true }))
+        getUniqueByKey(arr, group)
+            .filter(o => o[group])
+            .map(o => ({ group, name: o[group], enabled: true }))
 
     const jobFilters = toFilters(allTimedNodes.value, 'job')
     const usageFilters = toFilters(allTimedNodes.value, 'usage')
@@ -269,7 +273,8 @@ function sendTimerState(timeState: any, id: string) {
 
 const miner = props.ffxivData.miner.filter((o: any) => o.time)
 const botany = props.ffxivData.botany.filter((o: any) => o.time)
-allTimedNodes.value = [...miner, ...botany]
+const fishing = props.ffxivData.fishing.filter((o: any) => o.time)
+allTimedNodes.value = [...miner, ...botany, ...fishing]
 createFilterList()
 sortNodesIntoGroup(allTimedNodes.value)
 </script>

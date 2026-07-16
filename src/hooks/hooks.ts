@@ -17,6 +17,16 @@ export function getUniqueByKey(array: any[], key: string): any[] {
     })
 }
 
+/**
+ * "Region > Zone" for a node's area. Fishing holes are named spots rather than
+ * zones and only some of them exist in areas.json; the rest keep their raw name
+ * as `area`, which is all there is to show for them.
+ */
+export function formatAreaLabel(area: any): string {
+    if (!area) return ''
+    return typeof area === 'string' ? area : `${area.region} > ${area.zone}`
+}
+
 /** Zero-pads a number below 10 to two digits (e.g. Eorzea clock minutes). */
 export function padNumber(num: number): string {
     return num < 10 ? `0${num}` : `${num}`

@@ -87,7 +87,7 @@ const GS_ACTIVE_WINDOW = 600; // seconds active per cycle
 const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 
 // Job categories that support tracking (have a `.tracked` flag + track button)
-const TRACKABLE_JOBS = ['miner', 'botany', 'sightseeing'] as const;
+const TRACKABLE_JOBS = ['miner', 'botany', 'fishing', 'sightseeing'] as const;
 
 // Tracked nodes are persisted to localStorage keyed by "job:ID" rather than
 // kept only in memory, so tracking survives page reloads.
@@ -330,13 +330,26 @@ export default {
     },
 
     setFishingData(fishingRaw: any[]) {
+      const areas = this.ffxivData.areas;
+
+      // A fishing node's `area` is the name of a fishing hole ("Rogue River"),
+      // not a zone, and only some holes are listed in areas.json. Unmatched
+      // ones fall back to the raw name — same as setMiningAndBotanyData — so
+      // consumers get either a full area object or a bare spot name.
+      const getAreaData = (areaName: string): any =>
+        areas.find((o) => o.area === areaName) ??
+        areas.find((o) => o.point === areaName) ??
+        areas.find((o) => o.zone === areaName) ??
+        areaName;
+
       this.ffxivData.fishing = (fishingRaw as any[]).map((obj) => ({
         ...obj,
         tracked: false,
         time: obj.time || false,
+        stars: obj.stars || 0,
         attribute: false,
         usage: false,
-        area: this.ffxivData.areas.find((o) => o.zone === obj.zone),
+        area: getAreaData(obj.area),
       }))
     },
 
