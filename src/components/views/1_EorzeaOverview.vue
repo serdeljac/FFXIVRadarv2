@@ -65,7 +65,7 @@
                     <label
                         v-for="t in MARKER_TYPES"
                         :key="t.key"
-                        class="eorzeaOverview_checkbox">
+                        :class="[`eorzeaOverview_checkbox`, {'inactive': counts[t.key] == 0}]">
                         <input
                             type="checkbox"
                             v-model="filters[t.key]"
@@ -79,7 +79,6 @@
 
                 <!-- Filter: Data layer (single-select radio) -->
                 <div class="eorzeaOverview_checkboxes datalayers">
-                    <span class="eorzeaOverview_filterLabel">Data layer</span>
                     <label
                         v-for="t in DATA_TYPES"
                         :key="t.key"
@@ -97,12 +96,13 @@
                 </div>
 
                 <!-- FIXED SIGHTSEEING TABLE -->
-                <div v-if="selectedData == 'sightseeing'" class="leafletMap_table sightseeingTable">
+                <div v-if="selectedData == 'sightseeing'" class="leafletMap_table sightseeing">
                     <table v-if="tableRows.length">
                         <thead>
                             <tr>
-                                <th>Details</th>
                                 <th>Vista</th>
+                                <th>Flying Req?</th>
+                                <th>Emote</th>
                                 <th>Timed</th>
                             </tr>
                         </thead>
@@ -110,147 +110,187 @@
                                 <tr
                                     v-for="(row, ri) in tableRows"
                                     :key="ri"
-                                    class="leafletMap_tableRow"
-                                    :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
+                                    :class="[`leafletMap_tableRow`, 
+                                    { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
                                     :data-rowActive="isNodeActive(row, timerList, weatherList)"
                                     @click="selectTableRow(row)">
-                                    <td class="leafletMap_tableRow--buttons">
-                                            <toggleTrackingBtn
-                                                v-if="row?.time"
-                                                :trackingEnabled="row?.tracked"
-                                                class="hasContext"
-                                                data-context="Track Node"
-                                                @click="$emit('changeTracked', row)"
-                                            />
+                                    <td class="verticalCenter">
                                         <toggleDetailsBtn
-                                            v-if="windowWidth !== 'mobile' && detailRowSelected"
+                                            v-if="windowWidth !== 'mobile'"
                                             class="hasContext"
                                             data-context="View Details"
                                             @click="$emit('openDetails', detailRowSelected)"/>
+                                        <span class="verticalCenter-text">{{ row.name }}</span>
                                     </td>
-                                    <td>{{ row.name }}</td>
-                                    <td>{{ row.time || row.weather ? 'Specific' : 'Any' }}</td>
+                                    <td>{{ row.mount ? 'YES' : 'NO' }}</td>
+                                    <td>{{ row.emote }}</td>
+                                    <td class="leafletMap_tableRow--buttons">
+                                        <toggleTrackingBtn
+                                            v-if="row?.time"
+                                            :trackingEnabled="row?.tracked"
+                                            class="hasContext"
+                                            data-context="Track Node"
+                                            @click="$emit('changeTracked', row)"
+                                            />
+                                        
+                                        <span>
+                                            {{ EorzeaMap(row, timerList, weatherList) }}
+                                        </span>
+                                        
+                                    </td>
                                 </tr>
                         </tbody>
                     </table>
                 </div>
 
-                <!-- <div 
-                    v-if="detailRowSelected?.length != 0 && tableRows[0]?.job == 'sightseeing'" class="leafletMap_deatilBox">
+                <!-- FIXED MINING AND BOTANY TABLE -->
+                <div v-if="selectedData == 'mining' || selectedData == 'botany'" class="leafletMap_table miningAndBotany">
 
-                    <div class="leafletMap_deatilBox--title">
-                        {{ `#${detailRowSelected?.no} - ${detailRowSelected?.name}` }}
-                        <span>{{ `(x${detailRowSelected?.x}, y${detailRowSelected?.y})` }}</span>
-                    </div>
-
-                    <div class="leafletMap_deatilBox--image">
-                        <vistaSmallAPI 
-                        v-if="detailRowSelected"
-                        :node="detailRowSelected" 
-                        :size="'small'" 
-                        @click="$emit('openVistaImg', detailRowSelected)"/>
-                    </div>
-
-                    <div class="leafletMap_deatilBox--require">
-                        <p class="leafletMap_deatilBox--type">
-                            {{ `Type: ${detailRowSelected?.type ? detailRowSelected?.emote : 'explore'}` }}
-                        </p>
-                        <p class="leafletMap_deatilBox--emote">
-                            {{ `Emote: ${detailRowSelected?.emote }`}}
-                        </p>
-                        <p class="leafletMap_deatilBox--time">
-                            {{ `Time:` }}
-                            <timeDisplay
-                                :timerList="timerList"
-                                :timeId="detailRowSelected?.time"
-                                @timeActive="(e) => sendTimerState(e, detailRowSelected?.ID, 'timer')"/>
-                        </p>
-                        <p class="leafletMap_deatilBox--weather">
-                            {{ `Weather:` }}
-                            <weatherDisplay
-                                v-if="detailRowSelected"
-                                :weatherList="weatherList"
-                                :node="detailRowSelected"
-                                @weatherActive="(e) => sendTimerState(e, detailRowSelected?.ID, 'weather')"/>
-                        </p>
-                    </div>
-                    
-            
-                </div> -->
-
-
-                <!-- Zone table for the selected data layer -->
-                <div v-if="selectedData" class="leafletMap_table">
-
-                    <table v-if="isGathering && tableRows.length">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Track</th>
-                                <th>Attribute</th>
-                                <th>Usage</th>
-                                <th>Timer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <template v-for="(group, gi) in tableRows" :key="gi">
+                    <template v-for="(group, gi) in tableRows" :key="gi">
+                        <table v-if="isGathering && group._items.length" class="leafletMap_nodeTable">
+                            <thead>
+                                <tr>
+                                    <th>Item</th>
+                                    <th>Usage</th>
+                                    <th class="leafletMap_cellTimer">Timer</th>
+                                </tr>
+                            </thead>
+                            <tbody
+                                :class="{
+                                    'leafletMap_nodeTableBody--active': group.node_code === selectedCode,
+                                }"
+                                @click="selectTableRow(group)"
+                                @mouseenter="hoveredNodeCode = group.node_code"
+                                @mouseleave="hoveredNodeCode = null">
                                 <tr
                                     v-for="(it, ii) in group._items"
                                     :key="it.ID"
                                     class="leafletMap_tableRow"
                                     :class="{
-                                        'leafletMap_tableRow--active': group.node_code === selectedCode,
                                         'leafletMap_groupStart': ii === 0,
-                                    }"
-                                    @click="selectTableRow(group)">
+                                    }">
+
                                     <td class="leafletMap_cellItem">
+                                        <div>
                                         <img
                                             v-if="itemIcons[it.name]"
                                             :src="itemIcons[it.name]"
                                             :alt="it.name"
                                             class="leafletMap_itemImg" />
                                         <span>{{ it.name }} - Lv. {{ it.level }}{{ it.stars ? ' ' + '★'.repeat(it.stars) : '' }}</span>
+                                        </div>
                                     </td>
+
                                     <td class="leafletMap_cellTrack">
-                                        <toggleTrackingBtn
+                                        <!-- <toggleTrackingBtn
                                             v-if="it.time"
                                             :trackingEnabled="it.tracked"
-                                            @click.stop="$emit('changeTracked', it)" />
+                                            @click.stop="$emit('changeTracked', it)" /> -->
+
+                                            <span class="hasContext" :data-context="capitalize(it.job_sub)">
+                                                <iconImgAPI :name="it.job_sub"/>
+                                            </span>
+
+                                            <span v-if="it.usage" class="hasContext" :data-context="fetchUsageAttrName(it)">
+                                                <iconImgAPI :name="fetchUsageImgName(it)"/>
+                                            </span>
+
+                                            <span v-if="it.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${it.tomb}`">
+                                                <iconImgAPI :name="'folklore'"/>
+                                            </span>
                                     </td>
-                                    <td class="leafletMap_cellMeta">{{ it.attribute || '-' }}</td>
-                                    <td class="leafletMap_cellMeta">{{ formatUsage(it.usage) }}</td>
+
                                     <td
                                         v-if="ii === 0"
                                         :rowspan="group._items.length"
                                         class="leafletMap_cellTimer">
+                                        <toggleTrackingBtn
+                                            v-if="group.time"
+                                            :trackingEnabled="it.tracked"
+                                            @click.stop="$emit('changeTracked', it)" />
                                         <timeDisplay v-if="group.time" :timerList="timerList" :timeId="group.time" />
-                                        <span v-else>-</span>
+                                        <span v-else>Any Time</span>
                                     </td>
                                 </tr>
-                            </template>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </template>
 
-                    <table v-else-if="tableRows.length">
+                </div>
+
+                <!-- FISHING TABLE -->
+                <div v-if="selectedData == 'fishing'" class="leafletMap_table fishing">
+                    <table v-if="tableRows.length">
                         <thead>
                             <tr>
-                                <th v-for="c in tableColumns" :key="c.key">{{ c.label }}</th>
+                                <th>Spot</th>
+                                <th>Lv</th>
+                                <th>Rare</th>
+                                <th>Fish</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr
                                 v-for="(row, ri) in tableRows"
                                 :key="ri"
-                                :data-rowActive="isNodeActive(row, timerList, weatherList)"
                                 class="leafletMap_tableRow"
                                 :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
                                 @click="selectTableRow(row)">
-                                <td v-for="c in tableColumns" :key="c.key">{{ formatCell(row[c.key]) }}</td>
+                                <td class="leafletMap_cellItem">{{ row.name }}</td>
+                                <td>{{ row.level || '-' }}</td>
+                                <td>{{ row.rare || '-' }}</td>
+                                <td>{{ row.fish || '-' }}</td>
                             </tr>
                         </tbody>
                     </table>
 
-                    <p v-else class="leafletMap_tableEmpty">No {{ dataLabel }} in this zone.</p>
+                    <!-- Fish details table for selected spot -->
+                    <div v-if="detailRowSelected" class="leafletMap_table fishingDetails">
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Fish</th>
+                                    <th>Actions</th>
+                                    <th>Actions</th>
+                                    <th>Hookset</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="fish in fishDetails" :key="fish.id" class="leafletMap_tableRow">
+                                    <td class="leafletMap_cellItem">
+                                        <div>
+                                            <img
+                                                v-if="itemIcons[fish.name]"
+                                                :src="itemIcons[fish.name]"
+                                                :alt="fish.name"
+                                                class="leafletMap_itemImg" />
+                                            <span>{{ `${fish.name} - Lv.${fish.level} ${formatStars(fish.stars)}` }}</span>
+                                        </div>
+                                        <ul>
+                                            <li v-if="fish.bait != 'mooch'">
+                                                <span>Bait: {{ fish.bait }}</span>
+                                            </li>
+                                            <li v-else>
+                                                <ul>
+                                                    <li>Mooch: {{ fish.mooch_name1 }}</li>
+                                                    <li v-if="fish.mooch_name2">Mooch: {{ fish.mooch_name2 }}</li>
+                                                    <li v-if="fish.mooch_name3">Mooch: {{ fish.mooch_name3 }}</li>
+                                                </ul>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td class="leafletMap_cellItem">
+                                        <div>Action: {{ fish.hookset }}</div>
+                                        <div>Alert: {{ fish.bite }}</div>
+                                    </td>
+                                    <td>{{ fish.time ? 'Yes' : 'No' }}</td>
+                                    <td>{{ fish.hookset || '-' }}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <!-- <p v-else class="leafletMap_tableEmpty">No fish data available for this spot.</p> -->
+                    </div>
                 </div>
             </div>
 
@@ -269,7 +309,7 @@ import timeDisplay from '../ui/displayTime.vue'
 // import weatherDisplay from '../ui/displayWeather.vue'
 import iconImgAPI from '../API/iconImg.vue'
 // import vistaSmallAPI from '../API/vistaImg.vue'
-import { isNodeActive } from '../../hooks/hooks.ts'
+import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars} from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
@@ -288,7 +328,7 @@ const BASE_URL = 'https://v2.xivapi.com'
 const MAP_PX = 2048
 const NODE_SCALE = MAP_PX / 800
 const ICON_SIZE = 28 // px, on-screen size of a marker icon
-const ICON_CDN = 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/icons'
+const ICON_CDN = import.meta.env.DEV ? '/s3/icons' : 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/icons'
 const DEFAULT_ZONE = 'Limsa Lominsa Lower Decks'
 const AREA_POINT_ICON_IDS = new Set([60442])
 const AETHERYTE_ICON_IDS = new Set([60453])
@@ -408,12 +448,27 @@ function formatUsage(usage: string): string {
 // (a node_code, unique per table row) drives the table highlight; `selectedMarkers`
 // carries the active CSS class on the map; `nodeMarkers` links each node to its marker.
 const selectedCode = ref<string | null>(null)
+const hoveredNodeCode = ref<string | null>(null)
 let selectedMarkers: L.Marker[] = []
 const nodeMarkers = new Map<any, L.Marker>()
 // Elite hunts only: a hunt appears at several spawn points, so it maps to the
 // full list of markers representing those points.
 const huntMarkers = new Map<any, L.Marker[]>()
 let detailRowSelected = ref<any | null>(null)
+const fishDetails = computed(() => {
+    if (!detailRowSelected.value?.name) return []
+    const allFish = props.ffxivData?.fishing ?? []
+    return allFish.filter((fish: any) => fish.spot === detailRowSelected.value.name)
+})
+
+// Watch fishDetails to fetch icons for fish items and bait
+import { watch } from 'vue'
+watch(() => fishDetails.value, (fish) => {
+    for (const item of fish) {
+        if (item.name) ensureItemIcon(item.name)
+        if (item.bait && item.bait !== '-') ensureItemIcon(item.bait)
+    }
+})
 // Details for a clicked location: one group per node found there (a shared hunt
 // spawn point can host several hunts), each the local node merged with FFXIVAPI
 // data into a flat array of { key, value } rows.
@@ -478,6 +533,7 @@ onBeforeUnmount(() => {
         overlay = null
     }
 })
+
 
 // ─── Zone list ──────────────────────────────────────────────────────────────
 // Build a deduplicated zone list grouped by expansion, mirroring the overview
@@ -611,6 +667,22 @@ function preloadImage(url: string): Promise<void> {
         img.src = url
     })
 }
+
+// function fetchUsageAttrName(usage: string, info: any): string {
+//     if (usage === 'aetherial') {
+//         const { result1, result2, result3 } = info
+//         return [result1, result2, result3].map(capitalize).join(', ')
+//     }
+//     if (usage === 'customdelivery') return `Deliver to ${info}`
+//     if (usage === 'scripts') return `${capitalize(info)} Gather Scripts`
+//     return capitalize(usage)
+// }
+
+// function fetchUsageImgName(usage: string, info: any): string {
+//     if (usage === 'scripts') return `${info}gatherscripts`
+//     if (usage === 'crafting') return 'sq_crafting'
+//     return usage
+// }
 
 // ─── API: base map ────────────────────────────────────────────────────────
 // Mirrors the search flow in components/API/mapImg.vue: look up the Map sheet
@@ -856,14 +928,25 @@ function selectHunt(hunt: any) {
 
 // Table-row click: highlight the row, animate its marker(s), and pan to them.
 function selectTableRow(row: any) {
-    detailRowSelected = row
+    detailRowSelected.value = row
     if (selectedData.value === 'eliteHunts') {
         selectHunt(row)
         return
     }
     // Grouped (gathering) rows carry their underlying nodes in `_items`.
     const lookup = row._items ? row._items[0] : row
-    const marker = nodeMarkers.get(lookup) ?? null
+    let marker = nodeMarkers.get(lookup) ?? null
+
+    // For fishing rows, search by node_code if direct lookup fails
+    if (!marker && selectedData.value === 'fishing' && row.node_code) {
+        for (const [key, value] of nodeMarkers) {
+            if (key.node_code === row.node_code) {
+                marker = value
+                break
+            }
+        }
+    }
+
     selectMarker(marker)
     selectedCode.value = row.node_code ?? null
     if (marker && map) map.panTo(marker.getLatLng())
@@ -1639,6 +1722,14 @@ function clearDetails() {
     word-break: break-word;
 }
 
+.leafletMap_nodeTable {
+        border: 1px solid rgba(45, 212, 191, 0.15);
+}
+
+.leafletMap_nodeTable:not(:last-child) {
+        margin-bottom: 16px;
+}
+
 /* ── Radio (data layer) — round box to distinguish from checkboxes ── */
 .eorzeaOverview_checkbox input[type="radio"] + .eorzeaOverview_checkbox-box {
     border-radius: 50%;
@@ -1648,14 +1739,40 @@ function clearDetails() {
 .leafletMap_table {
     width: 100%;
     margin-top: 14px;
-    border: 1px solid $buttonBorder;
-    border-radius: 8px;
     overflow: hidden;
+
+    &.sightseeing, &.fishing {
+        tbody tr:hover {
+            background: rgba(45, 212, 191, 0.05);
+        }
+        tbody .leafletMap_tableRow--active{
+            background: rgba(45, 212, 191, 0.18) !important;
+        }
+    }
+
+    &.miningAndBotany {
+        tbody:hover {
+            background: rgba(45, 212, 191, 0.05);
+        }
+        tbody.leafletMap_nodeTableBody--active {
+            background: rgba(45, 212, 191, 0.18);
+        }
+        .leafletMap_cellTimer > div {
+            margin: auto;
+        }
+    }
+
+    .leafletMap_cellTimer {
+        max-width: 60px;
+        text-align: center;
+    }
 
     table {
         width: 100%;
         border-collapse: collapse;
         font-size: 0.82rem;
+        margin-bottom: 10px;
+        border-radius: 8px;
     }
 
     thead th {
@@ -1675,30 +1792,41 @@ function clearDetails() {
         padding: 7px 12px;
         color: #c8d8f0;
         border-top: 1px solid rgba(45, 212, 191, 0.08);
-        vertical-align: top;
+        vertical-align: middle;
     }
 
     tbody tr {
         cursor: pointer;
-        border-left: 3px solid transparent;
     }
 
-    tbody tr:hover td {
+    // tbody tr:hover td {
+    //     background: rgba(45, 212, 191, 0.05);
+    // }
+
+    // tbody tr.leafletMap_tableRow--active td {
+    //     background: rgba(45, 212, 191, 0.18);
+    // }
+
+    /* Mining/Botany tables: highlight entire tbody */
+    // tbody.leafletMap_nodeTableBody--active td {
+    //     background: rgba(45, 212, 191, 0.18);
+    // }
+
+    .leafletMap_table tbody.leafletMap_nodeTableBody--active ~ tbody.leafletMap_nodeTableBody--active td,
+    .leafletMap_table tbody:hover td {
         background: rgba(45, 212, 191, 0.05);
-    }
-
-    tbody tr.leafletMap_tableRow--active td {
-        background: rgba(45, 212, 191, 0.18);
     }
 
     tbody .leafletMap_tableRow--buttons {
         display: flex;
+        align-items: center;
+        span {margin-left: 6px;}
     }
 }
 
 /* Gathering table cells. Each item is its own row; the timer cell uses rowspan
    to span the node and is centered. */
-.leafletMap_cellItem {
+.leafletMap_cellItem div {
     display: flex;
     align-items: center;
     gap: 8px;
@@ -1710,7 +1838,7 @@ function clearDetails() {
     filter: drop-shadow(0 0 1px #000);
 }
 .leafletMap_cellTrack {
-    text-align: center;
+    text-align: left;
 }
 .leafletMap_cellTrack > * {
     display: inline-flex;
@@ -1734,7 +1862,7 @@ function clearDetails() {
 .leafletMap_tableEmpty {
     margin-top: 14px;
     padding: 12px 14px;
-    border: 1px dashed $buttonBorder;
+    // border: 1px dashed $buttonBorder;
     border-radius: 8px;
     color: #5a6e90;
     font-size: 0.85rem;

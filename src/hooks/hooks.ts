@@ -17,6 +17,22 @@ export function getUniqueByKey(array: any[], key: string): any[] {
     })
 }
 
+export function fetchUsageAttrName(node: any): string {
+    if (node.usage === 'aetherial') {
+        const { result1, result2, result3 } = node.usage_info
+        return [result1, result2, result3].map(capitalize).join(', ')
+    }
+    if (node.usage === 'customdelivery') return `Deliver to ${node.usage_info}`
+    if (node.usage === 'scripts') return `${capitalize(node.usage_info)} Gather Scripts`
+    return capitalize(node.usage)
+}
+
+export function fetchUsageImgName(node: any): string {
+    if (node.usage === 'scripts') return `${node.usage_info}gatherscripts`
+    if (node.usage === 'crafting') return 'sq_crafting'
+    return node.usage
+}
+
 /**
  * "Region > Zone" for a node's area. Fishing holes are named spots rather than
  * zones and only some of them exist in areas.json; the rest keep their raw name
@@ -71,4 +87,24 @@ export function isNodeActive(node: any, timerList: any[], weatherList: Record<st
         return timerState && weatherState ? true : null
     }
     return timerState
+}
+
+
+export function EorzeaMap (node: any, timerList: any[], weatherList: Record<string, any>) {
+    if (!node.time) {return 'Any Time'}
+
+    //Mining and Botany Checks
+    if (node.job == 'mining' || node.job == 'botany') {
+        return node.time ? timerList.find((o: any) => o.ID === node.time) : undefined
+    }
+
+    //Sightseeing Checks
+    if (node.job == 'sightseeing') {
+        const time = timerList.find((o: any) => o.ID === node.time).stateActive
+        const weather = (isWeatherMatch(weatherList, node.area.mapcode, node.weather1)
+            || isWeatherMatch(weatherList, node.area.mapcode, node.weather2)) ? true : false
+        console.log(weather, time)
+        return time && weather ? 'Active' : 'Inactive'
+    }
+    //Return Active, Inactive, Any
 }

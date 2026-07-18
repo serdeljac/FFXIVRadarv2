@@ -344,6 +344,7 @@ export default {
 
       this.ffxivData.fishing = (fishingRaw as any[]).map((obj) => ({
         ...obj,
+        spot: obj.area,
         tracked: false,
         time: obj.time || false,
         stars: obj.stars || 0,

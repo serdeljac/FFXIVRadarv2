@@ -35,6 +35,13 @@ export default defineConfig({
   plugins: [vue(), lodestoneDevApi()],
   server: {
     port: 6020,
+    proxy: {
+    '/s3/': {
+      target: 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/',
+      changeOrigin: true,
+      rewrite: (path) => path.replace(/^\/s3/, '')
+    }
+  }
   },
   css: {
     preprocessorOptions: {
