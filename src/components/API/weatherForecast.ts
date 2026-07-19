@@ -13,7 +13,12 @@ export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
     const now = new Date()
     const eorzea = EorzeaWeather
 
-    const currentWeather = eorzea.getWeather(zoneMapCode, now)
+    let currentWeather = null
+    try {
+        currentWeather = eorzea.getWeather(zoneMapCode, now)
+    } catch (error) {
+        console.warn(`Error getting weather for ${zoneMapCode}:`, error)
+    }
 
     // If weather is not available in eorzea-weather library, use fallback
     if (!currentWeather) {

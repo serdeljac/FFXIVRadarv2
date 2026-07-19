@@ -195,7 +195,11 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
 })
 
 function changeFilter(arrayIndex: number) {
-  filterSelected.value = filters.value[arrayIndex].name
+  console.log(`Filter clicked at index ${arrayIndex}, available filters:`, filters.value.map(f => f.name))
+  if (filters.value[arrayIndex]) {
+    filterSelected.value = filters.value[arrayIndex].name
+    console.log(`Filter changed to: ${filterSelected.value}`)
+  }
 }
 
 function getMapcodeFromZoneName(zoneName: string): string {
