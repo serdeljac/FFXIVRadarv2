@@ -271,6 +271,7 @@ function getMapcodeFromZoneName(zoneName: string): string {
   background: rgba(0, 0, 0, 0.2);
   border-top: 1px solid rgba(45, 212, 191, 0.3);
   border-bottom: 1px solid rgba(45, 212, 191, 0.3);
+  
 }
 
 .rdrTable_row {
@@ -279,6 +280,7 @@ function getMapcodeFromZoneName(zoneName: string): string {
   gap: 0;
   padding: 0;
   margin: 0;
+  width: 100%;
   border-bottom: 1px solid rgba(45, 212, 191, 0.1);
   align-items: center;
 
