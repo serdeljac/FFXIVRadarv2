@@ -337,8 +337,31 @@
                     </table>
                 </div>
 
-                <!-- HUNTS TABLE -->
-                <div v-if="selectedData == 'fates'" class="leafletMap_table hunts">
+                <!-- ELITE HUNTS TABLE -->
+                <div v-if="selectedData == 'eliteHunts'" class="leafletMap_table eliteHunts">
+                    <table v-if="tableRows.length">
+                        <thead>
+                            <tr>
+                                <th>Mark</th>
+                                <th>Rank</th>
+                                <th>Lv</th>
+                                <th>Respawn</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(row, ri) in tableRows"
+                                :key="ri"
+                                :class="[`leafletMap_tableRow`,
+                                { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
+                                @click="selectTableRow(row)">
+                                <td class="verticalCenter">{{ row.name }}</td>
+                                <td>{{ row.rank }}</td>
+                                <td>{{ row.level }}</td>
+                                <td>{{ row.respawn }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -860,7 +883,7 @@ function buildTable() {
         mining: groupByNodeCode(byZone(d.miner, 'areaZone')),
         botany: groupByNodeCode(byZone(d.botany, 'areaZone')),
         fates: byZone(d.fates, 'zone'),
-        eliteHunts: byZone(d.eliteHunts, 'areaZone'),
+        eliteHunts: byZone(d.eliteHunts, 'zone'),
     }
     tableRows.value = sources[key]
 
