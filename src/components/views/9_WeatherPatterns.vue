@@ -1,11 +1,12 @@
 <template>
   <div :class="['weatherPatterns body_content', windowWidth]">
-    <PageHeader title="Weather Patterns" :tagline="pageTagLine" icon="weather"/>
+    <PageHeader title="Weather Patterns" :tagline="pageTagLine" icon="weather" />
 
     <!-- Filter Bar -->
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <ToggleFilterBtn
+        <div>Filters: {{ filters.length }}, Expansions: {{ uniqueExpansions.length }}</div>
+        <toggleFilterBtn
           v-for="(filter, index) in filters"
           :key="filter.name"
           :name="filter.name"
@@ -64,7 +65,7 @@
 <script lang="ts" setup>
 import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import ToggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 
 interface Zone {
   name: string
@@ -85,27 +86,38 @@ const filters = ref<Filter[]>([])
 const filterSelected = ref('')
 
 const uniqueExpansions = computed<string[]>(() => {
-  if (!props.ffxivData?.areas) return []
+  if (!props.ffxivData?.areas) {
+    console.log('uniqueExpansions: no areas data')
+    return []
+  }
   const seen = new Set<string>()
   const result: string[] = []
+  console.log('uniqueExpansions: checking', props.ffxivData.areas.length, 'areas')
   for (const area of props.ffxivData.areas) {
+    console.log('area:', area.zone, 'inoverview:', area.inoverview, 'expansion:', area.expansion)
     if (area.inoverview === 1 && area.expansion && !seen.has(area.expansion)) {
       seen.add(area.expansion)
       result.push(area.expansion)
     }
   }
+  console.log('uniqueExpansions result:', result)
   return result.sort()
 })
 
 const zones = computed<Zone[]>(() => {
-  if (!props.ffxivData?.areas) return []
+  if (!props.ffxivData?.areas) {
+    console.log('zones: no areas data')
+    return []
+  }
 
+  console.log('zones: checking', props.ffxivData.areas.length, 'areas')
   const seen = new Set<string>()
   const uniqueZones: Zone[] = []
 
   for (const area of props.ffxivData.areas) {
     if (!area.mapcode || area.inoverview === 0 || seen.has(area.mapcode)) continue
     seen.add(area.mapcode)
+    console.log('zones: adding', area.zone, 'expansion:', area.expansion)
     uniqueZones.push({
       name: area.zone,
       mapCode: area.mapcode,
@@ -113,6 +125,7 @@ const zones = computed<Zone[]>(() => {
     })
   }
 
+  console.log('zones result length:', uniqueZones.length)
   return uniqueZones
 })
 
@@ -135,7 +148,11 @@ function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
 }
 
-watch(uniqueExpansions, initFilters, { immediate: true })
+watch(uniqueExpansions, (newVal) => {
+  if (newVal.length > 0) {
+    initFilters()
+  }
+}, { immediate: true })
 </script>
 
 <style scoped lang="scss">
@@ -244,4 +261,5 @@ watch(uniqueExpansions, initFilters, { immediate: true })
     font-weight: bold;
     text-align: left;
   }
-}</style>
+}
+</style>
