@@ -5,7 +5,6 @@
     <!-- Filter Bar -->
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <div>Filters: {{ filters.length }}, Expansions: {{ uniqueExpansions.length }}</div>
         <toggleFilterBtn
           v-for="(filter, index) in filters"
           :key="filter.name"
@@ -63,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 
@@ -82,42 +81,30 @@ interface Filter {
 const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
 
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
-const filters = ref<Filter[]>([])
 const filterSelected = ref('')
 
 const uniqueExpansions = computed<string[]>(() => {
-  if (!props.ffxivData?.areas) {
-    console.log('uniqueExpansions: no areas data')
-    return []
-  }
+  if (!props.ffxivData?.areas) return []
   const seen = new Set<string>()
   const result: string[] = []
-  console.log('uniqueExpansions: checking', props.ffxivData.areas.length, 'areas')
   for (const area of props.ffxivData.areas) {
-    console.log('area:', area.zone, 'inoverview:', area.inoverview, 'expansion:', area.expansion)
     if (area.inoverview === 1 && area.expansion && !seen.has(area.expansion)) {
       seen.add(area.expansion)
       result.push(area.expansion)
     }
   }
-  console.log('uniqueExpansions result:', result)
   return result.sort()
 })
 
 const zones = computed<Zone[]>(() => {
-  if (!props.ffxivData?.areas) {
-    console.log('zones: no areas data')
-    return []
-  }
+  if (!props.ffxivData?.areas) return []
 
-  console.log('zones: checking', props.ffxivData.areas.length, 'areas')
   const seen = new Set<string>()
   const uniqueZones: Zone[] = []
 
   for (const area of props.ffxivData.areas) {
     if (!area.mapcode || area.inoverview === 0 || seen.has(area.mapcode)) continue
     seen.add(area.mapcode)
-    console.log('zones: adding', area.zone, 'expansion:', area.expansion)
     uniqueZones.push({
       name: area.zone,
       mapCode: area.mapcode,
@@ -125,39 +112,40 @@ const zones = computed<Zone[]>(() => {
     })
   }
 
-  console.log('zones result length:', uniqueZones.length)
   return uniqueZones
 })
 
-const filteredZones = computed<Zone[]>(() => {
-  if (!filterSelected.value) return zones.value
-  return zones.value.filter(zone => zone.expansion === filterSelected.value)
-})
-
-function initFilters() {
-  filters.value = uniqueExpansions.value.map((name, i) => ({
+const filters = computed<Filter[]>(() => {
+  return uniqueExpansions.value.map((name, i) => ({
     group: 'expansion',
     name,
     enabled: i === 0,
   }))
-  filterSelected.value = filters.value[0]?.name ?? ''
-}
+})
+
+const filteredZones = computed<Zone[]>(() => {
+  // Auto-select first expansion on initial load
+  if (!filterSelected.value && filters.value.length > 0) {
+    filterSelected.value = filters.value[0].name
+  }
+  if (!filterSelected.value) return zones.value
+  return zones.value.filter(zone => zone.expansion === filterSelected.value)
+})
 
 function changeFilter(arrayIndex: number) {
-  filters.value.forEach((f, i) => { f.enabled = i === arrayIndex })
   filterSelected.value = filters.value[arrayIndex].name
 }
-
-watch(uniqueExpansions, (newVal) => {
-  if (newVal.length > 0) {
-    initFilters()
-  }
-}, { immediate: true })
 </script>
 
 <style scoped lang="scss">
 .weatherPatterns {
   padding: 0;
+}
+
+.filterbar {
+  background: rgba(255, 0, 0, 0.2) !important;
+  border: 2px solid red !important;
+  min-height: 50px;
 }
 
 .rdrTable_header {
