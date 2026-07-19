@@ -166,9 +166,10 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
 
       // Get weather data for this zone
       let weatherData = undefined
-      if (area.mapcode) {
+      const mapcode = area.mapcode || getMapcodeFromZoneName(area.zone)
+      if (mapcode) {
         try {
-          const forecast = getWeatherForecast(area.mapcode)
+          const forecast = getWeatherForecast(mapcode)
           weatherData = {
             previous: forecast.previous.name,
             current: forecast.current.name,
@@ -195,6 +196,22 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
 
 function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
+}
+
+function getMapcodeFromZoneName(zoneName: string): string {
+  // Convert zone name to camelCase mapcode
+  // "Radz-at-Han" -> "radzAtHan"
+  // "Old Sharlayan" -> "oldSharlayan"
+  return zoneName
+    .toLowerCase()
+    .replace(/[\s\-]/g, ' ')
+    .split(' ')
+    .map((word, index) => {
+      if (index === 0) return word
+      return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    .join('')
+    .replace(/[\s\-]/g, '')
 }
 </script>
 
