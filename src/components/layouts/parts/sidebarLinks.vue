@@ -29,7 +29,7 @@
             icon: 'eorzeamap',
             link: 'eorzeaoverview',
         },
-        
+
         {
             id: 2,
             name: 'Timed Nodes',
@@ -53,6 +53,12 @@
             name: 'Blue Mage Abilities',
             icon: 'bluemage',
             link: 'blueMageAbilities',
+        },
+        {
+            id: 11,
+            name: 'Weather Patterns',
+            icon: 'weather',
+            link: 'weatherPatterns',
         },
         {
             id: 8,
