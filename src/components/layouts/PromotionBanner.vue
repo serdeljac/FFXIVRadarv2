@@ -1,5 +1,5 @@
 <template>
-  <div class="promotion_banner">
+  <div v-if="adLoaded" class="promotion_banner">
     <ins
       class="adsbygoogle promotion_banner-ins"
       style="display:block"
@@ -11,14 +11,40 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue'
+import { onMounted, ref } from 'vue'
+
+const adLoaded = ref(false)
 
 onMounted(() => {
   try {
     const w = window as any
-    ;(w.adsbygoogle = w.adsbygoogle || []).push({})
+    const adsContainer = document.querySelector('.adsbygoogle')
+
+    if (adsContainer) {
+      const observer = new MutationObserver(() => {
+        const iframePresent = adsContainer.querySelector('iframe') !== null
+        const adContentPresent = (adsContainer as any).innerText?.length > 0
+        if (iframePresent || adContentPresent) {
+          adLoaded.value = true
+          observer.disconnect()
+        }
+      })
+
+      observer.observe(adsContainer, { childList: true, subtree: true })
+
+      ;(w.adsbygoogle = w.adsbygoogle || []).push({})
+
+      // Fallback: assume ad loaded after 3 seconds
+      setTimeout(() => {
+        if (!adLoaded.value) {
+          adLoaded.value = true
+          observer.disconnect()
+        }
+      }, 3000)
+    }
   } catch (e) {
     console.error('AdSense error:', e)
+    adLoaded.value = true
   }
 })
 </script>
