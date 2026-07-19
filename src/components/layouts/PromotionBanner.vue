@@ -21,30 +21,28 @@ onMounted(() => {
     const adsContainer = document.querySelector('.adsbygoogle')
 
     if (adsContainer) {
-      const observer = new MutationObserver(() => {
-        const iframePresent = adsContainer.querySelector('iframe') !== null
-        const adContentPresent = (adsContainer as any).innerText?.length > 0
-        if (iframePresent || adContentPresent) {
+      const checkForAd = () => {
+        // Check for iframe (most common way ads are injected)
+        const hasIframe = adsContainer.querySelector('iframe') !== null
+        // Check for direct ad content (fallback)
+        const hasContent = adsContainer.querySelector('[data-google-query-id]') !== null
+
+        if (hasIframe || hasContent) {
           adLoaded.value = true
           observer.disconnect()
         }
-      })
+      }
 
+      const observer = new MutationObserver(checkForAd)
       observer.observe(adsContainer, { childList: true, subtree: true })
 
       ;(w.adsbygoogle = w.adsbygoogle || []).push({})
 
-      // Fallback: assume ad loaded after 3 seconds
-      setTimeout(() => {
-        if (!adLoaded.value) {
-          adLoaded.value = true
-          observer.disconnect()
-        }
-      }, 3000)
+      // Check once after a short delay in case ad loads before observer starts
+      setTimeout(checkForAd, 500)
     }
   } catch (e) {
     console.error('AdSense error:', e)
-    adLoaded.value = true
   }
 })
 </script>
