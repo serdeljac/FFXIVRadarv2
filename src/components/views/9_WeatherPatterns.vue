@@ -103,7 +103,7 @@ const filteredZones = computed(() => {
 function getZoneCurrentWeather(mapCode: string): string {
   try {
     const weather = EorzeaWeather.getWeather(mapCode, new Date())
-    return weather?.name || 'Unknown'
+    return weather || 'Unknown'
   } catch {
     return 'N/A'
   }

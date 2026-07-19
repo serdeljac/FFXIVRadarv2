@@ -11,11 +11,6 @@ export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
     const now = new Date()
     const eorzea = EorzeaWeather
 
-    const weatherList = eorzea.getWeatherList(zoneMapCode)
-    if (!weatherList || weatherList.length === 0) {
-        throw new Error(`Weather data not found for zone: ${zoneMapCode}`)
-    }
-
     const currentWeather = eorzea.getWeather(zoneMapCode, now)
     if (!currentWeather) {
         throw new Error(`Unable to determine current weather for zone: ${zoneMapCode}`)
@@ -32,19 +27,19 @@ export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
 
     return {
         previous: {
-            name: previousWeather?.name || 'Unknown',
+            name: previousWeather || 'Unknown',
             time: 'Previous (8h ago)',
         },
         current: {
-            name: currentWeather.name,
+            name: currentWeather,
             time: 'Current',
         },
         next1: {
-            name: nextWeather1?.name || 'Unknown',
+            name: nextWeather1 || 'Unknown',
             time: 'Next (8h)',
         },
         next2: {
-            name: nextWeather2?.name || 'Unknown',
+            name: nextWeather2 || 'Unknown',
             time: 'After (16h)',
         },
     }
@@ -60,7 +55,7 @@ export function getWeatherHistory(zoneMapCode: string, hoursBack: number = 24): 
         const weather = eorzea.getWeather(zoneMapCode, checkTime)
         if (weather) {
             history.push({
-                name: weather.name,
+                name: weather,
                 timestamp: checkTime,
             })
         }
