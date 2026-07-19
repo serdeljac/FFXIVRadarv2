@@ -10,7 +10,7 @@
           :key="filter.name"
           :name="filter.name"
           :icon="filter.name"
-          :enabled="filter.enabled || null"
+          :enabled="filter.name == filterSelected  ? true : null"
           @click="changeFilter(index)"
         />
       </div>
@@ -70,6 +70,7 @@ interface Zone {
   name: string
   mapCode: string
   expansion: string
+  id?: string
 }
 
 interface Filter {
@@ -103,12 +104,14 @@ const zones = computed<Zone[]>(() => {
   const uniqueZones: Zone[] = []
 
   for (const area of props.ffxivData.areas) {
-    if (!area.mapcode || area.inoverview === 0 || seen.has(area.mapcode)) continue
-    seen.add(area.mapcode)
+    const identifier = area.mapcode || area.ID
+    if (!identifier || seen.has(identifier)) continue
+    seen.add(identifier)
     uniqueZones.push({
       name: area.zone,
-      mapCode: area.mapcode,
+      mapCode: area.mapcode || '',
       expansion: area.expansion,
+      id: area.ID,
     })
   }
 
