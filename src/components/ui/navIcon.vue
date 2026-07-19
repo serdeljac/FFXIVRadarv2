@@ -46,6 +46,13 @@
 
         <path v-else-if="name === 'privatepolicy'"
             d="M4 5 L12 2 L20 5 L20 11 C20 17 16 20.5 12 22 C8 20.5 4 17 4 11 Z" />
+
+        <g v-else-if="name === 'weather'" fill-rule="evenodd">
+            <path d="M5 13 Q5 10 8 10 Q9 6 13 6 Q17 6 18 10 Q21 10 21 13 Q21 17 17 17 L6 17 Q5 17 5 13 Z" />
+            <circle cx="9" cy="20" r="1.5" />
+            <circle cx="12" cy="20" r="1.5" />
+            <circle cx="15" cy="20" r="1.5" />
+        </g>
     </svg>
 </template>
 
