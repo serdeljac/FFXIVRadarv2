@@ -84,13 +84,13 @@ const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
 
 const uniqueExpansions = computed<string[]>(() => {
-  if (!props.ffxivData?.areas) return []
+  // Derive expansions from zones (which we know works)
   const seen = new Set<string>()
   const result: string[] = []
-  for (const area of props.ffxivData.areas) {
-    if (area.inoverview === 1 && area.expansion && !seen.has(area.expansion)) {
-      seen.add(area.expansion)
-      result.push(area.expansion)
+  for (const zone of zones.value) {
+    if (zone.expansion && !seen.has(zone.expansion)) {
+      seen.add(zone.expansion)
+      result.push(zone.expansion)
     }
   }
   return result.sort()
@@ -142,11 +142,6 @@ function changeFilter(arrayIndex: number) {
   padding: 0;
 }
 
-.filterbar {
-  background: rgba(255, 0, 0, 0.2) !important;
-  border: 2px solid red !important;
-  min-height: 50px;
-}
 
 .rdrTable_header {
   display: flex;
