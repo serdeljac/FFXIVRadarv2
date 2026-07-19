@@ -5,14 +5,14 @@
     <!-- Filter Bar -->
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <button
+        <toggleFilterBtn
           v-for="(filter, index) in filters"
           :key="filter.name"
-          :class="['test-filter-btn', filter.name == filterSelected ? 'active' : '']"
-          @click="selectFilter(filter.name)"
-        >
-          {{ filter.name }}
-        </button>
+          :name="filter.name"
+          :icon="filter.name"
+          :enabled="filter.name == filterSelected  ? true : null"
+          @select="filterSelected = filter.name"
+        />
       </div>
     </div>
 
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import { getWeatherForecast, type WeatherForecast } from '../API/weatherForecast'
@@ -84,10 +84,6 @@ const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth
 
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
-
-function selectFilter(expansionName: string) {
-  filterSelected.value = expansionName
-}
 
 const uniqueExpansions = computed<string[]>(() => {
   // Get unique expansions from zones
