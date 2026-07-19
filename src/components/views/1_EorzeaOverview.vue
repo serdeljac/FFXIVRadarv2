@@ -103,7 +103,7 @@
                                 <th>Vista</th>
                                 <th>Flying Req?</th>
                                 <th>Emote</th>
-                                <th>Timed</th>
+                                <th>Timer</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -182,11 +182,6 @@
                                     </td>
 
                                     <td class="leafletMap_cellTrack">
-                                        <!-- <toggleTrackingBtn
-                                            v-if="it.time"
-                                            :trackingEnabled="it.tracked"
-                                            @click.stop="$emit('changeTracked', it)" /> -->
-
                                             <span class="hasContext" :data-context="capitalize(it.job_sub)">
                                                 <iconImgAPI :name="it.job_sub"/>
                                             </span>
@@ -218,7 +213,7 @@
 
                 </div>
 
-                <!-- FISHING TABLE -->
+                <!-- FIXED FISHING TABLE -->
                 <div v-if="selectedData == 'fishing'" class="leafletMap_table fishing">
                     <table v-if="tableRows.length">
                         <thead>
@@ -245,19 +240,25 @@
                     </table>
 
                     <!-- Fish details table for selected spot -->
-                    <div v-if="detailRowSelected" class="leafletMap_table fishingDetails">
-
+                    <div v-if="detailRowSelected" class="leafletMap_table fishing">
                         <table>
                             <thead>
                                 <tr>
+                                    <th></th>
                                     <th>Fish</th>
                                     <th>Actions</th>
-                                    <th>Actions</th>
-                                    <th>Hookset</th>
+                                    <th>Timer</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="fish in fishDetails" :key="fish.id" class="leafletMap_tableRow">
+                                    <td>
+                                        <toggleDetailsBtn
+                                            v-if="windowWidth !== 'mobile'"
+                                            class="hasContext"
+                                            data-context="View Details"
+                                            @click="$emit('openDetails', fish)"/>
+                                    </td>
                                     <td class="leafletMap_cellItem">
                                         <div>
                                             <img
@@ -267,7 +268,7 @@
                                                 class="leafletMap_itemImg" />
                                             <span>{{ `${fish.name} - Lv.${fish.level} ${formatStars(fish.stars)}` }}</span>
                                         </div>
-                                        <ul>
+                                        <ul class="lowerlist">
                                             <li v-if="fish.bait != 'mooch'">
                                                 <span>Bait: {{ fish.bait }}</span>
                                             </li>
@@ -282,15 +283,49 @@
                                     </td>
                                     <td class="leafletMap_cellItem">
                                         <div>Action: {{ fish.hookset }}</div>
-                                        <div>Alert: {{ fish.bite }}</div>
+                                        <div>Tug: <span class="tug">{{ formatTug(fish.tug) }}</span></div>
                                     </td>
-                                    <td>{{ fish.time ? 'Yes' : 'No' }}</td>
-                                    <td>{{ fish.hookset || '-' }}</td>
+                                    <td class="leafletMap_cellTimer">
+                                        <toggleTrackingBtn
+                                            v-if="fish.time"
+                                            :trackingEnabled="fish.tracked"
+                                            @click.stop="$emit('changeTracked', fish)" />
+                                        <timeDisplay v-if="fish.time" :timerList="timerList" :timeId="fish.time" />
+                                        <span v-else>Any Time</span>
+                                    </td>
                                 </tr>
                             </tbody>
                         </table>
-                        <!-- <p v-else class="leafletMap_tableEmpty">No fish data available for this spot.</p> -->
                     </div>
+                </div>
+
+                <!-- FATEs TABLE -->
+                <div v-if="selectedData == 'fates'" class="leafletMap_table fates">
+                    <table v-if="tableRows.length">
+                        <thead>
+                            <tr>
+                                <th>FATE</th>
+                                <th>Lv</th>
+                                <th>Type</th>
+                                <th>EXP</th>
+                                <th>Gil</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="(row, ri) in tableRows"
+                                :key="ri"
+                                :class="[`leafletMap_tableRow`,
+                                { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
+                                @click="selectTableRow(row)">
+                                <td class="verticalCenter">{{ row.name }}</td>
+                                <td>{{ row.level }}</td>
+                                <td>{{ row.job_sub }}</td>
+                                <td>{{ row.exp }}</td>
+                                <td>{{ row.gil }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
 
@@ -309,7 +344,7 @@ import timeDisplay from '../ui/displayTime.vue'
 // import weatherDisplay from '../ui/displayWeather.vue'
 import iconImgAPI from '../API/iconImg.vue'
 // import vistaSmallAPI from '../API/vistaImg.vue'
-import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars} from '../../hooks/hooks.ts'
+import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars, formatTug} from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
@@ -1739,7 +1774,6 @@ function clearDetails() {
 .leafletMap_table {
     width: 100%;
     margin-top: 14px;
-    overflow: hidden;
 
     &.sightseeing, &.fishing {
         tbody tr:hover {
@@ -1765,6 +1799,14 @@ function clearDetails() {
     .leafletMap_cellTimer {
         max-width: 60px;
         text-align: center;
+    }
+
+    &.fishing {
+        .leafletMap_cellTimer {
+            & > div {margin: auto;}
+            max-width: 60px;
+            text-align: center;
+        }
     }
 
     table {
@@ -1830,6 +1872,9 @@ function clearDetails() {
     display: flex;
     align-items: center;
     gap: 8px;
+}
+.leafletMap_cellItem ul {
+    margin-top: 4px;
 }
 .leafletMap_itemImg {
     width: 24px;
