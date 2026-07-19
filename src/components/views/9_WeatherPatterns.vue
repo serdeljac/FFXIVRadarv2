@@ -36,29 +36,24 @@
           :key="zone.mapCode"
           class="rdrTable_row"
         >
-          <!-- ZONE NAME -->
           <div class="rdrTable_row-name">
             <p>{{ zone.name }}</p>
           </div>
 
-          <!-- PREVIOUS WEATHER -->
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForecast(zone.mapCode)?.previous.name || 'Unknown' }}</p>
+            <p>-</p>
           </div>
 
-          <!-- CURRENT WEATHER -->
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForecast(zone.mapCode)?.current.name || 'Unknown' }}</p>
+            <p>-</p>
           </div>
 
-          <!-- NEXT WEATHER -->
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForecast(zone.mapCode)?.next1.name || 'Unknown' }}</p>
+            <p>-</p>
           </div>
 
-          <!-- AFTER WEATHER -->
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForecast(zone.mapCode)?.next2.name || 'Unknown' }}</p>
+            <p>-</p>
           </div>
         </li>
       </ul>
@@ -67,10 +62,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, onMounted } from 'vue'
+import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import ToggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-import EorzeaWeather from 'eorzea-weather'
 
 interface Zone {
   name: string
@@ -78,27 +72,17 @@ interface Zone {
   expansion: string
 }
 
-interface WeatherForecast {
-  previous: { name: string; time: string }
-  current: { name: string; time: string }
-  next1: { name: string; time: string }
-  next2: { name: string; time: string }
-}
-
 interface Filter {
+  group: string
   name: string
   enabled: boolean
 }
 
-const props = defineProps<{
-  ffxivData?: any
-}>()
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
 
-const pageTagLine = 'Browse weather patterns for zones across Eorzea.'
-const windowWidth = ref('desktop')
+const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filters = ref<Filter[]>([])
 const filterSelected = ref('')
-const weatherCache = new Map<string, WeatherForecast>()
 
 const uniqueExpansions = computed<string[]>(() => {
   if (!props.ffxivData?.areas) return []
@@ -113,7 +97,7 @@ const uniqueExpansions = computed<string[]>(() => {
   return result.sort()
 })
 
-const zones = computed(() => {
+const zones = computed<Zone[]>(() => {
   if (!props.ffxivData?.areas) return []
 
   const seen = new Set<string>()
@@ -132,13 +116,14 @@ const zones = computed(() => {
   return uniqueZones
 })
 
-const filteredZones = computed(() => {
+const filteredZones = computed<Zone[]>(() => {
   if (!filterSelected.value) return zones.value
   return zones.value.filter(zone => zone.expansion === filterSelected.value)
 })
 
 function initFilters() {
   filters.value = uniqueExpansions.value.map((name, i) => ({
+    group: 'expansion',
     name,
     enabled: i === 0,
   }))
@@ -151,34 +136,6 @@ function changeFilter(arrayIndex: number) {
 }
 
 watch(uniqueExpansions, initFilters, { immediate: true })
-
-function getWeatherForecast(mapCode: string): WeatherForecast | null {
-  if (weatherCache.has(mapCode)) {
-    return weatherCache.get(mapCode) || null
-  }
-
-  try {
-    const now = new Date()
-    const current = EorzeaWeather.getWeather(mapCode, now)
-    if (!current) return null
-
-    const previous = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() - 8 * 60 * 60 * 1000))
-    const next1 = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() + 8 * 60 * 60 * 1000))
-    const next2 = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() + 16 * 60 * 60 * 1000))
-
-    const forecast: WeatherForecast = {
-      previous: { name: previous || 'Unknown', time: '-8h' },
-      current: { name: current, time: 'Now' },
-      next1: { name: next1 || 'Unknown', time: '+8h' },
-      next2: { name: next2 || 'Unknown', time: '+16h' },
-    }
-
-    weatherCache.set(mapCode, forecast)
-    return forecast
-  } catch {
-    return null
-  }
-}
 </script>
 
 <style scoped lang="scss">
