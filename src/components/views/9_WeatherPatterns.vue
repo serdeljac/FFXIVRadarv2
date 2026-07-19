@@ -5,10 +5,11 @@
     <!-- Filter Bar -->
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <toggleFilter
+        <ToggleFilterBtn
           v-for="(filter, index) in filters"
           :key="filter.name"
           :name="filter.name"
+          :icon="filter.name"
           :enabled="filter.enabled || null"
           @click="changeFilter(index)"
         />
@@ -66,9 +67,9 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch } from 'vue'
+import { ref, computed, watch, onMounted } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import toggleFilter from '../ui/buttons/toggleFilter.vue'
+import ToggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import EorzeaWeather from 'eorzea-weather'
 
 interface Zone {
@@ -149,11 +150,7 @@ function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
 }
 
-watch(uniqueExpansions, () => {
-  if (uniqueExpansions.value.length > 0) {
-    initFilters()
-  }
-}, { immediate: true })
+watch(uniqueExpansions, initFilters, { immediate: true })
 
 function getWeatherForecast(mapCode: string): WeatherForecast | null {
   if (weatherCache.has(mapCode)) {
