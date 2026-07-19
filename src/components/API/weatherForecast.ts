@@ -1,4 +1,5 @@
 import EorzeaWeather from 'eorzea-weather'
+import { getDawntrailWeather } from './weatherDawntrail'
 
 export interface WeatherForecast {
     previous: { name: string; time: string }
@@ -9,18 +10,29 @@ export interface WeatherForecast {
 
 const weatherCycle = ['Clear Skies', 'Fair Skies', 'Clouds', 'Fog', 'Wind', 'Gales', 'Rain', 'Showers', 'Thunderstorms', 'Dust Storm', 'Snow', 'Blizzards', 'Gloom', 'Auroras', 'Darkness', 'Heavensward Meteors']
 
-export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
-    const now = new Date()
-    const eorzea = EorzeaWeather
-
-    let currentWeather = null
+/**
+ * Resolves weather for a zone at a given time. Tries the bundled
+ * eorzea-weather library first (covers zones through Shadowbringers, plus
+ * Eureka/Bozja), then the Dawntrail rate tables in ./weatherDawntrail.
+ * Returns null if neither source recognizes the zone.
+ */
+function resolveWeather(zoneMapCode: string, date: Date): string | null {
     try {
-        currentWeather = eorzea.getWeather(zoneMapCode, now)
+        const libraryWeather = EorzeaWeather.getWeather(zoneMapCode, date)
+        if (libraryWeather) return libraryWeather
     } catch (error) {
         console.warn(`Error getting weather for ${zoneMapCode}:`, error)
     }
 
-    // If weather is not available in eorzea-weather library, use fallback
+    return getDawntrailWeather(zoneMapCode, date)
+}
+
+export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
+    const now = new Date()
+
+    const currentWeather = resolveWeather(zoneMapCode, now)
+
+    // If weather isn't available from either real data source, use fallback
     if (!currentWeather) {
         // Generate consistent weather using zone hash and time
         const hash = zoneMapCode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
@@ -48,13 +60,13 @@ export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
     }
 
     const get8HourBefore = new Date(now.getTime() - 8 * 60 * 60 * 1000)
-    const previousWeather = eorzea.getWeather(zoneMapCode, get8HourBefore)
+    const previousWeather = resolveWeather(zoneMapCode, get8HourBefore)
 
     const get8HourAfter = new Date(now.getTime() + 8 * 60 * 60 * 1000)
-    const nextWeather1 = eorzea.getWeather(zoneMapCode, get8HourAfter)
+    const nextWeather1 = resolveWeather(zoneMapCode, get8HourAfter)
 
     const get16HourAfter = new Date(now.getTime() + 16 * 60 * 60 * 1000)
-    const nextWeather2 = eorzea.getWeather(zoneMapCode, get16HourAfter)
+    const nextWeather2 = resolveWeather(zoneMapCode, get16HourAfter)
 
     return {
         previous: {
@@ -77,13 +89,12 @@ export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
 }
 
 export function getWeatherHistory(zoneMapCode: string, hoursBack: number = 24): Array<{ name: string; timestamp: Date }> {
-    const eorzea = EorzeaWeather
     const history = []
     const now = new Date()
 
     for (let i = 0; i <= hoursBack; i += 8) {
         const checkTime = new Date(now.getTime() - i * 60 * 60 * 1000)
-        const weather = eorzea.getWeather(zoneMapCode, checkTime)
+        const weather = resolveWeather(zoneMapCode, checkTime)
         if (weather) {
             history.push({
                 name: weather,

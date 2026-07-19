@@ -6,7 +6,7 @@
     <div class="body_content-group filterbar">
       <div class="wrapper">
         <toggleFilterBtn
-          v-for="(filter, index) in filters"
+          v-for="filter in filters"
           :key="filter.name"
           :name="filter.name"
           :icon="filter.name"
@@ -33,7 +33,7 @@
       <ul class="rdrTable_body">
         <li
           v-for="zone in filteredZones"
-          :key="zone.mapCode"
+          :key="zone.id"
           class="rdrTable_row"
         >
           <div class="rdrTable_row-name">
@@ -62,10 +62,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-import { getWeatherForecast, type WeatherForecast } from '../API/weatherForecast'
+import { getWeatherForecast } from '../API/weatherForecast'
+
+// Eorzea weather changes at Eorzea-minute 0, 480, and 960 — i.e. 12:00AM,
+// 8:00AM, and 4:00PM Eorzea Time. Mirrors the WEATHER_CHANGE_EORZEA_MINUTES
+// boundaries in App.vue so this page's forecast columns refresh in step with
+// the rest of the app's weather state.
+const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const
 
 interface Zone {
   name: string
@@ -84,6 +90,37 @@ const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth
 
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
+
+// Bumped only when the Eorzea clock crosses one of the three daily
+// weather-change boundaries. `filteredZones` reads this value purely to
+// register a reactive dependency, so the forecast columns (which are
+// computed from real-world time via getWeatherForecast) get recalculated
+// right when a new Eorzea weather cycle begins, rather than only when the
+// user changes the filter or new zone data arrives.
+const weatherRefreshTick = ref(0)
+let lastWeatherBoundaryMin = -1
+
+watch(
+  () => props.eorzeaClock?.totalMin,
+  (totalMin: number | undefined) => {
+    if (totalMin == null) return
+
+    // Use a small tolerance window (matches App.vue's own boundary check)
+    // since the Eorzea clock advances in whole-minute steps.
+    const crossedBoundary = WEATHER_CHANGE_EORZEA_MINUTES.find(
+      (boundary) => totalMin >= boundary && totalMin < boundary + 2
+    )
+
+    if (crossedBoundary !== undefined && crossedBoundary !== lastWeatherBoundaryMin) {
+      lastWeatherBoundaryMin = crossedBoundary
+      weatherRefreshTick.value++
+    } else if (crossedBoundary === undefined) {
+      // Left the tolerance window; allow the same boundary to trigger again
+      // the next time it's crossed (i.e. the next Eorzea day).
+      lastWeatherBoundaryMin = -1
+    }
+  }
+)
 
 const uniqueExpansions = computed<string[]>(() => {
   // Get unique expansions from zones
@@ -149,6 +186,10 @@ interface ZoneWithWeather extends Zone {
 }
 
 const filteredZones = computed<ZoneWithWeather[]>(() => {
+  // Reactive dependency only — see weatherRefreshTick declaration above.
+  // Ensures this computed re-evaluates at each Eorzea weather-change boundary.
+  void weatherRefreshTick.value
+
   // Auto-select first expansion on initial load
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
@@ -200,8 +241,11 @@ function getMapcodeFromZoneName(zoneName: string): string {
   // Convert zone name to camelCase mapcode
   // "Radz-at-Han" -> "radzAtHan"
   // "Old Sharlayan" -> "oldSharlayan"
+  // "Kozama'uka" -> "kozamauka", "Yak T'el" -> "yakTel" (apostrophes dropped,
+  // matching how existing mapcodes like "uldah" and "rhalgrsReach" handle them)
   return zoneName
     .toLowerCase()
+    .replace(/'/g, '')
     .replace(/[\s\-]/g, ' ')
     .split(' ')
     .map((word, index) => {
