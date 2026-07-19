@@ -33,7 +33,7 @@
                         type="button"
                         class="eorzeaOverview_select eorzeaOverview_select--trigger"
                         @click="isZoneListOpen = !isZoneListOpen">
-                        <iconImgAPI v-if="selectedZoneEntry" :name="selectedZoneEntry.type" class="eorzeaOverview_zoneIcon" />
+                        <!-- <iconImgAPI v-if="selectedZoneEntry" :name="selectedZoneEntry.type" class="eorzeaOverview_zoneIcon" /> -->
                         <span>{{ selectedZone }}</span>
                     </button>
                     <span class="eorzeaOverview_arrow">▾</span>
@@ -82,11 +82,12 @@
                     <label
                         v-for="t in DATA_TYPES"
                         :key="t.key"
-                        class="eorzeaOverview_checkbox">
+                        :class="[`eorzeaOverview_checkbox`, {'inactive': counts[t.key] == 0}]">
                         <input
                             type="radio"
                             name="dataLayer"
                             :value="t.key"
+                            :disabled="counts[t.key] == 0"
                             v-model="selectedData"
                             @change="selectDataLayer(t.key as any)" />
                         <span class="eorzeaOverview_checkbox-box"></span>
@@ -178,6 +179,7 @@
                                             :alt="it.name"
                                             class="leafletMap_itemImg" />
                                         <span>{{ it.name }} - Lv. {{ it.level }}{{ it.stars ? ' ' + '★'.repeat(it.stars) : '' }}</span>
+                                        <iconImgAPI v-if="it.usage === 'aetherial'" class="iconSize2 shiftCollect" :name="'collectability'"/>
                                         </div>
                                     </td>
 
@@ -325,7 +327,7 @@
                                             class="hasContext"
                                             data-context="View Details"
                                             @click="$emit('openDetails', row)"/>
-                                    {{ `${row.name} - Lv.${row.level}` }}
+                                    <span class="verticalCenter-text">{{ `${row.name} - Lv.${row.level}` }}</span>
                                 </td>
                                 <td>{{ row.job_sub }}</td>
                                 <td>{{ row.exp }}</td>
@@ -344,8 +346,8 @@
                             <tr>
                                 <th>Mark</th>
                                 <th>Rank</th>
-                                <th>Lv</th>
                                 <th>Respawn</th>
+                                <th>Trigger?</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -355,10 +357,14 @@
                                 :class="[`leafletMap_tableRow`,
                                 { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
                                 @click="selectTableRow(row)">
-                                <td class="verticalCenter">{{ row.name }}</td>
+                                <td >
+                                    <div class="verticalCenter">
+                                        {{ `${row.name} - Lv.${row.level}` }}
+                                    </div>
+                                </td>
                                 <td>{{ row.rank }}</td>
-                                <td>{{ row.level }}</td>
                                 <td>{{ row.respawn }}</td>
+                                <td class="largenotes">{{ row.trigger ? row.trigger : 'none' }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -1814,7 +1820,7 @@ function clearDetails() {
     width: 100%;
     margin-top: 14px;
 
-    &.sightseeing, &.fishing, &.fates {
+    &.sightseeing, &.fishing, &.fates, &.eliteHunts {
         tbody tr:hover {
             background: rgba(45, 212, 191, 0.05);
         }
@@ -1833,6 +1839,9 @@ function clearDetails() {
         .leafletMap_cellTimer > div {
             margin: auto;
         }
+        .shiftCollect {
+            transform: translate(-8px, -2px)
+        }
     }
 
     .leafletMap_cellTimer {
@@ -1845,6 +1854,12 @@ function clearDetails() {
             & > div {margin: auto;}
             max-width: 60px;
             text-align: center;
+        }
+    }
+
+    &.eliteHunts {
+        .largenotes {
+            max-width: 160px;
         }
     }
 
