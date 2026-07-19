@@ -1,80 +1,108 @@
 <template>
-  <section class="body_content weatherPatterns">
+  <div :class="['weatherPatterns body_content', windowWidth]">
     <PageHeader title="Weather Patterns" :tagline="pageTagLine" icon="weather"/>
 
-    <div class="weatherPatterns_content">
-      <div v-if="expandedZone" class="weatherPatterns_detail">
-        <button class="weatherPatterns_backBtn" @click="expandedZone = null">
-          ← Back
-        </button>
-
-        <h2>{{ expandedZone.name }} - Weather Forecast</h2>
-
-        <div class="weatherPatterns_forecast">
-          <WeatherForecast :zoneMapCode="expandedZone.mapCode"/>
-        </div>
-
-        <div class="weatherPatterns_history">
-          <h3>Recent Weather (Last 24 Hours)</h3>
-          <div class="weatherPatterns_historyList">
-            <div v-for="(weather, idx) in weatherHistory" :key="idx" class="weatherPatterns_historyItem">
-              <div class="weatherPatterns_time">{{ formatTime(weather.timestamp) }}</div>
-              <div class="weatherPatterns_weatherName">{{ weather.name }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div v-else class="weatherPatterns_list">
-        <div class="weatherPatterns_filterArea">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="Search zones..."
-            class="weatherPatterns_search"
-          />
-        </div>
-
-        <div class="weatherPatterns_zoneGrid">
-          <div
-            v-for="zone in filteredZones"
-            :key="zone.mapCode"
-            class="weatherPatterns_zoneCard"
-            @click="selectZone(zone)"
-          >
-            <h3>{{ zone.name }}</h3>
-            <div class="weatherPatterns_currentWeather">
-              <div class="weatherPatterns_label">Current</div>
-              <div class="weatherPatterns_weatherName">{{ getZoneCurrentWeather(zone.mapCode) }}</div>
-            </div>
-          </div>
-        </div>
+    <!-- Filter Bar -->
+    <div class="body_content-group filterbar">
+      <div class="wrapper">
+        <toggleFilter
+          v-for="expansion in expansions"
+          :key="expansion"
+          :name="expansion"
+          :enabled="selectedExpansion === expansion || null"
+          @click="selectedExpansion = selectedExpansion === expansion ? '' : expansion"
+        />
       </div>
     </div>
-  </section>
+
+    <!-- Weather Table -->
+    <div :class="['body_content-group rdrTable', windowWidth]">
+      <ul class="rdrTable_header">
+        <li class="rdrTable_row">
+          <p class="rdrTable_row-name">Zone</p>
+          <p class="rdrTable_row-weather">Previous (8h ago)</p>
+          <p class="rdrTable_row-weather">Current</p>
+          <p class="rdrTable_row-weather">Next (8h)</p>
+          <p class="rdrTable_row-weather">After (16h)</p>
+        </li>
+      </ul>
+
+      <hr class="rdrTable_split" />
+
+      <ul class="rdrTable_body">
+        <li
+          v-for="zone in filteredZones"
+          :key="zone.mapCode"
+          class="rdrTable_row"
+        >
+          <!-- ZONE NAME -->
+          <div class="rdrTable_row-name">
+            <p>{{ zone.name }}</p>
+          </div>
+
+          <!-- PREVIOUS WEATHER -->
+          <div class="rdrTable_row-weather">
+            <p>{{ getWeatherForecast(zone.mapCode)?.previous.name || 'Unknown' }}</p>
+          </div>
+
+          <!-- CURRENT WEATHER -->
+          <div class="rdrTable_row-weather">
+            <p>{{ getWeatherForecast(zone.mapCode)?.current.name || 'Unknown' }}</p>
+          </div>
+
+          <!-- NEXT WEATHER -->
+          <div class="rdrTable_row-weather">
+            <p>{{ getWeatherForecast(zone.mapCode)?.next1.name || 'Unknown' }}</p>
+          </div>
+
+          <!-- AFTER WEATHER -->
+          <div class="rdrTable_row-weather">
+            <p>{{ getWeatherForecast(zone.mapCode)?.next2.name || 'Unknown' }}</p>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import WeatherForecast from '../API/weatherForecast.vue'
+import toggleFilter from '../ui/buttons/toggleFilter.vue'
 import EorzeaWeather from 'eorzea-weather'
-import { getWeatherHistory } from '../API/weatherForecast'
 
 interface Zone {
   name: string
   mapCode: string
+  expansion: string
+}
+
+interface WeatherForecast {
+  previous: { name: string; time: string }
+  current: { name: string; time: string }
+  next1: { name: string; time: string }
+  next2: { name: string; time: string }
 }
 
 const props = defineProps<{
   ffxivData?: any
 }>()
 
-const pageTagLine = 'View weather patterns for every zone in Eorzea. Check current conditions and forecast upcoming weather changes.'
+const pageTagLine = 'Browse weather patterns for zones across Eorzea.'
+const windowWidth = ref('desktop')
+const selectedExpansion = ref('')
+const weatherCache = new Map<string, WeatherForecast>()
 
-const expandedZone = ref<Zone | null>(null)
-const searchQuery = ref('')
-const weatherHistory = ref<Array<{ name: string; timestamp: Date }>>([])
+const expansions = computed(() => {
+  if (!props.ffxivData?.areas) return []
+  const expansionSet = new Set<string>()
+  for (const area of props.ffxivData.areas) {
+    if (area.inoverview === 1 && area.expansion) {
+      expansionSet.add(area.expansion)
+    }
+  }
+  return Array.from(expansionSet).sort()
+})
 
 const zones = computed(() => {
   if (!props.ffxivData?.areas) return []
@@ -88,6 +116,7 @@ const zones = computed(() => {
     uniqueZones.push({
       name: area.zone,
       mapCode: area.mapcode,
+      expansion: area.expansion,
     })
   }
 
@@ -95,197 +124,143 @@ const zones = computed(() => {
 })
 
 const filteredZones = computed(() => {
-  if (!searchQuery.value) return zones.value
-  const query = searchQuery.value.toLowerCase()
-  return zones.value.filter(zone => zone.name.toLowerCase().includes(query))
+  if (!selectedExpansion.value) return zones.value
+  return zones.value.filter(zone => zone.expansion === selectedExpansion.value)
 })
 
-function getZoneCurrentWeather(mapCode: string): string {
+function getWeatherForecast(mapCode: string): WeatherForecast | null {
+  if (weatherCache.has(mapCode)) {
+    return weatherCache.get(mapCode) || null
+  }
+
   try {
-    const weather = EorzeaWeather.getWeather(mapCode, new Date())
-    return weather || 'Unknown'
+    const now = new Date()
+    const current = EorzeaWeather.getWeather(mapCode, now)
+    if (!current) return null
+
+    const previous = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() - 8 * 60 * 60 * 1000))
+    const next1 = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() + 8 * 60 * 60 * 1000))
+    const next2 = EorzeaWeather.getWeather(mapCode, new Date(now.getTime() + 16 * 60 * 60 * 1000))
+
+    const forecast: WeatherForecast = {
+      previous: { name: previous || 'Unknown', time: '-8h' },
+      current: { name: current, time: 'Now' },
+      next1: { name: next1 || 'Unknown', time: '+8h' },
+      next2: { name: next2 || 'Unknown', time: '+16h' },
+    }
+
+    weatherCache.set(mapCode, forecast)
+    return forecast
   } catch {
-    return 'N/A'
+    return null
   }
-}
-
-function selectZone(zone: Zone) {
-  expandedZone.value = zone
-  try {
-    weatherHistory.value = getWeatherHistory(zone.mapCode, 24)
-  } catch (error) {
-    console.error('Failed to load weather history:', error)
-    weatherHistory.value = []
-  }
-}
-
-function formatTime(date: Date): string {
-  return date.toLocaleTimeString('en-US', {
-    month: '2-digit',
-    day: '2-digit',
-    hour: '2-digit',
-    minute: '2-digit',
-    hour12: true,
-  })
 }
 </script>
 
 <style scoped lang="scss">
-  .weatherPatterns {
-    padding: 20px;
+.weatherPatterns {
+  padding: 0;
+}
+
+.rdrTable_header {
+  display: flex;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background: rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(45, 212, 191, 0.3);
+  border-bottom: 1px solid rgba(45, 212, 191, 0.3);
+}
+
+.rdrTable_row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
+  gap: 0;
+  padding: 0;
+  margin: 0;
+  border-bottom: 1px solid rgba(45, 212, 191, 0.1);
+  align-items: center;
+
+  &:hover {
+    background: rgba(45, 212, 191, 0.05);
   }
 
-  .weatherPatterns_content {
-    margin-top: 20px;
+  p {
+    padding: 12px;
+    margin: 0;
+    font-size: 14px;
+    text-align: center;
+    word-break: break-word;
+  }
+}
+
+.rdrTable_header .rdrTable_row {
+  background: rgba(45, 212, 191, 0.1);
+  font-weight: 600;
+  color: #2dd4bf;
+
+  p {
+    padding: 14px 12px;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
   }
 
-  .weatherPatterns_detail {
-    animation: slideIn 0.3s ease-in-out;
-  }
-
-  .weatherPatterns_backBtn {
+  &:hover {
     background: rgba(45, 212, 191, 0.1);
-    border: 1px solid rgba(45, 212, 191, 0.5);
-    color: #2dd4bf;
-    padding: 8px 16px;
-    border-radius: 4px;
-    cursor: pointer;
-    margin-bottom: 20px;
-    transition: all 0.2s;
+  }
+}
 
-    &:hover {
-      background: rgba(45, 212, 191, 0.2);
+.rdrTable_row-name {
+  text-align: left;
+  color: #2dd4bf;
+  font-weight: 500;
+}
+
+.rdrTable_row-weather {
+  color: #fff;
+  font-size: 13px;
+}
+
+.rdrTable_split {
+  display: none;
+}
+
+.rdrTable_body {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+
+  li {
+    padding: 0;
+  }
+}
+
+@media (max-width: 768px) {
+  .rdrTable_row {
+    grid-template-columns: 1fr;
+    padding: 8px;
+
+    p {
+      padding: 4px 0;
     }
   }
 
-  .weatherPatterns_detail h2 {
-    font-size: 24px;
-    margin-bottom: 20px;
-    color: #2dd4bf;
+  .rdrTable_header .rdrTable_row {
+    display: none;
   }
 
-  .weatherPatterns_forecast {
-    margin-bottom: 40px;
-  }
-
-  .weatherPatterns_history {
+  .rdrTable_body .rdrTable_row {
+    display: flex;
+    flex-direction: column;
     background: rgba(0, 0, 0, 0.3);
     border-radius: 4px;
-    padding: 20px;
-
-    h3 {
-      color: #2dd4bf;
-      margin-bottom: 15px;
-      font-size: 16px;
-    }
+    margin-bottom: 8px;
+    border: 1px solid rgba(45, 212, 191, 0.2);
   }
 
-  .weatherPatterns_historyList {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-    gap: 10px;
+  .rdrTable_row-name {
+    font-weight: bold;
+    text-align: left;
   }
-
-  .weatherPatterns_historyItem {
-    background: rgba(45, 212, 191, 0.1);
-    border: 1px solid rgba(45, 212, 191, 0.3);
-    border-radius: 4px;
-    padding: 12px;
-    text-align: center;
-  }
-
-  .weatherPatterns_time {
-    font-size: 11px;
-    color: #999;
-    margin-bottom: 6px;
-  }
-
-  .weatherPatterns_weatherName {
-    color: #2dd4bf;
-    font-weight: 500;
-  }
-
-  .weatherPatterns_filterArea {
-    margin-bottom: 20px;
-  }
-
-  .weatherPatterns_search {
-    width: 100%;
-    max-width: 400px;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.5);
-    border: 1px solid rgba(45, 212, 191, 0.3);
-    border-radius: 4px;
-    color: #fff;
-    font-size: 14px;
-
-    &::placeholder {
-      color: #666;
-    }
-
-    &:focus {
-      outline: none;
-      border-color: rgba(45, 212, 191, 0.8);
-      background: rgba(0, 0, 0, 0.7);
-    }
-  }
-
-  .weatherPatterns_zoneGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: 15px;
-  }
-
-  .weatherPatterns_zoneCard {
-    background: rgba(0, 0, 0, 0.4);
-    border: 1px solid rgba(45, 212, 191, 0.3);
-    border-radius: 4px;
-    padding: 15px;
-    cursor: pointer;
-    transition: all 0.2s;
-
-    &:hover {
-      background: rgba(0, 0, 0, 0.6);
-      border-color: rgba(45, 212, 191, 0.8);
-      transform: translateY(-2px);
-    }
-
-    h3 {
-      font-size: 16px;
-      color: #2dd4bf;
-      margin: 0 0 12px 0;
-    }
-  }
-
-  .weatherPatterns_currentWeather {
-    text-align: center;
-  }
-
-  .weatherPatterns_label {
-    font-size: 11px;
-    color: #999;
-    margin-bottom: 6px;
-  }
-
-  .weatherPatterns_weatherName {
-    color: #fff;
-    font-weight: 500;
-  }
-
-  @keyframes slideIn {
-    from {
-      opacity: 0;
-      transform: translateX(-20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateX(0);
-    }
-  }
-
-  @media (max-width: 768px) {
-    .weatherPatterns_zoneGrid {
-      grid-template-columns: 1fr;
-    }
-  }
-</style>
+}</style>
