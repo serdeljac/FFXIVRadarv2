@@ -19,7 +19,7 @@ interface Props {
 
 const props = withDefaults(defineProps<Props>(), {})
 const emit = defineEmits<{
-    click: []
+    select: [name: string]
 }>()
 
 function getIconImageURL(name: string) {
@@ -41,7 +41,9 @@ const fetchName = computed(() => {
 })
 
 function handleClick() {
-    emit('click')
+    if (props.name) {
+        emit('select', props.name)
+    }
 }
 </script>
 

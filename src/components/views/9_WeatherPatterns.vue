@@ -5,14 +5,14 @@
     <!-- Filter Bar -->
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <toggleFilterBtn
+        <button
           v-for="(filter, index) in filters"
           :key="filter.name"
-          :name="filter.name"
-          :icon="filter.name"
-          :enabled="filter.name == filterSelected  ? true : null"
-          @click="changeFilter(index)"
-        />
+          :class="['test-filter-btn', filter.name == filterSelected ? 'active' : '']"
+          @click="selectFilter(filter.name)"
+        >
+          {{ filter.name }}
+        </button>
       </div>
     </div>
 
@@ -62,7 +62,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import { getWeatherForecast, type WeatherForecast } from '../API/weatherForecast'
@@ -84,6 +84,16 @@ const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth
 
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
+
+watch(filterSelected, (newVal) => {
+  console.log(`filterSelected changed to: ${newVal}`)
+})
+
+function selectFilter(expansionName: string) {
+  console.log(`selectFilter called with: ${expansionName}`)
+  filterSelected.value = expansionName
+  console.log(`filterSelected.value is now: ${filterSelected.value}`)
+}
 
 const uniqueExpansions = computed<string[]>(() => {
   // Get unique expansions from zones
@@ -148,6 +158,7 @@ interface ZoneWithWeather extends Zone {
 }
 
 const filteredZones = computed<ZoneWithWeather[]>(() => {
+  console.log(`Computing filteredZones, filterSelected=${filterSelected.value}`)
   // Auto-select first expansion on initial load
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
@@ -194,13 +205,6 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
   return uniqueZones
 })
 
-function changeFilter(arrayIndex: number) {
-  console.log(`Filter clicked at index ${arrayIndex}, available filters:`, filters.value.map(f => f.name))
-  if (filters.value[arrayIndex]) {
-    filterSelected.value = filters.value[arrayIndex].name
-    console.log(`Filter changed to: ${filterSelected.value}`)
-  }
-}
 
 function getMapcodeFromZoneName(zoneName: string): string {
   // Convert zone name to camelCase mapcode
