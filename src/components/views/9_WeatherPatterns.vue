@@ -85,14 +85,8 @@ const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
 
-watch(filterSelected, (newVal) => {
-  console.log(`filterSelected changed to: ${newVal}`)
-})
-
 function selectFilter(expansionName: string) {
-  console.log(`selectFilter called with: ${expansionName}`)
   filterSelected.value = expansionName
-  console.log(`filterSelected.value is now: ${filterSelected.value}`)
 }
 
 const uniqueExpansions = computed<string[]>(() => {
@@ -137,6 +131,7 @@ const zones = computed<Zone[]>(() => {
     })
   }
 
+
   return uniqueZones
 })
 
@@ -158,7 +153,6 @@ interface ZoneWithWeather extends Zone {
 }
 
 const filteredZones = computed<ZoneWithWeather[]>(() => {
-  console.log(`Computing filteredZones, filterSelected=${filterSelected.value}`)
   // Auto-select first expansion on initial load
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
