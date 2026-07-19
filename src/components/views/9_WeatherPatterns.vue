@@ -6,11 +6,11 @@
     <div class="body_content-group filterbar">
       <div class="wrapper">
         <toggleFilter
-          v-for="expansion in expansions"
-          :key="expansion"
-          :name="expansion"
-          :enabled="selectedExpansion === expansion || null"
-          @click="selectedExpansion = selectedExpansion === expansion ? '' : expansion"
+          v-for="(filter, index) in filters"
+          :key="filter.name"
+          :name="filter.name"
+          :enabled="filter.enabled || null"
+          @click="changeFilter(index)"
         />
       </div>
     </div>
@@ -84,24 +84,32 @@ interface WeatherForecast {
   next2: { name: string; time: string }
 }
 
+interface Filter {
+  name: string
+  enabled: boolean
+}
+
 const props = defineProps<{
   ffxivData?: any
 }>()
 
 const pageTagLine = 'Browse weather patterns for zones across Eorzea.'
 const windowWidth = ref('desktop')
-const selectedExpansion = ref('')
+const filters = ref<Filter[]>([])
+const filterSelected = ref('')
 const weatherCache = new Map<string, WeatherForecast>()
 
-const expansions = computed(() => {
+const uniqueExpansions = computed<string[]>(() => {
   if (!props.ffxivData?.areas) return []
-  const expansionSet = new Set<string>()
+  const seen = new Set<string>()
+  const result: string[] = []
   for (const area of props.ffxivData.areas) {
-    if (area.inoverview === 1 && area.expansion) {
-      expansionSet.add(area.expansion)
+    if (area.inoverview === 1 && area.expansion && !seen.has(area.expansion)) {
+      seen.add(area.expansion)
+      result.push(area.expansion)
     }
   }
-  return Array.from(expansionSet).sort()
+  return result.sort()
 })
 
 const zones = computed(() => {
@@ -124,9 +132,24 @@ const zones = computed(() => {
 })
 
 const filteredZones = computed(() => {
-  if (!selectedExpansion.value) return zones.value
-  return zones.value.filter(zone => zone.expansion === selectedExpansion.value)
+  if (!filterSelected.value) return zones.value
+  return zones.value.filter(zone => zone.expansion === filterSelected.value)
 })
+
+function initFilters() {
+  filters.value = uniqueExpansions.value.map((name, i) => ({
+    name,
+    enabled: i === 0,
+  }))
+  filterSelected.value = filters.value[0]?.name ?? ''
+}
+
+function changeFilter(arrayIndex: number) {
+  filters.value.forEach((f, i) => { f.enabled = i === arrayIndex })
+  filterSelected.value = filters.value[arrayIndex].name
+}
+
+initFilters()
 
 function getWeatherForecast(mapCode: string): WeatherForecast | null {
   if (weatherCache.has(mapCode)) {
