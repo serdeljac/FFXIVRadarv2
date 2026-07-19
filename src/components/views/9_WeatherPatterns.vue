@@ -41,19 +41,19 @@
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>-</p>
+            <p>{{ getWeatherForZone(zone.mapCode)?.previous || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>-</p>
+            <p>{{ getWeatherForZone(zone.mapCode)?.current || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>-</p>
+            <p>{{ getWeatherForZone(zone.mapCode)?.next1 || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>-</p>
+            <p>{{ getWeatherForZone(zone.mapCode)?.next2 || '-' }}</p>
           </div>
         </li>
       </ul>
@@ -65,6 +65,7 @@
 import { ref, computed } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
+import { getWeatherForecast, type WeatherForecast } from '../API/weatherForecast'
 
 interface Zone {
   name: string
@@ -167,6 +168,23 @@ const filteredZones = computed<Zone[]>(() => {
 
 function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
+}
+
+function getWeatherForZone(mapCode: string): { previous: string; current: string; next1: string; next2: string } | null {
+  if (!mapCode) {
+    return null
+  }
+  try {
+    const forecast = getWeatherForecast(mapCode)
+    return {
+      previous: forecast.previous.name,
+      current: forecast.current.name,
+      next1: forecast.next1.name,
+      next2: forecast.next2.name,
+    }
+  } catch (error) {
+    return null
+  }
 }
 </script>
 
