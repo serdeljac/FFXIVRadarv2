@@ -55,7 +55,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import WeatherForecast from '../API/weatherForecast.vue'
 import EorzeaWeather from 'eorzea-weather'
@@ -76,55 +76,23 @@ const expandedZone = ref<Zone | null>(null)
 const searchQuery = ref('')
 const weatherHistory = ref<Array<{ name: string; timestamp: Date }>>([])
 
-const zones = ref<Zone[]>([
-  { name: 'Limsa Lominsa Lower Decks', mapCode: 'limsa_lominsa' },
-  { name: 'Middle La Noscea', mapCode: 'middle_la_noscea' },
-  { name: 'Lower La Noscea', mapCode: 'lower_la_noscea' },
-  { name: 'Eastern La Noscea', mapCode: 'eastern_la_noscea' },
-  { name: 'Western La Noscea', mapCode: 'western_la_noscea' },
-  { name: 'Upper La Noscea', mapCode: 'upper_la_noscea' },
-  { name: 'Outer La Noscea', mapCode: 'outer_la_noscea' },
-  { name: 'New Gridania', mapCode: 'new_gridania' },
-  { name: 'Central Shroud', mapCode: 'central_shroud' },
-  { name: 'East Shroud', mapCode: 'east_shroud' },
-  { name: 'South Shroud', mapCode: 'south_shroud' },
-  { name: 'North Shroud', mapCode: 'north_shroud' },
-  { name: 'Ul\'dah - Steps of Thal', mapCode: 'uldah' },
-  { name: 'Western Thanalan', mapCode: 'western_thanalan' },
-  { name: 'Central Thanalan', mapCode: 'central_thanalan' },
-  { name: 'Eastern Thanalan', mapCode: 'eastern_thanalan' },
-  { name: 'Southern Thanalan', mapCode: 'southern_thanalan' },
-  { name: 'Northern Thanalan', mapCode: 'northern_thanalan' },
-  { name: 'Coerthas Central Highlands', mapCode: 'coerthas_central' },
-  { name: 'Mor Dhona', mapCode: 'mor_dhona' },
-  { name: 'Coerthas Western Highlands', mapCode: 'coerthas_western' },
-  { name: 'The Sea of Clouds', mapCode: 'sea_of_clouds' },
-  { name: 'Azys Lla', mapCode: 'azys_lla' },
-  { name: 'The Dravanian Forelands', mapCode: 'dravanian_forelands' },
-  { name: 'The Dravanian Hinterlands', mapCode: 'dravanian_hinterlands' },
-  { name: 'The Churning Mists', mapCode: 'churning_mists' },
-  { name: 'Kugane', mapCode: 'kugane' },
-  { name: 'The Fringes', mapCode: 'the_fringes' },
-  { name: 'The Peaks', mapCode: 'the_peaks' },
-  { name: 'The Lochs', mapCode: 'the_lochs' },
-  { name: 'The Ruby Sea', mapCode: 'the_ruby_sea' },
-  { name: 'Yanxia', mapCode: 'yanxia' },
-  { name: 'The Azim Steppe', mapCode: 'azim_steppe' },
-  { name: 'The Crystarium', mapCode: 'the_crystarium' },
-  { name: 'Lakeland', mapCode: 'lakeland' },
-  { name: 'Kholusia', mapCode: 'kholusia' },
-  { name: 'Amh Araeng', mapCode: 'amh_araeng' },
-  { name: 'Il Mheg', mapCode: 'il_mheg' },
-  { name: 'The Rak\'tika Greatwood', mapCode: 'raktika_greatwood' },
-  { name: 'The Tempest', mapCode: 'the_tempest' },
-  { name: 'Old Sharlayan', mapCode: 'old_sharlayan' },
-  { name: 'Labyrinthos', mapCode: 'labyrinthos' },
-  { name: 'Thavnair', mapCode: 'thavnair' },
-  { name: 'Garlemald', mapCode: 'garlemald' },
-  { name: 'Mare Lamentorum', mapCode: 'mare_lamentorum' },
-  { name: 'Ultima Thule', mapCode: 'ultima_thule' },
-  { name: 'Elpis', mapCode: 'elpis' },
-])
+const zones = computed(() => {
+  if (!props.ffxivData?.areas) return []
+
+  const seen = new Set<string>()
+  const uniqueZones: Zone[] = []
+
+  for (const area of props.ffxivData.areas) {
+    if (!area.mapcode || area.inoverview === 0 || seen.has(area.mapcode)) continue
+    seen.add(area.mapcode)
+    uniqueZones.push({
+      name: area.zone,
+      mapCode: area.mapcode,
+    })
+  }
+
+  return uniqueZones
+})
 
 const filteredZones = computed(() => {
   if (!searchQuery.value) return zones.value
