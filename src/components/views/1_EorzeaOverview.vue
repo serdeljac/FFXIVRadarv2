@@ -240,7 +240,7 @@
                     </table>
 
                     <!-- Fish details table for selected spot -->
-                    <div v-if="detailRowSelected" class="leafletMap_table fishing">
+                    <div v-if="detailRowSelected && fishDetails.length" class="leafletMap_table fishing">
                         <table>
                             <thead>
                                 <tr>
@@ -305,10 +305,11 @@
                         <thead>
                             <tr>
                                 <th>FATE</th>
-                                <th>Lv</th>
                                 <th>Type</th>
                                 <th>EXP</th>
                                 <th>Gil</th>
+                                <th v-if="tableRows[0].seals">Seals</th>
+                                <th v-else-if="tableRows[0].gemstones">Gems</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -318,14 +319,26 @@
                                 :class="[`leafletMap_tableRow`,
                                 { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
                                 @click="selectTableRow(row)">
-                                <td class="verticalCenter">{{ row.name }}</td>
-                                <td>{{ row.level }}</td>
+                                <td class="verticalCenter">
+                                    <toggleDetailsBtn
+                                            v-if="windowWidth !== 'mobile'"
+                                            class="hasContext"
+                                            data-context="View Details"
+                                            @click="$emit('openDetails', row)"/>
+                                    {{ `${row.name} - Lv.${row.level}` }}
+                                </td>
                                 <td>{{ row.job_sub }}</td>
                                 <td>{{ row.exp }}</td>
                                 <td>{{ row.gil }}</td>
+                                <td v-if="row.seals">{{ row.seals }}</td>
+                                <td v-else-if="row.gemstones">{{ row.gemstones }}</td>
                             </tr>
                         </tbody>
                     </table>
+                </div>
+
+                <!-- HUNTS TABLE -->
+                <div v-if="selectedData == 'fates'" class="leafletMap_table hunts">
                 </div>
             </div>
 
@@ -809,7 +822,10 @@ function toggleType(key: IconType) {
 function selectDataLayer(key: DataType) {
     // Switching to a different type clears any lingering highlight; clicking an
     // icon of the already-selected type keeps the selection it just made.
-    if (selectedData.value !== key) selectMarker(null)
+    if (selectedData.value !== key) {
+        selectMarker(null)
+        detailRowSelected.value = null
+    }
     selectedData.value = key
     if (map) {
         for (const { key: dk } of DATA_TYPES) {
@@ -1775,7 +1791,7 @@ function clearDetails() {
     width: 100%;
     margin-top: 14px;
 
-    &.sightseeing, &.fishing {
+    &.sightseeing, &.fishing, &.fates {
         tbody tr:hover {
             background: rgba(45, 212, 191, 0.05);
         }
