@@ -85,16 +85,27 @@ const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
 
 const uniqueExpansions = computed<string[]>(() => {
-  // Derive expansions from zones (which we know works)
+  // Get unique expansions from zones
   const seen = new Set<string>()
-  const result: string[] = []
+  const zoneExpansions: string[] = []
   for (const zone of zones.value) {
     if (zone.expansion && !seen.has(zone.expansion)) {
       seen.add(zone.expansion)
-      result.push(zone.expansion)
+      zoneExpansions.push(zone.expansion)
     }
   }
-  return result.sort()
+
+  // Sort by order in ffxivData.expansions
+  if (props.ffxivData?.expansion && Array.isArray(props.ffxivData.expansion)) {
+    const expansionOrder = props.ffxivData.expansion.map((e: any) => e.expansion)
+    return zoneExpansions.sort((a, b) => {
+      const aIndex = expansionOrder.indexOf(a)
+      const bIndex = expansionOrder.indexOf(b)
+      return aIndex - bIndex
+    })
+  }
+
+  return zoneExpansions
 })
 
 const zones = computed<Zone[]>(() => {
