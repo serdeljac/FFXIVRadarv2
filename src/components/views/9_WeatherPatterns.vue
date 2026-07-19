@@ -142,8 +142,26 @@ const filteredZones = computed<Zone[]>(() => {
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
   }
-  if (!filterSelected.value) return zones.value
-  return zones.value.filter(zone => zone.expansion === filterSelected.value)
+
+  if (!filterSelected.value || !props.ffxivData?.areas) return []
+
+  // Filter areas by selected expansion and deduplicate by zone name
+  const seen = new Set<string>()
+  const uniqueZones: Zone[] = []
+
+  for (const area of props.ffxivData.areas) {
+    if (area.expansion === filterSelected.value && area.zone && !seen.has(area.zone)) {
+      seen.add(area.zone)
+      uniqueZones.push({
+        name: area.zone,
+        mapCode: area.mapcode || '',
+        expansion: area.expansion,
+        id: area.ID,
+      })
+    }
+  }
+
+  return uniqueZones
 })
 
 function changeFilter(arrayIndex: number) {
