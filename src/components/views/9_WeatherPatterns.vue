@@ -41,19 +41,19 @@
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForZone(zone.mapCode)?.previous || '-' }}</p>
+            <p>{{ zone.weather?.previous || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForZone(zone.mapCode)?.current || '-' }}</p>
+            <p>{{ zone.weather?.current || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForZone(zone.mapCode)?.next1 || '-' }}</p>
+            <p>{{ zone.weather?.next1 || '-' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ getWeatherForZone(zone.mapCode)?.next2 || '-' }}</p>
+            <p>{{ zone.weather?.next2 || '-' }}</p>
           </div>
         </li>
       </ul>
@@ -138,7 +138,16 @@ const filters = computed<Filter[]>(() => {
   }))
 })
 
-const filteredZones = computed<Zone[]>(() => {
+interface ZoneWithWeather extends Zone {
+  weather?: {
+    previous: string
+    current: string
+    next1: string
+    next2: string
+  }
+}
+
+const filteredZones = computed<ZoneWithWeather[]>(() => {
   // Auto-select first expansion on initial load
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
@@ -148,17 +157,35 @@ const filteredZones = computed<Zone[]>(() => {
 
   // Filter areas by selected expansion and deduplicate by zone name
   const seen = new Set<string>()
-  const uniqueZones: Zone[] = []
+  const uniqueZones: ZoneWithWeather[] = []
   const excludedZones = ['The Gold Saucer']
 
   for (const area of props.ffxivData.areas) {
     if (area.expansion === filterSelected.value && area.zone && !seen.has(area.zone) && !excludedZones.includes(area.zone)) {
       seen.add(area.zone)
+
+      // Get weather data for this zone
+      let weatherData = undefined
+      if (area.mapcode) {
+        try {
+          const forecast = getWeatherForecast(area.mapcode)
+          weatherData = {
+            previous: forecast.previous.name,
+            current: forecast.current.name,
+            next1: forecast.next1.name,
+            next2: forecast.next2.name,
+          }
+        } catch (error) {
+          // Zone has no weather data
+        }
+      }
+
       uniqueZones.push({
         name: area.zone,
         mapCode: area.mapcode || '',
         expansion: area.expansion,
         id: area.ID,
+        weather: weatherData,
       })
     }
   }
@@ -168,23 +195,6 @@ const filteredZones = computed<Zone[]>(() => {
 
 function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
-}
-
-function getWeatherForZone(mapCode: string): { previous: string; current: string; next1: string; next2: string } | null {
-  if (!mapCode) {
-    return null
-  }
-  try {
-    const forecast = getWeatherForecast(mapCode)
-    return {
-      previous: forecast.previous.name,
-      current: forecast.current.name,
-      next1: forecast.next1.name,
-      next2: forecast.next2.name,
-    }
-  } catch (error) {
-    return null
-  }
 }
 </script>
 
