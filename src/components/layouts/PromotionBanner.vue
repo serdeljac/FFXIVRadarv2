@@ -1,5 +1,5 @@
 <template>
-  <div v-if="adLoaded" class="promotion_banner">
+  <div class="promotion_banner" :class="{ 'promotion_banner--loaded': adLoaded }">
     <ins
       class="adsbygoogle promotion_banner-ins"
       style="display:block"
@@ -51,12 +51,16 @@ onMounted(() => {
 
 <style scoped lang="scss">
   .promotion_banner {
-    display: block;
-    width: 100%;
-    max-width: 728px;
-    aspect-ratio: 728 / 90;
-    text-align: center;
-    margin: 1rem auto;
+    display: none;
+
+    &--loaded {
+      display: block;
+      width: 100%;
+      max-width: 728px;
+      aspect-ratio: 728 / 90;
+      text-align: center;
+      margin: 1rem auto;
+    }
 
     &-ins {
       width: 100%;
