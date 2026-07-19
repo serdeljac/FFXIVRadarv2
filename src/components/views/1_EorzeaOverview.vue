@@ -68,7 +68,8 @@
                         :class="[`eorzeaOverview_checkbox`, {'inactive': counts[t.key] == 0}]">
                         <input
                             type="checkbox"
-                            v-model="filters[t.key]"
+                            :checked="filters[t.key] && counts[t.key] > 0"
+                            :disabled="counts[t.key] == 0"
                             @change="toggleType(t.key)" />
                         <span class="eorzeaOverview_checkbox-box"></span>
                         <span class="eorzeaOverview_checkbox-label">{{ t.label }}</span>
@@ -1652,6 +1653,7 @@ function clearDetails() {
             .eorzeaOverview_checkbox {
                 flex: 1 1 140px;
                 min-width: 120px;
+                
             }
         }
 
@@ -1676,6 +1678,7 @@ function clearDetails() {
         letter-spacing: 0.03em;
         cursor: pointer;
         transition: all 0.2s;
+        &.inactive {opacity: 0.3}
 
         &:hover {
             background: rgba(45, 212, 191, 0.07);
