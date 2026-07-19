@@ -384,9 +384,7 @@ import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import timeDisplay from '../ui/displayTime.vue'
-// import weatherDisplay from '../ui/displayWeather.vue'
 import iconImgAPI from '../API/iconImg.vue'
-// import vistaSmallAPI from '../API/vistaImg.vue'
 import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars, formatTug} from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
@@ -491,8 +489,6 @@ const hasError = ref(false)
 const errorMsg = ref('')
 const selectedZone = ref(DEFAULT_ZONE)
 const zoneGroups = ref<ZoneGroup[]>([])
-// const activeTime = reactive<Record<string, boolean>>({})
-// const activeWeather = reactive<Record<string, boolean>>({})
 // Custom zone dropdown (native <select><option> can't render an <img>, so the
 // icon-plus-label list is a plain button/list menu instead).
 const isZoneListOpen = ref(false)
@@ -745,22 +741,6 @@ function preloadImage(url: string): Promise<void> {
         img.src = url
     })
 }
-
-// function fetchUsageAttrName(usage: string, info: any): string {
-//     if (usage === 'aetherial') {
-//         const { result1, result2, result3 } = info
-//         return [result1, result2, result3].map(capitalize).join(', ')
-//     }
-//     if (usage === 'customdelivery') return `Deliver to ${info}`
-//     if (usage === 'scripts') return `${capitalize(info)} Gather Scripts`
-//     return capitalize(usage)
-// }
-
-// function fetchUsageImgName(usage: string, info: any): string {
-//     if (usage === 'scripts') return `${info}gatherscripts`
-//     if (usage === 'crafting') return 'sq_crafting'
-//     return usage
-// }
 
 // ─── API: base map ────────────────────────────────────────────────────────
 // Mirrors the search flow in components/API/mapImg.vue: look up the Map sheet
@@ -1078,14 +1058,6 @@ function renderSightseeing(zone: string) {
     }
     counts.sightseeing = count
 }
-
-// function sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
-//     if (type === 'timer') {
-//         activeTime[id] = timeState
-//     } else {
-//         activeWeather[id] = timeState
-//     }
-// }
 
 // Gathering nodes (miner / botany) come from ffxivData[job]; their `area` is
 // resolved to an object upstream, so match on area.zone. A single gathering spot
