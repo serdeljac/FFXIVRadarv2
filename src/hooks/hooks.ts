@@ -53,6 +53,10 @@ export function formatStars(count: number): string {
     return '★'.repeat(Math.max(0, count ?? 0))
 }
 
+export function formatTug(count: number): string {
+    return '!'.repeat(Math.max(0, count ?? 0))
+}
+
 /** Looks up a timer entry from `timerList` by ID. */
 export function findTimer(timerList: any[], id: any): any {
     return id ? timerList.find((o: any) => o.ID === id) : undefined
