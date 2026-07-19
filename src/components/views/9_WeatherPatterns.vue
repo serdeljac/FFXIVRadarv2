@@ -66,7 +66,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilter from '../ui/buttons/toggleFilter.vue'
 import EorzeaWeather from 'eorzea-weather'
@@ -149,7 +149,11 @@ function changeFilter(arrayIndex: number) {
   filterSelected.value = filters.value[arrayIndex].name
 }
 
-initFilters()
+watch(uniqueExpansions, () => {
+  if (uniqueExpansions.value.length > 0) {
+    initFilters()
+  }
+}, { immediate: true })
 
 function getWeatherForecast(mapCode: string): WeatherForecast | null {
   if (weatherCache.has(mapCode)) {
