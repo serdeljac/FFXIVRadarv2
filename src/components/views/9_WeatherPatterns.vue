@@ -148,9 +148,10 @@ const filteredZones = computed<Zone[]>(() => {
   // Filter areas by selected expansion and deduplicate by zone name
   const seen = new Set<string>()
   const uniqueZones: Zone[] = []
+  const excludedZones = ['The Gold Saucer']
 
   for (const area of props.ffxivData.areas) {
-    if (area.expansion === filterSelected.value && area.zone && !seen.has(area.zone)) {
+    if (area.expansion === filterSelected.value && area.zone && !seen.has(area.zone) && !excludedZones.includes(area.zone)) {
       seen.add(area.zone)
       uniqueZones.push({
         name: area.zone,
