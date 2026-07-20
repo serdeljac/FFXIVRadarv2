@@ -15,8 +15,14 @@ const weatherCycle = ['Clear Skies', 'Fair Skies', 'Clouds', 'Fog', 'Wind', 'Gal
  * eorzea-weather library first (covers zones through Shadowbringers, plus
  * Eureka/Bozja), then the Dawntrail rate tables in ./weatherDawntrail.
  * Returns null if neither source recognizes the zone.
+ *
+ * This is the single source of truth for "what's the real weather for this
+ * zone" — every caller (the Weather Patterns page, App.vue's app-wide
+ * weatherList) should go through this rather than calling eorzea-weather or
+ * ./weatherDawntrail directly, so the two data sources stay combined
+ * consistently in exactly one place.
  */
-function resolveWeather(zoneMapCode: string, date: Date): string | null {
+export function resolveWeather(zoneMapCode: string, date: Date = new Date()): string | null {
     try {
         const libraryWeather = EorzeaWeather.getWeather(zoneMapCode, date)
         if (libraryWeather) return libraryWeather

@@ -64,8 +64,7 @@
 <script lang="ts">
 // APIs
 import EorzeaTime from 'eorzea-time';
-import EorzeaWeather from 'eorzea-weather';
-import { getDawntrailWeather } from './components/API/weatherDawntrail';
+import { resolveWeather } from './components/API/weatherForecast';
 import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
@@ -294,17 +293,11 @@ export default {
       for (const area of this.ffxivData.areas) {
         if (!area.mapcode || seen.has(area.mapcode)) continue;
         seen.add(area.mapcode);
-        // eorzea-weather throws (rather than returning a falsy value) for zones
-        // it doesn't recognize — notably the 8 Dawntrail zones, which now have
-        // real mapcodes in areas.json but aren't in that library's zone table.
-        // Fall back to the Dawntrail rate tables for those before giving up.
-        let weather: string | false = false;
-        try {
-          weather = EorzeaWeather.getWeather(area.mapcode, now) || false;
-        } catch (error) {
-          weather = getDawntrailWeather(area.mapcode, now) || false;
-        }
-        this.weatherList[area.mapcode] = weather;
+        // Goes through weatherForecast.ts's resolveWeather() rather than
+        // calling eorzea-weather directly, so this stays in sync with the
+        // Weather Patterns page and the Dawntrail-zone fallback lives in
+        // exactly one place instead of being duplicated here.
+        this.weatherList[area.mapcode] = resolveWeather(area.mapcode, now) || false;
       }
     },
 

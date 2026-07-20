@@ -116,7 +116,7 @@ main {
 *[data-rowAndTimeActive] {
     animation: rowActiveAnimation 0.7s linear infinite;
 
-    .timeDisplay {
+    .timeAppend {
         animation: timerActiveAnimation 0.7s linear infinite;
     }
 }

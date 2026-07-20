@@ -112,3 +112,20 @@ export function EorzeaMap (node: any, timerList: any[], weatherList: Record<stri
     }
     //Return Active, Inactive, Any
 }
+
+
+
+//New Functions
+export function nodeTimeChecker (
+    node: any,
+    timerList: any[],
+    requestActiveState: boolean
+) {
+    if (!node.time) {
+        return requestActiveState ? null : 'Anytime'
+    }
+    const id = node.time
+    let timerListObj = timerList.find((o) => o.ID == id)
+    if (requestActiveState) {return timerListObj.stateActive ? true : null}
+    return timerListObj.countdown
+}

@@ -10,7 +10,9 @@
 
         <div class="bottomrow">
             <p>{{ areaLabel }}</p>
-            <timeDisplay :timeId="node.time" :timerList="timerList"/>
+            <p class="timeAppend">
+                {{ nodeTimeChecker(node, timerList, false) }}
+            </p>
         </div>
     </div>
 </template>
@@ -20,7 +22,7 @@ import { computed } from 'vue'
 import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
 import btnTracking from '../../ui/buttons/toggleTracking.vue'
 import timeDisplay from '../../ui/displayTime.vue'
-import { isNodeActive, formatAreaLabel } from '../../../hooks/hooks.ts'
+import { isNodeActive, formatAreaLabel, nodeTimeChecker } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['timerList', 'weatherList', 'node'])
 defineEmits(['changeTracked', 'openDetails'])

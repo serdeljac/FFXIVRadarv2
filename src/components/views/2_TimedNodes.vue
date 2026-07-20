@@ -57,7 +57,7 @@
             <ul class="rdrTable_body">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
-                    :data-rowAndTimeActive="activeList[d.ID]"
+                    :data-rowAndTimeActive="nodeTimeChecker(d, timerList, true)"
                     class="rdrTable_row">
 
                     <!-- TRACKER -->
@@ -108,7 +108,9 @@
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <timeDisplay :timerList="timerList" :timeId="d.time" @timeActive="(e) => sendTimerState(e, d.ID)" />
+                        <p class="timeAppend">
+                            {{ nodeTimeChecker(d, timerList, false) }}
+                        </p>
                     </div>
 
                     <!-- AREA -->
@@ -136,7 +138,7 @@ import timeDisplay from '../ui/displayTime.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../API/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { capitalize, getUniqueByKey } from '../../hooks/hooks.ts'
+import { nodeTimeChecker, capitalize, getUniqueByKey } from '../../hooks/hooks.ts'
 
 // Filter shape for clarity and type safety
 interface Filter {
