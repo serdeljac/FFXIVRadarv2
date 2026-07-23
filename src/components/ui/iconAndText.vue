@@ -8,7 +8,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 
 const props = defineProps(['icon', 'text', 'addClass', 'chainNo', 'secIcon'])
 

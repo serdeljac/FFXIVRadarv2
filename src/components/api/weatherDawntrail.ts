@@ -1,38 +1,8 @@
-/**
- * Weather-rate tables and forecast algorithm for Dawntrail zones.
- *
- * The bundled 'eorzea-weather' npm package (v3.2.0, last published May 2022
- * with no newer version since) predates Dawntrail, so it has no data for
- * these 8 zones. Without this module, getWeatherForecast() silently fell
- * back to a fake hash-based pattern for them — which only changed every 8
- * *real* hours (instead of every 8 Eorzea hours, ~23 real minutes, like
- * every other zone), making them appear frozen, and never matched actual
- * game weather.
- *
- * This module reimplements the same public, community-documented FFXIV
- * weather algorithm that 'eorzea-weather' itself uses internally — verified
- * to produce byte-identical target values against eorzea-weather's own
- * output across 20,000 sampled weather periods (see verification notes in
- * project history) — and pairs it with weather-rate tables for the 8
- * Dawntrail zones.
- *
- * Rate table data source: Asvel/ffxiv-weather (actively maintained, see
- * https://github.com/Asvel/ffxiv-weather/blob/master/src/Weather.ts), whose
- * own target-calculation algorithm independently matches the one below.
- * Weather *type sets* were cross-checked against zone weather-icon listings
- * on the FFXIV community wiki (consolegameswiki.com / gamerescape.com) for
- * all 8 zones; Solution Nine's single fixed "Fair Skies" weather and the
- * other 7 zones' weather-type sets matched exactly. Living Memory is the one
- * zone with a conflicting signal: one wiki briefly listed a 5th weather type
- * ("Reminiscence") not present in Asvel's table or in Gamer Escape's listing
- * (which matches Asvel's 4 types exactly) — worth spot-checking in-game if
- * you notice Living Memory's forecast ever looks wrong.
- */
-
-// Ordered [weatherName, cumulativeUpperBound] pairs. A forecast "target"
-// (0-99) resolves to the first entry whose upperBound is greater than the
-// target — i.e. entries are checked in order and bounds are cumulative,
-// exactly like the rate tables 'eorzea-weather' uses for its own zones.
+// Weather-rate tables and forecast algorithm for the 8 Dawntrail zones that the
+// eorzea-weather package (last updated 2022) predates and cannot cover. Each
+// entry is an ordered [weatherName, cumulativeUpperBound] pair: a 0-99 forecast
+// target resolves to the first entry whose upperBound exceeds it. Rates come from
+// Asvel/ffxiv-weather; weather-type sets were cross-checked against community wikis.
 type WeatherRateEntry = [name: string, upperBound: number]
 
 const DAWNTRAIL_WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
@@ -48,12 +18,9 @@ const DAWNTRAIL_WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
 
 export const DAWNTRAIL_ZONE_CODES: string[] = Object.keys(DAWNTRAIL_WEATHER_RATES)
 
-/**
- * Standard Eorzea-weather target algorithm: real-world time -> a 0-99
- * "target" value that zone rate tables resolve to a weather name. Bell
- * changes every 175 real seconds (1 Eorzea hour); the target itself only
- * changes once per 8-Eorzea-hour weather window (1400 real seconds).
- */
+// Standard Eorzea weather-target algorithm: hashes real-world time into a 0-99
+// value the rate tables resolve to a weather name. The target only changes once
+// per 8-Eorzea-hour window; the bit-mixing steps mirror the game's own formula.
 function calcWeatherTarget(date: Date): number {
     const unixSeconds = Math.floor(date.getTime() / 1000)
     const bell = Math.trunc(unixSeconds / 175)
@@ -65,7 +32,8 @@ function calcWeatherTarget(date: Date): number {
     return step2 % 100
 }
 
-/** Returns the Dawntrail weather name for `zoneMapCode` at `date`, or null if the zone isn't one of the 8 covered here. */
+// Dawntrail weather name for a zone at a given time, or null when the zone isn't
+// one of the 8 covered here.
 export function getDawntrailWeather(zoneMapCode: string, date: Date): string | null {
     const rates = DAWNTRAIL_WEATHER_RATES[zoneMapCode]
     if (!rates) return null
@@ -74,6 +42,5 @@ export function getDawntrailWeather(zoneMapCode: string, date: Date): string | n
     for (const [name, upperBound] of rates) {
         if (target < upperBound) return name
     }
-    // Unreachable — the last entry's upperBound is always 100 — but keeps TS happy and fails safe.
     return rates[rates.length - 1][0]
 }

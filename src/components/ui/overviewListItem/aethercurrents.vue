@@ -44,10 +44,9 @@ defineEmits(['focusNode'])
 
 const nodeList = reactive<any>({})
 
+// Splits aether currents into overworld nodes (no name) and quest-locked ones.
 function groupNodes() {
-    // Non-quest nodes
     nodeList.noquest = props.data.filter((o: any) => !o.name)
-    // Quest nodes
     nodeList.quest = props.data.filter((o: any) => o.name)
 }
 

@@ -62,14 +62,12 @@
 </template>
 
 <script lang="ts">
-// APIs
 import EorzeaTime from 'eorzea-time';
-import { resolveWeather } from './components/API/weatherForecast';
+import { resolveWeather } from './components/api/weatherForecast';
 import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
 
-// Components
 import promotionBanner from './components/layouts/PromotionBanner.vue';
 import sidebar from './components/layouts/Sidebar.vue';
 import trackingBar from './components/layouts/TrackingBar.vue';
@@ -78,21 +76,18 @@ import detailspane from './components/layouts/DetailsPane.vue';
 import vistaLarge from './components/layouts/ExpandVistaImg.vue'
 import starCanvas from './components/ui/starCanvas.vue'
 
-// Gold Saucer repeats every 20 real-time minutes (1200 seconds).
-// Active windows: [0–600), [1200–1800), [2400–3000)
-const GS_CYCLE = 1200; // seconds
-const GS_ACTIVE_WINDOW = 600; // seconds active per cycle
+// Gold Saucer runs on a 20-real-minute cycle, active for the first 10 minutes.
+const GS_CYCLE = 1200;
+const GS_ACTIVE_WINDOW = 600;
 
-// Eorzea weather changes at Eorzea-minute 0, 480, and 960
+// Eorzea minutes at which weather rolls over (12AM/8AM/4PM ET).
 const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const;
 
-// Job categories that support tracking (have a `.tracked` flag + track button)
 const TRACKABLE_JOBS = ['miner', 'botany', 'fishing', 'sightseeing'] as const;
 
-// Tracked nodes are persisted to localStorage keyed by "job:ID" rather than
-// kept only in memory, so tracking survives page reloads.
 const TRACKING_STORAGE_KEY = 'ffxivradar_trackedNodes';
 
+// Restores the persisted set of tracked node keys ("job:ID") from localStorage.
 function loadTrackedKeys(): Set<string> {
   try {
     const raw = localStorage.getItem(TRACKING_STORAGE_KEY);
@@ -155,7 +150,6 @@ export default {
   },
 
   async created() {
-    // Bind resize handler once so the same reference can be removed on unmount
     this._resizeHandler = this.onWindowResize.bind(this);
     window.addEventListener('resize', this._resizeHandler);
     this.onWindowResize();
@@ -170,7 +164,6 @@ export default {
   },
 
   unmounted() {
-    // Clean up to prevent memory / listener leaks
     if (this._resizeHandler) {
       window.removeEventListener('resize', this._resizeHandler);
     }
@@ -180,8 +173,7 @@ export default {
   },
 
   methods: {
-    // ─── Window & Layout ──────────────────────────────────────────────────────
-
+    // Maps the current viewport width to a named breakpoint and default sidebar layout.
     onWindowResize() {
       const w = window.innerWidth;
       if (w >= 1700) {
@@ -222,8 +214,8 @@ export default {
       if (target) this.sidebarLayout = target;
     },
 
-    // ─── Initial Data Setup ───────────────────────────────────────────────────
-
+    // Lazy-loads every JSON dataset in parallel, then derives the initial clock,
+    // timers, and weather state the rest of the app reads from.
     async setupInitialFFXIVData() {
       const [
         { default: areaRaw },
@@ -268,11 +260,11 @@ export default {
       this.setAetherCurrentData(aetherCurrentRaw);
       this.setFatesData(fatesRaw);
       this.setBlueMageData(blueMageRaw);
-      // Clock must be set before timers so totalMin is available
+      // Clock is set before timers because timer countdowns depend on totalMin.
       this.setEorzeaClock();
       this.createWeatherList();
       this.setGoldSaucerState();
-      this.setTimerData(timerRaw); // builds list + calculates initial countdown
+      this.setTimerData(timerRaw);
     },
 
     setAreaData(areaRaw: any[], expansionsRaw: any[]) {
@@ -286,21 +278,20 @@ export default {
       this.ffxivData.areas = areas;
     },
 
+    // Builds a mapcode -> current-weather lookup for every unique zone, routing
+    // through resolveWeather so it stays consistent with the Weather Patterns page.
     createWeatherList() {
-      // Use a Set for O(1) dedup instead of findIndex O(n²)
       const seen = new Set<string>();
       const now = new Date();
       for (const area of this.ffxivData.areas) {
         if (!area.mapcode || seen.has(area.mapcode)) continue;
         seen.add(area.mapcode);
-        // Goes through weatherForecast.ts's resolveWeather() rather than
-        // calling eorzea-weather directly, so this stays in sync with the
-        // Weather Patterns page and the Dawntrail-zone fallback lives in
-        // exactly one place instead of being duplicated here.
         this.weatherList[area.mapcode] = resolveWeather(area.mapcode, now) || false;
       }
     },
 
+    // Normalizes raw mining/botany nodes: coerces flags, resolves aetherial-reduction
+    // usage info, and attaches the full area object (or the raw name if unmatched).
     setMiningAndBotanyData(arr: any[], job: string, aetherialRaw: any[]) {
       const areas = this.ffxivData.areas;
 
@@ -334,13 +325,11 @@ export default {
       (this.ffxivData as any)[job] = processed;
     },
 
+    // Normalizes fishing nodes. Their `area` is a fishing-hole name, not a zone, and
+    // only some holes exist in areas.json; unmatched ones keep the raw name string.
     setFishingData(fishingRaw: any[]) {
       const areas = this.ffxivData.areas;
 
-      // A fishing node's `area` is the name of a fishing hole ("Rogue River"),
-      // not a zone, and only some holes are listed in areas.json. Unmatched
-      // ones fall back to the raw name — same as setMiningAndBotanyData — so
-      // consumers get either a full area object or a bare spot name.
       const getAreaData = (areaName: string): any =>
         areas.find((o) => o.area === areaName) ??
         areas.find((o) => o.point === areaName) ??
@@ -424,8 +413,9 @@ export default {
       }));
     },
 
+    // Builds the Blue Mage type filters and collapses the flat ability rows into one
+    // record per spell number, grouping each spell's locations/npcs/notes by type.
     setBlueMageData(blueMageRaw: any[]) {
-      // Build type-filter list (unique type1 values)
       const seenTypes = new Set<string>();
       const filters: any[] = [['type1', 'All', true]];
       for (const entry of blueMageRaw as any[]) {
@@ -436,7 +426,6 @@ export default {
       }
       this.ffxivData.bluemageFilters = filters;
 
-      // Use array length directly — no fragile Object.keys trick
       const maxNo: number = (blueMageRaw as any[])[blueMageRaw.length - 1].no;
 
       const groupData = (
@@ -476,8 +465,7 @@ export default {
       }
     },
 
-    // ─── Eorzea Clock ─────────────────────────────────────────────────────────
-
+    // Reads the current Eorzea time and derives the 12h/24h/minute/total-minute fields.
     setEorzeaClock() {
       const raw: string = new EorzeaTime().toString();
       if (!raw) {
@@ -493,25 +481,23 @@ export default {
       this.eorzeaClock.totalMin    = h24 * 60 + min;
     },
 
-    // ─── Gold Saucer ──────────────────────────────────────────────────────────
-
+    // Derives the Gold Saucer's active flag and seconds-remaining from wall-clock time
+    // within its 20-minute cycle (active for the first 10 minutes).
     setGoldSaucerState() {
       const now = new Date();
       const elapsed = now.getMinutes() * 60 + now.getSeconds();
-      // Within each 20-min cycle, active = first 10 min, inactive = second 10 min
       const posInCycle = elapsed % GS_CYCLE;
       this.goldSaucer.active  = posInCycle < GS_ACTIVE_WINDOW;
       this.goldSaucer.seconds = GS_ACTIVE_WINDOW - (posInCycle % GS_ACTIVE_WINDOW);
     },
 
-    // ─── Timers ───────────────────────────────────────────────────────────────
-
+    // Builds the timer list with prerendered display ranges, keeping the raw start/end
+    // fields so recalcTimerCountdowns can recompute windows without reloading JSON.
     setTimerData(timerRaw: any[]) {
       this.timerList = (timerRaw as any[]).map((obj) => ({
         ID:               obj.ID,
         displayRanges12Hr: this.buildRangeStrings(true,  [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
         displayRanges24Hr: this.buildRangeStrings(false, [obj.start0, obj.start1, obj.start2], [obj.end0, obj.end1, obj.end2]),
-        // Raw timing fields kept so recalcTimerCountdowns can run without re-importing JSON
         start0: obj.start0, start1: obj.start1, start2: obj.start2,
         end0:   obj.end0,   end1:   obj.end1,   end2:   obj.end2,
         sets:   obj.sets,
@@ -540,6 +526,8 @@ export default {
       return `${hr < 10 ? '0' : ''}${hr}:${min < 10 ? '0' : ''}${min}`;
     },
 
+    // Recomputes each timer's active state and seconds-until-change from the current
+    // Eorzea minute, walking its spawn windows and wrapping to tomorrow when all have passed.
     recalcTimerCountdowns() {
       const curMin = this.eorzeaClock.totalMin;
 
@@ -551,21 +539,17 @@ export default {
         let active = false;
         let minsUntil = 0;
 
-        // Build ordered [start, end] windows for this timer (up to `sets` windows)
         const windows = Array.from({ length: sets }, (_, i) => [starts[i], ends[i]]);
 
-        // Find which window the current time falls in
         let resolved = false;
         for (const [s, e] of windows) {
           if (curMin <= s) {
-            // Before this window starts
             active    = false;
             minsUntil = s - curMin;
             resolved  = true;
             break;
           }
           if (curMin > s && curMin <= e) {
-            // Inside this window
             active    = true;
             minsUntil = e - curMin;
             resolved  = true;
@@ -574,12 +558,12 @@ export default {
         }
 
         if (!resolved) {
-          // Past all windows — wrap to next Eorzea day
+          // Past every window today, so count toward the first window tomorrow.
           active    = false;
           minsUntil = (1440 - curMin) + starts[0];
         }
 
-        // Eorzea minutes → real-time seconds (1 Eorzea min ≈ 3 real seconds)
+        // 1 Eorzea minute is ~3 real-time seconds.
         const seconds = minsUntil * 3;
 
         this.timerList[d].stateActive = active;
@@ -588,15 +572,13 @@ export default {
       });
     },
 
-    // ─── Clock Tick (1 s interval) ────────────────────────────────────────────
-
+    // Per-second heartbeat: ticks down timer countdowns (recalculating on expiry),
+    // advances the Eorzea clock every 3s, and refreshes weather at each change boundary.
     onClockTick() {
       this.intervalTicks = this.intervalTicks >= 30 ? 0 : this.intervalTicks + 1;
 
-      // Update Gold Saucer every tick
       this.setGoldSaucerState();
 
-      // Decrement timer countdowns; recalc when any expires
       let needsRecalc = false;
       for (const entry of this.timerList) {
         entry.seconds -= 1;
@@ -608,13 +590,11 @@ export default {
       }
       if (needsRecalc) this.recalcTimerCountdowns();
 
-      // Update Eorzea clock every 3 ticks (~3 s = 1 Eorzea minute)
       if (this.intervalTicks % 3 === 0) {
         this.setEorzeaClock();
       }
 
-      // Refresh weather at each of the three daily Eorzea weather-change points
-      // Using a 2-minute tolerance window to handle slight tick drift
+      // 2-minute tolerance absorbs tick drift around each weather boundary.
       for (const boundary of WEATHER_CHANGE_EORZEA_MINUTES) {
         if (this.eorzeaClock.totalMin >= boundary && this.eorzeaClock.totalMin < boundary + 2) {
           this.createWeatherList();
@@ -622,8 +602,6 @@ export default {
         }
       }
     },
-
-    // ─── Utilities ────────────────────────────────────────────────────────────
 
     formatDuration(totalSeconds: number): string {
       const s = Math.max(0, Math.floor(totalSeconds));
@@ -635,11 +613,8 @@ export default {
       return `${sec}s`;
     },
 
-    // ─── Tracking & Details ───────────────────────────────────────────────────
-
-    // Restores tracked state from localStorage once ffxivData is loaded, so
-    // both the node `.tracked` flags and the tracking bar reflect what was
-    // tracked before the page was last closed.
+    // Re-applies persisted tracking once data is loaded, setting each node's `.tracked`
+    // flag and rebuilding the tracking bar from what was tracked before the last reload.
     restoreTrackedState() {
       const trackedKeys = loadTrackedKeys();
       if (trackedKeys.size === 0) return;

@@ -28,7 +28,7 @@ const router = createRouter({
     { path: "/aboutUs", component: aboutUs, props: true },
     { path: "/privatePolicy", component: privatePolicy, props: true },
     { path: "/weatherPatterns", component: weatherPatterns, props: true },
-    { path: "/:pathMatch(.*)*", component: pageNotFound }, //pathMatch can changeb to whatever
+    { path: "/:pathMatch(.*)*", component: pageNotFound },
   ],
   linkExactActiveClass: "currentPage",
 });

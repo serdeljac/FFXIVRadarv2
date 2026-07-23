@@ -209,7 +209,7 @@ import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
-import vistaSmallAPI from '../API/vistaImg.vue'
+import vistaSmallAPI from '../api/vistaImg.vue'
 import { formatStars, isTimerActive, isWeatherMatch, getTimerCountdown, formatAreaLabel } from '../../hooks/hooks.ts'
 
 const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
@@ -222,20 +222,16 @@ const isFishing = computed(() => props.node.job === 'fishing')
 
 const areaLabel = computed(() => formatAreaLabel(props.node.area))
 
-// Fishing holes missing from areas.json resolve to a bare spot name, leaving no
-// zone to look a map image up by and no mapsize to place the marker with.
+// False for fishing holes absent from areas.json, which have no zone to map.
 const hasMap = computed(() => !!props.node?.area?.zone)
 
-// ─── Fishing helpers ────────────────────────────────────────────────────────
-// A bait of 'mooch' means the chain starts from another fish rather than a
-// real bait, so there's nothing concrete to name on the Bait row.
 const baitLabel = computed(() => (props.node.bait === 'mooch' ? 'Mooch' : props.node.bait))
 
 const TUG_LABELS: Record<number, string> = { 1: '! (light)', 2: '!! (medium)', 3: '!!! (heavy)' }
 const tugLabel = computed(() => TUG_LABELS[props.node.bite] ?? props.node.bite)
 
-// The catch order: the starting bait (unless it's itself a mooch), each mooch
-// step, then the fish being looked at.
+// Ordered catch chain: starting bait (unless it's a mooch), each mooch step, then
+// the target fish; empty when the fish uses no mooch.
 const moochChain = computed<string[]>(() => {
     const { bait, mooch_name1, mooch_name2, mooch_name3, name } = props.node
     if (!mooch_name1) return []
@@ -277,10 +273,8 @@ function getVistaInfo(type: string) {
     if (type == 'level') return `LV. ${expFound.vista_min} - ${expFound.vista_max}`
 }
 
-// ─── Mini map (Leaflet) ─────────────────────────────────────────────────────
-// Cut-down version of the map in 1_EorzeaOverview.vue: same CRS.Simple +
-// image-overlay setup, but scoped to a single zone and only two kinds of
-// markers — the zone's aetheryte(s), for orientation, and the focused node.
+// Mini Leaflet map: a single-zone, CRS.Simple image overlay marking only the
+// zone's aetheryte(s) and the focused node.
 const BASE_URL = 'https://v2.xivapi.com'
 const MAP_PX = 2048
 const NODE_SCALE = MAP_PX / 800
@@ -296,9 +290,8 @@ let overlay: L.ImageOverlay | null = null
 let activeMarkers: L.Marker[] = []
 let loadToken = 0
 
-// Icon naming mirrors MapDisplay.vue's getIconImg: fates/eliteHunts have a
-// special prefix, everything else (gathering, sightseeing, aether currents)
-// uses job_sub directly as the icon filename.
+// Marker icon filename for the focused node: fates/eliteHunts use a special
+// prefix, everything else uses job_sub directly (mirrors MapDisplay.vue).
 const focusIconName = computed(() => {
     const job = props.node?.job
     const jobSub = props.node?.job_sub
@@ -312,8 +305,6 @@ onMounted(() => loadMap())
 
 onBeforeUnmount(() => destroyMap())
 
-// The parent (App.vue) swaps in a whole new node object on every selection,
-// so a shallow watch on the prop reference is enough to know when to reload.
 watch(() => props.node, () => loadMap())
 
 function destroyMap() {
@@ -323,10 +314,11 @@ function destroyMap() {
     activeMarkers = []
 }
 
+// Loads (or reuses) the Leaflet map for the current node. A monotonic loadToken
+// guards against races: any async step whose token is stale discards its result,
+// so rapid node switches can't paint an outdated map. Zoneless nodes tear the map
+// down instead.
 async function loadMap() {
-    // Nodes with no known zone hide the map stage entirely; tear any existing
-    // map down so the next node with a zone starts from a clean canvas, and
-    // bump the token so a load still in flight discards its result.
     if (!hasMap.value) {
         loadToken++
         destroyMap()
@@ -338,7 +330,6 @@ async function loadMap() {
     isMapLoading.value = true
     mapHasError.value = false
 
-    // The stage is v-if'd on hasMap, so it may only now be entering the DOM.
     await nextTick()
     if (token !== loadToken || !mapEl.value) return
 
@@ -363,13 +354,11 @@ async function loadMap() {
         const variant = String(props.node.area.variant ?? 0).padStart(2, '0')
         const imageUrl = await resolveMapImageUrl(zoneName, variant)
 
-        // A newer node selection superseded this request — discard it.
         if (token !== loadToken || !map) return
 
         await preloadImage(imageUrl)
         if (token !== loadToken || !map) return
 
-        // In CRS.Simple, bounds are [[y0,x0],[y1,x1]]; 1 unit == 1 image pixel.
         const bounds: L.LatLngBoundsExpression = [[0, 0], [MAP_PX, MAP_PX]]
 
         if (overlay) {
@@ -392,8 +381,8 @@ async function loadMap() {
     }
 }
 
-// Resolve once the image has fully downloaded (or reject if it can't load),
-// so the spinner stays up for the real cost of switching maps.
+// Resolves only once the image has fully downloaded (rejects if it can't), so the
+// loading spinner reflects the real cost of switching maps.
 function preloadImage(url: string): Promise<void> {
     return new Promise((resolve, reject) => {
         const img = new Image()
@@ -403,8 +392,7 @@ function preloadImage(url: string): Promise<void> {
     })
 }
 
-// Mirrors the search flow in 1_EorzeaOverview.vue's resolveMapMeta: look up
-// the Map sheet by PlaceName, then build the asset URL.
+// Looks the Map sheet up by PlaceName via xivapi, then builds its asset URL.
 async function resolveMapImageUrl(zoneName: string, variant: string): Promise<string> {
     const query = encodeURIComponent(`PlaceName.Name~"${zoneName}"`)
     const searchUrl = `${BASE_URL}/api/search?sheets=Map&query=${query}&fields=Id,PlaceName.Name&limit=1`
@@ -423,21 +411,20 @@ async function resolveMapImageUrl(zoneName: string, variant: string): Promise<st
     return `${BASE_URL}/api/asset/map/${idBase}/${variant}`
 }
 
+// Places the zone's aetheryte markers (orientation only) plus the highlighted focus node.
 function buildMarkers(zoneName: string) {
-    // Aetheryte(s) in this zone — for orientation only, not selectable.
     const aetherytes: any[] = (props.ffxivData?.aetheryte ?? []).filter((a: any) => a.area?.zone === zoneName)
     for (const a of aetherytes) {
         const latlng = nodeLatLng(a)
         if (latlng) addMarker(latlng, `${ICON_CDN}/aetheryte.webp`, a.point || a.area?.point || 'Aetheryte')
     }
 
-    // The focused node itself, highlighted.
     const focusLatLng = nodeLatLng(props.node)
     if (focusLatLng) addMarker(focusLatLng, `${ICON_CDN}/${focusIconName.value}.webp`, props.node.name || '', true)
 }
 
-// Same transx/transy-first, x/y-fallback logic as 1_EorzeaOverview.vue's
-// nodeLatLng, scaled onto the 2048px overlay.
+// Converts a node's coordinates to a Leaflet lat/lng on the 2048px overlay,
+// preferring precomputed transx/transy and falling back to x/y over mapsize.
 function nodeLatLng(node: any): L.LatLngExpression | null {
     let px: number, py: number
     if (typeof node?.transx === 'number' && typeof node?.transy === 'number') {

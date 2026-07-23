@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 
 defineProps(['bmData'])
 

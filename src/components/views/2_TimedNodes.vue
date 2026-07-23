@@ -91,8 +91,8 @@
                                 <iconImgAPI :name="d.job_sub"/>
                             </span>
 
-                            <span v-if="d.usage" class="hasContext" :data-context="fetchUsageAttrName(d.usage, d.usage_info)">
-                                <iconImgAPI :name="fetchUsageImgName(d.usage, d.usage_info)"/>
+                            <span v-if="d.usage" class="hasContext" :data-context="fetchUsageAttrName(d)">
+                                <iconImgAPI :name="fetchUsageImgName(d)"/>
                             </span>
 
                             <span v-if="d.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${d.tomb}`">
@@ -129,18 +129,16 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, computed } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
-import timeDisplay from '../ui/displayTime.vue'
 import areaDisplay from '../ui/displayArea.vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { nodeTimeChecker, capitalize, getUniqueByKey } from '../../hooks/hooks.ts'
+import { nodeTimeChecker, capitalize, getUniqueByKey, fetchUsageAttrName, fetchUsageImgName } from '../../hooks/hooks.ts'
 
-// Filter shape for clarity and type safety
 interface Filter {
     group: string
     name: string
@@ -158,21 +156,17 @@ const arraySet = ref(0)
 const displayNoNodesFound = ref(false)
 const searchName = ref('')
 const filters = ref<Filter[]>([])
-const activeList = reactive<Record<string, any>>({})
 const pageTagLine = 'Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed Mining, Botany and Fishing node across all expansions, showing the spawn time, zone, coordinates, item yields, aetherial reduction results, and the bait and weather each fish requires. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.'
 
-// Build grouped filter object once; recomputed only when filters change
 const groupedFilters = computed<Record<string, Filter[]>>(() => ({
     job: filters.value.filter(f => f.group === 'job'),
     usage: filters.value.filter(f => f.group === 'usage'),
     expansion: filters.value.filter(f => f.group === 'expansion'),
 }))
 
-// ─── Filter Initialisation ───────────────────────────────────────────────────
-
+// Builds the job/usage/expansion toggle list from the loaded nodes. Empty group
+// values are dropped so fishing nodes (which have no usage) don't add a blank toggle.
 function createFilterList() {
-    // Fishing nodes have no usage, so drop the empty value rather than render
-    // a nameless toggle for it.
     const toFilters = (arr: any[], group: string): Filter[] =>
         getUniqueByKey(arr, group)
             .filter(o => o[group])
@@ -185,8 +179,7 @@ function createFilterList() {
     filters.value = [...jobFilters, ...usageFilters, ...expansionFilters]
 }
 
-// ─── Pagination ────────────────────────────────────────────────────────────--
-
+// Chunks the node list into PAGE_SIZE pages for the table and flags the empty state.
 function sortNodesIntoGroup(array: any[]) {
     const result: any[][] = []
     for (let i = 0; i < array.length; i += PAGE_SIZE) {
@@ -195,8 +188,6 @@ function sortNodesIntoGroup(array: any[]) {
     compiledDataForTable.value = result
     displayNoNodesFound.value = result.length === 0
 }
-
-// ─── Filter Actions ──────────────────────────────────────────────────────────
 
 function changeFilter(filter: Filter) {
     filter.enabled = !filter.enabled
@@ -212,6 +203,7 @@ function resetFilters() {
     sortNodesIntoGroup(allTimedNodes.value)
 }
 
+// Keeps only nodes that don't match any disabled filter (filters are opt-out).
 function applyFilters() {
     const disabledFilters = filters.value.filter(f => !f.enabled)
     if (disabledFilters.length === 0) {
@@ -224,6 +216,7 @@ function applyFilters() {
     sortNodesIntoGroup(filtered)
 }
 
+// Searches nodes by item name and, for aetherial nodes, by reduction-result names.
 function filterByInputValue(value: string) {
     searchName.value = value
     arraySet.value = 0
@@ -248,30 +241,6 @@ function filterByInputValue(value: string) {
 
     sortNodesIntoGroup([...new Set([...byName, ...byAetherial])])
 }
-
-// ─── Display Helpers ─────────────────────────────────────────────────────────
-
-function fetchUsageImgName(usage: string, info: any): string {
-    if (usage === 'scripts') return `${info}gatherscripts`
-    if (usage === 'crafting') return 'sq_crafting'
-    return usage
-}
-
-function fetchUsageAttrName(usage: string, info: any): string {
-    if (usage === 'aetherial') {
-        const { result1, result2, result3 } = info
-        return [result1, result2, result3].map(capitalize).join(', ')
-    }
-    if (usage === 'customdelivery') return `Deliver to ${info}`
-    if (usage === 'scripts') return `${capitalize(info)} Gather Scripts`
-    return capitalize(usage)
-}
-
-function sendTimerState(timeState: any, id: string) {
-    activeList[id] = timeState
-}
-
-// ─── Init ────────────────────────────────────────────────────────────────────
 
 const miner = props.ffxivData.miner.filter((o: any) => o.time)
 const botany = props.ffxivData.botany.filter((o: any) => o.time)

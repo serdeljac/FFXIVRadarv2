@@ -21,7 +21,6 @@
 import { computed } from 'vue'
 import btnToggleDetails from '../../ui/buttons/toggleDetailMenu.vue'
 import btnTracking from '../../ui/buttons/toggleTracking.vue'
-import timeDisplay from '../../ui/displayTime.vue'
 import { isNodeActive, formatAreaLabel, nodeTimeChecker } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['timerList', 'weatherList', 'node'])
@@ -29,8 +28,6 @@ defineEmits(['changeTracked', 'openDetails'])
 
 const getActiveState = computed(() => isNodeActive(props.node, props.timerList, props.weatherList))
 
-// Gathered items and fish are all named per-item and share the same
-// "name - Lv. X ★★" heading; sightseeing vistas have no level.
 const hasLevelAndStars = computed(() => ['miner', 'botany', 'fishing'].includes(props.node.job))
 
 const areaLabel = computed(() => formatAreaLabel(props.node.area))

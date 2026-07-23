@@ -9,7 +9,7 @@
             <div class="overviewListItem_header">
                 <iconAndText :text="`
                     ${material[0].node_name} 
-                    ${material[0].job_sub.charAt(0).toUpperCase() + material[0].job_sub.slice(1)} 
+                    ${capitalize(material[0].job_sub)}
                     Node - Lv.${material[0].node_level}`" :icon="material[0].job_sub"/>
                 
 
@@ -45,8 +45,8 @@
 import { ref, watch } from 'vue'
 import iconAndText from '../../ui/iconAndText.vue'
 import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
-import iconImgAPI from '../../API/iconImg.vue'
-import { getTimerCountdown, isTimerActive } from '../../../hooks/hooks.ts'
+import iconImgAPI from '../../api/iconImg.vue'
+import { getTimerCountdown, isTimerActive, capitalize } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['data', 'timerList', 'focusNode', 'windowWidth'])
 defineEmits(['focusNode', 'changeTracked'])
@@ -57,7 +57,8 @@ function fetchTimerCountdowns(time: string) {
     return getTimerCountdown(props.timerList, time)
 }
 
-// Build an object keyed by node_code whose contents are that node's materials.
+// Groups rows by node_code into an object mapping each node to its materials,
+// sorted so shards sink to the bottom of each node's list.
 function groupNodes() {
     const groupedNodes: any = {}
 

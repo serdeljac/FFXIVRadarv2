@@ -384,7 +384,7 @@ import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import timeDisplay from '../ui/displayTime.vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars, formatTug} from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
@@ -402,7 +402,7 @@ defineEmits(['changeTracked', 'openDetails', 'openVistaImg'])
 const BASE_URL = 'https://v2.xivapi.com'
 const MAP_PX = 2048
 const NODE_SCALE = MAP_PX / 800
-const ICON_SIZE = 28 // px, on-screen size of a marker icon
+const ICON_SIZE = 28
 const ICON_CDN = import.meta.env.DEV ? '/s3/icons' : 'https://ffxivradar-952854879717-ca-central-1-an.s3.ca-central-1.amazonaws.com/icons'
 const DEFAULT_ZONE = 'Limsa Lominsa Lower Decks'
 const AREA_POINT_ICON_IDS = new Set([60442])
@@ -425,9 +425,9 @@ const MARKER_TYPES = ICON_TYPES.filter((t) => ['aetheryte', 'zoneExit', 'misc'].
 const DATA_TYPES = ICON_TYPES.filter((t) => !['aetheryte', 'zoneExit', 'misc'].includes(t.key))
 
 interface ZoneEntry {
-    zone: string    // PlaceName used both as the display label and the map lookup key
+    zone: string
     type: string
-    variant: string // two-digit xivapi asset variant, e.g. "00"
+    variant: string
 }
 interface ZoneGroup {
     expansion: string
@@ -749,9 +749,11 @@ function buildTable() {
 }
 
 const itemIcons = reactive<Record<string, string | null>>({})
+// Lazily resolves an item's icon URL from xivapi, caching by name. The null
+// placeholder is written up front so concurrent rows don't refetch the same item.
 async function ensureItemIcon(name: string) {
     if (name in itemIcons) return
-    itemIcons[name] = null // reserve so we don't fetch the same name twice
+    itemIcons[name] = null
     try {
         const query = encodeURIComponent(`Name="${name}"`)
         const res = await fetch(`${BASE_URL}/api/search?sheets=Item&query=${query}&fields=Icon.path&limit=1`)

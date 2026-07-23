@@ -54,18 +54,16 @@ defineEmits(['focusNode'])
 
 const nodeList = reactive<any>({})
 
-// Separate data into two sets: individual fates and chained fates.
+// Splits fates into standalone ones (no chain_set) and chained ones, grouping
+// the latter into an object keyed by chain_set so each chain renders together.
 function groupNodes() {
-    // Non-chained fates
     nodeList.nochainset = props.data.filter((o: any) => !o.chain_set)
 
-    // Unique chain sets
     let chainList = props.data.filter((o: any) => o.chain_set)
     chainList = chainList.filter((obj: any, index: number) =>
         index === chainList.findIndex((o: any) => obj.chain_set === o.chain_set)
     )
 
-    // Group each set into an object keyed by chain_set
     const groupedChainSet: any = {}
     for (const d in chainList) {
         const curSet = chainList[d].chain_set

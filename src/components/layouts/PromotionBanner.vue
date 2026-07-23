@@ -21,10 +21,10 @@ onMounted(() => {
     const adsContainer = document.querySelector('.adsbygoogle')
 
     if (adsContainer) {
+      // Reveals the banner only once AdSense actually injects an ad — detected
+      // either by its iframe or a rendered ad node — so an empty slot stays hidden.
       const checkForAd = () => {
-        // Check for iframe (most common way ads are injected)
         const hasIframe = adsContainer.querySelector('iframe') !== null
-        // Check for direct ad content (fallback)
         const hasContent = adsContainer.querySelector('[data-google-query-id]') !== null
 
         if (hasIframe || hasContent) {
@@ -38,7 +38,6 @@ onMounted(() => {
 
       ;(w.adsbygoogle = w.adsbygoogle || []).push({})
 
-      // Check once after a short delay in case ad loads before observer starts
       setTimeout(checkForAd, 500)
     }
   } catch (e) {

@@ -127,10 +127,9 @@ import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import timeDisplay from '../ui/displayTime.vue'
 import weatherDisplay from '../ui/displayWeather.vue'
 import areaDisplay from '../ui/displayArea.vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 
-// Filter shape kept explicit; replaces opaque tuple indexing.
 interface Filter {
     group: string
     name: string
@@ -146,7 +145,7 @@ const activeTime = reactive<Record<string, boolean>>({})
 const activeWeather = reactive<Record<string, boolean>>({})
 const pageTagLine = "The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required Eorzea time window, weather condition, emote, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log."
 
-// Derives the unique expansion list once; no duplicate logic between methods.
+// Distinct expansion names in first-seen order, used to build the filter bar.
 const uniqueExpansions = computed<string[]>(() => {
     const seen = new Set<string>()
     const result: string[] = []
@@ -159,7 +158,7 @@ const uniqueExpansions = computed<string[]>(() => {
     return result
 })
 
-// Groups all vista nodes by expansion name, computed once and cached.
+// Vista nodes bucketed by expansion so the selected tab is a direct lookup.
 const allVistaNodes = computed<Record<string, any[]>>(() => {
     const grouped: Record<string, any[]> = {}
     for (const expansion of uniqueExpansions.value) {
@@ -170,10 +169,8 @@ const allVistaNodes = computed<Record<string, any[]>>(() => {
     return grouped
 })
 
-// Active vista list for the selected filter; avoids repeated map lookups in the template.
 const currentVistaNodes = computed(() => allVistaNodes.value[filterSelected.value] ?? [])
 
-// Replaces fetchVistaData(); recomputes only when filterSelected changes.
 const currentExpansionData = computed(
     () => props.ffxivData.expansion.find((o: any) => o.expansion === filterSelected.value) ?? {}
 )

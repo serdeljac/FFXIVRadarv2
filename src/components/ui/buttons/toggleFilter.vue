@@ -7,7 +7,8 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import iconImgAPI from '../../API/iconImg.vue'
+import iconImgAPI from '../../api/iconImg.vue'
+import { capitalize } from '../../../hooks/hooks.ts'
 
 interface Props {
     name?: string
@@ -35,10 +36,7 @@ function getIconImageURL(name: string) {
     return name
 }
 
-const fetchName = computed(() => {
-    const name = props.name || ''
-    return name.charAt(0).toUpperCase() + name.slice(1)
-})
+const fetchName = computed(() => capitalize(props.name || ''))
 
 function handleClick() {
     if (props.name) {

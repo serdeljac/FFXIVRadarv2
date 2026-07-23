@@ -9,7 +9,7 @@
 </template>
 
 <script lang="ts" setup>
-import iconImgAPI from '../../API/iconImg.vue'
+import iconImgAPI from '../../api/iconImg.vue'
 
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
 

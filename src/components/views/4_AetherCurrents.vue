@@ -80,7 +80,7 @@ import { ref, computed } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import areaDisplay from '../ui/displayArea.vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 
 const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])

@@ -5,7 +5,7 @@
 </template>
 
 <script lang="ts" setup>
-import vistaSmallAPI from '../API/vistaImg.vue'
+import vistaSmallAPI from '../api/vistaImg.vue'
 
 defineProps(['node'])
 </script>

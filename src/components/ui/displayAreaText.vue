@@ -1,5 +1,5 @@
 <template>
-    <div :class="[`btn_area hasContext`, {'hasBackground': excludeBackground}]" :data-context="`${areaObj.expansion.charAt(0).toUpperCase() + areaObj.expansion.slice(1)} > ${areaObj.area.zone}`">
+    <div :class="[`btn_area hasContext`, {'hasBackground': excludeBackground}]" :data-context="`${capitalize(areaObj.expansion)} > ${areaObj.area.zone}`">
         <iconImgAPI :name="areaObj.area.icon"/>
         <p>{{ `${areaObj.area.area}` }}</p>
         <span class="cord">{{ `(x${areaObj.x}, y${areaObj.y})` }}</span>
@@ -7,7 +7,8 @@
 </template>
 
 <script lang="ts" setup>
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
+import { capitalize } from '../../hooks/hooks.ts'
 
 defineProps(['areaObj', 'excludeBackground'])
 </script>

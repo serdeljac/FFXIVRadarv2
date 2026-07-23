@@ -65,12 +65,10 @@
 import { ref, computed, watch } from 'vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
-import { getWeatherForecast } from '../API/weatherForecast'
+import { getWeatherForecast } from '../api/weatherForecast'
+import { capitalize } from '../../hooks/hooks.ts'
 
-// Eorzea weather changes at Eorzea-minute 0, 480, and 960 — i.e. 12:00AM,
-// 8:00AM, and 4:00PM Eorzea Time. Mirrors the WEATHER_CHANGE_EORZEA_MINUTES
-// boundaries in App.vue so this page's forecast columns refresh in step with
-// the rest of the app's weather state.
+// Eorzea minutes at which weather rolls over (12AM/8AM/4PM ET), mirroring App.vue.
 const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const
 
 interface Zone {
@@ -91,22 +89,20 @@ const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth
 const pageTagLine = 'View weather patterns for zones across Eorzea.'
 const filterSelected = ref('')
 
-// Bumped only when the Eorzea clock crosses one of the three daily
-// weather-change boundaries. `filteredZones` reads this value purely to
-// register a reactive dependency, so the forecast columns (which are
-// computed from real-world time via getWeatherForecast) get recalculated
-// right when a new Eorzea weather cycle begins, rather than only when the
-// user changes the filter or new zone data arrives.
+// Reactive tick that filteredZones depends on. Bumping it at each weather-change
+// boundary forces the forecast columns (derived from real time) to recompute in
+// sync with the Eorzea weather cycle, not just on filter or data changes.
 const weatherRefreshTick = ref(0)
 let lastWeatherBoundaryMin = -1
 
+// Watches the Eorzea clock and bumps the refresh tick once per boundary crossing.
+// A 2-minute tolerance absorbs whole-minute tick drift; leaving the window resets
+// the guard so the same boundary can fire again the next Eorzea day.
 watch(
   () => props.eorzeaClock?.totalMin,
   (totalMin: number | undefined) => {
     if (totalMin == null) return
 
-    // Use a small tolerance window (matches App.vue's own boundary check)
-    // since the Eorzea clock advances in whole-minute steps.
     const crossedBoundary = WEATHER_CHANGE_EORZEA_MINUTES.find(
       (boundary) => totalMin >= boundary && totalMin < boundary + 2
     )
@@ -115,15 +111,13 @@ watch(
       lastWeatherBoundaryMin = crossedBoundary
       weatherRefreshTick.value++
     } else if (crossedBoundary === undefined) {
-      // Left the tolerance window; allow the same boundary to trigger again
-      // the next time it's crossed (i.e. the next Eorzea day).
       lastWeatherBoundaryMin = -1
     }
   }
 )
 
+// Distinct zone expansions, re-sorted into ffxivData's canonical expansion order.
 const uniqueExpansions = computed<string[]>(() => {
-  // Get unique expansions from zones
   const seen = new Set<string>()
   const zoneExpansions: string[] = []
   for (const zone of zones.value) {
@@ -133,7 +127,6 @@ const uniqueExpansions = computed<string[]>(() => {
     }
   }
 
-  // Sort by order in ffxivData.expansions
   if (props.ffxivData?.expansion && Array.isArray(props.ffxivData.expansion)) {
     const expansionOrder = props.ffxivData.expansion.map((e: any) => e.expansion)
     return zoneExpansions.sort((a, b) => {
@@ -185,19 +178,18 @@ interface ZoneWithWeather extends Zone {
   }
 }
 
+// Zones for the selected expansion, deduplicated by name, each annotated with its
+// four-slot forecast. Reads weatherRefreshTick so it re-runs on weather boundaries,
+// and auto-selects the first expansion on initial load.
 const filteredZones = computed<ZoneWithWeather[]>(() => {
-  // Reactive dependency only — see weatherRefreshTick declaration above.
-  // Ensures this computed re-evaluates at each Eorzea weather-change boundary.
   void weatherRefreshTick.value
 
-  // Auto-select first expansion on initial load
   if (!filterSelected.value && filters.value.length > 0) {
     filterSelected.value = filters.value[0].name
   }
 
   if (!filterSelected.value || !props.ffxivData?.areas) return []
 
-  // Filter areas by selected expansion and deduplicate by zone name
   const seen = new Set<string>()
   const uniqueZones: ZoneWithWeather[] = []
   const excludedZones = ['The Gold Saucer']
@@ -206,7 +198,6 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
     if (area.expansion === filterSelected.value && area.zone && !seen.has(area.zone) && !excludedZones.includes(area.zone)) {
       seen.add(area.zone)
 
-      // Get weather data for this zone
       let weatherData = undefined
       const mapcode = area.mapcode || getMapcodeFromZoneName(area.zone)
       if (mapcode) {
@@ -219,7 +210,6 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
             next2: forecast.next2.name,
           }
         } catch (error) {
-          // Zone has no weather data
         }
       }
 
@@ -237,21 +227,15 @@ const filteredZones = computed<ZoneWithWeather[]>(() => {
 })
 
 
+// Derives a camelCase mapcode from a display zone name (e.g. "Radz-at-Han" ->
+// "radzAtHan"), dropping apostrophes to match the existing mapcode conventions.
 function getMapcodeFromZoneName(zoneName: string): string {
-  // Convert zone name to camelCase mapcode
-  // "Radz-at-Han" -> "radzAtHan"
-  // "Old Sharlayan" -> "oldSharlayan"
-  // "Kozama'uka" -> "kozamauka", "Yak T'el" -> "yakTel" (apostrophes dropped,
-  // matching how existing mapcodes like "uldah" and "rhalgrsReach" handle them)
   return zoneName
     .toLowerCase()
     .replace(/'/g, '')
     .replace(/[\s\-]/g, ' ')
     .split(' ')
-    .map((word, index) => {
-      if (index === 0) return word
-      return word.charAt(0).toUpperCase() + word.slice(1)
-    })
+    .map((word, index) => (index === 0 ? word : capitalize(word)))
     .join('')
     .replace(/[\s\-]/g, '')
 }

@@ -60,8 +60,8 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import mapImgAPI from '../API/mapImg.vue'
-import iconImgAPI from '../API/iconImg.vue'
+import mapImgAPI from '../api/mapImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 
 const props = defineProps(['ffxivData', 'focusNode', 'originClass', 'mapSize'])
 
@@ -88,17 +88,17 @@ const chainedNodes = computed<any[]>(() => {
     )
 })
 
+// Gathers every elite-hunt spawn point in the focused node's zone and
+// deduplicates them by pixel position so overlapping marks render only once.
 const huntNodes = computed<any[]>(() => {
     if (props.focusNode.job !== 'eliteHunts') return []
 
-    // Collect all spawn points for this zone
     const rawPoints: any[] = props.ffxivData.eliteHunts
         .filter((o: any) => o.area.zone === props.focusNode.area.zone)
         .flatMap((o: any) =>
             o.points.map((p: any) => ({ ...p, job: 'eliteHunts', job_sub: o.rank }))
         )
 
-    // Deduplicate by pixel position using a Map keyed on "x,y"
     const seen = new Map<string, any>()
     for (const p of rawPoints) {
         const key = `${p.transx},${p.transy}`

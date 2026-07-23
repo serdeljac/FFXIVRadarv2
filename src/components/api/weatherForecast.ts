@@ -10,18 +10,9 @@ export interface WeatherForecast {
 
 const weatherCycle = ['Clear Skies', 'Fair Skies', 'Clouds', 'Fog', 'Wind', 'Gales', 'Rain', 'Showers', 'Thunderstorms', 'Dust Storm', 'Snow', 'Blizzards', 'Gloom', 'Auroras', 'Darkness', 'Heavensward Meteors']
 
-/**
- * Resolves weather for a zone at a given time. Tries the bundled
- * eorzea-weather library first (covers zones through Shadowbringers, plus
- * Eureka/Bozja), then the Dawntrail rate tables in ./weatherDawntrail.
- * Returns null if neither source recognizes the zone.
- *
- * This is the single source of truth for "what's the real weather for this
- * zone" — every caller (the Weather Patterns page, App.vue's app-wide
- * weatherList) should go through this rather than calling eorzea-weather or
- * ./weatherDawntrail directly, so the two data sources stay combined
- * consistently in exactly one place.
- */
+// Single source of truth for a zone's real weather: tries the eorzea-weather
+// library first (through Shadowbringers plus Eureka/Bozja), falls back to the
+// Dawntrail rate tables, and returns null when neither source knows the zone.
 export function resolveWeather(zoneMapCode: string, date: Date = new Date()): string | null {
     try {
         const libraryWeather = EorzeaWeather.getWeather(zoneMapCode, date)
@@ -33,14 +24,15 @@ export function resolveWeather(zoneMapCode: string, date: Date = new Date()): st
     return getDawntrailWeather(zoneMapCode, date)
 }
 
+// Four-slot forecast (previous/current/next1/next2) at 8-hour steps. When a zone
+// has no real weather data, it degrades to a deterministic cycle derived from a
+// zone-name hash plus the current 8-hour slot, so the columns still stay stable.
 export function getWeatherForecast(zoneMapCode: string): WeatherForecast {
     const now = new Date()
 
     const currentWeather = resolveWeather(zoneMapCode, now)
 
-    // If weather isn't available from either real data source, use fallback
     if (!currentWeather) {
-        // Generate consistent weather using zone hash and time
         const hash = zoneMapCode.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0)
         const timeSlots = Math.floor(now.getTime() / (8 * 60 * 60 * 1000))
         const weatherIndex = (hash + timeSlots) % weatherCycle.length

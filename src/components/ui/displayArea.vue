@@ -10,13 +10,12 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import iconImgAPI from '../API/iconImg.vue'
+import iconImgAPI from '../api/iconImg.vue'
 import { formatAreaLabel } from '../../hooks/hooks.ts'
 
 const props = defineProps(['node'])
 
 const areaLabel = computed(() => formatAreaLabel(props.node.area))
-// Bare spot names (fishing holes absent from areas.json) carry no expansion icon.
 const areaIcon = computed(() => props.node.area?.icon ?? '')
 </script>
 

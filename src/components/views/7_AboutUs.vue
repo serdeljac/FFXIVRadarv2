@@ -155,10 +155,6 @@ defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherLis
 
 const pageTagLine = ''
 
-// ─── Character info (Lodestone, via api/character.ts) ──────────────────────
-// The FFXIVAPI used elsewhere on this site only serves static game data —
-// it has no access to player/character data — so this comes from our own
-// serverless function, which scrapes the public Lodestone profile instead.
 interface JobLevel {
     job: string
     role: string | null
@@ -191,10 +187,8 @@ const character = ref<CharacterInfo | null>(null)
 const charLoading = ref(true)
 const charError = ref(false)
 
-// Groups the flat job list by role for display, preserving the order roles
-// first appear in (Tank, Healer, Melee DPS, Ranged DPS, then crafters and
-// gatherers) — that's simply the order Lodestone's own class/job page lists
-// them in, so no separate sort order needs to be hardcoded here.
+// Buckets the flat job list by role, keeping Lodestone's own first-seen ordering
+// (Tank, Healer, DPS, then crafters/gatherers) so no explicit sort is needed.
 const groupedLevels = computed(() => {
     if (!character.value) return []
     const groups: { role: string; jobs: JobLevel[] }[] = []

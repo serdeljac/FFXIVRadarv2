@@ -56,7 +56,7 @@
 <script lang="ts" setup>
 import iconAndText from '../../ui/iconAndText.vue'
 import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
-import vistaSmallAPI from '../../API/vistaImg.vue'
+import vistaSmallAPI from '../../api/vistaImg.vue'
 import { getTimerCountdown, isTimerActive, isWeatherMatch } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['data', 'timerList', 'weatherList', 'focusNode', 'windowWidth'])
@@ -77,11 +77,11 @@ function checkTimeActive(type: string, arr: any) {
     return null
 }
 
+// A vista row is active only when its timer window and weather condition agree:
+// weatherless vistas fall back to the timer state alone.
 function checkRowActive(arr: any) {
-    // Match1 — time state
     const match1 = arr.time ? (isTimerActive(props.timerList, arr.time) ? true : null) : undefined
 
-    // Match2 — weather state
     if (!arr.weather1) return match1
     const match2 = isWeatherMatch(props.weatherList, arr.area.mapcode, arr.weather1)
         || isWeatherMatch(props.weatherList, arr.area.mapcode, arr.weather2)
