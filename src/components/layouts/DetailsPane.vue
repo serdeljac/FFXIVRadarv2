@@ -253,8 +253,6 @@ const otherMaterials = computed<any[]>(() => {
 })
 
 const isTimeActive = computed(() => (isTimerActive(props.timerList, props.node.time) ? true : null))
-const isWeather1Active = computed(() => (isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1) ? true : null))
-const isWeather2Active = computed(() => (isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2) ? true : null))
 
 const isTimeAndWeatherActive = computed(() => {
     const timeState = isTimerActive(props.timerList, props.node.time)

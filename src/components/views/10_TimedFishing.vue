@@ -58,8 +58,8 @@
             <ul class="rdrTable_body">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
-                    :data-rowActive="isFishNodeActive(d, timerList, weatherList)"
-                    class="rdrTable_row">
+                    :class="[`rdrTable_row`, {nodeIsActive: fishActive(d)}]"
+                    >
 
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking">
@@ -98,8 +98,8 @@
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <p class="timeAppend">
-                            {{ nodeTimeChecker(d, timerList, false) }}
+                        <p class="timeAppend" :class="{ active: fishActive(d) }">
+                            {{ d.time ? fishCountdown(d): 'Any Time' }}
                         </p>
                     </div>
 
@@ -124,7 +124,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
@@ -132,7 +132,7 @@ import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { nodeTimeChecker, capitalize, getUniqueByKey, isFishNodeActive } from '../../hooks/hooks.ts'
+import { capitalize, getUniqueByKey, isFishNodeActive, fishTimer } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -151,6 +151,21 @@ const arraySet = ref(0)
 const displayNoNodesFound = ref(false)
 const searchName = ref('')
 const filters = ref<Filter[]>([])
+
+// Countdowns run off real time rather than the timer list, since a hole's spawn
+// can hinge on weather as much as the clock. Ticking a local `now` is what makes
+// the rows re-render each second.
+const nowMs = ref(Date.now())
+let tickHandle: ReturnType<typeof setInterval> | undefined
+onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now() }, 1000) })
+onUnmounted(() => clearInterval(tickHandle))
+
+// While a hole is up the countdown reads as time remaining, otherwise as time
+// until it opens; the pulsing row is what distinguishes the two. 'Any Time' means
+// nothing gates it, '—' that its weather never comes round.
+const fishActive = (node: any) => isFishNodeActive(node, props.timerList, props.weatherList, nowMs.value)
+const fishCountdown = (node: any) => fishTimer(node, props.timerList, props.weatherList, nowMs.value) ?? 'Any Time'
+
 const pageTagLine = 'Timed fishing holes in Final Fantasy XIV only become available during specific Eorzea time windows, and some also require the right weather to be active. This tracker lists every timed fishing node across all expansions, showing the spawn time, zone, and coordinates. Use the filters to narrow by expansion, or search by fish name to find a specific catch quickly.'
 
 // "weather1 / weather2 / weather3 > weatherchain1 / weatherchain2 / weatherchain3",
@@ -234,7 +249,9 @@ function filterByInputValue(value: string) {
     sortNodesIntoGroup(byName)
 }
 
-allTimedNodes.value = props.ffxivData.fishing.filter((o: any) => o.time)
+// A hole is trackable if it is gated by a timer, by weather, or by both — plenty
+// of fish have no time window but still need the right weather.
+allTimedNodes.value = props.ffxivData.fishing.filter((o: any) => o.time || o.weather1)
 createFilterList()
 sortNodesIntoGroup(allTimedNodes.value)
 </script>
@@ -416,7 +433,7 @@ sortNodesIntoGroup(allTimedNodes.value)
 
         /* Teal glow for a fish currently inside its time + weather window,
            replacing the default purple pulse from style.scss. */
-        [data-rowActive] {
+        .nodeIsActive {
             animation: timedNodesRowPulse 0.9s ease-in-out infinite;
         }
 

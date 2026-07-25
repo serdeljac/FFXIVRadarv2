@@ -66,16 +66,7 @@ function fetchTimerCountdowns(time: string) {
     return getTimerCountdown(props.timerList, time)
 }
 
-function checkTimeActive(type: string, arr: any) {
-    if (type == 'weather1' || type == 'weather2') {
-        return isWeatherMatch(props.weatherList, arr.area.mapcode, arr[type]) ? true : null
-    }
 
-    if (type == 'time' && arr.time) {
-        return isTimerActive(props.timerList, arr.time) ? true : null
-    }
-    return null
-}
 
 // A vista row is active only when its timer window and weather condition agree:
 // weatherless vistas fall back to the timer state alone.

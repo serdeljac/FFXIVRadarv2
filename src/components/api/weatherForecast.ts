@@ -10,15 +10,23 @@ export interface WeatherForecast {
 
 const weatherCycle = ['Clear Skies', 'Fair Skies', 'Clouds', 'Fog', 'Wind', 'Gales', 'Rain', 'Showers', 'Thunderstorms', 'Dust Storm', 'Snow', 'Blizzards', 'Gloom', 'Auroras', 'Darkness', 'Heavensward Meteors']
 
+// Zones the library doesn't know (Dawntrail onwards). It throws for these every
+// time, so the first failure is remembered — otherwise callers that sweep many
+// windows ahead pay for a thrown exception and a console warning per lookup.
+const zonesMissingFromLibrary = new Set<string>()
+
 // Single source of truth for a zone's real weather: tries the eorzea-weather
 // library first (through Shadowbringers plus Eureka/Bozja), falls back to the
 // Dawntrail rate tables, and returns null when neither source knows the zone.
 export function resolveWeather(zoneMapCode: string, date: Date = new Date()): string | null {
-    try {
-        const libraryWeather = EorzeaWeather.getWeather(zoneMapCode, date)
-        if (libraryWeather) return libraryWeather
-    } catch (error) {
-        console.warn(`Error getting weather for ${zoneMapCode}:`, error)
+    if (!zonesMissingFromLibrary.has(zoneMapCode)) {
+        try {
+            const libraryWeather = EorzeaWeather.getWeather(zoneMapCode, date)
+            if (libraryWeather) return libraryWeather
+        } catch {
+            zonesMissingFromLibrary.add(zoneMapCode)
+            console.warn(`Weather for "${zoneMapCode}" is not in eorzea-weather; using the Dawntrail rate tables.`)
+        }
     }
 
     return getDawntrailWeather(zoneMapCode, date)

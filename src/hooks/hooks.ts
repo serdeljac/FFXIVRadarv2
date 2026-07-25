@@ -167,10 +167,11 @@ function weatherAtWindow(mapcode: string, windowIndex: number): string | null {
     return weather
 }
 
-// ── Sightseeing ─────────────────────────────────────────────────────────────
-// A vista needs its ET time range and its zone weather to line up at the same
-// moment, so "when does this next spawn" can't be read off the timer alone —
-// weather has to be predicted forward window by window.
+// ── Timed node prediction ───────────────────────────────────────────────────
+// Vistas and fishing holes both spawn on an ET time range combined with the zone
+// weather, so "when does this next happen" can't be read off the timer alone.
+// Weather is constant within a window, which turns both questions — how long a
+// spawn lasts, and when the next one starts — into a walk over that window grid.
 
 interface NodeWindowState {
     active: boolean
@@ -178,27 +179,68 @@ interface NodeWindowState {
     until: number
 }
 
-// Cached because the forward sweep is far too costly to redo for every vista on
-// every one-second tick. The answer only changes once `until` passes, so entries
-// stay valid until then; the weather key busts the cache when a zone rerolls.
-const sightseeStateCache = new Map<string, NodeWindowState>()
-
-function sightseeCacheKey(node: any, weatherList: Record<string, any>): string {
-    const mapcode = node.area?.mapcode ?? ''
-    return `${node.ID}|${node.time}|${node.weather1}|${node.weather2}|${mapcode}|${weatherList[mapcode]}`
+// The weather half of a spawn condition:
+//   required, no chain -> the zone weather must be one of `required`
+//   required + chain   -> the zone weather must be one of `chain`, *and* the
+//                         window before it one of `required` (fishing transitions)
+//   neither            -> no weather restriction at all
+interface WeatherRule {
+    required: string[]
+    chain: string[]
+    mapcode?: string
+    /** App's cached current weather, trusted for its own window so a row can never
+     *  contradict the weather column rendered next to it. */
+    live?: { index: number; weather: string | null }
 }
 
-// How long an already-spawned vista stays up. Both constraints are piecewise
-// constant, so this walks boundary to boundary and keeps going while they still
-// hold — a run can outlast the window it started in, either because the timer
-// wraps midnight (18 -> 2 is stored as two intervals) or because consecutive
-// weather windows both satisfy the node. Infinity means nothing ever ends it.
-function activeRunEnd(
-    windows: Array<[number, number]>,
-    accepted: string[],
-    mapcode: string | undefined,
-    from: number,
-): number {
+function weatherRule(
+    node: any,
+    weatherList: Record<string, any>,
+    requiredKeys: string[],
+    chainKeys: string[],
+    now: number,
+): WeatherRule {
+    const mapcode = node.area?.mapcode
+    return {
+        required: requiredKeys.map(k => node[k]).filter(Boolean),
+        chain: chainKeys.map(k => node[k]).filter(Boolean),
+        mapcode,
+        live: mapcode
+            ? { index: Math.floor(now / WEATHER_WINDOW_MS), weather: weatherList[mapcode] || null }
+            : undefined,
+    }
+}
+
+function weatherInWindow(rule: WeatherRule, windowIndex: number): string | null {
+    if (rule.live && windowIndex === rule.live.index) return rule.live.weather
+    return weatherAtWindow(rule.mapcode as string, windowIndex)
+}
+
+function weatherRuleHolds(rule: WeatherRule, windowIndex: number): boolean {
+    if (!rule.required.length) return true
+    if (!rule.mapcode) return false
+
+    const current = weatherInWindow(rule, windowIndex) as string
+    if (!rule.chain.length) return rule.required.includes(current)
+
+    // Chained: this window carries the "after" weather and the one before it the
+    // "before", so a transition only counts on the window it completes in.
+    return rule.chain.includes(current)
+        && rule.required.includes(weatherInWindow(rule, windowIndex - 1) as string)
+}
+
+const timeWindowHolds = (windows: Array<[number, number]>, at: number): boolean =>
+    !windows.length || inWindows(windows, eorzeaMinuteAt(at))
+
+const holdsAt = (windows: Array<[number, number]>, rule: WeatherRule, at: number): boolean =>
+    timeWindowHolds(windows, at) && weatherRuleHolds(rule, Math.floor(at / WEATHER_WINDOW_MS))
+
+// How long an already-spawned node stays up. Both constraints are piecewise
+// constant, so this walks boundary to boundary while they still hold — a run can
+// outlast the window it began in, either because the timer wraps midnight (18 -> 2
+// is stored as two intervals) or because consecutive weather windows both satisfy
+// the node. Infinity means nothing ever ends it.
+function activeRunEnd(windows: Array<[number, number]>, rule: WeatherRule, from: number): number {
     let at = from
 
     for (let guard = 0; guard < MAX_LOOKAHEAD_WINDOWS; guard++) {
@@ -211,9 +253,9 @@ function activeRunEnd(
         }
 
         let weatherEnd = Infinity
-        if (accepted.length) {
+        if (rule.required.length) {
             const windowIndex = Math.floor(at / WEATHER_WINDOW_MS)
-            if (!accepted.includes(weatherAtWindow(mapcode as string, windowIndex) as string)) return at
+            if (!weatherRuleHolds(rule, windowIndex)) return at
             weatherEnd = (windowIndex + 1) * WEATHER_WINDOW_MS
         }
 
@@ -230,34 +272,18 @@ function activeRunEnd(
     return Infinity
 }
 
-// Resolves whether a vista is spawned right now and when that changes. Current
-// weather is read from weatherList (the same source displayWeather.vue highlights
-// from, so the row and the weather text can never disagree); only *future*
-// windows go through resolveWeather.
-function sightseeState(node: any, timerList: any[], weatherList: Record<string, any>, now: number): NodeWindowState {
-    const windows = timerWindows(findTimer(timerList, node.time))
-    const accepted = [node.weather1, node.weather2].filter(Boolean)
-    const mapcode = node.area?.mapcode
-    const etNow = eorzeaMinuteAt(now)
+// When the node next spawns: walk forward a weather window at a time and, in each
+// window that satisfies the weather rule, intersect the ET minutes it spans with
+// the node's time ranges.
+function nextSpawnAt(windows: Array<[number, number]>, rule: WeatherRule, from: number): number {
+    if (rule.required.length && !rule.mapcode) return Infinity
 
-    const timeOk = !windows.length || inWindows(windows, etNow)
-    const weatherOk = !accepted.length || (!!mapcode && accepted.includes(weatherList[mapcode]))
-
-    if (timeOk && weatherOk) {
-        return { active: true, until: activeRunEnd(windows, accepted, mapcode, now) }
-    }
-
-    // A weather-gated vista with no mapcode can never be resolved.
-    if (accepted.length && !mapcode) return { active: false, until: Infinity }
-
-    // Walk forward a weather window at a time, and inside each one intersect the
-    // ET minutes it spans with the node's time ranges.
-    const firstWindow = Math.floor(now / WEATHER_WINDOW_MS)
+    const firstWindow = Math.floor(from / WEATHER_WINDOW_MS)
     const segments = windows.length ? windows : [[0, ET_DAY_MINUTES] as [number, number]]
 
     for (let i = 0; i < MAX_LOOKAHEAD_WINDOWS; i++) {
         const windowIndex = firstWindow + i
-        if (accepted.length && !accepted.includes(weatherAtWindow(mapcode, windowIndex) as string)) continue
+        if (!weatherRuleHolds(rule, windowIndex)) continue
 
         const windowStart = windowIndex * WEATHER_WINDOW_MS
         const etBase = (windowIndex % 3) * WEATHER_WINDOW_MINUTES
@@ -268,45 +294,66 @@ function sightseeState(node: any, timerList: any[], weatherList: Record<string, 
             const hi = Math.min(e, etBase + WEATHER_WINDOW_MINUTES)
             if (lo >= hi) continue
             const segmentEnd = windowStart + (hi - etBase) * ET_MINUTE_MS
-            if (segmentEnd <= now) continue
+            if (segmentEnd <= from) continue
             const segmentStart = windowStart + (lo - etBase) * ET_MINUTE_MS
-            // Clamped so a segment straddling `now` can never report negative time.
-            soonest = Math.min(soonest, Math.max(segmentStart, now))
+            // Clamped so a segment straddling `from` can never report negative time.
+            soonest = Math.min(soonest, Math.max(segmentStart, from))
         }
 
-        if (soonest < Infinity) return { active: false, until: soonest }
+        if (soonest < Infinity) return soonest
     }
 
-    return { active: false, until: Infinity }
+    return Infinity
 }
 
-function cachedSightseeState(node: any, timerList: any[], weatherList: Record<string, any>, now: number): NodeWindowState {
-    const key = sightseeCacheKey(node, weatherList)
-    const hit = sightseeStateCache.get(key)
+// Cached because the forward sweep is far too costly to redo for every row on
+// every one-second tick. An entry stays valid until its `until` passes; the live
+// weather in the key busts it early when a zone rerolls.
+const nodeStateCache = new Map<string, NodeWindowState>()
+
+function cachedNodeState(key: string, windows: Array<[number, number]>, rule: WeatherRule, now: number): NodeWindowState {
+    const hit = nodeStateCache.get(key)
     if (hit && now < hit.until) return hit
 
-    const state = sightseeState(node, timerList, weatherList, now)
-    if (sightseeStateCache.size > 2000) sightseeStateCache.clear()
-    sightseeStateCache.set(key, state)
+    const state = holdsAt(windows, rule, now)
+        ? { active: true, until: activeRunEnd(windows, rule, now) }
+        : { active: false, until: nextSpawnAt(windows, rule, now) }
+
+    if (nodeStateCache.size > 4000) nodeStateCache.clear()
+    nodeStateCache.set(key, state)
     return state
 }
 
-// Vista countdown to the next change of state: while spawned that's how much
-// longer it stays up, otherwise how long until the time range and zone weather
-// next line up. null means the vista is gated by neither, so there is no
-// countdown to run; '—' means no spawn was found within the lookahead.
-// Pair with isSightseeActive to tell which direction the countdown is running.
-export function sightseeTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string | null {
-    if (!node.time) return null
-    const gatedByTime = timerWindows(findTimer(timerList, node.time)).length > 0
-    const gatedByWeather = !!(node.weather1 || node.weather2)
-    if (!gatedByTime && !gatedByWeather) return null
+function cacheKey(kind: string, node: any, rule: WeatherRule): string {
+    return `${kind}|${node.ID}|${node.time}|${rule.required.join()}|${rule.chain.join()}|${rule.mapcode}|${rule.live?.weather}`
+}
 
-    const { active, until } = cachedSightseeState(node, timerList, weatherList, now)
-    // Only an exhausted lookahead reaches Infinity here, since an ungated vista
-    // already returned above.
+// Countdown to the node's next change of state: while spawned that's how much
+// longer it stays up, otherwise how long until its conditions next line up.
+// '—' means no spawn was found within the lookahead.
+function nodeTimerLabel(kind: string, node: any, windows: Array<[number, number]>, rule: WeatherRule, now: number): string | null {
+    const { active, until } = cachedNodeState(cacheKey(kind, node, rule), windows, rule, now)
     if (until === Infinity) return active ? null : '—'
     return formatDuration((until - now) / 1000)
+}
+
+// ── Sightseeing ─────────────────────────────────────────────────────────────
+const SIGHTSEE_WEATHER_KEYS = ['weather1', 'weather2']
+
+function sightseeParts(node: any, timerList: any[], weatherList: Record<string, any>, now: number) {
+    return {
+        windows: timerWindows(findTimer(timerList, node.time)),
+        rule: weatherRule(node, weatherList, SIGHTSEE_WEATHER_KEYS, [], now),
+    }
+}
+
+// null means the vista is gated by neither a time range nor weather, so there is
+// no countdown to run. Pair with isSightseeActive to tell which direction it runs.
+export function sightseeTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string | null {
+    if (!node.time) return null
+    const { windows, rule } = sightseeParts(node, timerList, weatherList, now)
+    if (!windows.length && !rule.required.length) return null
+    return nodeTimerLabel('vista', node, windows, rule, now)
 }
 
 // Companion to sightseeTimer, shaped for a class binding. Only a vista gated by
@@ -314,38 +361,40 @@ export function sightseeTimer(node: any, timerList: any[], weatherList: Record<s
 // it isn't a timed spawn worth highlighting, so bail before doing any work.
 export function isSightseeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
     if (!node.time || !node.weather1) return false
-    return cachedSightseeState(node, timerList, weatherList, now).active
+    const { windows, rule } = sightseeParts(node, timerList, weatherList, now)
+    return cachedNodeState(cacheKey('vista', node, rule), windows, rule, now).active
 }
 
-// Active state for a timed fishing hole. The timer window must always be open,
-// and on top of that:
-//   - no weather requirement  -> active on the timer alone
-//   - weather but no chain    -> the zone's current weather must be one of weather1-3
-//   - weather chain           -> the current weather must be one of weatherchain1-3
-//                                *and* the window before it one of weather1-3
-// Returns true/null (not false) so it can drive a `data-` attribute directly.
-export function isFishNodeActive(node: any, timerList: any[], weatherList: Record<string, any>): true | null {
-    if (!isTimerActive(timerList, node.time)) return null
+// ── Fishing ─────────────────────────────────────────────────────────────────
+// Unlike vistas, a fishing hole can be gated by a timer alone, weather alone, or
+// both, and its weather may be a transition: weatherchain1-3 is the weather that
+// must be blowing *now*, having followed one of weather1-3 in the window before.
+const FISH_WEATHER_KEYS = ['weather1', 'weather2', 'weather3']
+const FISH_CHAIN_KEYS = ['weatherchain1', 'weatherchain2', 'weatherchain3']
 
-    const requiredWeather = [node.weather1, node.weather2, node.weather3].filter(Boolean)
-    if (!requiredWeather.length) return true
-
-    // Fishing holes missing from areas.json keep `area` as a bare string, so there
-    // is no mapcode to resolve weather against.
-    const mapcode = node.area?.mapcode
-    if (!mapcode) return null
-
-    const currentWeather = weatherList[mapcode]
-    if (!node.weatherchain1) {
-        return requiredWeather.includes(currentWeather) ? true : null
+function fishParts(node: any, timerList: any[], weatherList: Record<string, any>, now: number) {
+    return {
+        windows: timerWindows(findTimer(timerList, node.time)),
+        rule: weatherRule(node, weatherList, FISH_WEATHER_KEYS, FISH_CHAIN_KEYS, now),
     }
-
-    const chainWeather = [node.weatherchain1, node.weatherchain2, node.weatherchain3].filter(Boolean)
-    if (!chainWeather.includes(currentWeather)) return null
-
-    const previousWeather = resolveWeather(mapcode, new Date(Date.now() - WEATHER_WINDOW_MS))
-    return requiredWeather.includes(previousWeather) ? true : null
 }
+
+// null means the hole has neither a timer nor a weather requirement, so it is
+// always up and there is nothing to count down.
+export function fishTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string | null {
+    const { windows, rule } = fishParts(node, timerList, weatherList, now)
+    if (!windows.length && !rule.required.length) return null
+    return nodeTimerLabel('fish', node, windows, rule, now)
+}
+
+// Companion to fishTimer, shaped for a class binding. A hole gated by neither a
+// timer nor weather is always available and never highlighted.
+export function isFishNodeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
+    const { windows, rule } = fishParts(node, timerList, weatherList, now)
+    if (!windows.length && !rule.required.length) return false
+    return cachedNodeState(cacheKey('fish', node, rule), windows, rule, now).active
+}
+
 
 // Overview-table status cell: untimed nodes read "Any Time", mining/botany return
 // their raw timer entry, and sightseeing resolves to "Active"/"Inactive" from both
