@@ -2,7 +2,7 @@
     <div :class="[`timedNodes body_content`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`Timed Nodes`" :tagline="pageTagLine" icon="gathering"/>
+        <PageHeader :title="`Timed Fishing`" :tagline="pageTagLine" icon="fishing"/>
 
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
@@ -48,6 +48,7 @@
                     <p class="rdrTable_row-attributes">Attributes</p>
                     <p class="rdrTable_row-level">Level</p>
                     <p class="rdrTable_row-time">Timer</p>
+                    <p class="rdrTable_row-weather">Weather</p>
                     <p class="rdrTable_row-area">Area</p>
                 </li>
             </ul>
@@ -57,7 +58,7 @@
             <ul class="rdrTable_body">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
-                    :data-rowAndTimeActive="nodeTimeChecker(d, timerList, true)"
+                    :data-rowAndTimeActive="isFishNodeActive(d, timerList, weatherList)"
                     class="rdrTable_row">
 
                     <!-- TRACKER -->
@@ -78,9 +79,6 @@
                     <div class="rdrTable_row-name">
                         <div>
                             <p>{{ d.name }}</p>
-                            <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
-                            <iconImgAPI v-if="d.usage === 'aetherial'" class="iconSize2" :name="'collectability'"/>
-                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/>
                         </div>
                     </div>
 
@@ -89,14 +87,6 @@
                         <div>
                             <span class="hasContext" :data-context="capitalize(d.job_sub)">
                                 <iconImgAPI :name="d.job_sub"/>
-                            </span>
-
-                            <span v-if="d.usage" class="hasContext" :data-context="fetchUsageAttrName(d)">
-                                <iconImgAPI :name="fetchUsageImgName(d)"/>
-                            </span>
-
-                            <span v-if="d.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${d.tomb}`">
-                                <iconImgAPI :name="'folklore'"/>
                             </span>
                         </div>
                     </div>
@@ -111,6 +101,11 @@
                         <p class="timeAppend">
                             {{ nodeTimeChecker(d, timerList, false) }}
                         </p>
+                    </div>
+
+                    <!-- WEATHER -->
+                    <div class="rdrTable_row-weather">
+                        {{ fishWeatherLabel(d) }}
                     </div>
 
                     <!-- AREA -->
@@ -137,7 +132,7 @@ import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { nodeTimeChecker, capitalize, getUniqueByKey, fetchUsageAttrName, fetchUsageImgName } from '../../hooks/hooks.ts'
+import { nodeTimeChecker, capitalize, getUniqueByKey, isFishNodeActive } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -156,27 +151,31 @@ const arraySet = ref(0)
 const displayNoNodesFound = ref(false)
 const searchName = ref('')
 const filters = ref<Filter[]>([])
-const pageTagLine = 'Unspoiled and ephemeral gathering nodes in Final Fantasy XIV only appear during specific Eorzea time windows — usually for just two hours out of every twenty-four. This tracker lists every timed Mining, Botany and Fishing node across all expansions, showing the spawn time, zone, coordinates, item yields, aetherial reduction results, and the bait and weather each fish requires. Use the filters to narrow by expansion or resource type, or search by item name to find a specific material quickly.'
+const pageTagLine = 'Timed fishing holes in Final Fantasy XIV only become available during specific Eorzea time windows, and some also require the right weather to be active. This tracker lists every timed fishing node across all expansions, showing the spawn time, zone, and coordinates. Use the filters to narrow by expansion, or search by fish name to find a specific catch quickly.'
+
+// "weather1 / weather2 / weather3 > weatherchain1 / weatherchain2 / weatherchain3",
+// dropping empty slots and the chain arrow entirely when there's no preceding weather.
+function fishWeatherLabel(d: any): string {
+    const required = [d.weather1, d.weather2, d.weather3].filter(Boolean)
+    if (!required.length) return ''
+
+    const preceding = [d.weatherchain1, d.weatherchain2, d.weatherchain3].filter(Boolean)
+    const requiredStr = required.join(' / ')
+    return preceding.length ? `${requiredStr} > ${preceding.join(' / ')}` : requiredStr
+}
 
 const groupedFilters = computed<Record<string, Filter[]>>(() => ({
-    job: filters.value.filter(f => f.group === 'job'),
-    usage: filters.value.filter(f => f.group === 'usage'),
     expansion: filters.value.filter(f => f.group === 'expansion'),
 }))
 
-// Builds the job/usage/expansion toggle list from the loaded nodes. Empty group
-// values are dropped so fishing nodes (which have no usage) don't add a blank toggle.
+// Builds the expansion toggle list from the loaded nodes.
 function createFilterList() {
     const toFilters = (arr: any[], group: string): Filter[] =>
         getUniqueByKey(arr, group)
             .filter(o => o[group])
             .map(o => ({ group, name: o[group], enabled: true }))
 
-    const jobFilters = toFilters(allTimedNodes.value, 'job')
-    const usageFilters = toFilters(allTimedNodes.value, 'usage')
-    const expansionFilters = toFilters(props.ffxivData.expansion, 'expansion')
-
-    filters.value = [...jobFilters, ...usageFilters, ...expansionFilters]
+    filters.value = toFilters(props.ffxivData.expansion, 'expansion')
 }
 
 // Chunks the node list into PAGE_SIZE pages for the table and flags the empty state.
@@ -216,7 +215,7 @@ function applyFilters() {
     sortNodesIntoGroup(filtered)
 }
 
-// Searches nodes by item name and, for aetherial nodes, by reduction-result names.
+// Searches nodes by fish name.
 function filterByInputValue(value: string) {
     searchName.value = value
     arraySet.value = 0
@@ -231,21 +230,11 @@ function filterByInputValue(value: string) {
     const byName = allTimedNodes.value.filter(
         (o: any) => o.name?.toLowerCase().includes(search)
     )
-    const byAetherial = allTimedNodes.value.filter((o: any) => {
-        if (o.usage !== 'aetherial') return false
-        const { result1, result2, result3 } = o.usage_info
-        return [result1, result2, result3].some(
-            (r: string) => r?.toLowerCase().includes(search)
-        )
-    })
 
-    sortNodesIntoGroup([...new Set([...byName, ...byAetherial])])
+    sortNodesIntoGroup(byName)
 }
 
-const miner = props.ffxivData.miner.filter((o: any) => o.time)
-const botany = props.ffxivData.botany.filter((o: any) => o.time)
-const fishing = props.ffxivData.fishing.filter((o: any) => o.time)
-allTimedNodes.value = [...miner, ...botany, ...fishing]
+allTimedNodes.value = props.ffxivData.fishing.filter((o: any) => o.time)
 createFilterList()
 sortNodesIntoGroup(allTimedNodes.value)
 </script>
@@ -258,7 +247,7 @@ sortNodesIntoGroup(allTimedNodes.value)
 
     .timedNodes {
         font-family: 'Rajdhani', sans-serif;
-        
+
         margin: 0 auto;
 
         &.mobile {
@@ -274,17 +263,13 @@ sortNodesIntoGroup(allTimedNodes.value)
         /* ── Filter bar ── */
         .filterbar {
             padding: 16px 20px;
-            // border-radius: 10px;
-            // border: 1px solid $buttonBorder;
             max-width: 1200px;
-            // background: rgba(255, 255, 255, 0.03);
 
             :deep(.btn) {
                 border: 1px solid $buttonBorder;
                 background: rgba(255, 255, 255, 0.03);
                 color: $fontColor;
                 font-family: 'Rajdhani', sans-serif;
-                // font-weight: 600;
                 letter-spacing: 0.03em;
                 border-radius: 8px;
                 box-shadow: none;
@@ -437,13 +422,13 @@ sortNodesIntoGroup(allTimedNodes.value)
 
         // Default layout
         .rdrTable_row {
-            grid-template-columns: 80px 400px 100px 100px 120px auto;
+            grid-template-columns: 80px 400px 100px 100px 120px 180px auto;
         }
 
         // Tablet view
         .rdrTable.tablet {
             .rdrTable_row {
-                grid-template-columns: 60px 200px 80px 80px 80px auto;
+                grid-template-columns: 60px 200px 80px 80px 80px 140px auto;
             }
         }
 
@@ -459,7 +444,8 @@ sortNodesIntoGroup(allTimedNodes.value)
             }
 
             .rdrTable_row-attributes,
-            .rdrTable_row-level {
+            .rdrTable_row-level,
+            .rdrTable_row-weather {
                 display: none;
             }
         }

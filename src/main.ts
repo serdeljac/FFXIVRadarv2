@@ -5,7 +5,8 @@ import App from './App.vue'
 
 const home = () => import("./components/views/0_Home.vue");
 const eorzeaOverview = () => import("./components/views/1_EorzeaOverview.vue");
-const timedNodes = () => import('./components/views/2_TimedNodes.vue')
+const timedNodes = () => import('./components/views/2_TimedMiningBotany.vue')
+const timedFishing = () => import('./components/views/10_TimedFishing.vue')
 const sightseeing = () => import('./components/views/3_SightseeingVistas.vue')
 const aetherCurrents = () => import('./components/views/4_AetherCurrents.vue')
 const blueMageSpells = () => import('./components/views/5_BlueMageAbilities.vue')
@@ -21,6 +22,7 @@ const router = createRouter({
     { path: "/", component: home, props: true },
     { path: "/eorzeaoverview", component: eorzeaOverview, props: true },
     { path: "/timedNodes", component: timedNodes, props: true },
+    { path: "/timedFishing", component: timedFishing, props: true },
     { path: "/sightseeing", component: sightseeing, props: true },
     { path: "/aetherCurrents", component: aetherCurrents, props: true },
     { path: "/blueMageAbilities", component: blueMageSpells, props: true },

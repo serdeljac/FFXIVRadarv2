@@ -1,3 +1,5 @@
+import { resolveWeather } from '../components/api/weatherForecast'
+
 export function capitalize(str: string): string {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 }
@@ -76,6 +78,40 @@ export function isNodeActive(node: any, timerList: any[], weatherList: Record<st
         return timerState && weatherState ? true : null
     }
     return timerState
+}
+
+// One weather window is 8 Eorzea hours, which is 1400 real seconds — the same
+// boundaries App.vue rebuilds weatherList on (0/8/16 ET).
+const WEATHER_WINDOW_MS = 1400 * 1000
+
+// Active state for a timed fishing hole. The timer window must always be open,
+// and on top of that:
+//   - no weather requirement  -> active on the timer alone
+//   - weather but no chain    -> the zone's current weather must be one of weather1-3
+//   - weather chain           -> the current weather must be one of weatherchain1-3
+//                                *and* the window before it one of weather1-3
+// Returns true/null (not false) so it can drive a `data-` attribute directly.
+export function isFishNodeActive(node: any, timerList: any[], weatherList: Record<string, any>): true | null {
+    if (!isTimerActive(timerList, node.time)) return null
+
+    const requiredWeather = [node.weather1, node.weather2, node.weather3].filter(Boolean)
+    if (!requiredWeather.length) return true
+
+    // Fishing holes missing from areas.json keep `area` as a bare string, so there
+    // is no mapcode to resolve weather against.
+    const mapcode = node.area?.mapcode
+    if (!mapcode) return null
+
+    const currentWeather = weatherList[mapcode]
+    if (!node.weatherchain1) {
+        return requiredWeather.includes(currentWeather) ? true : null
+    }
+
+    const chainWeather = [node.weatherchain1, node.weatherchain2, node.weatherchain3].filter(Boolean)
+    if (!chainWeather.includes(currentWeather)) return null
+
+    const previousWeather = resolveWeather(mapcode, new Date(Date.now() - WEATHER_WINDOW_MS))
+    return requiredWeather.includes(previousWeather) ? true : null
 }
 
 // Overview-table status cell: untimed nodes read "Any Time", mining/botany return

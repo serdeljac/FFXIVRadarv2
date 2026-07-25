@@ -32,9 +32,15 @@
 
         {
             id: 2,
-            name: 'Timed Nodes',
+            name: 'Timed Mining & Botany',
             icon: 'gathering',
             link: 'timedNodes',
+        },
+        {
+            id: 3,
+            name: 'Timed Fishing',
+            icon: 'fishing',
+            link: 'timedFishing',
         },
         {
             id: 4,
