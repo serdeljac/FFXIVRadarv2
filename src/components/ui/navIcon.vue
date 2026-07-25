@@ -13,6 +13,15 @@
         <path v-else-if="name === 'gathering'"
             d="M6 3 L18 3 L12 12 L18 21 L6 21 L12 12 Z" />
 
+        <!-- Tail overlaps the body from x=7 to x=10 so the two subpaths read as one
+             silhouette; meeting them at a single point leaves a gap at 24px. -->
+        <g v-else-if="name === 'fishing'">
+            <path fill-rule="evenodd"
+                d="M21.5 12 Q17.5 6.8 12.5 6.8 Q8.5 6.8 7 12 Q8.5 17.2 12.5 17.2 Q17.5 17.2 21.5 12 Z
+                   M18.45 10.5 A1.15 1.15 0 1 0 16.15 10.5 A1.15 1.15 0 1 0 18.45 10.5 Z" />
+            <path d="M10 12 L2 5.5 Q4.5 12 2 18.5 Z" />
+        </g>
+
         <path v-else-if="name === 'sightseeing'" fill-rule="evenodd"
             d="M9 5 L15 5 L15 8 L22 8 L22 20 L2 20 L2 8 L9 8 Z
                M16.5 14 A4.5 4.5 0 1 0 7.5 14 A4.5 4.5 0 1 0 16.5 14 Z" />

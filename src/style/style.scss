@@ -113,21 +113,15 @@ main {
     }
 }
 
-*[data-rowAndTimeActive] {
+.nodeIsActive {
     animation: rowActiveAnimation 0.7s linear infinite;
-
-    .timeAppend {
-        animation: timerActiveAnimation 0.7s linear infinite;
-    }
 }
+
 
 *[data-rowActive] {
     animation: rowActiveAnimation 0.7s linear infinite;
 }
 
-*[data-timeActive] {
-    animation: timerActiveAnimation 0.7s linear infinite;
-}
 
 *[data-map-icon-active] {
     animation: mapIconActiveAnimation 0.7s linear infinite;

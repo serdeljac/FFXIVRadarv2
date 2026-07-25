@@ -60,7 +60,7 @@
                         </li>
                         <li :data-rowActive="isTimeActive">
                             <p>Active:</p>
-                            <p :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</p>
+                            <p>{{ timerCountdown(node.time) }}</p>
                         </li>
                         <li v-if="node.tomb">
                             <p>Tomb:</p>
@@ -108,7 +108,7 @@
                         </li>
                         <li :data-rowActive="isTimeActive">
                             <p>Active:</p>
-                            <p :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</p>
+                            <p>{{ timerCountdown(node.time) }}</p>
                         </li>
                     </ul>
                 </div>
@@ -162,9 +162,9 @@
                         <li :data-rowActive="isTimeAndWeatherActive">
                             <p>Active:</p>
                             <p class="details_timeAndWeather">
-                                <span :data-timeActive="isTimeActive">{{ timerCountdown(node.time) }}</span>
-                                <span :data-timeActive="isWeather1Active">{{ node.weather1 }}</span>
-                                <span v-if="node.weather2" :data-timeActive="isWeather2Active">{{ node.weather2 }}</span>
+                                <span>{{ timerCountdown(node.time) }}</span>
+                                <span>{{ node.weather1 }}</span>
+                                <span v-if="node.weather2">{{ node.weather2 }}</span>
                             </p>
                         </li>
                         <li>

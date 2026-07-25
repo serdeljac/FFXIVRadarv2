@@ -32,8 +32,8 @@
 
                     <div class="weatherAndEmote">
                         <div>
-                            <p v-if="node.weather1" :data-timeActive="checkTimeActive('weather1', node)">{{ node.weather1 }}</p>
-                            <p v-if="node.weather2" :data-timeActive="checkTimeActive('weather2', node)">{{ node.weather2 }}</p>
+                            <p v-if="node.weather1">{{ node.weather1 }}</p>
+                            <p v-if="node.weather2">{{ node.weather2 }}</p>
                             <p v-if="!node.weather1">Any Weather</p>
                         </div>
                         <div>

@@ -58,7 +58,7 @@
             <ul class="rdrTable_body">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
-                    :data-rowAndTimeActive="isFishNodeActive(d, timerList, weatherList)"
+                    :data-rowActive="isFishNodeActive(d, timerList, weatherList)"
                     class="rdrTable_row">
 
                     <!-- TRACKER -->
@@ -414,9 +414,9 @@ sortNodesIntoGroup(allTimedNodes.value)
             font-size: 0.85rem;
         }
 
-        /* Give the pulsing "currently active" row a teal glow to match the theme,
-           instead of the default purple used elsewhere in the app. */
-        [data-rowAndTimeActive] {
+        /* Teal glow for a fish currently inside its time + weather window,
+           replacing the default purple pulse from style.scss. */
+        [data-rowActive] {
             animation: timedNodesRowPulse 0.9s ease-in-out infinite;
         }
 

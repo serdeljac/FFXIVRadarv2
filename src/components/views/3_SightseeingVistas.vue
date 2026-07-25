@@ -54,8 +54,7 @@
                 <li
                     v-for="d in currentVistaNodes"
                     :key="d.ID"
-                    :data-rowActive="activeTime[d.ID] && activeWeather[d.ID] || null"
-                    class="rdrTable_row"
+                    :class="[`rdrTable_row`, {nodeIsActive: vistaActive(d)}]"
                 >
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking">
@@ -86,11 +85,9 @@
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <timeDisplay
-                            :timerList="timerList"
-                            :timeId="d.time"
-                            @timeActive="(e) => sendTimerState(e, d.ID, 'timer')"
-                        />
+                        <p class="timeDisplay" :class="{ active: vistaActive(d) }">
+                            {{ d.time ? vistaTimer(d): 'Any Time' }}
+                        </p>
                     </div>
 
                     <!-- WEATHER -->
@@ -98,7 +95,6 @@
                         <weatherDisplay
                             :weatherList="weatherList"
                             :node="d"
-                            @weatherActive="(e) => sendTimerState(e, d.ID, 'weather')"
                         />
                     </div>
 
@@ -120,15 +116,15 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, computed } from 'vue'
+import { ref, computed, onMounted, onUnmounted } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-import timeDisplay from '../ui/displayTime.vue'
 import weatherDisplay from '../ui/displayWeather.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
+import { sightseeTimer, isSightseeActive } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -141,8 +137,19 @@ defineEmits(['changeTracked', 'openDetails'])
 
 const filters = ref<Filter[]>([])
 const filterSelected = ref('')
-const activeTime = reactive<Record<string, boolean>>({})
-const activeWeather = reactive<Record<string, boolean>>({})
+
+// Vista countdowns are driven off real time rather than the timer list, since a
+// spawn depends on weather as well as the clock. Ticking a local `now` is what
+// makes the rows re-render each second.
+const nowMs = ref(Date.now())
+let tickHandle: ReturnType<typeof setInterval> | undefined
+onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now() }, 1000) })
+onUnmounted(() => clearInterval(tickHandle))
+
+// While a vista is up the countdown reads as time remaining, otherwise as time
+// until it spawns; the pulsing `active` styling is what distinguishes the two.
+const vistaActive = (node: any) => isSightseeActive(node, props.timerList, props.weatherList, nowMs.value)
+const vistaTimer = (node: any) => sightseeTimer(node, props.timerList, props.weatherList, nowMs.value)
 const pageTagLine = "The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required Eorzea time window, weather condition, emote, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log."
 
 // Distinct expansion names in first-seen order, used to build the filter bar.
@@ -187,14 +194,6 @@ function initFilters() {
 function changeFilter(arrayIndex: number) {
     filters.value.forEach((f, i) => { f.enabled = i === arrayIndex })
     filterSelected.value = filters.value[arrayIndex].name
-}
-
-function sendTimerState(timeState: boolean, id: string, type: 'timer' | 'weather') {
-    if (type === 'timer') {
-        activeTime[id] = timeState
-    } else {
-        activeWeather[id] = timeState
-    }
 }
 
 initFilters()
@@ -318,8 +317,8 @@ initFilters()
             }
         }
 
-        /* Teal glow for a vista that's currently in its time + weather window */
-        [data-rowActive] {
+        /* Teal glow for a vista that's currently in its time + weather window. */
+        .nodeIsActive {
             animation: sightseeVistasRowPulse 0.9s ease-in-out infinite;
         }
 

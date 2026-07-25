@@ -1,5 +1,5 @@
 <template>
-    <div :data-rowAndTimeActive="getActiveState">
+    <div :data-rowActive="getActiveState">
 
         <div class="toprow">
             <btnTracking :trackingEnabled="node.tracked" remove @click="$emit('changeTracked', node)"/>

@@ -4,7 +4,7 @@
             :class="[`overviewListItem`, {'compact': windowWidth == 'tablet' || windowWidth == 'mobile'}]"
             @click="$emit('focusNode', material[0])"
             :data-rowFocused="nodeCode == focusNode.node_code ? true : null" 
-            :data-rowAndTimeActive="checkRowActive(material[0])">
+            :data-rowActive="checkRowActive(material[0])">
 
             <div class="overviewListItem_header">
                 <iconAndText :text="`

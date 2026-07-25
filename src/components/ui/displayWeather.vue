@@ -2,7 +2,6 @@
     <div>
         <p :class="[`timeDisplay`, {'active' : weather1Active}]">{{ fetchWeather1 }}</p>
         <p :class="[`timeDisplay`, {'active' : weather2Active}]">{{ fetchWeather2 }}</p>
-        {{ $emit('weatherActive', weather1Active || weather2Active ? true : null) }}
     </div>
 </template>
 
@@ -11,7 +10,6 @@ import { computed } from 'vue'
 import { isWeatherMatch } from '../../hooks/hooks'
 
 const props = defineProps(['node', 'weatherList'])
-defineEmits(['weatherActive'])
 
 const weather1Active = computed(() => isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1))
 const weather2Active = computed(() => isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2))

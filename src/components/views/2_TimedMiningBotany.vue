@@ -57,8 +57,8 @@
             <ul class="rdrTable_body">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
-                    :data-rowAndTimeActive="nodeTimeChecker(d, timerList, true)"
-                    class="rdrTable_row">
+                    
+                    :class="[`rdrTable_row`, {'nodeIsActive': nodeTimeChecker(d, timerList, true)}]">
 
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking">
@@ -430,9 +430,7 @@ sortNodesIntoGroup(allTimedNodes.value)
 
         /* Give the pulsing "currently active" row a teal glow to match the theme,
            instead of the default purple used elsewhere in the app. */
-        [data-rowAndTimeActive] {
-            animation: timedNodesRowPulse 0.9s ease-in-out infinite;
-        }
+
 
         // Default layout
         .rdrTable_row {
