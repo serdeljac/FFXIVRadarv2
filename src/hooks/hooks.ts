@@ -445,18 +445,19 @@ export function isFishNodeActive(node: any, timerList: any[], weatherList: Recor
     return cachedNodeState(cacheKey('fish', node, rule), windows, rule, now).active
 }
 
-// ── Tracked nodes ───────────────────────────────────────────────────────────
-// The tracking bar mixes all four trackable jobs, so each node is routed to the
-// same timer its own page shows: vistas and fishing holes go through the window
-// engine above, while mining and botany still read straight off the timer list.
+// ── Any node, by job ────────────────────────────────────────────────────────
+// The tracking bar and the details pane both show nodes of every job side by
+// side, so each is routed to the same timer its own page uses: vistas and
+// fishing holes go through the window engine above, while mining and botany
+// still read straight off the timer list.
 
-export function isTrackedNodeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
+export function isNodeWindowActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
     if (node.job === 'sightseeing') return isSightseeActive(node, timerList, weatherList, now)
     if (node.job === 'fishing') return isFishNodeActive(node, timerList, weatherList, now)
     return !!nodeTimeChecker(node, timerList, true)
 }
 
-export function trackedNodeTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string {
+export function nodeCountdown(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string {
     if (node.job === 'sightseeing') {
         // Matches the vista page, which labels an untimed vista rather than
         // counting down to nothing.

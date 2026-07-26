@@ -58,9 +58,9 @@
                             <p>Perception:</p>
                             <p>{{ node.perception }}</p>
                         </li>
-                        <li :data-rowActive="isTimeActive">
+                        <li :data-rowActive="isNodeActiveNow">
                             <p>Active:</p>
-                            <p>{{ timerCountdown(node.time) }}</p>
+                            <p>{{ nodeTimer }}</p>
                         </li>
                         <li v-if="node.tomb">
                             <p>Tomb:</p>
@@ -106,9 +106,9 @@
                             <p>Tug:</p>
                             <p>{{ tugLabel }}</p>
                         </li>
-                        <li :data-rowActive="isTimeActive">
+                        <li :data-rowActive="isNodeActiveNow">
                             <p>Active:</p>
-                            <p>{{ timerCountdown(node.time) }}</p>
+                            <p>{{ nodeTimer }}</p>
                         </li>
                     </ul>
                 </div>
@@ -159,10 +159,10 @@
                             <p>Level Range:</p>
                             <p>{{ getVistaInfo('level') }}</p>
                         </li>
-                        <li :data-rowActive="isTimeAndWeatherActive">
+                        <li :data-rowActive="isNodeActiveNow">
                             <p>Active:</p>
                             <p class="details_timeAndWeather">
-                                <span>{{ timerCountdown(node.time) }}</span>
+                                <span>{{ nodeTimer }}</span>
                                 <span>{{ node.weather1 }}</span>
                                 <span v-if="node.weather2">{{ node.weather2 }}</span>
                             </p>
@@ -210,7 +210,7 @@ import 'leaflet/dist/leaflet.css'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 import vistaSmallAPI from '../api/vistaImg.vue'
-import { formatStars, isTimerActive, isWeatherMatch, getTimerCountdown, formatAreaLabel } from '../../hooks/hooks.ts'
+import { formatStars, formatAreaLabel, isNodeWindowActive, nodeCountdown, useNow } from '../../hooks/hooks.ts'
 
 const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'openVistaImg'])
@@ -252,18 +252,17 @@ const otherMaterials = computed<any[]>(() => {
     return matches.length ? matches : [{ name: 'None', ID: '000' }]
 })
 
-const isTimeActive = computed(() => (isTimerActive(props.timerList, props.node.time) ? true : null))
+// Same clock and the same per-job routing the pages and tracking bar use, so a
+// node's countdown reads identically wherever it is shown.
+const nowMs = useNow()
 
-const isTimeAndWeatherActive = computed(() => {
-    const timeState = isTimerActive(props.timerList, props.node.time)
-    const weatherState = isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather1)
-        || isWeatherMatch(props.weatherList, props.node.area.mapcode, props.node.weather2)
-    return timeState && weatherState ? true : null
-})
+// `|| null` because Vue keeps a literal `false` on a non-boolean attribute, which
+// would leave every row matching the global [data-rowActive] rule.
+const isNodeActiveNow = computed(() =>
+    isNodeWindowActive(props.node, props.timerList, props.weatherList, nowMs.value) || null)
 
-function timerCountdown(time: string): string {
-    return getTimerCountdown(props.timerList, time)
-}
+const nodeTimer = computed(() =>
+    nodeCountdown(props.node, props.timerList, props.weatherList, nowMs.value))
 
 function getVistaInfo(type: string) {
     const expFound = props.ffxivData.expansion.find((o: any) => o.expansion == props.node.expansion)

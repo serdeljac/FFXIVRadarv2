@@ -25,7 +25,7 @@
 
 <script lang="ts" setup>
 import trackingbarItem from './parts/trackingbarItem.vue'
-import { isTrackedNodeActive, useNow } from '../../hooks/hooks.ts'
+import { isNodeWindowActive, useNow } from '../../hooks/hooks.ts'
 
 const props = defineProps(['windowWidth', 'trackinglist', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'changeTracked'])
@@ -38,7 +38,7 @@ function sortTracklingList() {
     const newTrackingList: any[] = []
 
     for (const d in props.trackinglist) {
-        const state = isTrackedNodeActive(props.trackinglist[d], props.timerList, props.weatherList, nowMs.value)
+        const state = isNodeWindowActive(props.trackinglist[d], props.timerList, props.weatherList, nowMs.value)
         if (state) { newTrackingList.unshift(props.trackinglist[d]) }
         else { newTrackingList.push(props.trackinglist[d]) }
     }
