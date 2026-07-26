@@ -140,7 +140,7 @@ onBeforeUnmount(() => {
 }
 
 .error-code {
-  font-family: 'Cinzel', serif;
+  font-family: 'Rajdhani', sans-serif;
   font-size: clamp(5.5rem, 16vw, 9rem);
   font-weight: 600;
   line-height: 1;
@@ -181,7 +181,7 @@ onBeforeUnmount(() => {
 }
 
 .title {
-  font-family: 'Cinzel', serif;
+  font-family: 'Rajdhani', sans-serif;
   font-size: 1.4rem;
   font-weight: 600;
   letter-spacing: 0.06em;

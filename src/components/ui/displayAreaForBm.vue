@@ -25,7 +25,7 @@ function getIconImageURL(data: any) {
     }
 
     .cord {
-        color: rgb(123, 123, 238);
+        color: $teal;
         margin-left: 4px;
     }
 </style>

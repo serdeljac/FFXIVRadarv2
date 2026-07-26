@@ -175,7 +175,7 @@ const links = [
 }
 
 .logo-text {
-  font-family: 'Cinzel', serif;
+  font-family: 'Rajdhani', sans-serif;
   font-size: clamp(1.9rem, 5vw, 2.6rem);
   font-weight: 700; letter-spacing: 0.05em;
   color: #e8f0ff;
@@ -229,7 +229,7 @@ const links = [
   animation: fadeUp 0.5s ease 0.1s both;
 
   h2 {
-    font-family: 'Cinzel', serif;
+    font-family: 'Rajdhani', sans-serif;
     font-size: 1.3rem; font-weight: 700;
     letter-spacing: 0.03em;
     color: #e8f0ff;

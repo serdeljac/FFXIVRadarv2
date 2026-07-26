@@ -1,32 +1,60 @@
-$fontColor: #c8d8f0;
-$bodyBackgroundColor: #121212;
-$expColor: gold;
-$levelColor: rgb(75, 156, 227);
-$trackingbarBackgroundColor: rgba(69, 28, 69, 0.67);
+// ── Palette ────────────────────────────────────────────────────────────────
+// One accent: teal. The legacy magenta chrome ($borderColor #5b045b at 1.44:1
+// against the old background) is gone — it was effectively invisible and it
+// fought the teal used on every redesigned page.
+//
+// Contrast figures below are measured against $bodyBackgroundColor. Anything
+// carrying real content clears WCAG AA (4.5:1); accents clear it comfortably.
 
-$borderColor: #5b045b;
-$borderColorHover: rgba(91, 4, 91, 0.67);
+// Surfaces — in a dark theme, elevation reads from borders and shadow rather
+// than fill luminance, so these stay close together on purpose.
+$bodyBackgroundColor: #0b0f1a;   // app background
+$surface:             #121826;   // cards, rows, chrome
+$surfaceRaised:       #1a2233;   // hover, popovers
+$surfaceOverlay:      #232d42;   // modals, tooltips
 
-$listBackgroundColor: rgb(24, 24, 24);
-$listBackgroundColorHover: rgb(47, 47, 47);
+// Text
+$fontColor: #e6edf8;   // 16.25:1  primary
+$dim:       #9fb0cc;   //  8.71:1  secondary — was #5a6e90 at 3.63:1, failed AA
+$muted:     #6b7c99;   //  4.53:1  de-emphasised only
 
-$buttonBackgroundColor: #0c4e4e;
-$buttonBackgroundColorHover: #0e4747;
-
-$iconColorHover: rgb(230, 241, 146);
-
-$teal: #2dd4bf;
+// Accent
+$teal:       #2dd4bf;  // 10.28:1
+$tealBright: #5eead4;
+$tealDeep:   #0f766e;
 $tealShadow: rgba(45, 212, 191, 0.2);
-$dim: #5a6e90;
-$buttonBorder: rgba(45, 212, 191, 0.15);
-$amber: #f59e0b;
-$red: #ef4444;
 
+// Status
+$green: #34d399;  //  9.95:1  active / spawned
+$amber: #f59e0b;  //  8.91:1  imminent
+$red:   #ef4444;  //  5.08:1  error / unavailable
+
+// ── Mapped names ───────────────────────────────────────────────────────────
+// Kept so existing usages pick the new palette up without edits.
+
+$borderColor:      #26314a;                      // hairline; also used as a fill
+$borderColorHover: rgba(45, 212, 191, 0.12);
+$buttonBorder:     rgba(45, 212, 191, 0.15);
+
+$trackingbarBackgroundColor: $surface;
+$listBackgroundColor:        $surface;
+$listBackgroundColorHover:   $surfaceRaised;
+
+$buttonBackgroundColor:      #0e4a45;   // solid — also used as a 1px border
+$buttonBackgroundColorHover: #136058;
+
+$iconColorHover: $teal;
+$expColor:       $amber;
+$levelColor:     $tealBright;
+
+// ── Metrics ────────────────────────────────────────────────────────────────
 $sidebarWidthExpand: 270px;
 $sidebarWidthCollapse: 80px;
 $trackingbarHeight: 70px;
 
-$borderRadius: 4px;
+$borderRadius: 8px;   // controls, chips
+$radiusCard:   12px;  // cards, rows
+$radiusPanel:  16px;  // panels, modals
 
 $paddingSize: 0.5rem;
 $iconSize: 26px;

@@ -266,7 +266,7 @@ onMounted(async () => {
             font-size: 0.9rem;
 
             &--error {
-                color: #ff9b9b;
+                color: $red;
             }
         }
 
@@ -297,7 +297,7 @@ onMounted(async () => {
         }
 
         &_name {
-            font-family: 'Cinzel', serif;
+            font-family: 'Rajdhani', sans-serif;
             font-size: 1.6rem;
             font-weight: 600;
             color: #e8f0ff;

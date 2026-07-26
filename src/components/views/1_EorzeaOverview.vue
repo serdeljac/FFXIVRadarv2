@@ -1224,7 +1224,7 @@ function clearDetails() {
         text-transform: uppercase;
 
         &--error {
-            color: #ff9b9b;
+            color: $red;
             text-transform: none;
             letter-spacing: 0.02em;
         }
@@ -1367,7 +1367,7 @@ function clearDetails() {
 
     &_zoneGroupLabel {
         padding: 8px 16px 4px;
-        font-family: 'Cinzel', serif;
+        font-family: 'Rajdhani', sans-serif;
         font-size: 0.78rem;
         color: $teal;
         text-transform: uppercase;
@@ -1523,7 +1523,7 @@ function clearDetails() {
 }
 
 .leafletMap_vistaTitle {
-    font-family: 'Cinzel', serif;
+    font-family: 'Rajdhani', sans-serif;
     font-size: 0.95rem;
     font-weight: 600;
     color: #e8f0ff;
@@ -1538,7 +1538,7 @@ function clearDetails() {
 
 .leafletMap_vistaError {
     padding: 8px 14px;
-    color: #ff9b9b;
+    color: $red;
     font-size: 0.85rem;
 }
 

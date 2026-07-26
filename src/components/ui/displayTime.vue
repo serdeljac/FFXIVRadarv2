@@ -18,9 +18,9 @@ const fetchTimer = computed(() => getTimerCountdown(props.timerList, props.timeI
 
 <style scoped lang="scss">
     @keyframes timerActiveAnimation {
-        0% {color: limegreen;}
-        50% {color: rgb(255, 255, 255);}
-        100% {color: limegreen;}
+        0% {color: $green;}
+        50% {color: $fontColor;}
+        100% {color: $green;}
     }
 
     .active {animation: timerActiveAnimation 0.7s linear infinite;}

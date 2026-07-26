@@ -116,8 +116,8 @@
     justify-content: center;
     gap: 12px;
     background: rgba(0, 0, 0, 1);
-    color: #e0d6c2;
-    font-family: sans-serif;
+    color: $fontColor;
+    font-family: 'Rajdhani', sans-serif;
     font-size: 14px;
     z-index: 120;
 }
@@ -126,7 +126,7 @@
     width: 36px;
     height: 36px;
     border: 3px solid rgba(255, 255, 255, 0.15);
-    border-top-color: #c8a96e;
+    border-top-color: $teal;
     border-radius: 50%;
     animation: spin 0.8s linear infinite;
 }

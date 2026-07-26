@@ -189,10 +189,10 @@ function isActiveRank(rank: string): boolean {
         }
 
         .radio-button__input:checked + .radio-button__label .radio-button__custom {
-        background-color: #4c8bf5;
+        background-color: #2dd4bf;
         border-color: transparent;
         transform: scale(0.8);
-        box-shadow: 0 0 20px #4c8bf580;
+        box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
         }
 
         .radio-button__input:checked + .radio-button__label {
@@ -201,8 +201,8 @@ function isActiveRank(rank: string): boolean {
 
         .radio-button__label:hover .radio-button__custom {
         transform: scale(1.2);
-        border-color: #4c8bf5;
-        box-shadow: 0 0 20px #4c8bf580;
+        border-color: #2dd4bf;
+        box-shadow: 0 0 20px rgba(45, 212, 191, 0.5);
         }
     }
 

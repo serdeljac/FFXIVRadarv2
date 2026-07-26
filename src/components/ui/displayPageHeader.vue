@@ -45,7 +45,7 @@
         }
 
         &_title {
-            font-family: 'Cinzel', serif;
+            font-family: 'Rajdhani', sans-serif;
             font-size: clamp(1.6rem, 4vw, 2.2rem);
             font-weight: 700;
             letter-spacing: 0.05em;

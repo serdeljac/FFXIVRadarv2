@@ -44,7 +44,7 @@ function openDonate() {
 .container {
   position: relative;
   padding: 3px;
-  background: linear-gradient(90deg, #03a9f4, #f441a5);
+  background: linear-gradient(90deg, #2dd4bf, #0f766e);
   border-radius: 0.9em;
   width: 200px;
   z-index: 50;
@@ -76,7 +76,7 @@ function openDonate() {
 }
 
 .container:hover::before {
-  background: linear-gradient(90deg, #03a9f4, #f441a5);
+  background: linear-gradient(90deg, #2dd4bf, #0f766e);
   filter: blur(1.2em);
   z-index: 40;
   

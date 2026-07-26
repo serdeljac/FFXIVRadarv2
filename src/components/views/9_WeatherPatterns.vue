@@ -21,8 +21,8 @@
       <ul class="rdrTable_header">
         <li class="rdrTable_row">
           <p class="rdrTable_row-name">Zone</p>
-          <p class="rdrTable_row-weather">Previous (8h ago)</p>
-          <p class="rdrTable_row-weather">Current</p>
+          <p class="rdrTable_row-weather">Previous</p>
+          <p class="rdrTable_row-weather rdrTable_row-current">Current</p>
           <p class="rdrTable_row-weather">Next (8h)</p>
           <p class="rdrTable_row-weather">After (16h)</p>
         </li>
@@ -41,22 +41,26 @@
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ zone.weather?.previous || '-' }}</p>
+            <p>{{ zone.weather?.previous || '—' }}</p>
+          </div>
+
+          <div class="rdrTable_row-weather rdrTable_row-current">
+            <p>{{ zone.weather?.current || '—' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ zone.weather?.current || '-' }}</p>
+            <p>{{ zone.weather?.next1 || '—' }}</p>
           </div>
 
           <div class="rdrTable_row-weather">
-            <p>{{ zone.weather?.next1 || '-' }}</p>
-          </div>
-
-          <div class="rdrTable_row-weather">
-            <p>{{ zone.weather?.next2 || '-' }}</p>
+            <p>{{ zone.weather?.next2 || '—' }}</p>
           </div>
         </li>
       </ul>
+
+      <div v-if="!filteredZones.length">
+        <p class="noResults">No zones found for this expansion.</p>
+      </div>
     </div>
   </div>
 </template>
@@ -242,113 +246,134 @@ function getMapcodeFromZoneName(zoneName: string): string {
 </script>
 
 <style scoped lang="scss">
-.weatherPatterns {
-  padding: 0;
-}
+    .weatherPatterns {
+        font-family: 'Rajdhani', sans-serif;
+        margin: 0 auto;
 
+        &.mobile .filterbar :deep(.btn) {
+            margin: 6px 5px;
+        }
 
-.rdrTable_header {
-  display: flex;
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  background: rgba(0, 0, 0, 0.2);
-  border-top: 1px solid rgba(45, 212, 191, 0.3);
-  border-bottom: 1px solid rgba(45, 212, 191, 0.3);
-  
-}
+        /* ── Filter bar ── */
+        .filterbar {
+            padding: 16px 20px;
+            max-width: 1200px;
 
-.rdrTable_row {
-  display: grid;
-  grid-template-columns: 2fr 1fr 1fr 1fr 1fr;
-  gap: 0;
-  padding: 0;
-  margin: 0;
-  width: 100%;
-  border-bottom: 1px solid rgba(45, 212, 191, 0.1);
-  align-items: center;
+            :deep(.btn) {
+                border: 1px solid $buttonBorder;
+                background: rgba(255, 255, 255, 0.03);
+                color: $fontColor;
+                font-family: 'Rajdhani', sans-serif;
+                letter-spacing: 0.03em;
+                border-radius: 8px;
+                box-shadow: none;
+                transition: all 0.2s;
 
-  &:hover {
-    background: rgba(45, 212, 191, 0.05);
-  }
+                &[enabled] {
+                    background: rgba(45, 212, 191, 0.12) !important;
+                    border-color: rgba(45, 212, 191, 0.4);
+                    color: #e8f0ff;
+                }
 
-  p {
-    padding: 12px;
-    margin: 0;
-    font-size: 14px;
-    text-align: center;
-    word-break: break-word;
-  }
-}
+                &:hover:not([disabled]) {
+                    background: rgba(45, 212, 191, 0.07);
+                    border-color: rgba(45, 212, 191, 0.35);
+                    color: #e8f0ff;
+                    transform: translateY(-1px);
+                    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.25);
+                }
+            }
+        }
 
-.rdrTable_header .rdrTable_row {
-  background: rgba(45, 212, 191, 0.1);
-  font-weight: 600;
-  color: #2dd4bf;
+        /* ── Table ── */
+        .rdrTable {
+            border: 1px solid $buttonBorder;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.02);
+            padding: 8px 12px 12px;
 
-  p {
-    padding: 14px 12px;
-    text-transform: uppercase;
-    font-size: 12px;
-    letter-spacing: 0.5px;
-  }
+            &_header .rdrTable_row p {
+                font-family: 'Share Tech Mono', monospace;
+                font-size: 0.72rem;
+                letter-spacing: 0.08em;
+                text-transform: uppercase;
+                color: $teal;
+            }
 
-  &:hover {
-    background: rgba(45, 212, 191, 0.1);
-  }
-}
+            &_split {
+                border: none;
+                border-top: 1px solid rgba(45, 212, 191, 0.15);
+                margin: 4px 0 8px;
+            }
 
-.rdrTable_row-name {
-  text-align: left;
-  color: #2dd4bf;
-  font-weight: 500;
-}
+            &_body .rdrTable_row {
+                background: rgba(255, 255, 255, 0.02);
+                border: 1px solid transparent;
+                transition: all 0.15s;
 
-.rdrTable_row-weather {
-  color: #fff;
-  font-size: 13px;
-}
+                &:hover {
+                    background: rgba(45, 212, 191, 0.05);
+                    border-color: rgba(45, 212, 191, 0.15);
+                }
+            }
 
-.rdrTable_split {
-  display: none;
-}
+            // Forecast cells are secondary; the zone name anchors the row.
+            &_row-name p {
+                color: $fontColor;
+                font-weight: 600;
+            }
 
-.rdrTable_body {
-  list-style: none;
-  padding: 0;
-  margin: 0;
+            // Targets the <p> rather than the cell: the global `*` reset sets a
+            // colour on every element, so a colour on the wrapper never reaches it.
+            &_row-weather p {
+                color: $dim;
+                font-size: 0.9rem;
+            }
 
-  li {
-    padding: 0;
-  }
-}
+            // "Current" is the value the page exists to answer, so it gets the
+            // same teal emphasis the other tables give their live value.
+            &_row-current p {
+                color: $teal;
+                font-family: 'Share Tech Mono', monospace;
+                font-size: 0.85rem;
+            }
+        }
 
-@media (max-width: 768px) {
-  .rdrTable_row {
-    grid-template-columns: 1fr;
-    padding: 8px;
+        .noResults {
+            text-align: center;
+            padding: 20px;
+            color: $dim;
+            font-family: 'Share Tech Mono', monospace;
+            font-size: 0.85rem;
+        }
 
-    p {
-      padding: 4px 0;
+        // Default layout
+        .rdrTable_row {
+            grid-template-columns: 260px repeat(4, 1fr);
+        }
+
+        // Tablet view
+        .rdrTable.tablet {
+            .rdrTable_row {
+                grid-template-columns: 170px repeat(4, 1fr);
+            }
+        }
+
+        // Mobile view — drop the two look-ahead columns rather than stacking,
+        // matching how the other tables shed secondary columns.
+        .rdrTable.mobile {
+            .rdrTable_header,
+            .rdrTable_split {
+                display: none;
+            }
+
+            .rdrTable_row {
+                grid-template-columns: auto 1fr;
+            }
+
+            .rdrTable_row-weather:not(.rdrTable_row-current) {
+                display: none;
+            }
+        }
     }
-  }
-
-  .rdrTable_header .rdrTable_row {
-    display: none;
-  }
-
-  .rdrTable_body .rdrTable_row {
-    display: flex;
-    flex-direction: column;
-    background: rgba(0, 0, 0, 0.3);
-    border-radius: 4px;
-    margin-bottom: 8px;
-    border: 1px solid rgba(45, 212, 191, 0.2);
-  }
-
-  .rdrTable_row-name {
-    font-weight: bold;
-    text-align: left;
-  }
-}
 </style>

@@ -570,7 +570,7 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
         letter-spacing: 0.05em;
 
         &--error {
-            color: #ff9b9b;
+            color: $red;
         }
     }
 
@@ -599,7 +599,7 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
         flex-shrink: 0;
 
         h3 {
-            font-family: 'Cinzel', serif;
+            font-family: 'Rajdhani', sans-serif;
             font-size: 0.95rem;
             font-weight: 600;
             color: #e8f0ff;

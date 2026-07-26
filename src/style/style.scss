@@ -1,5 +1,15 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+// Two families, down from five. Rajdhani carries all UI and display type; Share
+// Tech Mono is reserved for anything numeric — countdowns, coordinates, column
+// labels — where tabular digits stop the text reflowing as it ticks.
+// Dropped: Lato (body), Montserrat (headings), Cinzel (display serif).
+@import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=Share+Tech+Mono&display=swap');
+
+// Tells the browser this is a dark UI, so anything we don't style explicitly —
+// native form controls, overlay scrollbars, the space behind the page — renders
+// dark instead of defaulting to light.
+:root {
+    color-scheme: dark;
+}
 
 *,
 a {
@@ -10,13 +20,66 @@ a {
     text-decoration: none;
 }
 
+// Form controls don't inherit typography from their parent — without this the
+// browser's own UI font (Arial) leaks through on buttons and inputs. Only the
+// family is inherited; sizes stay as each control declares them.
+button,
+input,
+select,
+textarea {
+    font-family: inherit;
+}
+
+// ── Scrollbars ─────────────────────────────────────────────────────────────
+// Applied globally so every scroll region matches: the page, the sidebar, the
+// tracking bar, the details pane, the zone list and the overview tables.
+// Firefox only supports the two standard properties, so it gets the same colours
+// through those; WebKit and Blink get the fuller treatment underneath.
+* {
+    scrollbar-width: thin;
+    scrollbar-color: rgba(45, 212, 191, 0.3) transparent;
+}
+
+::-webkit-scrollbar {
+    width: 10px;
+    height: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: rgba(45, 212, 191, 0.04);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(45, 212, 191, 0.28);
+    border-radius: 999px;
+    // Inset the thumb so it reads as a floating pill rather than filling the gutter.
+    border: 2px solid transparent;
+    background-clip: content-box;
+    transition: background-color 0.15s ease;
+
+    &:hover {
+        background: rgba(45, 212, 191, 0.5);
+        background-clip: content-box;
+    }
+
+    &:active {
+        background: $teal;
+        background-clip: content-box;
+    }
+}
+
+// Stops the default white square where the two bars meet.
+::-webkit-scrollbar-corner {
+    background: transparent;
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
-    font-family: "Montserrat", sans-serif;
+    font-family: 'Rajdhani', sans-serif;
     font-weight: 600;
 }
 
@@ -37,7 +100,7 @@ li {
 }
 
 body {
-    font-family: "Lato", sans-serif;
+    font-family: 'Rajdhani', sans-serif;
     height: 100vh;
     background-color: $bodyBackgroundColor;
 }
@@ -56,29 +119,25 @@ main {
 
 @keyframes timerActiveAnimation {
     0% {
-        color: limegreen;
+        color: $green;
     }
 
     50% {
-        color: rgb(255, 255, 255);
+        color: $fontColor;
     }
 
     100% {
-        color: limegreen;
+        color: $green;
     }
 }
 
 @keyframes rowActiveAnimation {
-    0% {
-        background-color: #692168;
+    0%, 100% {
+        background-color: rgba(45, 212, 191, 0.08);
     }
 
     50% {
-        background-color: #3e0d3d;
-    }
-
-    100% {
-        background-color: #692168;
+        background-color: rgba(45, 212, 191, 0.22);
     }
 }
 
@@ -130,7 +189,7 @@ main {
 
 *[data-rowFocused] {
     transition: border-left 0.7s ease;
-    border-left: 4px solid rgb(96, 96, 231) !important;
+    border-left: 4px solid $teal !important;
 }
 
 .star-canvas {
@@ -159,9 +218,9 @@ main {
 }
 
 .trackingIcon {
-    border-radius: 4px;
-    border: 1px solid rgba(101, 77, 237, 0.603);
-    background-color: rgba(59, 45, 135, 0.603);
+    border-radius: $borderRadius;
+    border: 1px solid $buttonBorder;
+    background-color: rgba(45, 212, 191, 0.14);
     box-shadow: 1px 1px 3px #000;
 
     &:active {
