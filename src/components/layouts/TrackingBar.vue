@@ -10,11 +10,12 @@
 
         <!-- Tracking Bar List -->
         <div class="trackingbar_items">
-            <trackingbarItem 
+            <trackingbarItem
                 v-for="d in sortTracklingList()" :key="d.ID"
                 :node="d"
                 :timerList="timerList"
                 :weatherList="weatherList"
+                :nowMs="nowMs"
                 :class="[`trackingbar_item`]"
                 @changeTracked="e => $emit('changeTracked', e)"
                 @openDetails="e => $emit('openDetails', e)"/>
@@ -24,16 +25,20 @@
 
 <script lang="ts" setup>
 import trackingbarItem from './parts/trackingbarItem.vue'
-import { isNodeActive } from '../../hooks/hooks.ts'
+import { isTrackedNodeActive, useNow } from '../../hooks/hooks.ts'
 
 const props = defineProps(['windowWidth', 'trackinglist', 'timerList', 'weatherList'])
 defineEmits(['openDetails', 'changeTracked'])
+
+// Vista and fishing countdowns come from real time rather than the timer list.
+// The clock is shared with the pages so the bar can't disagree with them.
+const nowMs = useNow()
 
 function sortTracklingList() {
     const newTrackingList: any[] = []
 
     for (const d in props.trackinglist) {
-        const state = isNodeActive(props.trackinglist[d], props.timerList, props.weatherList)
+        const state = isTrackedNodeActive(props.trackinglist[d], props.timerList, props.weatherList, nowMs.value)
         if (state) { newTrackingList.unshift(props.trackinglist[d]) }
         else { newTrackingList.push(props.trackinglist[d]) }
     }

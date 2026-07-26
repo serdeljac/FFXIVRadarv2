@@ -99,7 +99,7 @@
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
                         <p class="timeAppend" :class="{ active: fishActive(d) }">
-                            {{ d.time ? fishCountdown(d): 'Any Time' }}
+                            {{ fishCountdown(d) }}
                         </p>
                     </div>
 
@@ -124,7 +124,7 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
@@ -132,7 +132,7 @@ import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { capitalize, getUniqueByKey, isFishNodeActive, fishTimer } from '../../hooks/hooks.ts'
+import { capitalize, getUniqueByKey, isFishNodeActive, fishTimer, useNow } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -153,12 +153,9 @@ const searchName = ref('')
 const filters = ref<Filter[]>([])
 
 // Countdowns run off real time rather than the timer list, since a hole's spawn
-// can hinge on weather as much as the clock. Ticking a local `now` is what makes
-// the rows re-render each second.
-const nowMs = ref(Date.now())
-let tickHandle: ReturnType<typeof setInterval> | undefined
-onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now() }, 1000) })
-onUnmounted(() => clearInterval(tickHandle))
+// can hinge on weather as much as the clock. The clock is shared app-wide so
+// these rows always agree with the same node in the tracking bar.
+const nowMs = useNow()
 
 // While a hole is up the countdown reads as time remaining, otherwise as time
 // until it opens; the pulsing row is what distinguishes the two. 'Any Time' means

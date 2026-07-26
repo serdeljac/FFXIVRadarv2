@@ -1,4 +1,36 @@
+import { ref, onMounted, onUnmounted } from 'vue'
+import type { Ref } from 'vue'
 import { resolveWeather } from '../components/api/weatherForecast'
+
+// One clock for every countdown in the app. Components that each ran their own
+// interval drifted up to a second apart, so the same node could read "43m 4s" on
+// its page and "43m 5s" in the tracking bar. Sharing the tick means every caller
+// formats from the identical timestamp. The interval only runs while something
+// is subscribed to it.
+const sharedNow = ref(Date.now())
+let clockHandle: ReturnType<typeof setInterval> | undefined
+let clockSubscribers = 0
+
+export function useNow(): Ref<number> {
+    onMounted(() => {
+        clockSubscribers++
+        if (!clockHandle) {
+            sharedNow.value = Date.now()
+            clockHandle = setInterval(() => { sharedNow.value = Date.now() }, 1000)
+        }
+    })
+
+    onUnmounted(() => {
+        clockSubscribers--
+        if (clockSubscribers <= 0) {
+            clockSubscribers = 0
+            clearInterval(clockHandle)
+            clockHandle = undefined
+        }
+    })
+
+    return sharedNow
+}
 
 export function capitalize(str: string): string {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
@@ -372,10 +404,28 @@ export function isSightseeActive(node: any, timerList: any[], weatherList: Recor
 const FISH_WEATHER_KEYS = ['weather1', 'weather2', 'weather3']
 const FISH_CHAIN_KEYS = ['weatherchain1', 'weatherchain2', 'weatherchain3']
 
+// Holes absent from areas.json keep `area` as a bare fishing-hole name, so there
+// is no mapcode and their weather can never be resolved. Reported once per area:
+// these functions run for every visible row on every tick, so logging each call
+// would bury the console.
+const reportedFishAreas = new Set<string>()
+
+function reportUnresolvableFishWeather(node: any) {
+    const area = typeof node.area === 'string'
+        ? node.area
+        : node.spot ?? node.area?.zone ?? 'unknown'
+    if (reportedFishAreas.has(area)) return
+    reportedFishAreas.add(area)
+    console.error(`Cannot weather using fishing area: ${area}`)
+}
+
 function fishParts(node: any, timerList: any[], weatherList: Record<string, any>, now: number) {
+    const rule = weatherRule(node, weatherList, FISH_WEATHER_KEYS, FISH_CHAIN_KEYS, now)
+    if (rule.required.length && !rule.mapcode) reportUnresolvableFishWeather(node)
+
     return {
         windows: timerWindows(findTimer(timerList, node.time)),
-        rule: weatherRule(node, weatherList, FISH_WEATHER_KEYS, FISH_CHAIN_KEYS, now),
+        rule,
     }
 }
 
@@ -393,6 +443,27 @@ export function isFishNodeActive(node: any, timerList: any[], weatherList: Recor
     const { windows, rule } = fishParts(node, timerList, weatherList, now)
     if (!windows.length && !rule.required.length) return false
     return cachedNodeState(cacheKey('fish', node, rule), windows, rule, now).active
+}
+
+// ── Tracked nodes ───────────────────────────────────────────────────────────
+// The tracking bar mixes all four trackable jobs, so each node is routed to the
+// same timer its own page shows: vistas and fishing holes go through the window
+// engine above, while mining and botany still read straight off the timer list.
+
+export function isTrackedNodeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
+    if (node.job === 'sightseeing') return isSightseeActive(node, timerList, weatherList, now)
+    if (node.job === 'fishing') return isFishNodeActive(node, timerList, weatherList, now)
+    return !!nodeTimeChecker(node, timerList, true)
+}
+
+export function trackedNodeTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string {
+    if (node.job === 'sightseeing') {
+        // Matches the vista page, which labels an untimed vista rather than
+        // counting down to nothing.
+        return node.time ? sightseeTimer(node, timerList, weatherList, now) ?? 'Any Time' : 'Any Time'
+    }
+    if (node.job === 'fishing') return fishTimer(node, timerList, weatherList, now) ?? 'Any Time'
+    return nodeTimeChecker(node, timerList, false)
 }
 
 

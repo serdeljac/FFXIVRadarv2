@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { isWeatherMatch } from '../../hooks/hooks'
+import { isWeatherMatch } from '../../hooks/hooks.ts'
 
 const props = defineProps(['node', 'weatherList'])
 

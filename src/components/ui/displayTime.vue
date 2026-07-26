@@ -7,7 +7,7 @@
 
 <script lang="ts" setup>
 import { computed } from 'vue'
-import { isTimerActive, getTimerCountdown } from '../../hooks/hooks'
+import { isTimerActive, getTimerCountdown } from '../../hooks/hooks.ts'
 
 const props = defineProps(['timeId', 'timerList'])
 defineEmits(['timeActive'])

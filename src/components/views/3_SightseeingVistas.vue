@@ -92,10 +92,8 @@
 
                     <!-- WEATHER -->
                     <div class="rdrTable_row-weather">
-                        <weatherDisplay
-                            :weatherList="weatherList"
-                            :node="d"
-                        />
+                        <p>{{ d.weather1 ? d.weather1 : 'Any Weather' }}</p>
+                        <p v-if="d.weather2">{{ d.weather2 }}</p>
                     </div>
 
                     <!-- EMOTE -->
@@ -116,15 +114,14 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, onMounted, onUnmounted } from 'vue'
+import { ref, computed } from 'vue'
 import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-import weatherDisplay from '../ui/displayWeather.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { sightseeTimer, isSightseeActive } from '../../hooks/hooks.ts'
+import { sightseeTimer, isSightseeActive, useNow } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -139,12 +136,9 @@ const filters = ref<Filter[]>([])
 const filterSelected = ref('')
 
 // Vista countdowns are driven off real time rather than the timer list, since a
-// spawn depends on weather as well as the clock. Ticking a local `now` is what
-// makes the rows re-render each second.
-const nowMs = ref(Date.now())
-let tickHandle: ReturnType<typeof setInterval> | undefined
-onMounted(() => { tickHandle = setInterval(() => { nowMs.value = Date.now() }, 1000) })
-onUnmounted(() => clearInterval(tickHandle))
+// spawn depends on weather as well as the clock. The clock is shared app-wide so
+// these rows always agree with the same node in the tracking bar.
+const nowMs = useNow()
 
 // While a vista is up the countdown reads as time remaining, otherwise as time
 // until it spawns; the pulsing `active` styling is what distinguishes the two.
