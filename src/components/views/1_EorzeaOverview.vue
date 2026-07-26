@@ -1185,16 +1185,22 @@ function clearDetails() {
     justify-content: center;
     font-family: 'Rajdhani', sans-serif;
 
+    // Fixed 600px basis so the map keeps its square footprint and the content
+    // area takes whatever is left. `min-width: 0` lets it shrink past that basis
+    // once the row wraps — without it the 600px stage inside sets a min-content
+    // floor and the map overflows its container on narrow viewports.
     &_content {
         position: relative; z-index: 10;
-        width: 100%; max-width: 800px;
+        flex: 0 1 600px;
+        min-width: 0;
+        max-width: 600px;
         display: flex; flex-direction: column;
         align-items: center; gap: 22px;
     }
 
     &_stage {
         position: relative;
-        width: 800px;
+        width: 600px;
         max-width: 100%;
     }
 
@@ -1246,8 +1252,8 @@ function clearDetails() {
     }
 
     &_canvas {
-        width: 800px;
-        height: 800px;
+        width: 600px;
+        height: 600px;
         max-width: 100%;
         background: #060a12;
         border: 1px solid $buttonBorder;
@@ -1259,9 +1265,10 @@ function clearDetails() {
 }
 
 .mapContext {
-    justify-content: space-around;
     display: flex;
     flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 24px;
     width: 100%;
 }
 
@@ -1271,10 +1278,13 @@ function clearDetails() {
 
 .eorzeaOverview {
 
+    // Takes the space the map leaves. `min-width: 0` is what lets the wide
+    // node tables shrink inside a flex item — without it they keep their
+    // content width and push the row into a horizontal overflow.
     &_contentArea {
         position: relative;
-        width: 100%;
-        max-width: 600px;
+        flex: 1 1 420px;
+        min-width: 0;
         margin-top: 6px;
     }
 

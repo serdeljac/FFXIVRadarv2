@@ -77,10 +77,10 @@
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
                         <div>
-                            <p>{{ d.name }}</p>
-                            <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
+                            <displayItemName :item="d.name" />
+                            <!-- <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
                             <iconImgAPI v-if="d.usage === 'aetherial'" class="iconSize2" :name="'collectability'"/>
-                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/>
+                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/> -->
                         </div>
                     </div>
 
@@ -134,6 +134,7 @@ import toggleFilterBtn from '../ui/buttons/toggleFilter.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
+import displayItemName from '../ui/displayItemName.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
@@ -395,9 +396,6 @@ sortNodesIntoGroup(allTimedNodes.value)
                     border-color: rgba(45, 212, 191, 0.15);
                 }
 
-                &-name span {
-                    color: $dim;
-                }
             }
 
             :deep(.trackingTriggerBtn path),

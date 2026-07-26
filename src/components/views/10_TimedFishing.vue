@@ -78,7 +78,7 @@
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
                         <div>
-                            <p>{{ d.name }}</p>
+                            <displayItemName :item="d.name" />
                         </div>
                     </div>
 
@@ -131,6 +131,7 @@ import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
+import displayItemName from '../ui/displayItemName.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import { capitalize, getUniqueByKey, isFishNodeActive, fishTimer, useNow } from '../../hooks/hooks.ts'
 
