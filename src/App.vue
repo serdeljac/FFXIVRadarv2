@@ -26,22 +26,25 @@
 
     <main :class="[`main_content`]" @click="toggleForceMenu">
       <promotionBanner />
+      <!-- No <Transition> here: wrapping these lazily-imported route components
+           in one breaks client-side navigation outright. With mode="out-in" the
+           view freezes on the first page loaded (URL changes, component never
+           swaps); without a mode, leaving pages never unmount and stack up. See
+           the .fade rules below, kept for a future CSS-only re-introduction. -->
       <router-view v-slot="{ Component }">
-  <Transition name="fade" mode="out-in">
-    <component
-      :is="Component"
-      :key="$route.path"
-      :ffxivData="ffxivData"
-      :windowWidth="windowWidth"
-      :timerList="timerList"
-      :weatherList="weatherList"
-      :eorzeaClock="eorzeaClock"
+        <component
+          :is="Component"
+          :key="$route.path"
+          :ffxivData="ffxivData"
+          :windowWidth="windowWidth"
+          :timerList="timerList"
+          :weatherList="weatherList"
+          :eorzeaClock="eorzeaClock"
 
-      @openVistaImg="(e: any) => openVistaImg(e)"
-      @openDetails="openDetails"
-      @changeTracked="changeTracked" />
-  </Transition>
-</router-view>
+          @openVistaImg="(e: any) => openVistaImg(e)"
+          @openDetails="openDetails"
+          @changeTracked="changeTracked" />
+      </router-view>
     </main>
 
     <detailspane

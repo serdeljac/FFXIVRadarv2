@@ -79,7 +79,7 @@ const links = [
     icon: 'eorzeamap'
   },
   {
-    link: 'timedMiningBotany',
+    link: 'timedNodes',
     featured: true,
     label: 'Timed Mining / Botany',
     icon: 'gathering'

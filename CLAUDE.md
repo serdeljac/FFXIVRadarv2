@@ -135,3 +135,13 @@ Before marking any task as complete:
 - Analyze the failure
 - Fix the code (not the tests, unless tests are incorrect)
 5. Re-run test until all pass
+
+
+## Security Requirements
+
+- Never hardcore credentials
+- ALWAYS use enviromental variables
+- Use .env.example for templates, never commit .env files
+- Sanitize all user inputs before database queries
+- Use parameterized queries, never string concatenation for SQL
+- Log errors without exposing sensitive data

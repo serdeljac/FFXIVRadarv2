@@ -25,8 +25,8 @@
       </div>
 
       <div class="actions">
-        <a href="/" class="btn primary">↩ Return to Eorzea</a>
-        <a href="/timedMiningBotany" class="btn outline">⏰ Timed Nodes</a>
+        <router-link to="/" class="btn primary">↩ Return to Eorzea</router-link>
+        <router-link to="/timedNodes" class="btn outline">⏰ Timed Nodes</router-link>
       </div>
     </div>
   </div>
@@ -96,7 +96,7 @@ onBeforeUnmount(() => {
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 .not-found {
-  min-height: 100vh;
+  min-height: calc(100vh - 100px);
   display: flex;
   align-items: center;
   justify-content: center;
