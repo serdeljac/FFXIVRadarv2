@@ -108,7 +108,10 @@ body {
 }
 
 main {
-    height: calc($trackingbarHeight + 200px - 100vh);
+    // Fills the viewport below the fixed tracking bar (main carries a matching
+    // margin-top), then grows with content. Must be min-height, not height:
+    // a fixed height here resolves to 0 and the page content escapes the box.
+    min-height: calc(100vh - #{$trackingbarHeight});
 }
 
 .expColor {

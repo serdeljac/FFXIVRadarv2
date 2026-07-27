@@ -80,14 +80,13 @@
 
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
+                        <displayItemName :item="d.name" :node="d"/>
                         <p>{{ d.name }}</p>
                     </div>
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <p class="timeDisplay" :class="{ active: vistaActive(d) }">
-                            {{ d.time ? vistaTimer(d): 'Any Time' }}
-                        </p>
+                        <displayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
@@ -120,8 +119,10 @@ import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
+import displayItemName from '../ui/displayItemName.vue'
+import displayTime from '../ui/displayTime.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { sightseeTimer, isSightseeActive, useNow } from '../../hooks/hooks.ts'
+import { isSightseeActive, useNow } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -143,7 +144,6 @@ const nowMs = useNow()
 // While a vista is up the countdown reads as time remaining, otherwise as time
 // until it spawns; the pulsing `active` styling is what distinguishes the two.
 const vistaActive = (node: any) => isSightseeActive(node, props.timerList, props.weatherList, nowMs.value)
-const vistaTimer = (node: any) => sightseeTimer(node, props.timerList, props.weatherList, nowMs.value)
 const pageTagLine = "The Sightseeing Log is a collection of scenic vistas hidden across Eorzea that you discover by standing in the right spot, at the right time of day, in the right weather, and performing the correct emote. This tracker covers all expansions — from A Realm Reborn through Dawntrail — and shows each vista's required Eorzea time window, weather condition, emote, zone, and coordinates. Preview images help you identify the exact location. Tick off entries as you find them to track your progress through the log."
 
 // Distinct expansion names in first-seen order, used to build the filter bar.

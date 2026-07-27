@@ -63,22 +63,30 @@ Weather rules differ by job: sightseeing needs `weather1|weather2` to match *now
 supports a **transition** — `weatherchain1-3` must be blowing now, having followed one of `weather1-3`
 in the *previous* window.
 
-### Two timer systems coexist
+### One countdown path, reached from the node alone
 
 | Job | Active state | Countdown |
 |---|---|---|
-| miner / botany | `nodeTimeChecker(node, timerList, true)` | `nodeTimeChecker(node, timerList, false)` |
+| miner / botany | `isGatherNodeActive` | `gatherTimer` |
 | sightseeing | `isSightseeActive` | `sightseeTimer` |
 | fishing | `isFishNodeActive` | `fishTimer` |
-| any (tracking bar, details pane) | `isNodeWindowActive` | `nodeCountdown` |
+| any surface | `isNodeWindowActive(node)` | `nodeCountdown(node)` |
 
-`nodeCountdown` / `isNodeWindowActive` dispatch on `node.job`, so mixed-job surfaces show the same value
-a node's own page shows. Mining/botany still uses the legacy path.
+All six run on the window engine, so every job's countdown comes out of `timerWindows`. `nodeCountdown`
+/ `isNodeWindowActive` dispatch on `node.job` and read the timer and weather lists from the sources
+App.vue hands to `registerNodeTimeSources`, so a caller passes only the node — which is what lets
+`ui/displayTime.vue` render any node's countdown as `<displayTime :node="d"/>`. Prefer that component
+over calling the hooks from a page.
 
-**Known bug:** `recalcTimerCountdowns` in App.vue does not handle wrap-around windows — for a `18 → 2`
-timer both of its branches are false all day, so those 29 timers report `stateActive: false` permanently.
-The window engine sidesteps this via `timerWindows`; anything reading `timerList[].stateActive` directly
-inherits the bug.
+**Known bugs in the legacy `timerList` countdown** — `recalcTimerCountdowns` in App.vue, still the source
+of `timerList[].countdown` and `.stateActive`, and inherited by anything reading those directly
+(`nodeTimeChecker`, `isNodeActive`, `EorzeaMap`):
+
+- It converts ET minutes to real seconds as `minsUntil * 3`, but an ET minute is `175/60 = 2.9167`
+  seconds. Its countdowns therefore run ~2.9% long — up to two minutes off for a full-day wait — and
+  flip to active that late.
+- It does not handle wrap-around windows: for a `18 → 2` timer both of its branches are false all day,
+  so those 29 timers report `stateActive: false` permanently.
 
 ### Countdowns must use the shared clock
 

@@ -1,24 +1,34 @@
 <template>
     <div class="itemName">
         <img
-            v-if="iconUrl"
+            v-if="iconUrl && node.job != 'sightseeing'"
             :src="iconUrl"
             :alt="item"
             class="itemName_icon"
             loading="lazy" />
+         <iconImgAPI v-else-if="node.job == 'sightseeing'" :name="node.job"/>
+        <span v-else class="itemName_icon itemName_icon--pending" aria-hidden="true"></span>
         <!-- Reserves the icon's footprint while it resolves, so a table of rows
              doesn't shift sideways as each request lands. -->
-        <span v-else class="itemName_icon itemName_icon--pending" aria-hidden="true"></span>
 
-        <span class="itemName_label">{{ item }}</span>
+        <span class="itemName_label">
+            {{ item }}
+        </span>
+        <span class="itemName_label" v-if="node.job =='miner' || node.job == 'botany' || node.job == 'fishing'">
+            {{ `- Lv. ${node.level} ${'★'.repeat(node.stars)}` }}
+        </span>
+        <span class="itemAttr_label" v-if="node.attribute && node.attribute == 'Hidden'">
+            [Hidden]
+        </span>
     </div>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue'
 import { fetchItemIconUrl } from '../api/itemIcon.ts'
+import iconImgAPI from '../api/iconImg.vue'
 
-const props = defineProps<{ item: string }>()
+const props = defineProps<{ item: string, node: any }>()
 
 const iconUrl = ref<string | null>(null)
 
@@ -48,7 +58,7 @@ watch(
             height: 24px;
             flex-shrink: 0;
             object-fit: contain;
-            color: $fontColor;
+            
             filter: drop-shadow(0 0 1px #000);
 
             &--pending {
@@ -63,6 +73,8 @@ watch(
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
+            color: $fontColor !important;
         }
     }
+
 </style>

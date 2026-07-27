@@ -78,7 +78,7 @@
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
                         <div>
-                            <displayItemName :item="d.name" />
+                            <displayItemName :item="d.name" :node="d"/>
                         </div>
                     </div>
 
@@ -98,9 +98,7 @@
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <p class="timeAppend" :class="{ active: fishActive(d) }">
-                            {{ fishCountdown(d) }}
-                        </p>
+                        <displayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
@@ -131,9 +129,10 @@ import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
+import displayTime from '../ui/displayTime.vue'
 import displayItemName from '../ui/displayItemName.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
-import { capitalize, getUniqueByKey, isFishNodeActive, fishTimer, useNow } from '../../hooks/hooks.ts'
+import { capitalize, getUniqueByKey, isFishNodeActive, useNow } from '../../hooks/hooks.ts'
 
 interface Filter {
     group: string
@@ -162,7 +161,7 @@ const nowMs = useNow()
 // until it opens; the pulsing row is what distinguishes the two. 'Any Time' means
 // nothing gates it, '—' that its weather never comes round.
 const fishActive = (node: any) => isFishNodeActive(node, props.timerList, props.weatherList, nowMs.value)
-const fishCountdown = (node: any) => fishTimer(node, props.timerList, props.weatherList, nowMs.value) ?? 'Any Time'
+
 
 const pageTagLine = 'Timed fishing holes in Final Fantasy XIV only become available during specific Eorzea time windows, and some also require the right weather to be active. This tracker lists every timed fishing node across all expansions, showing the spawn time, zone, and coordinates. Use the filters to narrow by expansion, or search by fish name to find a specific catch quickly.'
 

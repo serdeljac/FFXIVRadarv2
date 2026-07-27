@@ -29,8 +29,7 @@
                             class="hasContext"
                             data-context="Track Node"
                             @click="$emit('changeTracked', d)" />
-
-                        {{`${d.name} - Lv. ${d.level} ${'★'.repeat(d.stars)}`}}
+                        <displayItemName :item="d.name" :node="d"/>
                         <iconImgAPI class="iconSize2" v-if="d.usage == 'aetherial'" :name="'collectability'"/>
                         <iconImgAPI class="iconSize2" v-if="d.usage == 'customdelivery'" :name="'customdelivery'"/>
                     </li>
@@ -46,6 +45,7 @@ import { ref, watch } from 'vue'
 import iconAndText from '../../ui/iconAndText.vue'
 import toggleTrackingBtn from '../../ui/buttons/toggleTracking.vue'
 import iconImgAPI from '../../api/iconImg.vue'
+import displayItemName from '../displayItemName.vue'
 import { getTimerCountdown, isTimerActive, capitalize } from '../../../hooks/hooks.ts'
 
 const props = defineProps(['data', 'timerList', 'focusNode', 'windowWidth'])

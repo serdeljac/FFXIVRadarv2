@@ -32,6 +32,24 @@ export function useNow(): Ref<number> {
     return sharedNow
 }
 
+// ── Shared timer and weather sources ────────────────────────────────────────
+// A node's countdown is fully determined by the node plus the two lists App.vue
+// owns, so rather than thread timerList and weatherList through every page and
+// down into every row, App.vue registers them once here and the node-level
+// functions below read them by default. That makes `<displayTime :node="d"/>`
+// the entire call site for a countdown.
+//
+// timerList is assigned once at load and weatherList is mutated in place, so the
+// references stay live; nothing here needs to be reactive because every countdown
+// re-reads them off the shared useNow() tick.
+let timerSource: any[] = []
+let weatherSource: Record<string, any> = {}
+
+export function registerNodeTimeSources(timerList: any[], weatherList: Record<string, any>): void {
+    timerSource = timerList
+    weatherSource = weatherList
+}
+
 export function capitalize(str: string): string {
     return str ? str.charAt(0).toUpperCase() + str.slice(1) : ''
 }
@@ -381,7 +399,7 @@ function sightseeParts(node: any, timerList: any[], weatherList: Record<string, 
 
 // null means the vista is gated by neither a time range nor weather, so there is
 // no countdown to run. Pair with isSightseeActive to tell which direction it runs.
-export function sightseeTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string | null {
+export function sightseeTimer(node: any, timerList = timerSource, weatherList = weatherSource, now = Date.now()): string | null {
     if (!node.time) return null
     const { windows, rule } = sightseeParts(node, timerList, weatherList, now)
     if (!windows.length && !rule.required.length) return null
@@ -391,7 +409,7 @@ export function sightseeTimer(node: any, timerList: any[], weatherList: Record<s
 // Companion to sightseeTimer, shaped for a class binding. Only a vista gated by
 // both a time range and a weather condition can light up — missing either means
 // it isn't a timed spawn worth highlighting, so bail before doing any work.
-export function isSightseeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
+export function isSightseeActive(node: any, timerList = timerSource, weatherList = weatherSource, now = Date.now()): boolean {
     if (!node.time || !node.weather1) return false
     const { windows, rule } = sightseeParts(node, timerList, weatherList, now)
     return cachedNodeState(cacheKey('vista', node, rule), windows, rule, now).active
@@ -431,7 +449,7 @@ function fishParts(node: any, timerList: any[], weatherList: Record<string, any>
 
 // null means the hole has neither a timer nor a weather requirement, so it is
 // always up and there is nothing to count down.
-export function fishTimer(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string | null {
+export function fishTimer(node: any, timerList = timerSource, weatherList = weatherSource, now = Date.now()): string | null {
     const { windows, rule } = fishParts(node, timerList, weatherList, now)
     if (!windows.length && !rule.required.length) return null
     return nodeTimerLabel('fish', node, windows, rule, now)
@@ -439,32 +457,56 @@ export function fishTimer(node: any, timerList: any[], weatherList: Record<strin
 
 // Companion to fishTimer, shaped for a class binding. A hole gated by neither a
 // timer nor weather is always available and never highlighted.
-export function isFishNodeActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
+export function isFishNodeActive(node: any, timerList = timerSource, weatherList = weatherSource, now = Date.now()): boolean {
     const { windows, rule } = fishParts(node, timerList, weatherList, now)
     if (!windows.length && !rule.required.length) return false
     return cachedNodeState(cacheKey('fish', node, rule), windows, rule, now).active
 }
 
-// ── Any node, by job ────────────────────────────────────────────────────────
-// The tracking bar and the details pane both show nodes of every job side by
-// side, so each is routed to the same timer its own page uses: vistas and
-// fishing holes go through the window engine above, while mining and botany
-// still read straight off the timer list.
+// ── Mining and botany ───────────────────────────────────────────────────────
+// Gathering nodes are gated by an ET time range alone, so the weather half of the
+// rule stays empty and the engine reduces to a walk over timerWindows. Routing
+// them through the same engine as vistas and fishing holes is what makes the 29
+// wrap-around timers (18 -> 2) work: timerList's own countdown treats each set as
+// start < end and so reports those windows as never open.
+const NO_WEATHER: WeatherRule = { required: [], chain: [] }
 
-export function isNodeWindowActive(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): boolean {
-    if (node.job === 'sightseeing') return isSightseeActive(node, timerList, weatherList, now)
-    if (node.job === 'fishing') return isFishNodeActive(node, timerList, weatherList, now)
-    return !!nodeTimeChecker(node, timerList, true)
+function gatherWindows(node: any, timerList: any[]): Array<[number, number]> {
+    return timerWindows(findTimer(timerList, node.time))
 }
 
-export function nodeCountdown(node: any, timerList: any[], weatherList: Record<string, any>, now = Date.now()): string {
-    if (node.job === 'sightseeing') {
-        // Matches the vista page, which labels an untimed vista rather than
-        // counting down to nothing.
-        return node.time ? sightseeTimer(node, timerList, weatherList, now) ?? 'Any Time' : 'Any Time'
-    }
-    if (node.job === 'fishing') return fishTimer(node, timerList, weatherList, now) ?? 'Any Time'
-    return nodeTimeChecker(node, timerList, false)
+// null means the node has no time restriction, so there is nothing to count down.
+export function gatherTimer(node: any, timerList = timerSource, now = Date.now()): string | null {
+    if (!node.time) return null
+    const windows = gatherWindows(node, timerList)
+    if (!windows.length) return null
+    return nodeTimerLabel('gather', node, windows, NO_WEATHER, now)
+}
+
+// Companion to gatherTimer, shaped for a class binding.
+export function isGatherNodeActive(node: any, timerList = timerSource, now = Date.now()): boolean {
+    if (!node.time) return false
+    const windows = gatherWindows(node, timerList)
+    if (!windows.length) return false
+    return cachedNodeState(cacheKey('gather', node, NO_WEATHER), windows, NO_WEATHER, now).active
+}
+
+// ── Any node, by job ────────────────────────────────────────────────────────
+// Every surface that shows a countdown — a job's own page, the tracking bar, the
+// details pane — goes through these two, so a node reads the same everywhere.
+// Both take their timer and weather data from the registered sources, which is
+// why a caller only has to hand over the node.
+
+export function isNodeWindowActive(node: any, now = Date.now()): boolean {
+    if (node.job === 'sightseeing') return isSightseeActive(node, timerSource, weatherSource, now)
+    if (node.job === 'fishing') return isFishNodeActive(node, timerSource, weatherSource, now)
+    return isGatherNodeActive(node, timerSource, now)
+}
+
+export function nodeCountdown(node: any, now = Date.now()): string {
+    if (node.job === 'sightseeing') return sightseeTimer(node, timerSource, weatherSource, now) ?? 'Any Time'
+    if (node.job === 'fishing') return fishTimer(node, timerSource, weatherSource, now) ?? 'Any Time'
+    return gatherTimer(node, timerSource, now) ?? 'Any Time'
 }
 
 

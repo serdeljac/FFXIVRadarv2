@@ -259,10 +259,10 @@ const nowMs = useNow()
 // `|| null` because Vue keeps a literal `false` on a non-boolean attribute, which
 // would leave every row matching the global [data-rowActive] rule.
 const isNodeActiveNow = computed(() =>
-    isNodeWindowActive(props.node, props.timerList, props.weatherList, nowMs.value) || null)
+    isNodeWindowActive(props.node, nowMs.value) || null)
 
 const nodeTimer = computed(() =>
-    nodeCountdown(props.node, props.timerList, props.weatherList, nowMs.value))
+    nodeCountdown(props.node, nowMs.value))
 
 function getVistaInfo(type: string) {
     const expFound = props.ffxivData.expansion.find((o: any) => o.expansion == props.node.expansion)

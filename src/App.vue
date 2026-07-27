@@ -67,6 +67,7 @@
 <script lang="ts">
 import EorzeaTime from 'eorzea-time';
 import { resolveWeather } from './components/api/weatherForecast';
+import { registerNodeTimeSources } from './hooks/hooks.ts';
 import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
@@ -268,6 +269,9 @@ export default {
       this.createWeatherList();
       this.setGoldSaucerState();
       this.setTimerData(timerRaw);
+      // Hands the two lists to hooks.ts so any component can render a node's
+      // countdown from the node alone, without them being passed as props.
+      registerNodeTimeSources(this.timerList, this.weatherList);
     },
 
     setAreaData(areaRaw: any[], expansionsRaw: any[]) {

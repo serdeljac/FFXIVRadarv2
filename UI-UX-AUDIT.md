@@ -12,11 +12,11 @@ value or a verified file reference — nothing is inferred from appearance alone
 
 | Tier | Theme | Count |
 |---|---|---|
-| **P0** | Functional bugs — broken today | 7 — **4 done**, 3 open |
+| **P0** | Functional bugs — broken today | 7 — **5 done**, 2 open |
 | **P1** | Keyboard & screen-reader access | 11 |
 | **P2** | Mobile & touch | 6 |
 | **P3** | Polish, consistency, dead code | 8 |
-| | **Total** | **32 — 4 done, 28 open** |
+| | **Total** | **32 — 5 done, 27 open** |
 
 **The headline finding:** repo-wide there is **1 `aria-*` attribute, 0 `role=` attributes, 0 keyboard
 event handlers, and 0 `prefers-reduced-motion` blocks** across all of `src/`. On `/timedNodes` the page
@@ -55,13 +55,22 @@ Broken behaviour in the shipped app. All are small, contained fixes.
       path, which is why this went unnoticed.) Verified: 0 `/timedMiningBotany` hrefs remain anywhere
       in the quick-access grid, and the card lands on `/timedNodes`.
 
-- [ ] **`<main>` collapses to 12px at every viewport.**
+- [x] **`<main>` collapses to padding-only at every viewport.** ✅ **DONE**
       `src/style/style.scss:109` — `height: calc($trackingbarHeight + 200px - 100vh)` evaluates to
-      `70px + 200px - 100vh`, which is negative on any viewport taller than 270px. Measured
-      `computed height: 12px` at 1440×900, 900×800 and 375×812. Page content is visible only because
-      children overflow the collapsed box.
-      → Almost certainly intended as `min-height: calc(100vh - ($trackingbarHeight + 200px))`. Fix the
-      operand order and verify no layout depends on the broken value.
+      `270px - 100vh`, negative on any viewport taller than 270px. The browser **clamps it to 0**, so
+      `main` measured 24px on desktop (16px + 8px padding) and 12px on mobile (6px + 6px) — pure
+      padding, zero content box. Content escaped the box by **2756px**; the page scrolled only by
+      accident, via visible overflow.
+      Second effect: `<main>` carries `@click="toggleForceMenu"` (the click-anywhere-to-collapse-the-
+      sidebar handler), so its hit area was a 24px strip instead of the whole content area.
+      → Replaced with `min-height: calc(100vh - #{$trackingbarHeight})`, matching the `margin-top:
+      $trackingbarHeight` already on `main`.
+      **Verified:** long pages now wrap their content exactly (`main` 2788px = 2764 content + 24
+      padding, nothing overflowing); the short News page sits at the 830px floor and fills the
+      viewport with **zero excess scroll** (no phantom scrollbar); the floor tracks the viewport
+      correctly at two heights (830px at 900vh, 742px at 812vh); no horizontal overflow at any width;
+      `elementFromPoint` probes at y=200/400/600/772 now all land inside `main`, confirming the click
+      handler covers the full page. `npm run build` (incl. `vue-tsc`) and all 17 tests pass.
 
 - [ ] **"View Details" is a dead control on tablet.**
       At 900px the tables render **50 visible details buttons**, but `src/App.vue:48` gates the pane on

@@ -25,7 +25,6 @@ export function resolveWeather(zoneMapCode: string, date: Date = new Date()): st
             if (libraryWeather) return libraryWeather
         } catch {
             zonesMissingFromLibrary.add(zoneMapCode)
-            console.warn(`Weather for "${zoneMapCode}" is not in eorzea-weather; using the Dawntrail rate tables.`)
         }
     }
 

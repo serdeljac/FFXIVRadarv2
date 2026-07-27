@@ -10,6 +10,7 @@
                 <iconAndText 
                     :text="`Sightseeing Log #${node.no} - ${node.name}`" 
                     :icon="`${node.job_sub}`"/>
+                <displayItemName :item="node.name" :node="node"/>
 
                 <div class="forceright">
                     <toggleTrackingBtn

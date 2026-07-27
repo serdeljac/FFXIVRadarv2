@@ -38,7 +38,7 @@ function sortTracklingList() {
     const newTrackingList: any[] = []
 
     for (const d in props.trackinglist) {
-        const state = isNodeWindowActive(props.trackinglist[d], props.timerList, props.weatherList, nowMs.value)
+        const state = isNodeWindowActive(props.trackinglist[d], nowMs.value)
         if (state) { newTrackingList.unshift(props.trackinglist[d]) }
         else { newTrackingList.push(props.trackinglist[d]) }
     }

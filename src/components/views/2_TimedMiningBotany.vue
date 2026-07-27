@@ -46,7 +46,6 @@
                     <p class="rdrTable_row-tracking"></p>
                     <p class="rdrTable_row-name">Name</p>
                     <p class="rdrTable_row-attributes">Attributes</p>
-                    <p class="rdrTable_row-level">Level</p>
                     <p class="rdrTable_row-time">Timer</p>
                     <p class="rdrTable_row-area">Area</p>
                 </li>
@@ -76,18 +75,12 @@
 
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
-                        <div>
-                            <displayItemName :item="d.name" />
-                            <!-- <span v-if="d.attribute && d.attribute !== 'Collectability'">{{ ` [${d.attribute}]` }}</span>
-                            <iconImgAPI v-if="d.usage === 'aetherial'" class="iconSize2" :name="'collectability'"/>
-                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/> -->
-                        </div>
+                            <displayItemName :item="d.name" :node="d"/>
                     </div>
 
                     <!-- ATTRIBUTES -->
                     <div class="rdrTable_row-attributes">
-                        <div>
-                            <span class="hasContext" :data-context="capitalize(d.job_sub)">
+                        <span class="hasContext" :data-context="capitalize(d.job_sub)">
                                 <iconImgAPI :name="d.job_sub"/>
                             </span>
 
@@ -95,22 +88,18 @@
                                 <iconImgAPI :name="fetchUsageImgName(d)"/>
                             </span>
 
+                            <iconImgAPI v-if="d.usage === 'customdelivery'" class="iconSize2" :name="'customdelivery'"/>
+
                             <span v-if="d.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${d.tomb}`">
                                 <iconImgAPI :name="'folklore'"/>
                             </span>
-                        </div>
                     </div>
 
-                    <!-- LEVEL -->
-                    <div class="rdrTable_row-level">
-                        {{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}
-                    </div>
+
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time">
-                        <p class="timeAppend">
-                            {{ nodeTimeChecker(d, timerList, false) }}
-                        </p>
+                        <displayTime :node="d"/>
                     </div>
 
                     <!-- AREA -->
@@ -137,6 +126,7 @@ import inputSearchBar from '../ui/buttons/inputSearchBar.vue'
 import displayItemName from '../ui/displayItemName.vue'
 import areaDisplay from '../ui/displayArea.vue'
 import iconImgAPI from '../api/iconImg.vue'
+import displayTime from '../ui/displayTime.vue'
 import PageHeader from '../ui/displayPageHeader.vue'
 import { nodeTimeChecker, capitalize, getUniqueByKey, fetchUsageAttrName, fetchUsageImgName } from '../../hooks/hooks.ts'
 
@@ -432,13 +422,13 @@ sortNodesIntoGroup(allTimedNodes.value)
 
         // Default layout
         .rdrTable_row {
-            grid-template-columns: 80px 400px 100px 100px 120px auto;
+            grid-template-columns: 80px 400px 200px 120px auto;
         }
 
         // Tablet view
         .rdrTable.tablet {
             .rdrTable_row {
-                grid-template-columns: 60px 200px 80px 80px 80px auto;
+                grid-template-columns: 60px 200px 80px 80px auto;
             }
         }
 

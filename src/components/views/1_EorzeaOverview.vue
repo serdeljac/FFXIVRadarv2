@@ -122,7 +122,7 @@
                                             class="hasContext"
                                             data-context="View Details"
                                             @click="$emit('openDetails', detailRowSelected)"/>
-                                        <span class="verticalCenter-text">{{ row.name }}</span>
+                                        <displayItemName :item="row.name" :node="row" class="verticalCenter-text"/>
                                     </td>
                                     <td>{{ row.mount ? 'YES' : 'NO' }}</td>
                                     <td>{{ row.emote }}</td>
@@ -173,15 +173,7 @@
                                     }">
 
                                     <td class="leafletMap_cellItem">
-                                        <div>
-                                        <img
-                                            v-if="itemIcons[it.name]"
-                                            :src="itemIcons[it.name]"
-                                            :alt="it.name"
-                                            class="leafletMap_itemImg" />
-                                        <span>{{ it.name }} - Lv. {{ it.level }}{{ it.stars ? ' ' + '★'.repeat(it.stars) : '' }}</span>
-                                        <iconImgAPI v-if="it.usage === 'aetherial'" class="iconSize2 shiftCollect" :name="'collectability'"/>
-                                        </div>
+                                        <displayItemName :item="it.name" :node="it" class="verticalCenter-text"/>
                                     </td>
 
                                     <td class="leafletMap_cellTrack">
@@ -206,7 +198,7 @@
                                             v-if="group.time"
                                             :trackingEnabled="it.tracked"
                                             @click.stop="$emit('changeTracked', it)" />
-                                        <timeDisplay v-if="group.time" :timerList="timerList" :timeId="group.time" />
+                                        <timeDisplay v-if="group.time" :node="it" />
                                         <span v-else>Any Time</span>
                                     </td>
                                 </tr>
@@ -263,14 +255,7 @@
                                             @click="$emit('openDetails', fish)"/>
                                     </td>
                                     <td class="leafletMap_cellItem">
-                                        <div>
-                                            <img
-                                                v-if="itemIcons[fish.name]"
-                                                :src="itemIcons[fish.name]"
-                                                :alt="fish.name"
-                                                class="leafletMap_itemImg" />
-                                            <span>{{ `${fish.name} - Lv.${fish.level} ${formatStars(fish.stars)}` }}</span>
-                                        </div>
+                                        <displayItemName :item="fish.name" :node="fish" class="verticalCenter-text"/>
                                         <ul class="lowerlist">
                                             <li v-if="fish.bait != 'mooch'">
                                                 <span>Bait: {{ fish.bait }}</span>
@@ -293,7 +278,7 @@
                                             v-if="fish.time"
                                             :trackingEnabled="fish.tracked"
                                             @click.stop="$emit('changeTracked', fish)" />
-                                        <timeDisplay v-if="fish.time" :timerList="timerList" :timeId="fish.time" />
+                                        <timeDisplay v-if="fish.time" :node="fish" />
                                         <span v-else>Any Time</span>
                                     </td>
                                 </tr>
@@ -384,8 +369,9 @@ import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
 import timeDisplay from '../ui/displayTime.vue'
+import displayItemName from '../ui/displayItemName.vue'
 import iconImgAPI from '../api/iconImg.vue'
-import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatStars, formatTug} from '../../hooks/hooks.ts'
+import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatTug} from '../../hooks/hooks.ts'
 
 const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
 
