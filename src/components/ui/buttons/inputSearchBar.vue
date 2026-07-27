@@ -1,25 +1,44 @@
 <template>
-    <input id="searchBox" ref="searchBox" type="text" :value="modelValue" @input="inputValue" placeholder="Search..." />
+    <!-- The label is visually hidden but present: a placeholder is not an
+         accessible name, and it disappears as soon as the user types. -->
+    <label class="visuallyHidden" :for="inputId">{{ label }}</label>
+    <input
+        :id="inputId"
+        type="search"
+        :value="modelValue"
+        @input="inputValue"
+        :placeholder="placeholder" />
 </template>
 
 <script lang="ts" setup>
-import { ref, onMounted } from 'vue'
+withDefaults(defineProps<{
+    modelValue?: string
+    label?: string
+    placeholder?: string
+    /** Opt-in only. Autofocusing on mount stole focus on every page visit and
+     *  popped the on-screen keyboard on mobile. */
+    autofocus?: boolean
+}>(), {
+    label: 'Search by name',
+    placeholder: 'Search...',
+})
 
-defineProps(['modelValue'])
 const emit = defineEmits(['selected'])
 
-const searchBox = ref<HTMLInputElement | null>(null)
+// Was a hardcoded id="searchBox" — duplicated if two bars ever render together,
+// which would silently break the label association.
+const inputId = `searchBox-${Math.random().toString(36).slice(2, 9)}`
 
 function inputValue(event: Event) {
     emit('selected', (event.target as HTMLInputElement).value)
 }
-
-onMounted(() => searchBox.value?.focus())
 </script>
 
 <style scoped lang="scss">
-    input[type=text] {
-        min-width: 300px;
+    input[type=search] {
+        // Was min-width: 300px, which overflowed the filter bar on a 375px screen.
+        width: 100%;
+        max-width: 300px;
         margin: 10px 0.5rem;
         border: 1px solid $buttonBackgroundColor;
         border-radius: $borderRadius;

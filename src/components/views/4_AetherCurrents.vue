@@ -19,28 +19,33 @@
         </div>
 
         <!-- Table -->
-        <div :class="['body_content-group rdrTable', windowWidth]">
+        <div
+            :class="['body_content-group rdrTable', windowWidth]"
+            role="table"
+            aria-label="Aether currents">
 
-            <ul class="rdrTable_header">
-                <li class="rdrTable_row">
-                    <p class="rdrTable_row-tracking"></p>
-                    <p class="rdrTable_row-quest">Quest</p>
-                    <p class="rdrTable_row-unlock">Unlock Requirement</p>
-                    <p class="rdrTable_row-area">Location</p>
+            <ul class="rdrTable_header" role="rowgroup">
+                <li class="rdrTable_row" role="row">
+                    <p class="rdrTable_row-tracking" role="columnheader"><span class="visuallyHidden">Actions</span></p>
+                    <p class="rdrTable_row-quest" role="columnheader">Quest</p>
+                    <p class="rdrTable_row-unlock" role="columnheader">Unlock Requirement</p>
+                    <p class="rdrTable_row-area" role="columnheader">Location</p>
                 </li>
             </ul>
 
             <hr class="rdrTable_split"/>
 
-            <ul class="rdrTable_body">
+            <ul class="rdrTable_body" role="rowgroup">
                 <li
                     v-for="d in currentNodes"
                     :key="d.ID"
+                    role="row"
                     :class="['rdrTable_row', d.specialClass]"
                 >
                     <!-- ICON (desktop only) -->
-                    <div v-if="isDesktop" class="rdrTable_row-tracking">
+                    <div v-if="isDesktop" class="rdrTable_row-tracking" role="cell">
                         <toggleDetailsBtn
+                            :label="`View details for ${d.name || `Aether Current #${d.no}`}`"
                             class="hasContext"
                             data-context="View Details"
                             @click="$emit('openDetails', d)"
@@ -48,9 +53,10 @@
                     </div>
 
                     <!-- QUEST NAME -->
-                    <div class="rdrTable_row-quest">
+                    <div class="rdrTable_row-quest" role="cell">
                         <toggleDetailsBtn
                             v-if="!isDesktop"
+                            :label="`View details for ${d.name || `Aether Current #${d.no}`}`"
                             class="hasContext"
                             data-context="View Details"
                             @click="$emit('openDetails', d)"
@@ -60,13 +66,13 @@
                     </div>
 
                     <!-- UNLOCK CONDITION -->
-                    <div v-if="!isMobile || d.unlock" class="rdrTable_row-unlock">
+                    <div v-if="!isMobile || d.unlock" class="rdrTable_row-unlock" role="cell">
                         <iconImgAPI v-if="d.unlock" :name="`quest_${d.unlock_type}`"/>
                         <p v-if="d.unlock">{{ `${d.unlock} - Lv.${d.unlock_level}` }}</p>
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_row-area">
+                    <div class="rdrTable_row-area" role="cell">
                         <areaDisplay :node="d" />
                     </div>
                 </li>

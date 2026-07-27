@@ -22,92 +22,107 @@
                         :name="'Reset'"
                         :noicon="true"
                         :enabled="true"
+                        :action="true"
                         @click="resetFilters" />
                 </div>
             </div>
         </div>
 
         <!-- Pagination -->
-        <ul class="body_content-group pagenation">
-            <li
-                v-for="(_, index) in compiledDataForTable" :key="index"
-                class="pagenation_item"
-                :class="{ pageActive: arraySet === index }"
-                @click="arraySet = index">
-                {{ index + 1 }}
-            </li>
-        </ul>
+        <nav aria-label="Pagination">
+            <ul class="body_content-group pagenation">
+                <li v-for="(_, index) in compiledDataForTable" :key="index">
+                    <button
+                        type="button"
+                        class="pagenation_item"
+                        :class="{ pageActive: arraySet === index }"
+                        :aria-current="arraySet === index ? 'page' : null"
+                        :aria-label="`Page ${index + 1}`"
+                        @click="arraySet = index">
+                        {{ index + 1 }}
+                    </button>
+                </li>
+            </ul>
+        </nav>
 
         <!-- Table -->
-        <div :class="[`body_content-group rdrTable`, windowWidth]">
+        <!-- ARIA table roles over the existing <ul>/<li> markup — see the note in
+             2_TimedMiningBotany.vue. Roles rather than a real <table> so the
+             CSS-grid row layout is untouched. -->
+        <div
+            :class="[`body_content-group rdrTable`, windowWidth]"
+            role="table"
+            aria-label="Timed fishing holes">
 
-            <ul class="rdrTable_header">
-                <li class="rdrTable_row">
-                    <p class="rdrTable_row-tracking"></p>
-                    <p class="rdrTable_row-name">Name</p>
-                    <p class="rdrTable_row-attributes">Attributes</p>
-                    <p class="rdrTable_row-level">Level</p>
-                    <p class="rdrTable_row-time">Timer</p>
-                    <p class="rdrTable_row-weather">Weather</p>
-                    <p class="rdrTable_row-area">Area</p>
+            <ul class="rdrTable_header" role="rowgroup">
+                <li class="rdrTable_row" role="row">
+                    <p class="rdrTable_row-tracking" role="columnheader"><span class="visuallyHidden">Actions</span></p>
+                    <p class="rdrTable_row-name" role="columnheader">Name</p>
+                    <p class="rdrTable_row-attributes" role="columnheader">Attributes</p>
+                    <p class="rdrTable_row-level" role="columnheader">Level</p>
+                    <p class="rdrTable_row-time" role="columnheader">Timer</p>
+                    <p class="rdrTable_row-weather" role="columnheader">Weather</p>
+                    <p class="rdrTable_row-area" role="columnheader">Area</p>
                 </li>
             </ul>
 
             <hr class="rdrTable_split" />
 
-            <ul class="rdrTable_body">
+            <ul class="rdrTable_body" role="rowgroup">
                 <li
                     v-for="d in compiledDataForTable[arraySet]" :key="d.ID"
+                    role="row"
                     :class="[`rdrTable_row`, {nodeIsActive: fishActive(d)}]"
                     >
 
                     <!-- TRACKER -->
-                    <div class="rdrTable_row-tracking">
+                    <div class="rdrTable_row-tracking" role="cell">
                         <toggleTrackingBtn
                             :trackingEnabled="d.tracked"
+                            :label="d.tracked ? `Untrack ${d.name}` : `Track ${d.name}`"
                             class="hasContext"
                             data-context="Track Node"
                             @click="$emit('changeTracked', d)" />
                         <toggleDetailsBtn
-                            v-if="windowWidth !== 'mobile'"
+                            :label="`View details for ${d.name}`"
                             class="hasContext"
                             data-context="View Details"
                             @click="$emit('openDetails', d)" />
                     </div>
 
                     <!-- NAME -->
-                    <div class="rdrTable_row-name">
+                    <div class="rdrTable_row-name" role="cell">
                         <div>
                             <displayItemName :item="d.name" :node="d"/>
                         </div>
                     </div>
 
                     <!-- ATTRIBUTES -->
-                    <div class="rdrTable_row-attributes">
+                    <div class="rdrTable_row-attributes" role="cell">
                         <div>
-                            <span class="hasContext" :data-context="capitalize(d.job_sub)">
+                            <span class="hasContext" role="img" :aria-label="capitalize(d.job_sub)" :data-context="capitalize(d.job_sub)">
                                 <iconImgAPI :name="d.job_sub"/>
                             </span>
                         </div>
                     </div>
 
                     <!-- LEVEL -->
-                    <div class="rdrTable_row-level">
+                    <div class="rdrTable_row-level" role="cell">
                         {{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_row-time">
+                    <div class="rdrTable_row-time" role="cell">
                         <displayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
-                    <div class="rdrTable_row-weather">
+                    <div class="rdrTable_row-weather" role="cell">
                         {{ fishWeatherLabel(d) }}
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_row-area">
+                    <div class="rdrTable_row-area" role="cell">
                         <areaDisplay :node="d" />
                     </div>
                 </li>
@@ -333,6 +348,10 @@ sortNodesIntoGroup(allTimedNodes.value)
             width: 90%;
 
             &_item {
+                // Native <button> reset — was a bare <li> before it became focusable.
+                appearance: none;
+                font-size: inherit;
+
                 width: 32px;
                 user-select: none;
                 aspect-ratio: 1 / 1;
@@ -453,8 +472,14 @@ sortNodesIntoGroup(allTimedNodes.value)
                 display: none;
             }
 
+            // 88px so the two 44x44 touch targets fit side by side without
+            // their hit areas overlapping — see 2_TimedMiningBotany.vue.
             .rdrTable_row {
-                grid-template-columns: 60px auto;
+                grid-template-columns: 88px auto;
+            }
+
+            .rdrTable_row-tracking {
+                gap: 18px;
             }
 
             .rdrTable_row-attributes,

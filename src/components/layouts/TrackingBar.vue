@@ -1,10 +1,12 @@
 <template>
-    <header>
+    <header aria-label="Site header and tracked nodes">
 
         <!-- Title -->
+        <!-- Wordmark, not a heading: each page's own <h1> lives in PageHeader,
+             and two <h1>s per page made the document outline ambiguous. -->
         <div class="trackingbar_header">
             <router-link :to="`/`">
-                <h1>FFXIV Radar</h1>
+                <p class="trackingbar_title">FFXIV Radar</p>
             </router-link>
         </div>
 

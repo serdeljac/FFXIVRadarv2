@@ -37,4 +37,14 @@ const active = computed(() => isNodeWindowActive(props.node, nowMs.value))
     }
 
     .active {animation: timerActiveAnimation 0.7s linear infinite;}
+
+    // The colour cycle is what marks a node as currently up, so with motion
+    // reduced the "active" end of that cycle has to persist as a static colour —
+    // otherwise the countdown reverts to body text and the state is lost.
+    @media (prefers-reduced-motion: reduce) {
+        .active {
+            color: $green;
+            font-weight: 600;
+        }
+    }
 </style>

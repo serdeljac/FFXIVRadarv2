@@ -1,22 +1,24 @@
 <template>
-    <aside class="details">
+    <aside
+        :class="['details', windowWidth]"
+        role="dialog"
+        aria-label="Node details"
+        ref="paneEl"
+        :tabindex="isFullScreen ? -1 : undefined"
+        @keydown.esc="$emit('openDetails', node)">
 
         <div class="details_header">
             <button
                 type="button"
                 class="details_closeBtn hasContext"
                 data-context="Close"
+                aria-label="Close details panel"
                 @click="$emit('openDetails', node)">
                 <closeDetailsBtn />
             </button>
 
-            <p v-if="isGathering || isFishing" class="details_headerName">
-                <iconAndText :text="`${node.name} - Lv. ${node.level} ${stars(node.stars)}`" :icon="node.job_sub" />
-            </p>
-            <p v-else-if="node.job === 'sightseeing'" class="details_headerName">
-                <iconAndText :text="`${node.name}`" :icon="node.job_sub" />
-            </p>
-            <p v-else-if="node.job === 'aethercurrents'" class="details_headerName">
+            <displayItemName :item="node.name" :node="node"/>
+            <p v-if="node.job === 'aethercurrents'" class="details_headerName">
                 <iconAndText :text="`Aether Current #${node.order}`" :icon="node.job_sub" />
             </p>
         </div>
@@ -210,10 +212,17 @@ import 'leaflet/dist/leaflet.css'
 import iconAndText from '../ui/iconAndText.vue'
 import closeDetailsBtn from '../ui/buttons/closeMenu.vue'
 import vistaSmallAPI from '../api/vistaImg.vue'
+import displayItemName from '../ui/displayItemName.vue'
 import { formatStars, formatAreaLabel, isNodeWindowActive, nodeCountdown, useNow } from '../../hooks/hooks.ts'
 
-const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList'])
+const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList', 'windowWidth'])
 defineEmits(['openDetails', 'openVistaImg'])
+
+// On mobile the pane covers the whole screen, so it behaves like a modal: focus
+// moves into it on open and the page behind it must not scroll. On larger
+// screens it sits beside the content and neither applies.
+const paneEl = ref<HTMLElement | null>(null)
+const isFullScreen = computed(() => props.windowWidth === 'mobile')
 
 const stars = formatStars
 
@@ -288,7 +297,7 @@ let activeMarkers: L.Marker[] = []
 let loadToken = 0
 
 // Marker icon filename for the focused node: fates/eliteHunts use a special
-// prefix, everything else uses job_sub directly (mirrors MapDisplay.vue).
+// prefix, everything else uses job_sub directly (same rule as the overview map).
 const focusIconName = computed(() => {
     const job = props.node?.job
     const jobSub = props.node?.job_sub
@@ -298,9 +307,26 @@ const focusIconName = computed(() => {
     return jobSub
 })
 
-onMounted(() => loadMap())
+onMounted(() => {
+    loadMap()
+    if (isFullScreen.value) {
+        document.body.style.overflow = 'hidden'
+        // Focus the pane itself rather than the close button, so a screen reader
+        // announces the node's details from the top instead of starting on "Close".
+        paneEl.value?.focus()
+    }
+})
 
-onBeforeUnmount(() => destroyMap())
+onBeforeUnmount(() => {
+    destroyMap()
+    document.body.style.overflow = ''
+})
+
+// Guards against the pane being resized across the mobile boundary while open,
+// which would otherwise strand the scroll lock on or off.
+watch(isFullScreen, (full) => {
+    document.body.style.overflow = full ? 'hidden' : ''
+})
 
 watch(() => props.node, () => loadMap())
 
@@ -490,6 +516,40 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
     font-family: 'Rajdhani', sans-serif;
     color: $fontColor;
     z-index: 999;
+
+    // Mobile only: a full-screen sheet. Tablet keeps the side panel above —
+    // there is room for it there, and covering the table would lose the context
+    // the user is comparing against.
+    &.mobile {
+        width: 100%;
+        left: 0;
+        right: 0;
+        top: $trackingbarHeight;
+        height: auto;
+        border-left: 0;
+        box-shadow: none;
+        // Above the sidebar overlay so it can't be tabbed behind.
+        z-index: 10000;
+        // Close button stays reachable without scrolling back up.
+        .details_header {
+            position: sticky;
+            top: -1rem;
+            z-index: 2;
+            margin: -1rem -1.25rem 0;
+            padding: 1rem 1.25rem;
+            background: $bodyBackgroundColor;
+            border-bottom: 1px solid $buttonBorder;
+        }
+
+        // The 1:1 map would eat most of a phone screen before any data is visible.
+        .details_mapStage {
+            aspect-ratio: 4 / 3;
+        }
+    }
+
+    &:focus {
+        outline: none;
+    }
 
     &_header {
         display: flex;

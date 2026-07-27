@@ -17,42 +17,46 @@
     </div>
 
     <!-- Weather Table -->
-    <div :class="['body_content-group rdrTable', windowWidth]">
-      <ul class="rdrTable_header">
-        <li class="rdrTable_row">
-          <p class="rdrTable_row-name">Zone</p>
-          <p class="rdrTable_row-weather">Previous</p>
-          <p class="rdrTable_row-weather rdrTable_row-current">Current</p>
-          <p class="rdrTable_row-weather">Next (8h)</p>
-          <p class="rdrTable_row-weather">After (16h)</p>
+    <div
+      :class="['body_content-group rdrTable', windowWidth]"
+      role="table"
+      aria-label="Zone weather forecast">
+      <ul class="rdrTable_header" role="rowgroup">
+        <li class="rdrTable_row" role="row">
+          <p class="rdrTable_row-name" role="columnheader">Zone</p>
+          <p class="rdrTable_row-weather" role="columnheader">Previous</p>
+          <p class="rdrTable_row-weather rdrTable_row-current" role="columnheader">Current</p>
+          <p class="rdrTable_row-weather" role="columnheader">Next (8h)</p>
+          <p class="rdrTable_row-weather" role="columnheader">After (16h)</p>
         </li>
       </ul>
 
       <hr class="rdrTable_split" />
 
-      <ul class="rdrTable_body">
+      <ul class="rdrTable_body" role="rowgroup">
         <li
           v-for="zone in filteredZones"
           :key="zone.id"
           class="rdrTable_row"
+          role="row"
         >
-          <div class="rdrTable_row-name">
+          <div class="rdrTable_row-name" role="cell">
             <p>{{ zone.name }}</p>
           </div>
 
-          <div class="rdrTable_row-weather">
+          <div class="rdrTable_row-weather" role="cell">
             <p>{{ zone.weather?.previous || '—' }}</p>
           </div>
 
-          <div class="rdrTable_row-weather rdrTable_row-current">
+          <div class="rdrTable_row-weather rdrTable_row-current" role="cell">
             <p>{{ zone.weather?.current || '—' }}</p>
           </div>
 
-          <div class="rdrTable_row-weather">
+          <div class="rdrTable_row-weather" role="cell">
             <p>{{ zone.weather?.next1 || '—' }}</p>
           </div>
 
-          <div class="rdrTable_row-weather">
+          <div class="rdrTable_row-weather" role="cell">
             <p>{{ zone.weather?.next2 || '—' }}</p>
           </div>
         </li>

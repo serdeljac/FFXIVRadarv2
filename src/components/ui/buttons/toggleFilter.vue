@@ -1,5 +1,11 @@
 <template>
-    <button :class="[`btn`]" :disabled="disabled" :enabled="enabled" @click="handleClick">
+    <button
+        type="button"
+        :class="[`btn`]"
+        :disabled="disabled"
+        :enabled="enabled"
+        :aria-pressed="action ? null : !!enabled"
+        @click="handleClick">
         <iconImgAPI :name="getIconImageURL(icon)" v-if="!noicon"/>
         {{ fetchName }}
     </button>
@@ -16,6 +22,9 @@ interface Props {
     disabled?: boolean
     enabled?: boolean | null
     noicon?: boolean
+    /** Set for one-shot buttons like "Reset". They use `enabled` purely for
+     *  styling, so they must not report a pressed state to assistive tech. */
+    action?: boolean
 }
 
 const props = withDefaults(defineProps<Props>(), {})
@@ -61,7 +70,8 @@ function handleClick() {
                 0px 0px 3px $buttonBackgroundColorHover;
         &[enabled] {background-color: $buttonBackgroundColor !important;}
         &[disabled] {
-            opacity: 0.1;
+            // Was 0.1, which put the label far below any legible threshold.
+            opacity: 0.4;
             cursor: not-allowed;
         }
         img {

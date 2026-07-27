@@ -73,7 +73,7 @@ const currentYear = new Date().getFullYear()
 
 const links = [
   {
-    link: 'eorzeaoverview',
+    link: 'eorzeaOverview',
     featured: true,
     label: 'Eorzea Overview',
     icon: 'eorzeamap'
@@ -83,6 +83,12 @@ const links = [
     featured: true,
     label: 'Timed Mining / Botany',
     icon: 'gathering'
+  },
+  {
+    link: 'timedFishing',
+    featured: true,
+    label: 'Timed Fishing',
+    icon: 'fishing'
   },
   {
     link: 'sightseeing',
@@ -101,6 +107,12 @@ const links = [
     featured: false,
     label: 'Blue Mage Abilities',
     icon: 'bluemage'
+  },
+  {
+    link: 'weatherPatterns',
+    featured: false,
+    label: 'Weather Patterns',
+    icon: 'weather'
   },
   {
     link: 'news',

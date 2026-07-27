@@ -92,11 +92,45 @@ li {
 .app_container {
     font-size: 14px;
 
+    // Was 12px, which is below the comfortable floor for the dense numeric data
+    // in these tables (timers, coordinates, levels).
     &.mobile {
-        font-size: 12px;
+        font-size: 14px;
 
         main {
             padding: 6px;
+        }
+
+        // 16px specifically on form fields: anything smaller makes iOS Safari
+        // zoom the viewport when the field takes focus.
+        input,
+        select,
+        textarea {
+            font-size: 16px;
+        }
+
+        // Touch targets. The icon buttons stay 26px visually — the hit area is
+        // expanded to 44x44 with a centred pseudo-element, so row layout and
+        // icon size are untouched. Driven by the .mobile class rather than
+        // `@media (pointer: coarse)` to match how the rest of the app handles
+        // responsive behaviour.
+        .trackingTriggerBtn,
+        .toDetailsBtn {
+            &::after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 44px;
+                height: 44px;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        // Pagination was 34x34, below the 44px comfortable minimum.
+        .pagenation_item {
+            min-width: 44px;
+            min-height: 44px;
         }
     }
 }
@@ -112,6 +146,94 @@ main {
     // margin-top), then grows with content. Must be min-height, not height:
     // a fixed height here resolves to 0 and the page content escapes the box.
     min-height: calc(100vh - #{$trackingbarHeight});
+}
+
+// ── Reduced motion ─────────────────────────────────────────────────────────
+// The app runs several always-on looping animations (active-node row pulse,
+// active-timer colour cycle, map icon pulse, the starfield). Switching them off
+// wholesale would be wrong: the pulse IS the "this node is up right now" signal,
+// so each looping indicator gets a static equivalent rather than nothing.
+// Loading spinners are deliberately left turning — a frozen spinner reads as a
+// hung page, which is worse than the motion it avoids.
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+
+    // Static stand-ins for the state the animation used to convey.
+    .nodeIsActive,
+    *[data-rowActive] {
+        background-color: rgba(45, 212, 191, 0.18) !important;
+    }
+
+    *[data-map-icon-active] {
+        opacity: 1 !important;
+        filter: drop-shadow(0 0 4px $teal) brightness(1.3) !important;
+    }
+
+    // Loading feedback keeps moving.
+    [class*="spinner"],
+    [class*="Spinner"] {
+        animation-duration: 0.8s !important;
+        animation-iteration-count: infinite !important;
+    }
+}
+
+// Global focus indicator. Pulled forward from the polish tier because the
+// controls converted from <div> to <button> are only reachable now — without a
+// visible ring a keyboard user can tab through them but never see where they are.
+// :focus-visible so pointer users don't get a ring on every click.
+:focus-visible {
+    outline: 2px solid $teal;
+    outline-offset: 2px;
+    border-radius: 2px;
+}
+
+// Available to screen readers, removed from the visual layout. Used for labels
+// on icon-only controls and for table column headers.
+.visuallyHidden {
+    position: absolute !important;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+// Skip link — first focusable element in the app. Off-screen until focused so
+// keyboard users can jump past the sidebar's 10 links and the tracking bar.
+.skip-link {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 10000;
+    padding: 0.75rem 1.25rem;
+    background-color: $surfaceRaised;
+    color: $fontColor !important;
+    border: 1px solid $teal;
+    border-radius: 0 0 $borderRadius 0;
+    transform: translateY(-120%);
+    transition: transform 0.15s ease;
+
+    &:focus-visible,
+    &:focus {
+        transform: translateY(0);
+    }
+}
+
+// `main` takes tabindex="-1" so the skip link can move focus into it; that
+// would otherwise paint a focus ring around the whole page.
+main:focus,
+main:focus-visible {
+    outline: none;
 }
 
 .expColor {
@@ -243,53 +365,6 @@ main {
     &-text {margin-left: 6px}
 }
 
-.overviewListItem {
-    background-color: $listBackgroundColor;
-    border-radius: $borderRadius;
-    cursor: pointer;
-    transition: all .07s linear;
-    margin: 2px auto;
-    padding: 4px;
-    border-left: 4px solid transparent;
-
-    &:hover {
-        background-color: $listBackgroundColorHover;
-    }
-
-    &_header {
-        padding: 5px 0.5rem;
-        display: grid;
-        grid-template-columns: 1.5fr 0.5fr;
-        justify-content: space-between;
-
-        .forceright {
-            justify-self: end;
-            display: flex;
-            align-items: center;
-        }
-    }
-
-    hr {
-        width: 94%;
-        margin: 4px auto;
-    }
-
-    &_body {
-        padding: 5px 0.5rem;
-    }
-
-    &_list {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        justify-content: center;
-
-        li {
-            padding: 3px 2px;
-            text-align: center;
-        }
-    }
-}
-
 .sidebar {
     position: fixed;
     left: 0;
@@ -314,6 +389,16 @@ main {
     }
 
     &_clockdisplay {
+        // Native <button> reset — this is a bare clock readout, not a chrome button.
+        appearance: none;
+        background: none;
+        border: 0;
+        color: inherit;
+        font: inherit;
+        width: 100%;
+        display: block;
+        cursor: pointer;
+
         padding-top: 2rem;
         margin: 10px 0;
 
@@ -404,9 +489,35 @@ main {
         }
     }
 
+    // Tracked nodes used to be `display: none` here, so the bar occupied its
+    // full 70px on a phone while showing nothing but the wordmark — the app's
+    // main retention feature, invisible on its most likely device. They are now
+    // a horizontally scrollable strip instead.
     &.mobile {
+        .trackingbar_header {
+            min-width: auto;
+            flex-shrink: 0;
+
+            .trackingbar_title {
+                font-size: 1.25rem;
+            }
+        }
+
         .trackingbar_items {
-            display: none;
+            display: flex;
+            grid-template-columns: none;
+            overflow-x: auto;
+            overflow-y: hidden;
+            padding-right: 0.5rem;
+            // Momentum scrolling + snap so cards land cleanly.
+            scroll-snap-type: x mandatory;
+            -webkit-overflow-scrolling: touch;
+
+            > * {
+                flex: 0 0 auto;
+                width: 240px;
+                scroll-snap-align: start;
+            }
         }
     }
 
@@ -418,8 +529,11 @@ main {
         justify-content: center;
         transition: all 0.05s ease;
 
-        h1 {
+        // Was an <h1>; demoted to <p> to keep one heading per page. Weight is
+        // set explicitly because <p> does not inherit the bold <h1> default.
+        .trackingbar_title {
             font-size: 2rem;
+            font-weight: 700;
         }
     }
 
@@ -568,7 +682,9 @@ main {
 }
 
 .tug {
-    color: lime;
+    // Was the raw named colour `lime`, the only colour in the app outside the
+    // palette. $green is the established "active / positive" token.
+    color: $green;
     font-weight: 800;
     letter-spacing: 2px;
 }

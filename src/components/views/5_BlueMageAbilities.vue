@@ -19,45 +19,48 @@
         </div>
 
         <!-- Table -->
-        <div :class="['body_content-group rdrTable', windowWidth]">
+        <div
+            :class="['body_content-group rdrTable', windowWidth]"
+            role="table"
+            aria-label="Blue Mage abilities">
 
-            <ul class="rdrTable_header">
-                <li class="rdrTable_row">
-                    <p class="rdrTable_row-name">Name</p>
-                    <p class="rdrTable_row-level">Min Lv</p>
-                    <p class="rdrTable_row-enemy">Enemy/NPC</p>
-                    <p class="rdrTable_row-notes">Notes</p>
-                    <p class="rdrTable_row-area">Location</p>
+            <ul class="rdrTable_header" role="rowgroup">
+                <li class="rdrTable_row" role="row">
+                    <p class="rdrTable_row-name" role="columnheader">Name</p>
+                    <p class="rdrTable_row-level" role="columnheader">Min Lv</p>
+                    <p class="rdrTable_row-enemy" role="columnheader">Enemy/NPC</p>
+                    <p class="rdrTable_row-notes" role="columnheader">Notes</p>
+                    <p class="rdrTable_row-area" role="columnheader">Location</p>
                 </li>
             </ul>
 
             <hr class="rdrTable_split"/>
 
-            <ul class="rdrTable_body">
-                <li v-for="d in appendData" :key="d.ID" class="rdrTable_row">
+            <ul class="rdrTable_body" role="rowgroup">
+                <li v-for="d in appendData" :key="d.ID" class="rdrTable_row" role="row">
 
                     <!-- NAME -->
-                    <div class="rdrTable_row-name">{{ d.name }}</div>
+                    <div class="rdrTable_row-name" role="cell">{{ d.name }}</div>
 
                     <!-- LEVEL -->
-                    <div class="rdrTable_row-level">{{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}</div>
+                    <div class="rdrTable_row-level" role="cell">{{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}</div>
 
                     <!-- ENEMY/NPC -->
-                    <div class="rdrTable_row-enemy">
+                    <div class="rdrTable_row-enemy" role="cell">
                         <template v-for="e in d.npc" :key="e[1]">
                             <p v-if="isVisibleEntry(e[0])">{{ e[2] }}</p>
                         </template>
                     </div>
 
                     <!-- NOTES -->
-                    <div class="rdrTable_row-notes">
+                    <div class="rdrTable_row-notes" role="cell">
                         <template v-for="e in d.notes" :key="e[1]">
                             <p v-if="isVisibleEntry(e[0])">{{ e[2] || '-' }}</p>
                         </template>
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_row-area">
+                    <div class="rdrTable_row-area" role="cell">
                         <template v-for="e in d.location" :key="e[1]">
                             <areaDisplayBM v-if="isVisibleEntry(e[0])" :bmData="e" />
                         </template>

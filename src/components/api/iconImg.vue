@@ -1,12 +1,19 @@
 <template>
-    <img :id="imgID" :class="`ffxiv_icon iconSize`"/>
+    <!-- alt defaults to "" (decorative): these icons almost always sit next to a
+         text label or inside a span that already carries an accessible name, so
+         announcing them again would just be noise. Pass `alt` where the icon is
+         the only thing conveying the meaning. -->
+    <img :id="imgID" :alt="alt" :class="`ffxiv_icon iconSize`" loading="lazy"/>
 </template>
 
 <script lang="ts" setup>
 import { ref, watch, nextTick } from 'vue'
 import axios from 'axios'
 
-const props = defineProps(['name'])
+const props = withDefaults(defineProps<{
+    name?: string
+    alt?: string
+}>(), { alt: '' })
 
 const imgID = ref('img')
 

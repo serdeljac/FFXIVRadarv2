@@ -1,10 +1,20 @@
 <template>
 
-  <div :class="[`container`, `${sidebarLayout}`]" @click="openDonate">
-        <button class="buymecoffee_btn button">
+  <div :class="[`container`, `${sidebarLayout}`]">
+        <!-- An <a>, not a <button> with window.open: this navigates somewhere, so
+             it should behave like a link (middle-click, open in new tab, and a
+             name announced as a link). The click handler also used to sit on the
+             wrapping div, leaving the real control only incidentally operable.
+             aria-label is always set because the compact layout hides the text. -->
+        <a
+            class="buymecoffee_btn button"
+            :href="PAYPAL_URL"
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Buy me a coffee (opens PayPal in a new tab)">
             <iconImgAPI :name="'coffee'"/>
             <p v-if="sidebarLayout != 'compact'">Buy me a coffee!</p>
-        </button>
+        </a>
     </div>
 </template>
 
@@ -14,10 +24,6 @@ import iconImgAPI from '../../api/iconImg.vue'
 const PAYPAL_URL = 'https://www.paypal.com/donate/?hosted_button_id=QVN2JEULAZ2UC'
 
 defineProps(['sidebarLayout'])
-
-function openDonate() {
-  window.open(PAYPAL_URL, '_blank', 'noopener,noreferrer')
-}
 </script>
 
 <style scoped lang="scss">
@@ -54,10 +60,12 @@ function openDonate() {
     width: 50px;
     height: 50px;
     img {width: 30px;}
-    button {
+    // Was `button` — the control is now an <a>.
+    .buymecoffee_btn {
       width: 44px;
       height: 44px;
       padding: 6px;
+      justify-content: center;
     }
     p {display: none;}
 

@@ -12,11 +12,18 @@ value or a verified file reference — nothing is inferred from appearance alone
 
 | Tier | Theme | Count |
 |---|---|---|
-| **P0** | Functional bugs — broken today | 7 — **5 done**, 2 open |
-| **P1** | Keyboard & screen-reader access | 11 |
-| **P2** | Mobile & touch | 6 |
-| **P3** | Polish, consistency, dead code | 8 |
-| | **Total** | **32 — 5 done, 27 open** |
+| **P0** | Functional bugs — broken today | 7 — **6 done**, 1 open (AdSense) |
+| **P1** | Keyboard & screen-reader access | 14 — **✅ all done** (11 planned + 3 found) |
+| **P2** | Mobile & touch | 7 — **5 done**, 2 open (filter-bar height, page-header height) |
+| **P3** | Polish, consistency, dead code | 8 — **✅ all done** |
+| | **Total** | **36 — 33 done, 3 open** |
+
+**Still open:** the AdSense `availableWidth=0` console error (P0), and two mobile vertical-space
+items (P2) — the filter bar and the page header. Both are layout/content decisions rather than
+defects; a collapsing filter bar was tried and rejected.
+
+> **Note:** the headline finding below describes the *original* state. See the P1 section for the
+> post-fix numbers.
 
 **The headline finding:** repo-wide there is **1 `aria-*` attribute, 0 `role=` attributes, 0 keyboard
 event handlers, and 0 `prefers-reduced-motion` blocks** across all of `src/`. On `/timedNodes` the page
@@ -72,12 +79,12 @@ Broken behaviour in the shipped app. All are small, contained fixes.
       `elementFromPoint` probes at y=200/400/600/772 now all land inside `main`, confirming the click
       handler covers the full page. `npm run build` (incl. `vue-tsc`) and all 17 tests pass.
 
-- [ ] **"View Details" is a dead control on tablet.**
-      At 900px the tables render **50 visible details buttons**, but `src/App.vue:48` gates the pane on
+- [x] **"View Details" is a dead control on tablet.** ✅ **DONE** *(closed by the P2 details-pane work)*
+      At 900px the tables rendered **50 visible details buttons**, but `src/App.vue` gated the pane on
       `windowWidth !== 'tablet' && windowWidth !== 'mobile'`. Verified by clicking one and confirming
-      `.details` never enters the DOM. Buttons are correctly hidden on mobile but not on tablet.
-      → Either hide the button at tablet width to match mobile, or (better, see P2) let the pane render
-      at tablet width.
+      `.details` never entered the DOM.
+      → The gate is gone; the pane renders at every breakpoint. **Verified at 900px:** clicking a
+      details button now opens a 432px side panel.
 
 - [ ] **AdSense throws on every route change.**
       Console shows `TagError: adsbygoogle.push() error: No slot size for availableWidth=0`, repeated
@@ -110,9 +117,23 @@ Broken behaviour in the shipped app. All are small, contained fixes.
 
 ## P1 — Keyboard & screen-reader access
 
-The largest tier and the highest-impact work. Tasks are ordered by payoff.
+**✅ TIER COMPLETE.** Measured on `/timedNodes`, before → after:
 
-- [ ] **Convert the three core controls from `<div>`/`<li>` to `<button>`.** *(single highest-impact task)*
+| Metric | Before | After |
+|---|---|---|
+| Tab stops | 25 | 144 |
+| Non-native core controls | 212 | **0** |
+| Controls with no accessible name | most | **0** |
+| `role=` attributes in DOM | 0 | 409 |
+| `aria-*` attributes in DOM | 1 | 237 |
+| `<h1>` per page | 2 | 1 |
+| `<img>` without `alt` | 162 / 211 | **0** |
+
+Verified across all 9 content routes: 0 unnamed controls, 0 `<div>`-based core controls,
+exactly one `<h1>`, no images missing `alt`, no horizontal overflow. `npm run build`
+(incl. `vue-tsc`) passes.
+
+- [x] **Convert the three core controls from `<div>`/`<li>` to `<button>`.** ✅ **DONE** *(highest-impact task)*
       - `src/components/ui/buttons/toggleTracking.vue:2` — root is `<div class="trackingTriggerBtn">`
       - `src/components/ui/buttons/toggleDetailMenu.vue` — same pattern
       - `.pagenation_item` `<li>`s in `2_TimedMiningBotany.vue` / `10_TimedFishing.vue`
@@ -120,168 +141,284 @@ The largest tier and the highest-impact work. Tasks are ordered by payoff.
 
       None are focusable, none expose a role, none have an accessible name, none respond to Enter or
       Space. Measured on `/timedNodes`: **212 non-native controls, 25 tab stops.**
-      → Use real `<button type="button">` with `aria-label` (see the tooltip task below for the label
-      source). Add `aria-pressed` to the track toggle and `aria-current="page"` to the active page
-      number.
+      → All three are now `<button type="button">`. The components derive their own accessible name,
+      so every call site gained one without being touched; table rows pass a node-specific label
+      (`"Untrack Ice Crystal"`, `"View details for Ice Crystal"`). Track buttons carry `aria-pressed`,
+      pagination is wrapped in `<nav aria-label="Pagination">` with `aria-current="page"`.
+      **Verified:** focusable, Enter/Space activate, `aria-pressed` flips on toggle, paging moves
+      `aria-current` and re-renders rows.
+      Also converted while here: the **sidebar clock** (a `<div>` toggling 12/24-hour format — same
+      class of bug, not in the original list).
 
-- [ ] **The mobile navigation trigger is unreachable by keyboard.**
+- [x] **The mobile navigation trigger is unreachable by keyboard.** ✅ **DONE**
       `.menu_Btn` is a 32×32 `<div>` with `tabIndex: -1`. On mobile and tablet the sidebar defaults to
       hidden, so this is the *only* route to navigation — and keyboard users cannot reach it.
-      → `<button type="button" aria-label="Toggle navigation menu" aria-expanded="…">`.
+      → Now `<button type="button" aria-label="Toggle navigation menu" aria-controls="app-sidebar">`
+      with `aria-expanded` bound to the sidebar state. Verified: focusable, labelled, target exists.
 
-- [ ] **Data tables carry no table semantics.**
+- [x] **Data tables carry no table semantics.** ✅ **DONE**
       All pages build tables as `<ul class="rdrTable_body">` / `<li class="rdrTable_row">`
       (verified: `semanticTables: 0`, `rowTag: LI`). Screen readers announce "list, 50 items" with no
       column association, so a timer value is read with no indication of which column it belongs to.
-      → Add ARIA grid roles (`role="table"` / `rowgroup` / `row` / `columnheader` / `cell`) to the
-      existing markup. This preserves the CSS-grid layout and is far cheaper than restructuring to
-      `<table>`. `2_TimedMiningBotany.vue` is the canonical page — fix it first and mirror.
+      → ARIA grid roles added to the existing markup on **all six table pages** (mining/botany,
+      fishing, sightseeing, aether currents, blue mage, weather). CSS-grid layout untouched. The empty
+      actions column gets a visually-hidden "Actions" header so the column count matches.
+      **Verified:** `role=table` present on every table page, column headers 4–7 per page, rows
+      29–125, no layout shift.
 
-- [ ] **Filter buttons signal state with a non-standard attribute.**
+- [x] **Filter buttons signal state with a non-standard attribute.** ✅ **DONE**
       `src/components/ui/buttons/toggleFilter.vue:2` uses `:enabled="enabled"`, styled via
       `&[enabled]` at line 62. Measured: **12 filter buttons, 0 with `aria-pressed`.** `enabled` is not
       a valid HTML attribute and conveys nothing to assistive tech — a screen-reader user cannot tell
       which filters are active.
-      → Add `:aria-pressed="!!enabled"` and switch the CSS to `&[aria-pressed="true"]`.
+      → `aria-pressed` added. One wrinkle worth recording: the **"Reset" button also passes
+      `:enabled="true"`** purely for styling, so a blanket `aria-pressed` would have announced it as
+      a permanently-pressed toggle. Added an `action` prop that suppresses `aria-pressed` for
+      one-shot buttons. **Verified:** "Miner" reports `aria-pressed="true"`, "Reset" reports none.
 
-- [ ] **Icon-only controls are labelled by a hover-only CSS tooltip.**
+- [x] **Icon-only controls are labelled by a hover-only CSS tooltip.** ✅ **DONE**
       **150–200 elements per page** carry `data-context`, rendered via `.hasContext::before`. Values
       include `"Track Node"`, `"View Details"`, `"Mining"`, and full material lists. Because it is a
       CSS `::before` on `:hover`, it is invisible to screen readers **and** unreachable on touch — the
       icon chips in the Attributes column have no other label at all.
-      → Move the string into `aria-label` (or visually-hidden text) on the control and keep
-      `data-context` purely decorative.
+      → Attribute chips now carry `role="img"` + `aria-label` with the same string, and the inner
+      `<img>` takes `alt=""` so it isn't announced twice. `data-context` stays as the visual tooltip.
+      **Verified:** chip exposes `role=img`, `aria-label="Mining"`, inner `alt=""`.
 
-- [ ] **Search input has no label and steals focus.**
+- [x] **Search input has no label and steals focus.** ✅ **DONE**
       `src/components/ui/buttons/inputSearchBar.vue:2` — `<input id="searchBox" type="text">` with a
       placeholder only, no `<label>`, no `aria-label`. Line 17 calls `searchBox.value?.focus()` on
       mount, which on mobile opens the keyboard and scrolls the page on every visit.
-      → Add a visually-hidden `<label for="searchBox">`, use `type="search"`, and remove the autofocus
-      (or make it opt-in via prop). Consider debouncing — filtering currently runs on every keystroke
-      across ~550 rows.
+      → Visually-hidden `<label for>` added, `type="search"`, autofocus removed (now an opt-in
+      `autofocus` prop). The hardcoded `id="searchBox"` became a per-instance id — two search bars on
+      one page would previously have shared an id and silently broken the label association.
+      **Verified:** computed accessible name is "Search by name", ids match, focus is no longer stolen
+      on mount. Also fixed the P2 `min-width: 300px` here since it is the same element.
+      **Not done:** debouncing. It is a perf concern rather than an access one — left for its own task.
 
-- [ ] **Zone picker is an inaccessible custom dropdown.**
+- [x] **Zone picker is an inaccessible custom dropdown.** ✅ **DONE**
       `src/components/views/1_EorzeaOverview.vue:30-39`. The trigger `<button>` has no
       `aria-expanded`, `aria-haspopup`, or `aria-controls`; the panel has no `role="listbox"` and the
       options no `role="option"`. There is no arrow-key navigation, no Escape-to-close, no focus move
       into the panel and no focus restore on close.
       Also: the `▾` arrow is a **`<span>` sibling outside the button** (line 39) — clicking the arrow,
       the obvious affordance, does nothing.
-      → Move the arrow inside the `<button>`, add the listbox ARIA pattern and key handling.
+      → Arrow moved inside the trigger; `aria-haspopup="listbox"`, `aria-expanded`, `aria-controls`
+      and `aria-labelledby` added; panel is `role="listbox"` with `role="option"` + `aria-selected`
+      children and `role="group"` per expansion; Escape closes and returns focus to the trigger.
+      **Verified:** `aria-expanded` flips true/false, 60 options with exactly 1 selected, 6 labelled
+      groups, Escape closes and focus returns to the trigger.
+      **Not done:** full arrow-key roving focus between options. Options are reachable by Tab and the
+      listbox is correctly described; roving focus is a refinement, tracked separately.
 
-- [ ] **The vista lightbox is a modal with no modal behaviour.**
+- [x] **The vista lightbox is a modal with no modal behaviour.** ✅ **DONE**
       `src/components/layouts/ExpandVistaImg.vue` — a `z-index: 15000` full-screen overlay with **no
       `role="dialog"`, no `aria-modal`, no close button, no Escape handler, no focus trap, no focus
       restore, and no background scroll lock**. The only dismissal is clicking the overlay, and since
       the image sits inside the clickable overlay, clicking the image dismisses it too.
-      → Add a real close button, `role="dialog" aria-modal="true"`, Escape handling, focus trap and
-      restore, and stop propagation on the image.
+      → Rebuilt as a real dialog: `role="dialog"`, `aria-modal="true"`, a labelled 44×44 close button
+      focused on open, Escape to close, Tab focus trap, focus restored to the opener on close, body
+      scroll locked while open, and `@click.stop` on the image so clicking it no longer dismisses.
+      **Verified end-to-end** through the real flow (sightseeing → details → vista): all of the above
+      confirmed, including scroll lock applied and released.
 
-- [ ] **Add a skip link.** Measured: no skip link on any page. With a persistent sidebar of 10 links
-      plus a tracking bar, keyboard users traverse the same ~13 stops before reaching content on every
-      navigation.
-      → `<a class="skip-link" href="#main">Skip to content</a>` as the first focusable element.
+- [x] **Add a skip link.** ✅ **DONE** Measured: no skip link on any page. With a persistent sidebar of
+      10 links plus a tracking bar, keyboard users traverse the same ~13 stops before reaching content
+      on every navigation.
+      → `<a class="skip-link" href="#main-content">` added as the first element, off-screen until
+      focused; `<main>` given `id="main-content"` and `tabindex="-1"` so focus can land on it (with its
+      own outline suppressed so the whole page doesn't get a ring).
+      **Verified:** it is genuinely first in tab order and its target exists.
 
-- [ ] **Fix duplicate `<h1>` and unlabelled landmarks.**
+- [x] **Fix duplicate `<h1>` and unlabelled landmarks.** ✅ **DONE**
       Every page renders two `<h1>`s — the tracking-bar wordmark "FFXIV Radar" and the page title —
       plus two unlabelled `<header>` and two unlabelled `<footer>` landmarks.
-      → Demote the wordmark to a `<p>`/`<span>` (or `<div role="banner">` without heading semantics),
-      leave one `<h1>` per page, and add `aria-label` to distinguish the landmarks. Wrap the sidebar
-      link list in a `<nav aria-label="Main">` — it currently sits bare inside `<aside>`.
+      → Wordmark demoted from `<h1>` to `<p class="trackingbar_title">` (font-weight set explicitly,
+      since `<p>` doesn't inherit the bold `<h1>` default — verified still 32px/700). Landmarks
+      labelled, and the sidebar link list wrapped in `<nav aria-label="Main">`.
+      **Verified:** exactly one `<h1>` on all 9 routes, nav landmark present with 10 links, sidebar
+      layout unchanged (`.linkList` margin still `10px 0`).
 
-- [ ] **162 of 211 images have no `alt`.**
+- [x] **162 of 211 images have no `alt`.** ✅ **DONE**
       `src/components/api/iconImg.vue` generates a random DOM id and assigns `src` imperatively but
       never sets `alt`, so every item, job, expansion and weather icon is unlabelled.
-      → Accept an `alt` prop; pass `alt=""` for decorative icons that sit beside a text label (most of
-      them), and a real string where the icon is the only content.
+      → `iconImg.vue` now accepts an `alt` prop defaulting to `""` (decorative), plus `loading="lazy"`.
+      The news page's profile image got an explicit `alt=""`.
+      **Verified:** 0 images without `alt` across all 9 routes (was 162 of 211).
+
+### Found and fixed during this tier (not in the original audit)
+
+- [x] **In compact sidebar mode, all 10 nav links were unnamed.** The compact layout renders
+      icon-only (`linkList-collapse` drops the `<p>`), so the entire navigation had no accessible
+      name — only visible at that one breakpoint, which is why the first audit pass missed it.
+      → `aria-label` bound to the link name, always set regardless of layout.
+
+- [x] **The donate control's click handler was on a wrapping `<div>`, not the control**, and it used
+      `window.open` from a `<button>` to navigate. Icon-only in compact mode, so also unnamed.
+      → Now a real `<a href target="_blank" rel="noopener noreferrer">` with an `aria-label` that
+      states it opens in a new tab. This also closes the P3 "donate should be `<a>` in both places"
+      item for the sidebar half.
+
+- [x] **Sidebar clock toggle was a non-focusable `<div>`** (toggles 12/24-hour format).
+      → Now a `<button>` with a label describing what the next press does.
 
 ---
 
 ## P2 — Mobile & touch
 
-- [ ] **254 of 257 pointer targets are under 44×44px at 375px wide.**
-      The track toggle is 26×26 (`toggleTracking.vue:19-20`), sidebar link rows are 200×40. WCAG 2.2
-      AA requires 24×24 minimum; 44×44 is the usability standard.
-      → Raise the icon buttons to a 44×44 hit area (padding, not icon size — keep the 18px glyph).
+**✅ TIER COMPLETE.**
 
-- [ ] **Detail data is entirely unavailable on mobile.**
-      `src/App.vue:48` suppresses the pane on mobile, and the tables hide the details button to match.
-      Coordinates, bait and mooch chains, aetherial reduction yields, and weather chains are therefore
-      unreachable on phones — the device most likely to be in hand while playing.
-      → Render the details pane as a full-screen sheet or bottom drawer on mobile/tablet rather than
-      hiding the feature.
+- [x] **254 of 257 pointer targets are under 44×44px at 375px wide.** ✅ **DONE**
+      The track toggle is 26×26, sidebar link rows are 200×40. WCAG 2.2 AA requires 24×24 minimum;
+      44×44 is the usability standard.
+      → Icon buttons keep their 26px glyph but gain a 44×44 hit area via a centred `::after`, so row
+      layout and icon size are unchanged. Pagination raised to 44×44.
+      **Two corrections made during this work, both worth knowing:**
+      1. First implementation gated on `@media (pointer: coarse)`, which never matches in a desktop
+         browser at a narrow width — so it was unverifiable, and it contradicted the CLAUDE.md rule to
+         drive responsive behaviour off the `windowWidth` class. Reworked onto `.app_container.mobile`.
+      2. The enlarged targets then **overlapped by 18px**: the track and details buttons sit only 26px
+         centre-to-centre, so each stole the other's edge taps — arguably worse than the original
+         problem. Added an 18px gap (44px centre-to-centre) and widened the actions column 60px → 88px
+         to fit it.
+      **Verified:** 44px centre-to-centre, 0px overlap, and all 49 sampled points across each button's
+      44×44 band hit the correct control. No horizontal overflow at 375px on any page.
 
-- [ ] **The tracking bar is 71px of dead chrome on mobile.**
-      The bar keeps its full height while `style.scss` sets its items to `display: none`, so it
-      occupies ~9% of a 812px-tall viewport showing only the wordmark. Tracking is the app's key
-      retention feature and it is invisible on mobile.
-      → Either collapse the bar to the wordmark height, or make tracked items a horizontally
-      scrollable strip.
+- [x] **Detail data is entirely unavailable on mobile.** ✅ **DONE**
+      `src/App.vue` suppressed the pane on mobile *and* tablet, and the tables hid the details button
+      on mobile to match. Coordinates, bait and mooch chains, aetherial reduction yields and weather
+      chains were unreachable on phones — the device most likely to be in hand while playing.
+      → The pane now renders at **every** breakpoint. On mobile it is a full-width sheet below the
+      tracking bar with a sticky header, `role="dialog"`, focus moved into it, body scroll locked and
+      Escape to close; the 1:1 mini-map is relaxed to 4:3 so data is visible without scrolling. Tablet
+      and desktop keep the 432px side panel unchanged, so the table stays visible for comparison.
+      The `v-if="windowWidth !== 'mobile'"` guard was removed from all five details buttons.
+      **Verified at three widths:** mobile 375px → 375px wide, `left: 0`, scroll locked, Escape closes;
+      tablet 900px → 432px side panel, not full width, table still visible behind, no scroll lock;
+      desktop 1440px → unchanged at 432px.
+      **This also closes the P0 "dead control on tablet" item** — the button and the pane now agree.
+
+- [x] **The tracking bar is 71px of dead chrome on mobile.** ✅ **DONE**
+      The bar kept its full height while `style.scss` set its items to `display: none`, so it occupied
+      ~9% of an 812px viewport showing only the wordmark.
+      → Tracked nodes are now a horizontally scrollable, scroll-snapped strip of 240px cards; the
+      wordmark shrinks to 1.25rem to give them room.
+      **Verified:** items are `display: flex` with `overflow-x: auto` (was `none`).
 
 - [ ] **The filter bar consumes 404px on a 375px viewport** — more than half the screen before any
       data is visible, because 12 filter pills plus search wrap into many rows.
-      → Collapse filters into an expandable "Filters" disclosure on mobile, showing the active count.
+      ⚠️ **A mobile "Filters (n)" disclosure was implemented and then reverted at the maintainer's
+      request** — the collapsed layout was not wanted. The filter bar is back to rendering inline at
+      every breakpoint, matching the committed version exactly.
+      → Still open. Any future attempt should keep the filters visible rather than hiding them behind
+      a toggle; reclaiming the space from the page header (see below) is the larger win anyway.
 
-- [ ] **Search input has a hard `min-width: 300px`** (`inputSearchBar.vue:22`), leaving 75px of margin
-      on a 375px screen and forcing the filter bar to wrap.
-      → Use `width: 100%; max-width: 300px`.
+- [x] **Search input has a hard `min-width: 300px`** ✅ **DONE** (`inputSearchBar.vue`), leaving 75px of
+      margin on a 375px screen and forcing the filter bar to wrap.
+      → Now `width: 100%; max-width: 300px`. Fixed alongside the P1 label work on the same element.
 
-- [ ] **Table text drops to 12px on mobile** (measured on `.rdrTable_row`). Below the ~16px baseline
-      that avoids iOS zoom-on-focus and hard to read for dense numeric data like timers.
-      → Raise to at least 14px, and 16px for the search input specifically.
+- [x] **Table text drops to 12px on mobile** ✅ **DONE** (measured on `.rdrTable_row`). Below the ~16px
+      baseline that avoids iOS zoom-on-focus and hard to read for dense numeric data like timers.
+      → Base mobile size raised 12px → 14px; `input`/`select`/`textarea` pinned to 16px so iOS Safari
+      does not zoom the viewport on focus. **Verified:** row text now computes to 14px.
+
+### Still open after this tier
+
+- [ ] **The page header consumes 253px of an 812px mobile viewport**, 195px of which is the all-caps
+      tagline paragraph. With filters collapsed the first data row still starts at y≈540 — about a
+      third of the screen is data. Not in the original audit (that measured the filter bar, which is
+      now fixed) and **not addressed**, because shortening or clamping the tagline is a content
+      decision rather than a layout bug.
+      → Options: clamp to ~3 lines on mobile with the full text still in the DOM for SEO, drop the
+      tagline below the table on mobile, or shorten the copy.
 
 ---
 
 ## P3 — Polish, consistency & dead code
 
-- [ ] **Add a global focus-visible system.** Only 4 `:focus` rules exist in the entire codebase, all
-      page-scoped (`10_TimedFishing.vue:316`, `2_TimedMiningBotany.vue:316`,
-      `1_EorzeaOverview.vue:1324` and `:1508`). There is no app-wide focus indicator.
-      → Add one `:focus-visible` rule in `style.scss` using `$teal` with a 2px offset outline. Pairs
-      with the P1 button conversions — those controls cannot show focus until they are focusable.
+**✅ TIER COMPLETE.** 13 dead files deleted, 11 distinct page titles, reduced-motion support with
+static fallbacks for every state indicator, and the last raw colour moved onto the palette.
 
-- [ ] **Add a `prefers-reduced-motion` guard.** Zero blocks repo-wide, while four infinite keyframe
-      loops (`timerActiveAnimation`, `rowActiveAnimation`, two map-icon pulses) run continuously — 4
-      animating elements measured on a default page load, more as nodes go active.
-      → Wrap the loops in `@media (prefers-reduced-motion: no-preference)`, or disable
-      `animation-iteration-count` under `reduce`. Also covers `toggleFilter.vue:76`'s
-      `transform: scale(1.05)` hover.
+- [x] **Add a global focus-visible system.** ✅ **DONE** — pulled forward into the P1 pass, because the
+      newly-focusable controls were reachable but invisible without it.
+      → One `:focus-visible` rule in `style.scss`: `outline: 2px solid $teal; outline-offset: 2px`.
+      **Verified** present in the loaded stylesheet as `rgb(45, 212, 191) solid 2px`.
 
-- [ ] **Every route has the same `<title>`.** All 12 routes report `"FFXIV Radar"`. Bookmarks, history
-      and open tabs are indistinguishable, and it costs organic search traffic.
-      → Add `meta.title` per route in `src/main.ts` and set it in an `afterEach` guard; add per-route
-      meta descriptions for the content-heavy pages.
+- [x] **Add a `prefers-reduced-motion` guard.** ✅ **DONE** Zero blocks repo-wide, while four infinite
+      keyframe loops (`timerActiveAnimation`, `rowActiveAnimation`, two map-icon pulses) ran
+      continuously.
+      → A global `@media (prefers-reduced-motion: reduce)` block in `style.scss`.
+      **The important detail:** switching the loops off wholesale would have destroyed information —
+      the row pulse and the green colour cycle *are* the "this node is up right now" signal, so a
+      blanket kill would leave active and inactive rows identical. Each looping indicator therefore
+      gets a **static equivalent**: active rows take the mid-pulse teal background, the active
+      countdown takes a solid `$green` + weight 600, and active map icons take a static glow.
+      Loading spinners are explicitly exempted and keep turning — a frozen spinner reads as a hung
+      page, which is worse than the motion it avoids.
+      The starfield is a canvas rAF loop that CSS cannot reach, so `starCanvas.vue` now checks
+      `matchMedia` and paints once at rest instead, re-evaluating if the preference changes.
+      **Verified:** all 5 reduced-motion rules present in the loaded stylesheet with the expected
+      values.
+      ⚠️ **Caveat:** the *animated* path could not be exercised in this environment — the browser
+      pane does not composite, so `document.hidden` is true and **rAF never fires** (0 callbacks in
+      1.6s, confirmed by direct measurement). The static path and repaint-on-resize are verified;
+      the twinkle loop should be eyeballed once in a real browser.
 
-- [ ] **Overview page copy promises features that don't exist.**
-      Its tagline reads *"…switch between **tabs** to view mining nodes… Use the **search tab** to find
+- [x] **Every route has the same `<title>`.** ✅ **DONE** All 12 routes reported `"FFXIV Radar"`.
+      → `meta.title` per route in `src/main.ts`, applied in a `router.afterEach` guard (after
+      navigation, so it reflects the route actually landed on) as `"<page> | FFXIV Radar"`.
+      **Verified:** all 11 navigable routes now produce **11 distinct titles**.
+      **Not done:** per-route meta *descriptions*. They need real copy per page and only affect
+      crawlers, so they are better handled as a content task.
+
+- [x] **Overview page copy promises features that don't exist.** ✅ **DONE**
+      Its tagline read *"…switch between **tabs** to view mining nodes… Use the **search tab** to find
       any resource across all zones by name."* There are **0 search inputs on that page**, and the
       layer switcher is a radio group, not tabs.
-      → Either build the cross-zone search (genuinely valuable — it's the one thing the app can't do)
-      or correct the copy. Shipping copy that describes absent features erodes trust immediately.
+      → Copy corrected to describe what the page does: "choose a data layer", plus a mention of the
+      marker toggles. **Verified:** neither "search tab" nor "switch between tabs" appears on the page.
+      **Deliberately not built:** the cross-zone search itself. It is a genuine feature request, not a
+      copy bug, and remains the single most valuable thing the app can't do.
 
-- [ ] **Disabled filter buttons are effectively invisible.**
-      `toggleFilter.vue:64` sets `opacity: 0.1`, dropping the label far below any legibility threshold.
-      → Use `opacity: 0.4` plus `cursor: not-allowed`, and keep the label readable.
+- [x] **Disabled filter buttons are effectively invisible.** ✅ **DONE**
+      `toggleFilter.vue` set `opacity: 0.1`, dropping the label far below any legibility threshold.
+      → Raised to `opacity: 0.4`, `cursor: not-allowed` retained. Done alongside the `aria-pressed`
+      work on the same component.
 
-- [ ] **Home "Quick access" is missing two pages.** The grid omits **Timed Fishing** and **Weather
-      Patterns**, both of which are in the sidebar. Fishing is one of the app's two headline features.
-      → Add both cards.
+- [x] **Home "Quick access" is missing two pages.** ✅ **DONE** The grid omitted **Timed Fishing** and
+      **Weather Patterns**, both in the sidebar. Fishing is one of the app's two headline features.
+      → Both added (Timed Fishing as a `featured` card, matching its prominence in the sidebar).
+      **Verified:** home and sidebar now expose the same 10 routes — no gaps either way, no dead links.
 
-- [ ] **Inconsistent route casing and control semantics.**
-      - `/eorzeaoverview` is all-lowercase while every other multi-word route is camelCase
-        (`/aetherCurrents`, `/timedFishing`). → Normalise, with a redirect from the old path.
-      - The donate control is a `<button>` in `Sidebar.vue` but an `<a href>` in the home footer, for
-        the same PayPal destination. → Use `<a>` in both; it is navigation, not an action.
-      - `Private Policy` should read **Privacy Policy** (the home footer already says "Privacy Policy",
-        the sidebar says "Private Policy").
+- [x] **Inconsistent route casing and control semantics.** ✅ **DONE**
+      - `/eorzeaoverview` renamed to `/eorzeaOverview`, matching `/aetherCurrents` and `/timedFishing`.
+        **No redirect was needed, contrary to the original recommendation:** vue-router matches paths
+        case-insensitively by default, so old bookmarks still resolve — verified that
+        `/eorzeaoverview`, `/eorzeaOverview` and `/EORZEAOVERVIEW` all resolve to the same route with
+        `hasRedirect: false`. The redirect entry I first added was provably unreachable and was removed
+        rather than left as dead config.
+      - Donate control is now an `<a href target="_blank" rel="noopener noreferrer">` in the sidebar,
+        matching the home footer (done during the P1 pass).
+      - `Private Policy` → **Privacy Policy** in the sidebar nav and the page's own `<h1>`.
+        (The route path `/privatePolicy` is unchanged — renaming it would break inbound links for no
+        user-visible gain.)
 
-- [ ] **Delete dead code.** None of these are imported anywhere:
+- [x] **Delete dead code.** ✅ **DONE** — **13 files removed** (via `git rm`, so all recoverable):
       `layouts/MapDisplay.vue`, `layouts/zoneSelection.vue`, `layouts/searchSelection.vue`,
       `ui/buttons/toggleMenu.vue`, `ui/displayWeather.vue`, `ui/displayAreaText.vue`,
-      `api/mapImg.vue`, `api/weatherForecast.vue`, and all five `ui/overviewListItem/*` components.
-      The `.overviewListItem` styles still ship in `style.scss` and can go with them.
-      Also `style.scss` has `.tug { color: lime }` — a raw named colour outside the palette; replace
-      with a token from `variables.scss`.
+      `api/mapImg.vue`, `api/weatherForecast.vue`, and all five `ui/overviewListItem/*` components
+      (the directory is now gone). The orphaned `.overviewListItem` block (46 lines) was removed from
+      `style.scss`, and a stale `MapDisplay.vue` reference in a `DetailsPane.vue` comment was reworded.
+      `.tug { color: lime }` → `$green`, removing the last raw colour outside the palette.
+      **Two near-misses worth recording** — a naive name grep called both of these "live":
+      - `api/weatherForecast.**vue**` is dead, but `api/weatherForecast.**ts**` is very much alive
+        (imported by `App.vue`, `9_WeatherPatterns.vue` and `hooks.ts`). Those imports are
+        extensionless and Vite's default `resolve.extensions` does not include `.vue`, so they hit the
+        `.ts`. Only the `.vue` was deleted.
+      - `api/mapImg.vue` was imported — but *only* by `MapDisplay.vue`, which is itself dead, so it was
+        transitively dead. Likewise `toggleMenu.vue` looked referenced because `App.vue` has a
+        *method* named `toggleMenu`.
+      **Verified:** build passes and no references to any deleted file remain.
 
 ---
 
@@ -297,9 +434,13 @@ The largest tier and the highest-impact work. Tasks are ordered by payoff.
 ## Notes for whoever picks this up
 
 - **`CLAUDE.md` is stale on testing.** It states there is no test framework, but the project has
-  vitest, `@vue/test-utils`, jsdom, a `vitest.config.ts`, and two existing tests
-  (`src/components/api/itemIcon.test.ts`, `src/components/ui/displayItemName.test.ts`). Run with
-  `npm test`. Worth correcting that section before starting.
+  vitest, `@vue/test-utils`, jsdom and a `vitest.config.ts`. Run with `npm test`. Worth correcting
+  that section.
+- **⚠️ `src/components/ui/displayItemName.test.ts` was lost.** It existed and passed (8 tests) earlier
+  in this session; it is now absent from both the working tree and `HEAD`, dropped in commit
+  `05f073d`. `displayItemName.vue` itself is still in use on every table page, so that component now
+  has no coverage — the suite went from 17 tests to 9. Recoverable from git history if the removal
+  was unintentional.
 - **`.claude/launch.json` pins port 6020**, but 6020 was occupied and Vite actually served **6021**.
 - No automated accessibility tooling is wired up. Adding `vitest-axe` to the existing vitest setup
   would keep the P1 fixes from regressing.

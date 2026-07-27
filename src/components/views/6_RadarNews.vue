@@ -9,7 +9,8 @@
 
             <div class="bulleton">
                 <div class="bulleton_profileImg">
-                    <img :src="getIconImageURL('profile')"/>
+                    <!-- Decorative: the post's author and heading are already in text. -->
+                    <img :src="getIconImageURL('profile')" alt="" loading="lazy"/>
                 </div>
                 <div class="bulleton_content">
                     <h2>v1.0 - Site has officially been launched!</h2>

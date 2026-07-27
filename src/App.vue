@@ -4,6 +4,7 @@
     <span class="app_loading-text">Loading Eorzea data…</span>
   </div>
   <div v-else :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
+    <a class="skip-link" href="#main-content">Skip to content</a>
     <starCanvas />
 
     <trackingBar
@@ -17,14 +18,16 @@
 
     <buttonMenu
       :class="[`menu_Btn`, { tracking_pos: sidebarLayout === 'hidden-extended' || sidebarLayout === 'mobile-extended' }]"
+      :expanded="sidebarLayout !== 'hidden-extended'"
       @click="toggleMenu" />
 
     <sidebar
+      id="app-sidebar"
       :class="[`sidebar`, sidebarLayout, windowWidth]"
       :sidebarLayout="sidebarLayout"
       :eorzeaClock="eorzeaClock" />
 
-    <main :class="[`main_content`]" @click="toggleForceMenu">
+    <main id="main-content" tabindex="-1" :class="[`main_content`]" @click="toggleForceMenu">
       <promotionBanner />
       <!-- No <Transition> here: wrapping these lazily-imported route components
            in one breaks client-side navigation outright. With mode="out-in" the
@@ -47,18 +50,23 @@
       </router-view>
     </main>
 
+    <!-- Available at every breakpoint. It used to be suppressed on tablet and
+         mobile, which left coordinates, bait chains and reduction yields
+         unreachable on phones — and on tablet the "View details" buttons still
+         rendered, so they were visible controls that did nothing. -->
     <detailspane
-      v-if="openDetailSidebar && windowWidth !== 'tablet' && windowWidth !== 'mobile'"
+      v-if="openDetailSidebar"
       :node="detailsPanel"
+      :windowWidth="windowWidth"
       :ffxivData="ffxivData"
       :timerList="timerList"
       :weatherList="weatherList"
-      @openDetails="openDetails" 
+      @openDetails="openDetails"
       @openVistaImg="openVistaImg"/>
 
-    <vistaLarge 
+    <vistaLarge
       v-if="openVistaImgDisplay"
-      @click="openVistaImg(vistaImg)"
+      @close="openVistaImg(vistaImg)"
       :node="vistaImg"/>
 
   </div>

@@ -1,7 +1,10 @@
 <template>
+    <nav aria-label="Main">
     <ul :class="[`linkList`, sidebarLayout]">
         <li v-for="a in link_list" :key="a.id">
-            <router-link :to="`/${a.link}`">
+            <!-- aria-label is always set: in the compact layout the link renders
+                 icon-only, which otherwise leaves all 10 nav items unnamed. -->
+            <router-link :to="`/${a.link}`" :aria-label="a.name">
 
                 <div v-if="sidebarLayout == 'compact'" :class="['linkList-collapse']">
                     <navIcon :name="a.icon"/>
@@ -15,6 +18,7 @@
             </router-link>
         </li>
     </ul>
+    </nav>
 </template>
 
 <script lang="ts" setup>
@@ -27,7 +31,7 @@
             id: 1,
             name: 'Eorzea Overview',
             icon: 'eorzeamap',
-            link: 'eorzeaoverview',
+            link: 'eorzeaOverview',
         },
 
         {
@@ -80,7 +84,7 @@
         },
         {
             id: 10,
-            name: 'Private Policy',
+            name: 'Privacy Policy',
             icon: 'privatepolicy',
             link: 'privatePolicy',
         },

@@ -27,27 +27,44 @@
             <div class="eorzeaOverview_contentArea">
 
                 
-                <div class="zoneSelect" ref="zoneSelectEl">
-                    <span class="eorzeaOverview_filterLabel">Zone select</span>
+                <div class="zoneSelect" ref="zoneSelectEl" @keydown.esc="closeZoneList">
+                    <span id="zoneSelectLabel" class="eorzeaOverview_filterLabel">Zone select</span>
+                    <!-- The ▾ used to be a sibling <span> outside the button, so
+                         clicking the arrow — the obvious affordance — did nothing.
+                         It now lives inside the trigger. -->
                     <button
                         type="button"
+                        ref="zoneTriggerEl"
                         class="eorzeaOverview_select eorzeaOverview_select--trigger"
+                        aria-haspopup="listbox"
+                        aria-controls="zoneSelectList"
+                        aria-labelledby="zoneSelectLabel"
+                        :aria-expanded="isZoneListOpen ? 'true' : 'false'"
                         @click="isZoneListOpen = !isZoneListOpen">
-                        
-                        <span>{{ selectedZone }}</span>
-                    </button>
-                    <span class="eorzeaOverview_arrow">▾</span>
 
-                    <ul v-if="isZoneListOpen" class="eorzeaOverview_zoneList">
+                        <span>{{ selectedZone }}</span>
+                        <span class="eorzeaOverview_arrow" aria-hidden="true">▾</span>
+                    </button>
+
+                    <ul
+                        v-if="isZoneListOpen"
+                        id="zoneSelectList"
+                        class="eorzeaOverview_zoneList"
+                        role="listbox"
+                        aria-labelledby="zoneSelectLabel">
                         <li
                             v-for="group in zoneGroups"
                             :key="group.expansion"
+                            role="group"
+                            :aria-label="group.expansion"
                             class="eorzeaOverview_zoneGroup">
                             <span class="eorzeaOverview_zoneGroupLabel">{{ group.expansion }}</span>
                             <button
                                 v-for="zone in group.zones"
                                 :key="zone.zone"
                                 type="button"
+                                role="option"
+                                :aria-selected="zone.zone === selectedZone"
                                 class="eorzeaOverview_zoneOption"
                                 :class="{ 'eorzeaOverview_zoneOption--active': zone.zone === selectedZone }"
                                 @click="selectZone(zone.zone)">
@@ -98,262 +115,272 @@
                 </div>
 
                 
-                <div v-if="selectedData == 'sightseeing'" class="leafletMap_table sightseeing">
-                    <table v-if="tableRows.length">
-                        <thead>
-                            <tr>
-                                <th>Vista</th>
-                                <th>Flying Req?</th>
-                                <th>Emote</th>
-                                <th>Timer</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                                <tr
-                                    v-for="(row, ri) in tableRows"
-                                    :key="ri"
-                                    :class="[`leafletMap_tableRow`, 
-                                    { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
-                                    :data-rowActive="isNodeActive(row, timerList, weatherList)"
-                                    @click="selectTableRow(row)">
-                                    <td class="verticalCenter">
-                                        <toggleDetailsBtn
-                                            v-if="windowWidth !== 'mobile'"
-                                            class="hasContext"
-                                            data-context="View Details"
-                                            @click="$emit('openDetails', detailRowSelected)"/>
-                                        <displayItemName :item="row.name" :node="row" class="verticalCenter-text"/>
-                                    </td>
-                                    <td>{{ row.mount ? 'YES' : 'NO' }}</td>
-                                    <td>{{ row.emote }}</td>
-                                    <td class="leafletMap_tableRow--buttons">
-                                        <toggleTrackingBtn
-                                            v-if="row?.time"
-                                            :trackingEnabled="row?.tracked"
-                                            class="hasContext"
-                                            data-context="Track Node"
-                                            @click="$emit('changeTracked', row)"
-                                            />
-                                        
-                                        <span>
-                                            {{ EorzeaMap(row, timerList, weatherList) }}
-                                        </span>
-                                        
-                                    </td>
-                                </tr>
-                        </tbody>
-                    </table>
+                <div
+                    v-if="selectedData == 'sightseeing' && tableRows.length"
+                    :class="['rdrTable rdrTable--sightseeing', windowWidth]">
+
+                    <ul class="rdrTable_header">
+                        <li class="rdrTable_row">
+                            <p class="rdrTable_row-name">Vista</p>
+                            <p class="rdrTable_row-flying">Flying</p>
+                            <p class="rdrTable_row-emote">Emote</p>
+                            <p class="rdrTable_row-time">Timer</p>
+                        </li>
+                    </ul>
+
+                    <hr class="rdrTable_split" />
+
+                    <ul class="rdrTable_body">
+                        <li
+                            v-for="(row, ri) in tableRows"
+                            :key="ri"
+                            :class="['rdrTable_row', { 'rdrTable_row--selected': row.node_code === selectedCode }]"
+                            :data-rowActive="isNodeActive(row, timerList, weatherList)"
+                            @click="selectTableRow(row)">
+
+                            <div class="rdrTable_row-name">
+                                <toggleDetailsBtn
+                                    :label="`View details for ${row.name}`"
+                                    class="hasContext"
+                                    data-context="View Details"
+                                    @click.stop="$emit('openDetails', row)"/>
+                                <displayItemName :item="row.name" :node="row"/>
+                            </div>
+
+                            <div class="rdrTable_row-flying">{{ row.mount ? 'YES' : 'NO' }}</div>
+                            <div class="rdrTable_row-emote">{{ row.emote }}</div>
+
+                            <div class="rdrTable_row-time">
+                                <toggleTrackingBtn
+                                    v-if="row?.time"
+                                    :trackingEnabled="row?.tracked"
+                                    class="hasContext"
+                                    data-context="Track Node"
+                                    @click.stop="$emit('changeTracked', row)" />
+                                <span>{{ EorzeaMap(row, timerList, weatherList) }}</span>
+                            </div>
+                        </li>
+                    </ul>
                 </div>
 
                 
-                <div v-if="selectedData == 'mining' || selectedData == 'botany'" class="leafletMap_table miningAndBotany">
+                <div v-if="selectedData == 'mining' || selectedData == 'botany'" class="rdrTableGroups">
 
                     <template v-for="(group, gi) in tableRows" :key="gi">
-                        <table v-if="isGathering && group._items.length" class="leafletMap_nodeTable">
-                            <thead>
-                                <tr>
-                                    <th>Item</th>
-                                    <th>Usage</th>
-                                    <th class="leafletMap_cellTimer">Timer</th>
-                                </tr>
-                            </thead>
-                            <tbody
-                                :class="{
-                                    'leafletMap_nodeTableBody--active': group.node_code === selectedCode,
-                                }"
-                                @click="selectTableRow(group)"
-                                @mouseenter="hoveredNodeCode = group.node_code"
-                                @mouseleave="hoveredNodeCode = null">
-                                <tr
-                                    v-for="(it, ii) in group._items"
-                                    :key="it.ID"
-                                    class="leafletMap_tableRow"
-                                    :class="{
-                                        'leafletMap_groupStart': ii === 0,
-                                    }">
+                        <!-- One card per gathering node. The timer belongs to the node
+                             rather than any single item, so it sits in the group's
+                             header strip instead of a rowspanned cell. -->
+                        <div
+                            v-if="isGathering && group._items.length"
+                            :class="['rdrTable rdrTable--gathering', windowWidth,
+                                     { 'rdrTable--selected': group.node_code === selectedCode }]"
+                            @click="selectTableRow(group)"
+                            @mouseenter="hoveredNodeCode = group.node_code"
+                            @mouseleave="hoveredNodeCode = null">
 
-                                    <td class="leafletMap_cellItem">
-                                        <displayItemName :item="it.name" :node="it" class="verticalCenter-text"/>
-                                    </td>
-
-                                    <td class="leafletMap_cellTrack">
-                                            <span class="hasContext" :data-context="capitalize(it.job_sub)">
-                                                <iconImgAPI :name="it.job_sub"/>
-                                            </span>
-
-                                            <span v-if="it.usage" class="hasContext" :data-context="fetchUsageAttrName(it)">
-                                                <iconImgAPI :name="fetchUsageImgName(it)"/>
-                                            </span>
-
-                                            <span v-if="it.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${it.tomb}`">
-                                                <iconImgAPI :name="'folklore'"/>
-                                            </span>
-                                    </td>
-
-                                    <td
-                                        v-if="ii === 0"
-                                        :rowspan="group._items.length"
-                                        class="leafletMap_cellTimer">
+                            <ul class="rdrTable_header">
+                                <li class="rdrTable_row">
+                                    <p class="rdrTable_row-name">Item</p>
+                                    <p class="rdrTable_row-attributes">Usage</p>
+                                    <p class="rdrTable_row-time">
                                         <toggleTrackingBtn
                                             v-if="group.time"
-                                            :trackingEnabled="it.tracked"
-                                            @click.stop="$emit('changeTracked', it)" />
-                                        <timeDisplay v-if="group.time" :node="it" />
+                                            :trackingEnabled="group._items[0].tracked"
+                                            class="hasContext"
+                                            data-context="Track Node"
+                                            @click.stop="$emit('changeTracked', group._items[0])" />
+                                        <displayTime v-if="group.time" :node="group._items[0]" />
                                         <span v-else>Any Time</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </p>
+                                </li>
+                            </ul>
+
+                            <hr class="rdrTable_split" />
+
+                            <ul class="rdrTable_body">
+                                <li v-for="it in group._items" :key="it.ID" class="rdrTable_row">
+
+                                    <div class="rdrTable_row-name">
+                                        <displayItemName :item="it.name" :node="it"/>
+                                    </div>
+
+                                    <div class="rdrTable_row-attributes">
+                                        <span class="hasContext" :data-context="capitalize(it.job_sub)">
+                                            <iconImgAPI :name="it.job_sub"/>
+                                        </span>
+
+                                        <span v-if="it.usage" class="hasContext" :data-context="fetchUsageAttrName(it)">
+                                            <iconImgAPI :name="fetchUsageImgName(it)"/>
+                                        </span>
+
+                                        <span v-if="it.node_name === 'Legendary'" class="hasContext" :data-context="`Requires ${it.tomb}`">
+                                            <iconImgAPI :name="'folklore'"/>
+                                        </span>
+                                    </div>
+
+                                    <div class="rdrTable_row-time"></div>
+                                </li>
+                            </ul>
+                        </div>
                     </template>
 
                 </div>
 
                 
-                <div v-if="selectedData == 'fishing'" class="leafletMap_table fishing">
-                    <table v-if="tableRows.length">
-                        <thead>
-                            <tr>
-                                <th>Spot</th>
-                                <th>Lv</th>
-                                <th>Rare</th>
-                                <th>Fish</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
+                <template v-if="selectedData == 'fishing'">
+                    <div v-if="tableRows.length" :class="['rdrTable rdrTable--fishingSpots', windowWidth]">
+                        <ul class="rdrTable_header">
+                            <li class="rdrTable_row">
+                                <p class="rdrTable_row-name">Spot</p>
+                                <p class="rdrTable_row-level">Lv</p>
+                                <p class="rdrTable_row-rare">Rare</p>
+                                <p class="rdrTable_row-fish">Fish</p>
+                            </li>
+                        </ul>
+
+                        <hr class="rdrTable_split" />
+
+                        <ul class="rdrTable_body">
+                            <li
                                 v-for="(row, ri) in tableRows"
                                 :key="ri"
-                                class="leafletMap_tableRow"
-                                :class="{ 'leafletMap_tableRow--active': row.node_code === selectedCode }"
+                                :class="['rdrTable_row', { 'rdrTable_row--selected': row.node_code === selectedCode }]"
                                 @click="selectTableRow(row)">
-                                <td class="leafletMap_cellItem">{{ row.name }}</td>
-                                <td>{{ row.level || '-' }}</td>
-                                <td>{{ row.rare || '-' }}</td>
-                                <td>{{ row.fish || '-' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                    
-                    <div v-if="detailRowSelected && fishDetails.length" class="leafletMap_table fishing">
-                        <table>
-                            <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>Fish</th>
-                                    <th>Actions</th>
-                                    <th>Timer</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="fish in fishDetails" :key="fish.id" class="leafletMap_tableRow">
-                                    <td>
-                                        <toggleDetailsBtn
-                                            v-if="windowWidth !== 'mobile'"
-                                            class="hasContext"
-                                            data-context="View Details"
-                                            @click="$emit('openDetails', fish)"/>
-                                    </td>
-                                    <td class="leafletMap_cellItem">
-                                        <displayItemName :item="fish.name" :node="fish" class="verticalCenter-text"/>
-                                        <ul class="lowerlist">
-                                            <li v-if="fish.bait != 'mooch'">
-                                                <span>Bait: {{ fish.bait }}</span>
-                                            </li>
-                                            <li v-else>
-                                                <ul>
-                                                    <li>Mooch: {{ fish.mooch_name1 }}</li>
-                                                    <li v-if="fish.mooch_name2">Mooch: {{ fish.mooch_name2 }}</li>
-                                                    <li v-if="fish.mooch_name3">Mooch: {{ fish.mooch_name3 }}</li>
-                                                </ul>
-                                            </li>
-                                        </ul>
-                                    </td>
-                                    <td class="leafletMap_cellItem">
-                                        <div>Action: {{ fish.hookset }}</div>
-                                        <div>Tug: <span class="tug">{{ formatTug(fish.tug) }}</span></div>
-                                    </td>
-                                    <td class="leafletMap_cellTimer">
-                                        <toggleTrackingBtn
-                                            v-if="fish.time"
-                                            :trackingEnabled="fish.tracked"
-                                            @click.stop="$emit('changeTracked', fish)" />
-                                        <timeDisplay v-if="fish.time" :node="fish" />
-                                        <span v-else>Any Time</span>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                <div class="rdrTable_row-name">{{ row.name }}</div>
+                                <div class="rdrTable_row-level">{{ row.level || '—' }}</div>
+                                <div class="rdrTable_row-rare">{{ row.rare || '—' }}</div>
+                                <div class="rdrTable_row-fish">{{ row.fish || '—' }}</div>
+                            </li>
+                        </ul>
                     </div>
-                </div>
 
-                
-                <div v-if="selectedData == 'fates'" class="leafletMap_table fates">
-                    <table v-if="tableRows.length">
-                        <thead>
-                            <tr>
-                                <th>FATE</th>
-                                <th>Type</th>
-                                <th>EXP</th>
-                                <th>Gil</th>
-                                <th v-if="tableRows[0].seals">Seals</th>
-                                <th v-else-if="tableRows[0].gemstones">Gems</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(row, ri) in tableRows"
-                                :key="ri"
-                                :class="[`leafletMap_tableRow`,
-                                { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
-                                @click="selectTableRow(row)">
-                                <td class="verticalCenter">
+                    <div
+                        v-if="detailRowSelected && fishDetails.length"
+                        :class="['rdrTable rdrTable--fishDetail', windowWidth]">
+                        <ul class="rdrTable_header">
+                            <li class="rdrTable_row">
+                                <p class="rdrTable_row-tracking"></p>
+                                <p class="rdrTable_row-name">Fish</p>
+                                <p class="rdrTable_row-actions">Actions</p>
+                                <p class="rdrTable_row-time">Timer</p>
+                            </li>
+                        </ul>
+
+                        <hr class="rdrTable_split" />
+
+                        <ul class="rdrTable_body">
+                            <li v-for="fish in fishDetails" :key="fish.id" class="rdrTable_row">
+                                <div class="rdrTable_row-tracking">
                                     <toggleDetailsBtn
-                                            v-if="windowWidth !== 'mobile'"
-                                            class="hasContext"
-                                            data-context="View Details"
-                                            @click="$emit('openDetails', row)"/>
-                                    <span class="verticalCenter-text">{{ `${row.name} - Lv.${row.level}` }}</span>
-                                </td>
-                                <td>{{ row.job_sub }}</td>
-                                <td>{{ row.exp }}</td>
-                                <td>{{ row.gil }}</td>
-                                <td v-if="row.seals">{{ row.seals }}</td>
-                                <td v-else-if="row.gemstones">{{ row.gemstones }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                                        :label="`View details for ${fish.name}`"
+                                        class="hasContext"
+                                        data-context="View Details"
+                                        @click="$emit('openDetails', fish)"/>
+                                </div>
+
+                                <div class="rdrTable_row-name">
+                                    <displayItemName :item="fish.name" :node="fish"/>
+                                    <ul class="rdrTable_subList">
+                                        <li v-if="fish.bait != 'mooch'">Bait: {{ fish.bait }}</li>
+                                        <template v-else>
+                                            <li>Mooch: {{ fish.mooch_name1 }}</li>
+                                            <li v-if="fish.mooch_name2">Mooch: {{ fish.mooch_name2 }}</li>
+                                            <li v-if="fish.mooch_name3">Mooch: {{ fish.mooch_name3 }}</li>
+                                        </template>
+                                    </ul>
+                                </div>
+
+                                <div class="rdrTable_row-actions">
+                                    <span>{{ fish.hookset }}</span>
+                                    <span class="tug">{{ formatTug(fish.tug) }}</span>
+                                </div>
+
+                                <div class="rdrTable_row-time">
+                                    <toggleTrackingBtn
+                                        v-if="fish.time"
+                                        :trackingEnabled="fish.tracked"
+                                        class="hasContext"
+                                        data-context="Track Node"
+                                        @click.stop="$emit('changeTracked', fish)" />
+                                    <displayTime v-if="fish.time" :node="fish" />
+                                    <span v-else>Any Time</span>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </template>
 
                 
-                <div v-if="selectedData == 'eliteHunts'" class="leafletMap_table eliteHunts">
-                    <table v-if="tableRows.length">
-                        <thead>
-                            <tr>
-                                <th>Mark</th>
-                                <th>Rank</th>
-                                <th>Respawn</th>
-                                <th>Trigger?</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr
-                                v-for="(row, ri) in tableRows"
-                                :key="ri"
-                                :class="[`leafletMap_tableRow`,
-                                { 'leafletMap_tableRow--active': row.node_code === selectedCode }]"
-                                @click="selectTableRow(row)">
-                                <td >
-                                    <div class="verticalCenter">
-                                        {{ `${row.name} - Lv.${row.level}` }}
-                                    </div>
-                                </td>
-                                <td>{{ row.rank }}</td>
-                                <td>{{ row.respawn }}</td>
-                                <td class="largenotes">{{ row.trigger ? row.trigger : 'none' }}</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div
+                    v-if="selectedData == 'fates' && tableRows.length"
+                    :class="['rdrTable rdrTable--fates', windowWidth,
+                             { 'rdrTable--hasReward': tableRows[0].seals || tableRows[0].gemstones }]">
+
+                    <ul class="rdrTable_header">
+                        <li class="rdrTable_row">
+                            <p class="rdrTable_row-name">FATE</p>
+                            <p class="rdrTable_row-type">Type</p>
+                            <p class="rdrTable_row-exp">EXP</p>
+                            <p class="rdrTable_row-gil">Gil</p>
+                            <p v-if="tableRows[0].seals" class="rdrTable_row-reward">Seals</p>
+                            <p v-else-if="tableRows[0].gemstones" class="rdrTable_row-reward">Gems</p>
+                        </li>
+                    </ul>
+
+                    <hr class="rdrTable_split" />
+
+                    <ul class="rdrTable_body">
+                        <li
+                            v-for="(row, ri) in tableRows"
+                            :key="ri"
+                            :class="['rdrTable_row', { 'rdrTable_row--selected': row.node_code === selectedCode }]"
+                            @click="selectTableRow(row)">
+
+                            <div class="rdrTable_row-name">
+                                <toggleDetailsBtn
+                                    :label="`View details for ${row.name}`"
+                                    class="hasContext"
+                                    data-context="View Details"
+                                    @click.stop="$emit('openDetails', row)"/>
+                                <span>{{ `${row.name} - Lv.${row.level}` }}</span>
+                            </div>
+
+                            <div class="rdrTable_row-type">{{ row.job_sub }}</div>
+                            <div class="rdrTable_row-exp">{{ row.exp }}</div>
+                            <div class="rdrTable_row-gil">{{ row.gil }}</div>
+                            <div v-if="row.seals" class="rdrTable_row-reward">{{ row.seals }}</div>
+                            <div v-else-if="row.gemstones" class="rdrTable_row-reward">{{ row.gemstones }}</div>
+                        </li>
+                    </ul>
+                </div>
+
+                <div
+                    v-if="selectedData == 'eliteHunts' && tableRows.length"
+                    :class="['rdrTable rdrTable--hunts', windowWidth]">
+
+                    <ul class="rdrTable_header">
+                        <li class="rdrTable_row">
+                            <p class="rdrTable_row-name">Mark</p>
+                            <p class="rdrTable_row-rank">Rank</p>
+                            <p class="rdrTable_row-respawn">Respawn</p>
+                            <p class="rdrTable_row-trigger">Trigger</p>
+                        </li>
+                    </ul>
+
+                    <hr class="rdrTable_split" />
+
+                    <ul class="rdrTable_body">
+                        <li
+                            v-for="(row, ri) in tableRows"
+                            :key="ri"
+                            :class="['rdrTable_row', { 'rdrTable_row--selected': row.node_code === selectedCode }]"
+                            @click="selectTableRow(row)">
+                            <div class="rdrTable_row-name">{{ `${row.name} - Lv.${row.level}` }}</div>
+                            <div class="rdrTable_row-rank">{{ row.rank }}</div>
+                            <div class="rdrTable_row-respawn">{{ row.respawn }}</div>
+                            <div class="rdrTable_row-trigger">{{ row.trigger ? row.trigger : 'none' }}</div>
+                        </li>
+                    </ul>
                 </div>
             </div>
 
@@ -368,12 +395,15 @@ import 'leaflet/dist/leaflet.css'
 import PageHeader from '../ui/displayPageHeader.vue'
 import toggleTrackingBtn from '../ui/buttons/toggleTracking.vue'
 import toggleDetailsBtn from '../ui/buttons/toggleDetailMenu.vue'
-import timeDisplay from '../ui/displayTime.vue'
+import displayTime from '../ui/displayTime.vue'
 import displayItemName from '../ui/displayItemName.vue'
 import iconImgAPI from '../api/iconImg.vue'
 import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatTug} from '../../hooks/hooks.ts'
 
-const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then switch between tabs to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Use the Search tab to find any resource across all zones by name.'
+// Describes what the page actually does. The previous copy advertised a "Search
+// tab" for finding resources across all zones (there is no search on this page)
+// and called the data-layer radio group "tabs".
+const pageTagLine = 'Browse every zone in Final Fantasy XIV on an interactive map. Select a zone using the zone picker, then choose a data layer to view Mining nodes, Botany nodes, Sightseeing Log vistas, FATE spawn locations, Elite Hunt marks, and Aether Currents — all plotted on the zone map with coordinates. Toggle the map markers to show aetherytes and zone exits alongside them.'
 
 const props = defineProps<{
     ffxivData: any
@@ -432,6 +462,15 @@ const selectedZone = ref(DEFAULT_ZONE)
 const zoneGroups = ref<ZoneGroup[]>([])
 const isZoneListOpen = ref(false)
 const zoneSelectEl = ref<HTMLElement | null>(null)
+const zoneTriggerEl = ref<HTMLButtonElement | null>(null)
+
+// Escape closes the zone list and hands focus back to the trigger, so keyboard
+// users aren't stranded on a control that just disappeared.
+function closeZoneList() {
+    if (!isZoneListOpen.value) return
+    isZoneListOpen.value = false
+    zoneTriggerEl.value?.focus()
+}
 const filters = reactive<Record<IconType, boolean>>({ aetheryte: true, zoneExit: true, misc: false, sightseeing: true, mining: true, botany: true, fishing: true, fates: true, eliteHunts: true })
 const counts = reactive<Record<IconType, number>>({ aetheryte: 0, zoneExit: 0, misc: 0, sightseeing: 0, mining: 0, botany: 0, fishing: 0, fates: 0, eliteHunts: 0 })
 const selectedData = ref<DataType | ''>('')
@@ -1561,158 +1600,165 @@ function clearDetails() {
     word-break: break-word;
 }
 
-.leafletMap_nodeTable {
-        border: 1px solid rgba(45, 212, 191, 0.15);
-}
-
-.leafletMap_nodeTable:not(:last-child) {
-        margin-bottom: 16px;
-}
-
 /* ── Radio (data layer) — round box to distinguish from checkboxes ── */
 .eorzeaOverview_checkbox input[type="radio"] + .eorzeaOverview_checkbox-box {
     border-radius: 50%;
 }
 
-/* ── Zone table for the selected data layer ── */
-.leafletMap_table {
-    width: 100%;
+/* ── Zone tables ──────────────────────────────────────────────────────────
+   Same treatment as 2_TimedMiningBotany.vue: a bordered card, mono uppercase
+   teal headers, a teal hairline split, and grid rows that highlight on hover.
+   Columns are tighter here because these live in the content area beside the
+   map rather than across the full page width. */
+.rdrTable {
     margin-top: 14px;
+    border: 1px solid $buttonBorder;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.02);
+    padding: 8px 12px 12px;
 
-    &.sightseeing, &.fishing, &.fates, &.eliteHunts {
-        tbody tr:hover {
-            background: rgba(45, 212, 191, 0.05);
-        }
-        tbody .leafletMap_tableRow--active{
-            background: rgba(45, 212, 191, 0.18) !important;
-        }
-    }
-
-    &.miningAndBotany {
-        tbody:hover {
-            background: rgba(45, 212, 191, 0.05);
-        }
-        tbody.leafletMap_nodeTableBody--active {
-            background: rgba(45, 212, 191, 0.18);
-        }
-        .leafletMap_cellTimer > div {
-            margin: auto;
-        }
-        .shiftCollect {
-            transform: translate(-8px, -2px)
-        }
-    }
-
-    .leafletMap_cellTimer {
-        max-width: 60px;
-        text-align: center;
-    }
-
-    &.fishing {
-        .leafletMap_cellTimer {
-            & > div {margin: auto;}
-            max-width: 60px;
-            text-align: center;
-        }
-    }
-
-    &.eliteHunts {
-        .largenotes {
-            max-width: 160px;
-        }
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        font-size: 0.82rem;
-        margin-bottom: 10px;
-        border-radius: 8px;
-    }
-
-    thead th {
-        text-align: left;
-        padding: 8px 12px;
-        background: rgba(45, 212, 191, 0.1);
-        color: $teal;
+    &_header .rdrTable_row p {
         font-family: 'Share Tech Mono', monospace;
         font-size: 0.72rem;
+        letter-spacing: 0.08em;
         text-transform: uppercase;
-        letter-spacing: 0.06em;
-        white-space: nowrap;
-        border-bottom: 1px solid $teal;
-    }
-
-    tbody td {
-        padding: 7px 12px;
-        color: #c8d8f0;
-        border-top: 1px solid rgba(45, 212, 191, 0.08);
-        vertical-align: middle;
-    }
-
-    tbody tr {
-        cursor: pointer;
-    }
-
-    /* Mining/Botany tables: highlight entire tbody */
-
-    .leafletMap_table tbody.leafletMap_nodeTableBody--active ~ tbody.leafletMap_nodeTableBody--active td,
-    .leafletMap_table tbody:hover td {
-        background: rgba(45, 212, 191, 0.05);
-    }
-
-    tbody .leafletMap_tableRow--buttons {
+        color: $teal;
         display: flex;
         align-items: center;
-        span {margin-left: 6px;}
+        gap: 6px;
+    }
+
+    &_split {
+        border: none;
+        border-top: 1px solid rgba(45, 212, 191, 0.15);
+        margin: 4px 0 8px;
+    }
+
+    &_body .rdrTable_row {
+        background: rgba(255, 255, 255, 0.02);
+        border: 1px solid transparent;
+        transition: all 0.15s;
+        cursor: pointer;
+        font-size: 0.86rem;
+
+        &:hover {
+            background: rgba(45, 212, 191, 0.05);
+            border-color: rgba(45, 212, 191, 0.15);
+        }
+
+        &--selected {
+            background: rgba(45, 212, 191, 0.18) !important;
+            border-color: rgba(45, 212, 191, 0.4) !important;
+        }
+    }
+
+    // Cells that pair a control with a value.
+    &_row-time,
+    &_row-tracking,
+    &_row-name {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        min-width: 0;
+    }
+
+    &_row-actions {
+        display: flex;
+        flex-direction: column;
+        gap: 2px;
+        min-width: 0;
+        font-size: 0.8rem;
+        color: $dim;
+    }
+
+    &_row-trigger,
+    &_row-fish,
+    &_row-respawn,
+    &_row-type {
+        min-width: 0;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: $dim;
+    }
+
+    &_subList {
+        margin-top: 2px;
+        font-family: 'Share Tech Mono', monospace;
+        font-size: 0.7rem;
+        color: $dim;
+    }
+
+    :deep(.trackingTriggerBtn path),
+    :deep(.toDetailsBtn path) {
+        fill: $dim;
+    }
+    :deep(.trackingTriggerBtn.tracked path) {
+        fill: $teal;
+    }
+    :deep(.trackingTriggerBtn:hover path),
+    :deep(.toDetailsBtn:hover path) {
+        fill: $teal !important;
+    }
+
+    .hasContext::before {
+        background: rgba(11, 18, 32, 0.95);
+        border: 1px solid rgba(45, 212, 191, 0.35);
+        color: #e8f0ff;
+        font-family: 'Rajdhani', sans-serif;
+    }
+
+    /* ── Column layouts ── */
+    &--sightseeing .rdrTable_row  { grid-template-columns: minmax(0, 1fr) 60px 110px 110px; }
+    &--gathering   .rdrTable_row  { grid-template-columns: minmax(0, 1fr) 110px 110px; }
+    &--fishingSpots .rdrTable_row { grid-template-columns: minmax(0, 1.1fr) 44px 74px minmax(0, 1fr); }
+    &--fishDetail  .rdrTable_row  { grid-template-columns: 34px minmax(0, 1fr) 130px 110px; }
+    &--fates       .rdrTable_row  { grid-template-columns: minmax(0, 1fr) 90px 70px 70px; }
+    &--fates.rdrTable--hasReward .rdrTable_row { grid-template-columns: minmax(0, 1fr) 84px 62px 62px 62px; }
+    &--hunts       .rdrTable_row  { grid-template-columns: minmax(0, 1fr) 52px 90px minmax(0, 0.9fr); }
+
+    /* Tablet / mobile — shed the least important columns rather than stacking,
+       matching how the node tables degrade. */
+    &.tablet,
+    &.mobile {
+        // Every column here carries meaning, so tighten the fixed ones and give
+        // the item name whatever is left rather than dropping any.
+        &.rdrTable--gathering .rdrTable_row { grid-template-columns: minmax(0, 1fr) 78px 92px; }
+
+        &.rdrTable--sightseeing .rdrTable_row { grid-template-columns: minmax(0, 1fr) 100px; }
+        &.rdrTable--sightseeing .rdrTable_row-flying,
+        &.rdrTable--sightseeing .rdrTable_row-emote { display: none; }
+
+        &.rdrTable--fishingSpots .rdrTable_row { grid-template-columns: minmax(0, 1fr) 44px; }
+        &.rdrTable--fishingSpots .rdrTable_row-rare,
+        &.rdrTable--fishingSpots .rdrTable_row-fish { display: none; }
+
+        &.rdrTable--fishDetail .rdrTable_row { grid-template-columns: 34px minmax(0, 1fr) 100px; }
+        &.rdrTable--fishDetail .rdrTable_row-actions { display: none; }
+
+        &.rdrTable--fates .rdrTable_row,
+        &.rdrTable--fates.rdrTable--hasReward .rdrTable_row { grid-template-columns: minmax(0, 1fr) 70px; }
+        &.rdrTable--fates .rdrTable_row-exp,
+        &.rdrTable--fates .rdrTable_row-gil,
+        &.rdrTable--fates .rdrTable_row-reward { display: none; }
+
+        &.rdrTable--hunts .rdrTable_row { grid-template-columns: minmax(0, 1fr) 52px; }
+        &.rdrTable--hunts .rdrTable_row-respawn,
+        &.rdrTable--hunts .rdrTable_row-trigger { display: none; }
     }
 }
 
-/* Gathering table cells. Each item is its own row; the timer cell uses rowspan
-   to span the node and is centered. */
-.leafletMap_cellItem div {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-.leafletMap_cellItem ul {
-    margin-top: 4px;
-}
-.leafletMap_itemImg {
-    width: 24px;
-    height: 24px;
-    flex-shrink: 0;
-    filter: drop-shadow(0 0 1px #000);
-}
-.leafletMap_cellTrack {
-    text-align: left;
-}
-.leafletMap_cellTrack > * {
-    display: inline-flex;
-}
-.leafletMap_cellMeta {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: #5a6e90;
-    white-space: nowrap;
-    text-transform: capitalize;
-}
-.leafletMap_cellTimer {
-    text-align: center;
-    vertical-align: middle;
-}
-/* Stronger divider between gathering nodes than between items within a node. */
-.leafletMap_table tbody tr.leafletMap_groupStart td {
-    border-top: 1px solid rgba(45, 212, 191, 0.25);
-}
+/* One card per gathering node; the whole card is the click target. */
+.rdrTableGroups .rdrTable {
+    cursor: pointer;
 
-.leafletMap_tableEmpty {
-    margin-top: 14px;
-    padding: 12px 14px;
-    border-radius: 8px;
-    color: #5a6e90;
-    font-size: 0.85rem;
-    text-align: center;
+    &.rdrTable--selected {
+        border-color: rgba(45, 212, 191, 0.4);
+        background: rgba(45, 212, 191, 0.07);
+    }
+
+    &:hover {
+        border-color: rgba(45, 212, 191, 0.3);
+    }
 }
 
 /* Match Leaflet's controls to the dark teal theme. */

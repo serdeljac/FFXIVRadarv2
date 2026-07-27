@@ -2,9 +2,16 @@
     <div :data-rowActive="getActiveState">
 
         <div class="toprow">
-            <btnTracking :trackingEnabled="node.tracked" remove @click="$emit('changeTracked', node)"/>
+            <btnTracking
+                :trackingEnabled="node.tracked"
+                remove
+                :label="`Remove ${node.name} from tracking`"
+                @click="$emit('changeTracked', node)"/>
             <displayItemName :item="node.name" :node="node" />
-            <btnToggleDetails :direction="'open'" @click="$emit('openDetails', node)"/>
+            <btnToggleDetails
+                :direction="'open'"
+                :label="`View details for ${node.name}`"
+                @click="$emit('openDetails', node)"/>
         </div>
 
         <div class="bottomrow">

@@ -2,7 +2,7 @@
     <div :class="[`policy body_content`, windowWidth]">
 
         <!-- Header -->
-        <PageHeader :title="`FFXIV RADAR Private Policy`" :tagline="pageTagLine" icon="privatepolicy"/>
+        <PageHeader :title="`FFXIV RADAR Privacy Policy`" :tagline="pageTagLine" icon="privatepolicy"/>
 
         <div class="group">
             <h6>Effective Date: May 10, 2026 | Last Updated: July 5, 2026</h6>

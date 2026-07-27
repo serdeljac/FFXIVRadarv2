@@ -34,39 +34,44 @@
         </div>
 
         <!-- Table -->
-        <div :class="['body_content-group rdrTable', windowWidth]">
+        <div
+            :class="['body_content-group rdrTable', windowWidth]"
+            role="table"
+            aria-label="Sightseeing log vistas">
 
-            <ul class="rdrTable_header">
-                <li class="rdrTable_row">
-                    <p class="rdrTable_row-tracking"></p>
-                    <p class="rdrTable_row-no">No</p>
-                    <p class="rdrTable_row-name">Name</p>
-                    <p class="rdrTable_row-time">Time</p>
-                    <p class="rdrTable_row-weather">Weather</p>
-                    <p class="rdrTable_row-emote">Emote</p>
-                    <p class="rdrTable_row-area">Area</p>
+            <ul class="rdrTable_header" role="rowgroup">
+                <li class="rdrTable_row" role="row">
+                    <p class="rdrTable_row-tracking" role="columnheader"><span class="visuallyHidden">Actions</span></p>
+                    <p class="rdrTable_row-no" role="columnheader">No</p>
+                    <p class="rdrTable_row-name" role="columnheader">Name</p>
+                    <p class="rdrTable_row-time" role="columnheader">Time</p>
+                    <p class="rdrTable_row-weather" role="columnheader">Weather</p>
+                    <p class="rdrTable_row-emote" role="columnheader">Emote</p>
+                    <p class="rdrTable_row-area" role="columnheader">Area</p>
                 </li>
             </ul>
 
             <hr class="rdrTable_split" />
 
-            <ul class="rdrTable_body">
+            <ul class="rdrTable_body" role="rowgroup">
                 <li
                     v-for="d in currentVistaNodes"
                     :key="d.ID"
+                    role="row"
                     :class="[`rdrTable_row`, {nodeIsActive: vistaActive(d)}]"
                 >
                     <!-- TRACKER -->
-                    <div class="rdrTable_row-tracking">
+                    <div class="rdrTable_row-tracking" role="cell">
                         <toggleTrackingBtn
                             v-if="d.time"
                             :trackingEnabled="d.tracked"
+                            :label="d.tracked ? `Untrack ${d.name}` : `Track ${d.name}`"
                             class="hasContext"
                             data-context="Track Node"
                             @click="$emit('changeTracked', d)"
                         />
                         <toggleDetailsBtn
-                            v-if="windowWidth !== 'mobile'"
+                            :label="`View details for ${d.name}`"
                             class="hasContext"
                             data-context="View Details"
                             @click="$emit('openDetails', d)"
@@ -74,34 +79,34 @@
                     </div>
 
                     <!-- NO -->
-                    <div class="rdrTable_row-no">
+                    <div class="rdrTable_row-no" role="cell">
                         <p>{{ d.no }}</p>
                     </div>
 
                     <!-- NAME -->
-                    <div class="rdrTable_row-name">
+                    <div class="rdrTable_row-name" role="cell">
                         <displayItemName :item="d.name" :node="d"/>
                     </div>
 
                     <!-- TIMER -->
-                    <div class="rdrTable_row-time">
+                    <div class="rdrTable_row-time" role="cell">
                         <displayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
-                    <div class="rdrTable_row-weather">
+                    <div class="rdrTable_row-weather" role="cell">
                         <p>{{ d.weather1 ? d.weather1 : 'Any Weather' }}</p>
                         <p v-if="d.weather2">{{ d.weather2 }}</p>
                     </div>
 
                     <!-- EMOTE -->
-                    <div class="rdrTable_row-emote">
+                    <div class="rdrTable_row-emote" role="cell">
                         <iconImgAPI :name="d.emote.toLowerCase()"/>
                         <p>{{ d.emote }}</p>
                     </div>
 
                     <!-- AREA -->
-                    <div class="rdrTable_row-area">
+                    <div class="rdrTable_row-area" role="cell">
                         <areaDisplay :node="d" />
                     </div>
                 </li>
@@ -331,8 +336,14 @@ initFilters()
                 display: none;
             }
 
+            // 88px so the two 44x44 touch targets fit side by side without
+            // their hit areas overlapping — see 2_TimedMiningBotany.vue.
             .rdrTable_row {
-                grid-template-columns: 60px 100px auto;
+                grid-template-columns: 88px 100px auto;
+            }
+
+            .rdrTable_row-tracking {
+                gap: 18px;
             }
 
             .rdrTable_row-no {

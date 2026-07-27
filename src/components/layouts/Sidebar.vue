@@ -1,9 +1,13 @@
 <template>
-    <aside>
+    <aside aria-label="Sidebar">
         <!-- Clock Display -->
-        <div 
+        <!-- <button>, not a <div>: this toggles the 12/24-hour format, so it has
+             to be reachable and operable from the keyboard like any other control. -->
+        <button
+            type="button"
             v-if="sidebarLayout == 'compact'"
-            :class="[`sidebar_clockdisplay collapsed`]" 
+            :class="[`sidebar_clockdisplay collapsed`]"
+            :aria-label="clockToggleLabel"
             @click="clockIs24Format = !clockIs24Format">
             <h2 v-if="clockIs24Format">
                 {{ eorzeaClock.display24Hr }} <br/>
@@ -14,11 +18,13 @@
                 {{ clockMinute }} <br />
                 {{ eorzeaClock.display24Hr > 12 ? 'PM' : 'AM' }}
             </h2>
-        </div>
+        </button>
 
-        <div 
+        <button
+            type="button"
             v-else
-            :class="[`sidebar_clockdisplay extended`]" 
+            :class="[`sidebar_clockdisplay extended`]"
+            :aria-label="clockToggleLabel"
             @click="clockIs24Format = !clockIs24Format">
             <p>Eorzea Clock:</p>
             <h2 v-if="clockIs24Format">
@@ -27,7 +33,7 @@
             <h2 v-else>
                 {{ `${eorzeaClock.display12Hr}:${clockMinute} ${eorzeaClock.display24Hr > 12 ? 'PM' : 'AM'}` }}
             </h2>
-        </div>
+        </button>
 
         <!-- List of Links -->
         <sidebarLinks :sidebarLayout="sidebarLayout"/>
@@ -52,4 +58,8 @@ const clockIs24Format = ref(true)
 
 const clockMinute = computed(() => padNumber(props.eorzeaClock.displayMin))
 const currentYear = new Date().getFullYear()
+
+const clockToggleLabel = computed(
+    () => `Eorzea clock, switch to ${clockIs24Format.value ? '12' : '24'}-hour format`
+)
 </script>
