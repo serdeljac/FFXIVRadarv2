@@ -29,11 +29,6 @@
 
     <main id="main-content" tabindex="-1" :class="[`main_content`]" @click="toggleForceMenu">
       <promotionBanner />
-      <!-- No <Transition> here: wrapping these lazily-imported route components
-           in one breaks client-side navigation outright. With mode="out-in" the
-           view freezes on the first page loaded (URL changes, component never
-           swaps); without a mode, leaving pages never unmount and stack up. See
-           the .fade rules below, kept for a future CSS-only re-introduction. -->
       <router-view v-slot="{ Component }">
         <component
           :is="Component"
@@ -50,10 +45,6 @@
       </router-view>
     </main>
 
-    <!-- Available at every breakpoint. It used to be suppressed on tablet and
-         mobile, which left coordinates, bait chains and reduction yields
-         unreachable on phones — and on tablet the "View details" buttons still
-         rendered, so they were visible controls that did nothing. -->
     <detailspane
       v-if="openDetailSidebar"
       :node="detailsPanel"
@@ -74,19 +65,21 @@
 
 <script lang="ts">
 import EorzeaTime from 'eorzea-time';
-import { resolveWeather } from './components/api/weatherForecast';
+import { resolveWeather } from './modules/weatherForecast.ts';
 import { registerNodeTimeSources } from './hooks/hooks.ts';
 import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
 
-import promotionBanner from './components/layouts/PromotionBanner.vue';
-import sidebar from './components/layouts/Sidebar.vue';
-import trackingBar from './components/layouts/TrackingBar.vue';
-import buttonMenu from './components/ui/buttons/toggleSidebarMenu.vue';
-import detailspane from './components/layouts/DetailsPane.vue';
-import vistaLarge from './components/layouts/ExpandVistaImg.vue'
-import starCanvas from './components/ui/starCanvas.vue'
+import sidebar from './layouts/sidebar/Sidebar.vue';
+
+import promotionBanner from './components/PromotionBanner.vue';
+
+import trackingBar from './layouts/TrackingBar.vue';
+import buttonMenu from './components/buttons/toggleSidebarMenu.vue';
+import detailspane from './layouts/DetailsPane.vue';
+import vistaLarge from './components/ExpandVistaImg.vue'
+import starCanvas from './components/display/starCanvas.vue'
 
 // Gold Saucer runs on a 20-real-minute cycle, active for the first 10 minutes.
 const GS_CYCLE = 1200;

@@ -56,7 +56,7 @@ Broken behaviour in the shipped app. All are small, contained fixes.
       → Changed to `/timedNodes`. Verified: clicking the button lands on `/timedNodes` with 50 rows.
 
 - [x] **Home page "Timed Mining / Botany" card is dead.** ✅ **DONE**
-      `src/components/views/0_Home.vue:82` — `link: 'timedMiningBotany'`. Same wrong route, on the
+      `src/components/router/Home.vue:82` — `link: 'timedMiningBotany'`. Same wrong route, on the
       primary landing page's quick-access grid.
       → Changed to `timedNodes`. (The sidebar in `parts/sidebarLinks.vue` already used the correct
       path, which is why this went unnoticed.) Verified: 0 `/timedMiningBotany` hrefs remain anywhere

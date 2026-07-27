@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
-import { resolveWeather } from '../components/api/weatherForecast'
+import { resolveWeather } from '../modules/weatherForecast'
 
 // One clock for every countdown in the app. Components that each ran their own
 // interval drifted up to a second apart, so the same node could read "43m 4s" on
