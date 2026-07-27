@@ -89,8 +89,8 @@
 
     import { ref, computed } from 'vue'
     import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
-    import toggleDetailsBtn from '../components/buttons/toggleDetailMenu.vue'
-    import areaDisplay from '../components/display/displayArea.vue'
+    import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
+    import areaDisplay from '../components/display/DisplayArea.vue'
     import iconImgAPI from '../modules/FetchIconImage.vue'
 
     const filters = ref<[string, string, boolean][]>([])

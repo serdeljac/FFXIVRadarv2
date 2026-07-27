@@ -7,7 +7,7 @@
     <a class="skip-link" href="#main-content">Skip to content</a>
     <starCanvas />
 
-    <trackingBar
+    <TrackingBar
       :class="[`trackingbar`, sidebarLayout, windowWidth]"
       :windowWidth="windowWidth"
       :timerList="timerList"
@@ -16,12 +16,12 @@
       @openDetails="openDetails"
       @changeTracked="changeTracked" />
 
-    <buttonMenu
+    <ToggleSidebarMenu
       :class="[`menu_Btn`, { tracking_pos: sidebarLayout === 'hidden-extended' || sidebarLayout === 'mobile-extended' }]"
       :expanded="sidebarLayout !== 'hidden-extended'"
       @click="toggleMenu" />
 
-    <sidebar
+    <Sidebar
       id="app-sidebar"
       :class="[`sidebar`, sidebarLayout, windowWidth]"
       :sidebarLayout="sidebarLayout"
@@ -45,7 +45,7 @@
       </router-view>
     </main>
 
-    <detailspane
+    <DetailsPane
       v-if="openDetailSidebar"
       :node="detailsPanel"
       :windowWidth="windowWidth"
@@ -71,15 +71,19 @@ import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
 inject();
 
-import sidebar from './layouts/sidebar/Sidebar.vue';
+import Sidebar from './layouts/sidebar/Sidebar.vue';
+import TrackingBar from './layouts/trackingbar/TrackingBar.vue';
+import ToggleSidebarMenu from './components/buttons/ToggleSidebarMenu.vue';
+import DetailsPane from './layouts/detailspane/DetailsPane.vue';
+
 
 import promotionBanner from './components/PromotionBanner.vue';
 
-import trackingBar from './layouts/TrackingBar.vue';
-import buttonMenu from './components/buttons/toggleSidebarMenu.vue';
-import detailspane from './layouts/DetailsPane.vue';
+
+
+
 import vistaLarge from './components/ExpandVistaImg.vue'
-import starCanvas from './components/display/starCanvas.vue'
+import starCanvas from './components/display/fix/starCanvas.vue'
 
 // Gold Saucer runs on a 20-real-minute cycle, active for the first 10 minutes.
 const GS_CYCLE = 1200;
@@ -108,7 +112,7 @@ function saveTrackedKeys(keys: Set<string>) {
 
 export default {
   name: 'AppRoot',
-  components: { sidebar, trackingBar, buttonMenu, detailspane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
+  components: { Sidebar, TrackingBar, ToggleSidebarMenu, DetailsPane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
   data() {
     return {
       loading: true as boolean,

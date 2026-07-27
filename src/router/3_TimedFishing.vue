@@ -139,13 +139,13 @@
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
 import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
-import toggleTrackingBtn from '../components/buttons/toggleTracking.vue'
-import toggleDetailsBtn from '../components/buttons/toggleDetailMenu.vue'
+import toggleTrackingBtn from '../components/buttons/ToggleTracking.vue'
+import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
 import inputSearchBar from '../components/buttons/inputSearchBar.vue'
-import areaDisplay from '../components/display/displayArea.vue'
+import areaDisplay from '../components/display/DisplayArea.vue'
 import iconImgAPI from '../modules/FetchIconImage.vue'
 import displayTime from '../components/display/displayTime.vue'
-import displayItemName from '../components/display/displayItemName.vue'
+import displayItemName from '../components/display/DisplayItemName.vue'
 import PageHeader from '../components/PageHeader.vue'
 import { capitalize, getUniqueByKey, isFishNodeActive, useNow } from '../hooks/hooks.ts'
 

@@ -60,15 +60,8 @@ watch(() => props.size, () => loadVistaPreviewImg())
     width: 100%;
 
     &.size-small {
-        min-width: 100px;
-        max-width: 160px;
-        height: 100px;
-    }
-
-    &.size-medium {
-        min-width: 160px;
-        max-width: 160px;
-        height: 100px;
+        width: 360px;
+        height: 360px;
     }
 
     &.size-large {

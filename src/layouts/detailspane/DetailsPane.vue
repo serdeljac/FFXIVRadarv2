@@ -7,6 +7,7 @@
         :tabindex="isFullScreen ? -1 : undefined"
         @keydown.esc="$emit('openDetails', node)">
 
+        <!-- Header -->
         <div class="details_header">
             <button
                 type="button"
@@ -14,19 +15,13 @@
                 data-context="Close"
                 aria-label="Close details panel"
                 @click="$emit('openDetails', node)">
-                <closeDetailsBtn />
+                <CloseDetailsPane />
             </button>
 
-            <displayItemName :item="node.name" :node="node"/>
-            <p v-if="node.job === 'aethercurrents'" class="details_headerName">
-                <iconAndText :text="`Aether Current #${node.order}`" :icon="node.job_sub" />
-            </p>
+            <DisplayItemName class="detailsItemName" :item="node.job != 'aethercurrents' ? node.name : aetherCurrentName(node)" :node="node" :hideAttr="true"/>
         </div>
 
-        <!-- Mini map: same Leaflet/CRS.Simple setup as 1_EorzeaOverview.vue,
-             scoped to this node's zone with only the aetheryte(s) and the
-             focused node itself plotted. Hidden for nodes with no known zone
-             (fishing holes absent from areas.json) — there's no map to load. -->
+        <!-- Map -->
         <div v-if="hasMap" class="details_mapStage">
             <transition name="details_fade">
                 <div v-if="isMapLoading" class="details_mapOverlay">
@@ -39,17 +34,16 @@
             <div ref="mapEl" class="details_mapCanvas"></div>
         </div>
 
+        <!-- Location -->
         <div class="details_location">
-            <h3>{{ areaLabel }}</h3>
-            <span v-if="node.area.issubarea" class="details_locationPoint">{{ node.point }}</span>
-            <h4>(x{{ node.x }}, y{{ node.y }})</h4>
+            <DisplayArea :node="node"/>
         </div>
 
+        <!-- Content Details -->
         <div class="details_content">
 
-            <!-- ── Gathering (Miner / Botany) ───────────────────────── -->
+            <!-- Mining and Botany -->
             <template v-if="isGathering">
-
                 <div class="details_requirements">
                     <ul>
                         <li>
@@ -61,11 +55,13 @@
                             <p>{{ node.perception }}</p>
                         </li>
                         <li :data-rowActive="isNodeActiveNow">
-                            <p>Active:</p>
-                            <p>{{ nodeTimer }}</p>
+                            <p>Timer:</p>
+                            <p>
+                                <DisplayTime :node="node" />
+                            </p>
                         </li>
                         <li v-if="node.tomb">
-                            <p>Tomb:</p>
+                            <p>Tomb Req:</p>
                             <p>{{ node.tomb }}</p>
                         </li>
                     </ul>
@@ -88,44 +84,41 @@
                         </li>
                     </ul>
                 </div>
-
             </template>
 
-            <!-- ── Fishing ─────────────────────────────────────────── -->
+            <!-- Fishing -->
             <template v-else-if="isFishing">
-
                 <div class="details_requirements">
                     <ul>
-                        <li v-if="node.bait">
-                            <p>Bait:</p>
+                        <li v-if="node.bait != 'mooch'">
+                            <p>Recommended Bait:</p>
                             <p>{{ baitLabel }}</p>
                         </li>
-                        <li v-if="node.hookset">
+                        <li v-else>
+                            <p>Mooch:</p>
+                            <p>
+                                {{ node.mooch_name1 }}
+                                {{ node.mooch_name2 ? `, ${node.mooch_name2}` : ''}}
+                                {{ node.mooch_name3 ? `, ${node.mooch_name3}` : ''}}
+                            </p>
+                        </li>
+                        <li>
                             <p>Hookset:</p>
                             <p>{{ node.hookset }}</p>
                         </li>
-                        <li v-if="node.bite">
+                        <li>
                             <p>Tug:</p>
-                            <p>{{ tugLabel }}</p>
+                            <p>{{ formatTug(node.tug) }}</p>
                         </li>
                         <li :data-rowActive="isNodeActiveNow">
-                            <p>Active:</p>
+                            <p>Timer:</p>
                             <p>{{ nodeTimer }}</p>
                         </li>
                     </ul>
                 </div>
 
-                <div class="details_panel" v-if="moochChain.length">
-                    <h3>Mooch Chain</h3>
-                    <ul>
-                        <li v-for="(fish, i) in moochChain" :key="fish">{{ `${i + 1}. ${fish}` }}</li>
-                    </ul>
-                </div>
-
-                <!-- weatherchain* is the weather that must precede weather*, so
-                     the two lists read as "from → to" when a chain is present. -->
                 <div class="details_panel" v-if="requiredWeather.length">
-                    <h3>Weather</h3>
+                    <h3>Weather Condition</h3>
                     <ul>
                         <li v-if="precedingWeather.length">{{ precedingWeather.join(' / ') }} &rarr;</li>
                         <li>{{ requiredWeather.join(' / ') }}</li>
@@ -140,22 +133,21 @@
                 <div class="details_panel">
                     <h3>Other Fish Here</h3>
                     <ul>
-                        <li v-for="d in otherMaterials" :key="d.ID">
-                            {{ d.name }} – Lv. {{ d.level }} {{ stars(d.stars) }}
+                        <li v-for="d in otherMaterials" :key="d.ID" class="otherFishingList">
+                            <p>{{ `${d.name} - Lv.${d.level} ${formatStars(d.stars)}` }}</p>
+                            <p>{{ d.bait }}</p>
                         </li>
                     </ul>
                 </div>
-
             </template>
 
-            <!-- ── Sightseeing ─────────────────────────────────────── -->
+            <!-- Sightseeing -->
             <template v-else-if="node.job === 'sightseeing'">
-
                 <div class="details_requirements">
                     <ul>
                         <li>
                             <p>EXP Earned:</p>
-                            <p>{{ getVistaInfo('exp') }}</p>
+                            <DisplayExp :iconName="'exp'" :text="getVistaInfo('exp')" :type="'exp'"/>
                         </li>
                         <li>
                             <p>Level Range:</p>
@@ -165,24 +157,22 @@
                             <p>Active:</p>
                             <p class="details_timeAndWeather">
                                 <span>{{ nodeTimer }}</span>
-                                <span>{{ node.weather1 }}</span>
-                                <span v-if="node.weather2">{{ node.weather2 }}</span>
                             </p>
                         </li>
                         <li>
                             <p>Emote:</p>
-                            <p><iconAndText :text="node.emote" :icon="node.emote" /></p>
+                            <DisplayEmote :text="node.emote" :iconName="node.emote" />
                         </li>
                     </ul>
                 </div>
 
-                <div class="details_previewAndGuide">
-                    <vistaSmallAPI :node="node" :size="'medium'" @click="$emit('openVistaImg', node)"/>
+                <div class="details_panel" v-if="node.notes">
+                    <h3>Notes</h3>
+                    <p>{{ node.notes }}</p>
+                </div>
 
-                    <p>
-                        <span v-if="node.mount" class="details_flyingTag">Flying Mount Required</span>
-                        {{ node.notes }}
-                    </p>
+                <div class="details_previewAndGuide">
+                    <FetchVistaImage :node="node" :size="'small'" @click="$emit('openVistaImg', node)"/>
                 </div>
             </template>
 
@@ -206,17 +196,27 @@
 </template>
 
 <script lang="ts" setup>
-import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
-import L from 'leaflet'
-import 'leaflet/dist/leaflet.css'
-import iconAndText from '../components/display/iconAndText.vue'
-import closeDetailsBtn from '../components/buttons/closeMenu.vue'
-import vistaSmallAPI from '../modules/vistaImg.vue'
-import displayItemName from '../components/display/displayItemName.vue'
-import { formatStars, formatAreaLabel, isNodeWindowActive, nodeCountdown, useNow } from '../hooks/hooks.ts'
+    const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList', 'windowWidth'])
+    defineEmits(['openDetails', 'openVistaImg'])
+    import CloseDetailsPane from '../../components/buttons/CloseDetailsPane.vue'
+    import DisplayItemName from '../../components/display/DisplayItemName.vue'
+    import DisplayArea from '../../components/display/DisplayArea.vue'
+    import DisplayTime from '../../components/display/DisplayTime.vue'
+    import DisplayExp from '../../components/display/DisplayExp.vue'
+    import DisplayEmote from '../../components/display/DisplayEmote.vue'
+    import FetchVistaImage from '../../modules/FetchVistaImage.vue'
+    import { formatStars, formatTug, formatAreaLabel, isNodeWindowActive, nodeCountdown, useNow, aetherCurrentName } from '../../hooks/hooks.ts'
 
-const props = defineProps(['ffxivData', 'node', 'timerList', 'weatherList', 'windowWidth'])
-defineEmits(['openDetails', 'openVistaImg'])
+    import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
+    import L from 'leaflet'
+    import 'leaflet/dist/leaflet.css'
+
+
+
+// import displayItemName from '../components/display/DisplayItemName.vue'
+
+
+
 
 // On mobile the pane covers the whole screen, so it behaves like a modal: focus
 // moves into it on open and the page behind it must not scroll. On larger
@@ -275,7 +275,7 @@ const nodeTimer = computed(() =>
 
 function getVistaInfo(type: string) {
     const expFound = props.ffxivData.expansion.find((o: any) => o.expansion == props.node.expansion)
-    if (type == 'exp') return expFound.vista_exp == 0 ? 'None' : expFound.vista_exp
+    if (type == 'exp') return expFound.vista_exp == 0 ? '0' : expFound.vista_exp
     if (type == 'level') return `LV. ${expFound.vista_min} - ${expFound.vista_max}`
 }
 
@@ -589,6 +589,10 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
         }
     }
 
+    .detailsItemName {
+        transform: translateY(2px)
+    }
+
     &_headerName {
         flex: 1;
         font-size: 1.1rem;
@@ -692,7 +696,7 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
         border: 1px solid $buttonBorder;
         border-radius: 8px;
         background: rgba(255, 255, 255, 0.03);
-        padding: 2px 14px;
+        padding: 2px 6px;
 
         ul { list-style: none; }
 
@@ -701,7 +705,7 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
             grid-template-columns: 1fr auto;
             align-items: center;
             gap: 8px;
-            padding: 8px 0;
+            padding: 8px 8px;
 
             & + li {
                 border-top: 1px solid rgba(45, 212, 191, 0.08);
@@ -761,6 +765,12 @@ function addMarker(latlng: L.LatLngExpression, iconUrl: string, tooltip: string,
         :deep(.iconAndText) {
             justify-content: center;
         }
+    }
+
+    .otherFishingList {
+        display: flex;
+        width: 100%;
+        justify-content: space-between;
     }
 
     &_previewAndGuide {

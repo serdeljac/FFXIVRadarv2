@@ -11,20 +11,17 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{
-    /** Drives aria-expanded so the sidebar's open/closed state is announced. */
-    expanded?: boolean
-}>()
+    defineProps<{
+        expanded?: boolean
+    }>()
 </script>
 
 <style scoped lang="scss">
     .menu_Btn {
-        // Native <button> reset — styling comes from App.vue's .menu_Btn rules.
         appearance: none;
         padding: 0;
         font: inherit;
         color: inherit;
-
         cursor: pointer;
         border: 1px solid $borderColor;
         border-radius: 100%;

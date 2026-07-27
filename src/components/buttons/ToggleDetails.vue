@@ -10,24 +10,20 @@
 </template>
 
 <script lang="ts" setup>
-defineProps<{
-    direction?: string
-    /** Overrides the default accessible name, e.g. "View details for Mythrite Ore". */
-    label?: string
-}>()
+    defineProps<{
+        direction?: string
+        label?: string
+    }>()
 </script>
 
 <style scoped lang="scss">
     .toDetailsBtn {
-        // Native <button> reset — this renders as a bare icon, not a chrome button.
         appearance: none;
         background: none;
         border: 0;
         padding: 0;
         font: inherit;
         color: inherit;
-
-        // 26px visual box; 44x44 touch target applied in style.scss on mobile.
         width: 26px;
         height: 26px;
         display: flex;

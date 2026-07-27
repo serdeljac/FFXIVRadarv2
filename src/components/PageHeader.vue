@@ -2,7 +2,10 @@
     <header class="pageHeader">
         <div class="pageHeader_titleRow">
             <h1 class="pageHeader_title">
-                <navIcon v-if="icon" :name="icon" class="pageHeader_icon"/>{{ title.split(' ', 2)[0] }} <span class="accent">{{ fixtitle(title) }}</span>
+                <span v-if="ishome" class="logo-hex">⬡</span>
+                <navIcon v-if="icon && !ishome" :name="icon" class="pageHeader_icon"/>{{ title.split(' ', 2)[0] }} 
+                
+                <span class="accent">{{ fixtitle(title) }}</span>
             </h1>
         </div>
         <p class="pageHeader_tagline">
@@ -12,21 +15,14 @@
     </header>
 </template>
 
-<script lang="ts">
-    import navIcon from '../layouts/sidebar/SidebarIcons.vue'
-
-    export default {
-        name: "Page Header",
-        props: ['title', 'tagline', 'icon'],
-        components: { navIcon },
-        methods: {
-            fixtitle(text: string) {
+<script lang="ts" setup>
+import navIcon from '../layouts/sidebar/SidebarIcons.vue'
+const props = defineProps(['title', 'tagline', 'icon', 'ishome'])
+function fixtitle(text: string) {
                 let firstSec = text.split(' ', 2)[0]
                 let secondSec = text.split(firstSec, 2)[1]
                 return secondSec
             }
-        }
-    }
 </script>
 
 <style scoped lang="scss">
@@ -43,6 +39,17 @@
             align-items: center;
             gap: 12px;
         }
+
+  .logo-hex {
+    font-size: 2rem; color: $teal;
+    margin-right: 8px;
+    filter: drop-shadow(0 0 8px $tealShadow);
+    animation: hexPulse 3s ease-in-out infinite;
+  }
+  @keyframes hexPulse {
+    0%,100% { filter: drop-shadow(0 0 8px $tealShadow); }
+    50%      { filter: drop-shadow(0 0 18px rgba(45,212,191,0.5)); }
+  }
 
         &_title {
             font-family: 'Rajdhani', sans-serif;

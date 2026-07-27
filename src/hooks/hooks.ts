@@ -89,6 +89,10 @@ export function formatAreaLabel(area: any): string {
     return typeof area === 'string' ? area : `${area.region} > ${area.zone}`
 }
 
+export function aetherCurrentName(node: any) {
+    return `#${node.no} ${node.name ? node.name : 'Aether Current'}`
+}
+
 export function padNumber(num: number): string {
     return num < 10 ? `0${num}` : `${num}`
 }
