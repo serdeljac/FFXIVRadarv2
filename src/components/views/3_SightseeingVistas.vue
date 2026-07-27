@@ -81,7 +81,6 @@
                     <!-- NAME -->
                     <div class="rdrTable_row-name">
                         <displayItemName :item="d.name" :node="d"/>
-                        <p>{{ d.name }}</p>
                     </div>
 
                     <!-- TIMER -->
