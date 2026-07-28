@@ -3,8 +3,8 @@
 
         <!-- Eorzea Overview Icon -->
         <g v-if="name === 'eorzeaMap'">
-            <path fill-rule="evenodd"d="M6 13 L22 13 L17 22 L1 22 Z M7.1 13.9 L19.9 13.9 L15.9 21.1 L3.1 21.1 Z" />
-            <path fill-rule="evenodd" d="M17 8 A5 5 0 1 0 7 8 A5 5 0 1 0 17 8 Z M14.3 8 A2.3 2.3 0 1 0 9.7 8 A2.3 2. 0 1 0 14.3 8 Z" />
+            <path fill-rule="evenodd" d="M6 13 L22 13 L17 22 L1 22 Z M7.1 13.9 L19.9 13.9 L15.9 21.1 L3.1 21.1 Z" />
+            <path fill-rule="evenodd" d="M17 8 A5 5 0 1 0 7 8 A5 5 0 1 0 17 8 Z M14.3 8 A2.3 2.3 0 1 0 9.7 8 A2.3 2.3 0 1 0 14.3 8 Z" />
             <path d="M8 11 L16 11 L12 15 Z" />
         </g>
 

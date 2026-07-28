@@ -87,6 +87,7 @@ export function fetchUsageImgName(node: any): string {
 
 // Fishing holes absent from areas.json stay a bare string; zones become "Region > Zone".
 export function formatAreaLabel(area: any): string {
+    if (!area.ID) {console.error(area)}
     if (!area) return ''
     return typeof area === 'string' ? area : `${area.region} > ${area.zone}`
 }

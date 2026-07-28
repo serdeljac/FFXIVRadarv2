@@ -5,7 +5,7 @@
 
     <div class="body_content-group filterbar">
       <div class="wrapper">
-        <toggleFilterBtn
+        <ToggleFilter
           v-for="filter in filters"
           :key="filter.name"
           :name="filter.name"
@@ -73,7 +73,7 @@
   import PageHeader from '../components/PageHeader.vue'
   const pageTagLine = 'View weather patterns for zones across Eorzea.'
 
-  import toggleFilterBtn from '../components/buttons/ToggleFilter.vue'
+  import ToggleFilter from '../components/buttons/ToggleFilter.vue'
 
   import { ref, computed, watch } from 'vue'
   import { getWeatherForecast } from '../modules/weatherForecast'

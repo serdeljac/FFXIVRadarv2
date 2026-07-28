@@ -20,7 +20,7 @@
 
     interface Props {
         trackingEnabled?: boolean
-        remove: boolean
+        remove?: boolean
         label?: string
     }
 

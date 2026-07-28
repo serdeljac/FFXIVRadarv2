@@ -19,7 +19,7 @@
 
                 <div class="filterbar_group">
                     <SearchBar :modelValue="searchName" @selected="filterByInputValue" />
-                    <toggleFilterBtn
+                    <ToggleFilter
                         :name="'Reset'"
                         :noicon="true"
                         :enabled="true"
