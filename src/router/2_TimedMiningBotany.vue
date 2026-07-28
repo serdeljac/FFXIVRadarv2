@@ -8,7 +8,7 @@
         <div class="body_content-group filterbar">
             <div class="wrapper">
                 <div v-for="(group, groupKey) in groupedFilters" :key="groupKey" class="filterbar_group">
-                    <toggleFilterBtn
+                    <ToggleFilter
                         v-for="filter in group" :key="filter.name"
                         :name="filter.name"
                         :icon="filter.name"
@@ -17,39 +17,37 @@
                 </div>
 
                 <div class="filterbar_group">
-                    <inputSearchBar :modelValue="searchName" @selected="filterByInputValue" />
-                    <toggleFilterBtn
+                    <SearchBar :modelValue="searchName" @selected="filterByInputValue" />
+                    <ToggleFilter
                         :name="'Reset'"
                         :noicon="true"
                         :enabled="true"
                         :action="true"
                         @click="resetFilters" />
                 </div>
+
+                <!-- Pagination -->
+                <nav aria-label="Pagination">
+                    <ul class="body_content-group pagenation">
+                        <li v-for="(_, index) in compiledDataForTable" :key="index">
+                            <button
+                                type="button"
+                                class="pagenation_item"
+                                :class="{ pageActive: arraySet === index }"
+                                :aria-current="arraySet === index ? 'page' : null"
+                                :aria-label="`Page ${index + 1}`"
+                                @click="arraySet = index">
+                                {{ index + 1 }}
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 
-        <!-- Pagination -->
-        <nav aria-label="Pagination">
-            <ul class="body_content-group pagenation">
-                <li v-for="(_, index) in compiledDataForTable" :key="index">
-                    <button
-                        type="button"
-                        class="pagenation_item"
-                        :class="{ pageActive: arraySet === index }"
-                        :aria-current="arraySet === index ? 'page' : null"
-                        :aria-label="`Page ${index + 1}`"
-                        @click="arraySet = index">
-                        {{ index + 1 }}
-                    </button>
-                </li>
-            </ul>
-        </nav>
+        
 
         <!-- Table -->
-        <!-- ARIA table roles over the existing <ul>/<li> markup: without them a
-             screen reader announces "list, 50 items" and reads each cell with no
-             indication of which column it belongs to. Roles are used rather than a
-             real <table> so the CSS-grid row layout is untouched. -->
         <div
             :class="[`body_content-group rdrTable`, windowWidth]"
             role="table"
@@ -76,27 +74,22 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking" role="cell">
-                        <toggleTrackingBtn
+                        <ToggleTracking
                             :trackingEnabled="d.tracked"
                             :label="d.tracked ? `Untrack ${d.name}` : `Track ${d.name}`"
-                            class="hasContext"
-                            data-context="Track Node"
+                            :remove="d.tracking"
                             @click="$emit('changeTracked', d)" />
-                        <toggleDetailsBtn
+                        <ToggleDetails
                             :label="`View details for ${d.name}`"
-                            class="hasContext"
-                            data-context="View Details"
                             @click="$emit('openDetails', d)" />
                     </div>
 
                     <!-- NAME -->
                     <div class="rdrTable_row-name" role="cell">
-                            <displayItemName :item="d.name" :node="d"/>
+                        <DisplayItemName :item="d.name" :node="d"/>
                     </div>
 
                     <!-- ATTRIBUTES -->
-                    <!-- The data-context tooltip is hover-only, so each chip also
-                         carries the same string as an accessible name. -->
                     <div class="rdrTable_row-attributes" role="cell">
                         <span class="hasContext" role="img" :aria-label="capitalize(d.job_sub)" :data-context="capitalize(d.job_sub)">
                                 <iconImgAPI :name="d.job_sub"/>
@@ -113,16 +106,14 @@
                             </span>
                     </div>
 
-
-
                     <!-- TIMER -->
                     <div class="rdrTable_row-time" role="cell">
-                        <displayTime :node="d"/>
+                        <DisplayTime :node="d"/>
                     </div>
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area" role="cell">
-                        <areaDisplay :node="d" />
+                        <DisplayArea :node="d" />
                     </div>
                 </li>
             </ul>
@@ -136,16 +127,23 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+defineEmits(['changeTracked', 'openDetails'])
 import { ref, computed } from 'vue'
-import toggleFilterBtn from '../components/buttons/ToggleFilter.vue'
-import toggleTrackingBtn from '../components/buttons/ToggleTracking.vue'
-import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
-import inputSearchBar from '../components/buttons/inputSearchBar.vue'
-import displayItemName from '../components/display/DisplayItemName.vue'
-import areaDisplay from '../components/display/DisplayArea.vue'
-import iconImgAPI from '../modules/FetchIconImage.vue'
-import displayTime from '../components/display/DisplayTime.vue'
 import PageHeader from '../components/PageHeader.vue'
+
+import ToggleFilter from '../components/buttons/ToggleFilter.vue'
+import SearchBar from '../components/buttons/SearchBar.vue'
+
+import ToggleTracking from '../components/buttons/ToggleTracking.vue'
+import ToggleDetails from '../components/buttons/ToggleDetails.vue'
+
+import DisplayItemName from '../components/display/DisplayItemName.vue'
+import DisplayTime from '../components/display/DisplayTime.vue'
+import DisplayArea from '../components/display/DisplayArea.vue'
+import iconImgAPI from '../modules/FetchIconImage.vue'
+
+
 import { nodeTimeChecker, capitalize, getUniqueByKey, fetchUsageAttrName, fetchUsageImgName } from '../hooks/hooks.ts'
 
 interface Filter {
@@ -156,8 +154,7 @@ interface Filter {
 
 const PAGE_SIZE = 50
 
-const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
-defineEmits(['changeTracked', 'openDetails'])
+
 
 const compiledDataForTable = ref<any[][]>([])
 const allTimedNodes = ref<any[]>([])
@@ -282,11 +279,13 @@ sortNodesIntoGroup(allTimedNodes.value)
         /* ── Filter bar ── */
         .filterbar {
             padding: 16px 20px;
-            // border-radius: 10px;
-            // border: 1px solid $buttonBorder;
-            max-width: 1200px;
-            // background: rgba(255, 255, 255, 0.03);
+            max-width: 1400px;
 
+            .wrapper {
+                flex-direction: column;
+            }
+
+        
             :deep(.btn) {
                 border: 1px solid $buttonBorder;
                 background: rgba(255, 255, 255, 0.03);
@@ -339,7 +338,6 @@ sortNodesIntoGroup(allTimedNodes.value)
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            width: 90%;
 
             &_item {
                 // Native <button> reset — was a bare <li> before it became focusable.

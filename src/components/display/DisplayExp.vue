@@ -1,6 +1,6 @@
 <template>
     <div :class="[`iconAndText`, type]">
-        <p v-if="text">{{ text }}</p>
+        <p>{{ text }}</p>
         <iconImgAPI :name="iconName"/>
     </div>
 </template>
@@ -14,6 +14,9 @@
     .iconAndText {
         display: inline-flex;
         align-items: center;
+        margin: 0px 4px 0 6px;
+        transform: translateY(-2px);
+        img {margin: 0;}
         p {
             transform: translateY(1px);
             font-size: 1rem;

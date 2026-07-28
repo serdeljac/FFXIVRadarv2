@@ -26,8 +26,7 @@
             </template>
             <p>
                 Each vista discovered will grant you
-                <span class="expColor">{{ currentExpansionData.vista_exp }}</span>
-                <iconImgAPI :name="'exp'"/>
+                <DisplayExp :iconName="'exp'" :text="currentExpansionData.vista_exp" :type="'exp'"/>
                 when you're between levels
                 <span class="levelColor">{{ currentExpansionData.vista_min }}-{{ currentExpansionData.vista_max }}</span>.
             </p>
@@ -113,6 +112,9 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+defineEmits(['changeTracked', 'openDetails'])
+
 import { ref, computed } from 'vue'
 import ToggleFilter from '../components/buttons/ToggleFilter.vue'
 import ToggleTracking from '../components/buttons/ToggleTracking.vue'
@@ -121,9 +123,7 @@ import DisplayItemName from '../components/display/DisplayItemName.vue'
 import DisplayTime from '../components/display/DisplayTime.vue'
 import DisplayEmote from '../components/display/DisplayEmote.vue'
 import DisplayArea from '../components/display/DisplayArea.vue'
-
-import iconImgAPI from '../modules/FetchIconImage.vue'
-
+import DisplayExp from '../components/display/DisplayExp.vue'
 
 import PageHeader from '../components/PageHeader.vue'
 import { isSightseeActive, useNow } from '../hooks/hooks.ts'
@@ -134,8 +134,6 @@ interface Filter {
     enabled: boolean
 }
 
-const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
-defineEmits(['changeTracked', 'openDetails'])
 
 const filters = ref<Filter[]>([])
 const filterSelected = ref('')

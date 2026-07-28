@@ -5,7 +5,7 @@
   </div>
   <div v-else :class="[`app_container`, `menustate_${sidebarLayout}`, windowWidth]">
     <a class="skip-link" href="#main-content">Skip to content</a>
-    <starCanvas />
+    <StarCanvas />
 
     <TrackingBar
       :class="[`trackingbar`, sidebarLayout, windowWidth]"
@@ -83,7 +83,7 @@ import promotionBanner from './components/PromotionBanner.vue';
 
 
 import vistaLarge from './components/ExpandVistaImg.vue'
-import starCanvas from './components/display/fix/starCanvas.vue'
+import StarCanvas from './modules/StarCanvas.vue'
 
 // Gold Saucer runs on a 20-real-minute cycle, active for the first 10 minutes.
 const GS_CYCLE = 1200;
@@ -112,7 +112,7 @@ function saveTrackedKeys(keys: Set<string>) {
 
 export default {
   name: 'AppRoot',
-  components: { Sidebar, TrackingBar, ToggleSidebarMenu, DetailsPane, promotionBanner, vistaLarge, starCanvas, SpeedInsights },
+  components: { Sidebar, TrackingBar, ToggleSidebarMenu, DetailsPane, promotionBanner, vistaLarge, StarCanvas, SpeedInsights },
   data() {
     return {
       loading: true as boolean,

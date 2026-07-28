@@ -24,7 +24,7 @@
 <script lang="ts" setup>
     const props = defineProps(['windowWidth', 'trackinglist', 'timerList', 'weatherList'])
     defineEmits(['openDetails', 'changeTracked'])
-    import TrackingBarItem from './trackingbarItem.vue'
+    import TrackingBarItem from './TrackingBarItem.vue'
     import { isNodeWindowActive, useNow } from '../../hooks/hooks.ts'
 
     const nowMs = useNow()

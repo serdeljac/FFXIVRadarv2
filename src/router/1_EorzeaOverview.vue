@@ -139,25 +139,22 @@
                             @click="selectTableRow(row)">
 
                             <div class="rdrTable_row-name">
-                                <toggleDetailsBtn
+                                <ToggleDetails
                                     :label="`View details for ${row.name}`"
-                                    class="hasContext"
-                                    data-context="View Details"
                                     @click.stop="$emit('openDetails', row)"/>
-                                <displayItemName :item="row.name" :node="row"/>
+                                <DisplayItemName :item="row.name" :node="row"/>
                             </div>
 
                             <div class="rdrTable_row-flying">{{ row.mount ? 'YES' : 'NO' }}</div>
                             <div class="rdrTable_row-emote">{{ row.emote }}</div>
 
                             <div class="rdrTable_row-time">
-                                <toggleTrackingBtn
+                                <ToggleTracking
                                     v-if="row?.time"
                                     :trackingEnabled="row?.tracked"
-                                    class="hasContext"
-                                    data-context="Track Node"
+                                    :remove="row.tracked"
                                     @click.stop="$emit('changeTracked', row)" />
-                                <span>{{ EorzeaMap(row, timerList, weatherList) }}</span>
+                                <DisplayTime v-if="row?.time" :node="row"/>
                             </div>
                         </li>
                     </ul>
@@ -183,13 +180,12 @@
                                     <p class="rdrTable_row-name">Item</p>
                                     <p class="rdrTable_row-attributes">Usage</p>
                                     <p class="rdrTable_row-time">
-                                        <toggleTrackingBtn
+                                        <ToggleTracking
                                             v-if="group.time"
                                             :trackingEnabled="group._items[0].tracked"
-                                            class="hasContext"
-                                            data-context="Track Node"
+                                            :remove="group._items[0].tracked"
                                             @click.stop="$emit('changeTracked', group._items[0])" />
-                                        <displayTime v-if="group.time" :node="group._items[0]" />
+                                        <DisplayTime v-if="group.time" :node="group._items[0]" />
                                         <span v-else>Any Time</span>
                                     </p>
                                 </li>
@@ -201,7 +197,7 @@
                                 <li v-for="it in group._items" :key="it.ID" class="rdrTable_row">
 
                                     <div class="rdrTable_row-name">
-                                        <displayItemName :item="it.name" :node="it"/>
+                                        <DisplayItemName :item="it.name" :node="it"/>
                                     </div>
 
                                     <div class="rdrTable_row-attributes">
@@ -271,15 +267,13 @@
                         <ul class="rdrTable_body">
                             <li v-for="fish in fishDetails" :key="fish.id" class="rdrTable_row">
                                 <div class="rdrTable_row-tracking">
-                                    <toggleDetailsBtn
+                                    <ToggleDetails
                                         :label="`View details for ${fish.name}`"
-                                        class="hasContext"
-                                        data-context="View Details"
                                         @click="$emit('openDetails', fish)"/>
                                 </div>
 
                                 <div class="rdrTable_row-name">
-                                    <displayItemName :item="fish.name" :node="fish"/>
+                                    <DisplayItemName :item="fish.name" :node="fish"/>
                                     <ul class="rdrTable_subList">
                                         <li v-if="fish.bait != 'mooch'">Bait: {{ fish.bait }}</li>
                                         <template v-else>
@@ -296,13 +290,12 @@
                                 </div>
 
                                 <div class="rdrTable_row-time">
-                                    <toggleTrackingBtn
+                                    <ToggleTracking
                                         v-if="fish.time"
                                         :trackingEnabled="fish.tracked"
-                                        class="hasContext"
-                                        data-context="Track Node"
+                                        :remove="fish.tracked"
                                         @click.stop="$emit('changeTracked', fish)" />
-                                    <displayTime v-if="fish.time" :node="fish" />
+                                    <DisplayTime v-if="fish.time" :node="fish" />
                                     <span v-else>Any Time</span>
                                 </div>
                             </li>
@@ -337,10 +330,8 @@
                             @click="selectTableRow(row)">
 
                             <div class="rdrTable_row-name">
-                                <toggleDetailsBtn
+                                <ToggleDetails
                                     :label="`View details for ${row.name}`"
-                                    class="hasContext"
-                                    data-context="View Details"
                                     @click.stop="$emit('openDetails', row)"/>
                                 <span>{{ `${row.name} - Lv.${row.level}` }}</span>
                             </div>
@@ -393,12 +384,12 @@ import { ref, reactive, computed, onMounted, onBeforeUnmount } from 'vue'
 import L from 'leaflet'
 import 'leaflet/dist/leaflet.css'
 import PageHeader from '../components/PageHeader.vue'
-import toggleTrackingBtn from '../components/buttons/ToggleTracking.vue'
-import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
-import displayTime from '../components/display/displayTime.vue'
-import displayItemName from '../components/display/DisplayItemName.vue'
+import ToggleTracking from '../components/buttons/ToggleTracking.vue'
+import ToggleDetails from '../components/buttons/ToggleDetails.vue'
+import DisplayTime from '../components/display/DisplayTime.vue'
+import DisplayItemName from '../components/display/DisplayItemName.vue'
 import iconImgAPI from '../modules/FetchIconImage.vue'
-import { isNodeActive, EorzeaMap, capitalize, fetchUsageAttrName, fetchUsageImgName, formatTug} from '../hooks/hooks.ts'
+import { isNodeActive, capitalize, fetchUsageAttrName, fetchUsageImgName, formatTug} from '../hooks/hooks.ts'
 
 // Describes what the page actually does. The previous copy advertised a "Search
 // tab" for finding resources across all zones (there is no search on this page)
@@ -1437,7 +1428,6 @@ function clearDetails() {
 
     &_checkboxes {
         width: 100%;
-        max-width: 600px;
         margin-top: 14px;
 
         &.markertypes > div {
@@ -1454,7 +1444,7 @@ function clearDetails() {
 
         &.datalayers {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            grid-template-columns: 1fr 1fr 1fr;
             gap: 8px;
         }
     }

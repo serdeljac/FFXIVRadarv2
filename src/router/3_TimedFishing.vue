@@ -7,8 +7,9 @@
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
+
                 <div v-for="(group, groupKey) in groupedFilters" :key="groupKey" class="filterbar_group">
-                    <toggleFilterBtn
+                    <ToggleFilter
                         v-for="filter in group" :key="filter.name"
                         :name="filter.name"
                         :icon="filter.name"
@@ -17,7 +18,7 @@
                 </div>
 
                 <div class="filterbar_group">
-                    <inputSearchBar :modelValue="searchName" @selected="filterByInputValue" />
+                    <SearchBar :modelValue="searchName" @selected="filterByInputValue" />
                     <toggleFilterBtn
                         :name="'Reset'"
                         :noicon="true"
@@ -25,30 +26,25 @@
                         :action="true"
                         @click="resetFilters" />
                 </div>
+
+                <nav aria-label="Pagination">
+                    <ul class="body_content-group pagenation">
+                        <li v-for="(_, index) in compiledDataForTable" :key="index">
+                            <button
+                                type="button"
+                                class="pagenation_item"
+                                :class="{ pageActive: arraySet === index }"
+                                :aria-current="arraySet === index ? 'page' : null"
+                                :aria-label="`Page ${index + 1}`"
+                                @click="arraySet = index">
+                                {{ index + 1 }}
+                            </button>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
 
-        <!-- Pagination -->
-        <nav aria-label="Pagination">
-            <ul class="body_content-group pagenation">
-                <li v-for="(_, index) in compiledDataForTable" :key="index">
-                    <button
-                        type="button"
-                        class="pagenation_item"
-                        :class="{ pageActive: arraySet === index }"
-                        :aria-current="arraySet === index ? 'page' : null"
-                        :aria-label="`Page ${index + 1}`"
-                        @click="arraySet = index">
-                        {{ index + 1 }}
-                    </button>
-                </li>
-            </ul>
-        </nav>
-
-        <!-- Table -->
-        <!-- ARIA table roles over the existing <ul>/<li> markup — see the note in
-             2_TimedMiningBotany.vue. Roles rather than a real <table> so the
-             CSS-grid row layout is untouched. -->
         <div
             :class="[`body_content-group rdrTable`, windowWidth]"
             role="table"
@@ -59,7 +55,6 @@
                     <p class="rdrTable_row-tracking" role="columnheader"><span class="visuallyHidden">Actions</span></p>
                     <p class="rdrTable_row-name" role="columnheader">Name</p>
                     <p class="rdrTable_row-attributes" role="columnheader">Attributes</p>
-                    <p class="rdrTable_row-level" role="columnheader">Level</p>
                     <p class="rdrTable_row-time" role="columnheader">Timer</p>
                     <p class="rdrTable_row-weather" role="columnheader">Weather</p>
                     <p class="rdrTable_row-area" role="columnheader">Area</p>
@@ -77,13 +72,12 @@
 
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking" role="cell">
-                        <toggleTrackingBtn
+                        <ToggleTracking
                             :trackingEnabled="d.tracked"
                             :label="d.tracked ? `Untrack ${d.name}` : `Track ${d.name}`"
-                            class="hasContext"
-                            data-context="Track Node"
+                            :remove="d.tracked"
                             @click="$emit('changeTracked', d)" />
-                        <toggleDetailsBtn
+                        <ToggleDetails
                             :label="`View details for ${d.name}`"
                             class="hasContext"
                             data-context="View Details"
@@ -93,7 +87,7 @@
                     <!-- NAME -->
                     <div class="rdrTable_row-name" role="cell">
                         <div>
-                            <displayItemName :item="d.name" :node="d"/>
+                            <DisplayItemName :item="d.name" :node="d"/>
                         </div>
                     </div>
 
@@ -106,14 +100,10 @@
                         </div>
                     </div>
 
-                    <!-- LEVEL -->
-                    <div class="rdrTable_row-level" role="cell">
-                        {{ `Lv. ${d.level} ${'★'.repeat(d.stars)}` }}
-                    </div>
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time" role="cell">
-                        <displayTime :node="d"/>
+                        <DisplayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
@@ -123,7 +113,7 @@
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area" role="cell">
-                        <areaDisplay :node="d" />
+                        <DisplayArea :node="d" />
                     </div>
                 </li>
             </ul>
@@ -137,17 +127,21 @@
 </template>
 
 <script lang="ts" setup>
+const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
+defineEmits(['changeTracked', 'openDetails'])
+
 import { ref, computed } from 'vue'
-import toggleFilterBtn from '../components/buttons/ToggleFilter.vue'
-import toggleTrackingBtn from '../components/buttons/ToggleTracking.vue'
-import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
-import inputSearchBar from '../components/buttons/inputSearchBar.vue'
-import areaDisplay from '../components/display/DisplayArea.vue'
-import iconImgAPI from '../modules/FetchIconImage.vue'
-import displayTime from '../components/display/displayTime.vue'
-import displayItemName from '../components/display/DisplayItemName.vue'
 import PageHeader from '../components/PageHeader.vue'
+import ToggleFilter from '../components/buttons/ToggleFilter.vue'
+import SearchBar from '../components/buttons/SearchBar.vue'
+import ToggleTracking from '../components/buttons/ToggleTracking.vue'
+import ToggleDetails from '../components/buttons/ToggleDetails.vue'
+import DisplayItemName from '../components/display/DisplayItemName.vue'
+import DisplayTime from '../components/display/DisplayTime.vue'
+import DisplayArea from '../components/display/DisplayArea.vue'
 import { capitalize, getUniqueByKey, isFishNodeActive, useNow } from '../hooks/hooks.ts'
+
+import iconImgAPI from '../modules/FetchIconImage.vue'
 
 interface Filter {
     group: string
@@ -156,10 +150,6 @@ interface Filter {
 }
 
 const PAGE_SIZE = 50
-
-const props = defineProps(['ffxivData', 'eorzeaClock', 'timerList', 'windowWidth', 'weatherList'])
-defineEmits(['changeTracked', 'openDetails'])
-
 const compiledDataForTable = ref<any[][]>([])
 const allTimedNodes = ref<any[]>([])
 const arraySet = ref(0)
@@ -292,7 +282,11 @@ sortNodesIntoGroup(allTimedNodes.value)
         /* ── Filter bar ── */
         .filterbar {
             padding: 16px 20px;
-            max-width: 1200px;
+            max-width: 1400px;
+
+            .wrapper {
+                flex-direction: column
+            }
 
             :deep(.btn) {
                 border: 1px solid $buttonBorder;
@@ -345,7 +339,7 @@ sortNodesIntoGroup(allTimedNodes.value)
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
-            width: 90%;
+            margin-top: 2rem;
 
             &_item {
                 // Native <button> reset — was a bare <li> before it became focusable.
@@ -414,9 +408,7 @@ sortNodesIntoGroup(allTimedNodes.value)
                     border-color: rgba(45, 212, 191, 0.15);
                 }
 
-                &-name span {
-                    color: $dim;
-                }
+  
             }
 
             :deep(.trackingTriggerBtn path),
@@ -455,13 +447,13 @@ sortNodesIntoGroup(allTimedNodes.value)
 
         // Default layout
         .rdrTable_row {
-            grid-template-columns: 80px 400px 100px 100px 120px 180px auto;
+            grid-template-columns: 80px 400px 100px 120px 180px auto;
         }
 
         // Tablet view
         .rdrTable.tablet {
             .rdrTable_row {
-                grid-template-columns: 60px 200px 80px 80px 80px 140px auto;
+                grid-template-columns: 60px 200px 80px 80px 140px auto;
             }
         }
 

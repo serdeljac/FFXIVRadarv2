@@ -1,6 +1,6 @@
 <template>
     <div :class="[`iconAndText`]">
-        <iconImgAPI :name="`emote_${node.emote.toLowerCase()}`"/>
+        <iconImgAPI :name="`${node.emote.toLowerCase()}`"/>
         <p>{{ node.emote }}</p>
     </div>
 </template>
