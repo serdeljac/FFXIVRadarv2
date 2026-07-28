@@ -10,8 +10,30 @@
                     <img :src="getIconImageURL('profile')" alt="" loading="lazy"/>
                 </div>
                 <div class="bulleton_content">
+                    <h2>v1.1.0 - Area data added for fishing</h2>
+                    <p class="bulleton_postdate">Posted: July 28, 2026 @ 09:50 PST</p>
+                    <hr />
+                    <div class="bulleton_details">
+                        <ol class="bulleton_list-tier2">
+                            <li>
+                                <p>Corrected fishing data</p>
+                            </li>
+                            <li>
+                                <p>Minor bug fixes</p>
+                            </li>
+                        </ol>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="bulleton">
+                <div class="bulleton_profileImg">
+                    <img :src="getIconImageURL('profile')" alt="" loading="lazy"/>
+                </div>
+                <div class="bulleton_content">
                     <h2>v1.0.0 - Site has officially been launched!</h2>
-                    <p class="bulleton_postdate">Posted: July 28, 2026 @ 07:38 PST</p>
+                    <p class="bulleton_postdate">Posted: July 18, 2026 @ 07:38 PST</p>
                     <hr />
                     <div class="bulleton_details">
                         <ol class="bulleton_list-tier2">
@@ -28,6 +50,7 @@
                     </div>
                 </div>
             </div>
+
         </div>
 
     </div>
