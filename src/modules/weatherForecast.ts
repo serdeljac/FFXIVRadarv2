@@ -1,5 +1,5 @@
 import EorzeaWeather from 'eorzea-weather'
-import { getDawntrailWeather } from './weatherDawntrail'
+import { getRateTableWeather } from './weatherRates'
 
 export interface WeatherForecast {
     previous: { name: string; time: string }
@@ -10,14 +10,14 @@ export interface WeatherForecast {
 
 const weatherCycle = ['Clear Skies', 'Fair Skies', 'Clouds', 'Fog', 'Wind', 'Gales', 'Rain', 'Showers', 'Thunderstorms', 'Dust Storm', 'Snow', 'Blizzards', 'Gloom', 'Auroras', 'Darkness', 'Heavensward Meteors']
 
-// Zones the library doesn't know (Dawntrail onwards). It throws for these every
+// Zones the library doesn't know (Endwalker onwards). It throws for these every
 // time, so the first failure is remembered — otherwise callers that sweep many
 // windows ahead pay for a thrown exception and a console warning per lookup.
 const zonesMissingFromLibrary = new Set<string>()
 
 // Single source of truth for a zone's real weather: tries the eorzea-weather
 // library first (through Shadowbringers plus Eureka/Bozja), falls back to the
-// Dawntrail rate tables, and returns null when neither source knows the zone.
+// Endwalker/Dawntrail rate tables, and returns null when neither knows the zone.
 export function resolveWeather(zoneMapCode: string, date: Date = new Date()): string | null {
     if (!zonesMissingFromLibrary.has(zoneMapCode)) {
         try {
@@ -28,7 +28,33 @@ export function resolveWeather(zoneMapCode: string, date: Date = new Date()): st
         }
     }
 
-    return getDawntrailWeather(zoneMapCode, date)
+    return getRateTableWeather(zoneMapCode, date)
+}
+
+// Derives a zone's weather code from its display name (e.g. "Radz-at-Han" ->
+// "radzAtHan"), dropping apostrophes to match the mapcode conventions used by
+// areas.json and the eorzea-weather library. Endwalker and Dawntrail zones carry
+// no mapcode in areas.json at all, so for those this derivation is the only way
+// to reach a weather table — see zoneWeatherCode for the resolution order.
+function mapCodeFromZoneName(zoneName: string): string {
+    return zoneName
+        .toLowerCase()
+        .replace(/'/g, '')
+        .split(/[\s\-]+/)
+        .map((word, index) => (index === 0 ? word : word.charAt(0).toUpperCase() + word.slice(1)))
+        .join('')
+}
+
+// The weather code to look a zone up by, given whatever `area` row a node carries.
+// Sub-area rows (fishing holes, gathering points) only ever fill in `mapcode` for
+// zones the original data covered, so the zone name is the reliable fallback.
+// Returns '' when there is nothing to go on — an unmatched node whose `area` is
+// still the raw name string has no zone to derive from.
+export function zoneWeatherCode(area: any): string {
+    if (!area) return ''
+    if (typeof area === 'string') return ''
+    if (area.mapcode) return area.mapcode
+    return area.zone ? mapCodeFromZoneName(area.zone) : ''
 }
 
 // Four-slot forecast (previous/current/next1/next2) at 8-hour steps. When a zone

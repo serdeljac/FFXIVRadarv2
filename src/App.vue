@@ -65,7 +65,7 @@
 
 <script lang="ts">
 import EorzeaTime from 'eorzea-time';
-import { resolveWeather } from './modules/weatherForecast.ts';
+import { resolveWeather, zoneWeatherCode } from './modules/weatherForecast.ts';
 import { registerNodeTimeSources } from './hooks/hooks.ts';
 import { inject } from '@vercel/analytics';
 import { SpeedInsights } from "@vercel/speed-insights/vue"
@@ -292,13 +292,17 @@ export default {
 
     // Builds a mapcode -> current-weather lookup for every unique zone, routing
     // through resolveWeather so it stays consistent with the Weather Patterns page.
+    // Keyed by zoneWeatherCode rather than area.mapcode so Endwalker and Dawntrail
+    // zones — which carry no mapcode in areas.json — get an entry too; without one
+    // their nodes read the live weather as null and never light up.
     createWeatherList() {
       const seen = new Set<string>();
       const now = new Date();
       for (const area of this.ffxivData.areas) {
-        if (!area.mapcode || seen.has(area.mapcode)) continue;
-        seen.add(area.mapcode);
-        this.weatherList[area.mapcode] = resolveWeather(area.mapcode, now) || false;
+        const code = zoneWeatherCode(area);
+        if (!code || seen.has(code)) continue;
+        seen.add(code);
+        this.weatherList[code] = resolveWeather(code, now) || false;
       }
     },
 

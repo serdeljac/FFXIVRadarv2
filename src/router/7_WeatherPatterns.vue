@@ -76,8 +76,7 @@
   import ToggleFilter from '../components/buttons/ToggleFilter.vue'
 
   import { ref, computed, watch } from 'vue'
-  import { getWeatherForecast } from '../modules/weatherForecast'
-  import { capitalize } from '../hooks/hooks.ts'
+  import { getWeatherForecast, zoneWeatherCode } from '../modules/weatherForecast'
 
   const WEATHER_CHANGE_EORZEA_MINUTES = [0, 480, 960] as const
 
@@ -202,7 +201,7 @@
         seen.add(area.zone)
 
         let weatherData = undefined
-        const mapcode = area.mapcode || getMapcodeFromZoneName(area.zone)
+        const mapcode = zoneWeatherCode(area)
         if (mapcode) {
           try {
             const forecast = getWeatherForecast(mapcode)
@@ -228,20 +227,6 @@
 
     return uniqueZones
   })
-
-
-  // Derives a camelCase mapcode from a display zone name (e.g. "Radz-at-Han" ->
-  // "radzAtHan"), dropping apostrophes to match the existing mapcode conventions.
-  function getMapcodeFromZoneName(zoneName: string): string {
-    return zoneName
-      .toLowerCase()
-      .replace(/'/g, '')
-      .replace(/[\s\-]/g, ' ')
-      .split(' ')
-      .map((word, index) => (index === 0 ? word : capitalize(word)))
-      .join('')
-      .replace(/[\s\-]/g, '')
-  }
 </script>
 
 <style scoped lang="scss">

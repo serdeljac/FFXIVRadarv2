@@ -8,12 +8,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 npm run dev      # Vite dev server on port 6020 (falls back to 6021+ if taken)
 npm run build    # vue-tsc -b && vite build — typecheck runs first and will fail the build
 npm run preview  # serve the production build
+npm test         # vitest run — src/**/*.test.ts
+npm run test:watch
 npx vue-tsc -b   # typecheck only, without building
 ```
 
-There is **no test framework** in this project — no vitest/jest, no test script. Verify changes by
-building and by exercising the running app. For logic in `src/hooks/hooks.ts`, a practical approach is
-to bundle it standalone and run it against the real JSON data:
+Tests are vitest (`vitest.config.ts` merges the app's Vite config, so SCSS variable injection applies).
+Test files live next to what they cover and are inside `tsconfig.app.json`'s `include`, so a test that
+imports something missing **fails `npm run build`**, not just `npm test`.
+
+The weather and window-prediction code is tested against the real JSON in `src/assets/json/` rather
+than fixtures — `src/hooks/fishWindows.test.ts` replicates App.vue's `setFishingData` /
+`createWeatherList` so it exercises the same shapes the app builds. For ad-hoc exploration of
+`src/hooks/hooks.ts` you can still bundle it standalone:
 
 ```bash
 npx esbuild src/hooks/hooks.ts --bundle --format=esm --platform=node --outfile=.tmp-hooks.mjs --external:eorzea-weather
@@ -125,12 +132,24 @@ a `/s3/` dev proxy configured in the same file.
   wrapper never reaches the `<p>` inside — style the text element directly.
 - **Vue keeps a literal `false` on non-boolean attributes.** For `data-` attributes driving CSS, return
   `true | null` (or append `|| null`), otherwise `data-x="false"` still matches `[data-x]`.
-- **Data gaps are expected, not bugs.** ~169 fishing holes are absent from `areas.json` and keep `area`
-  as a bare string with no `mapcode`, so their weather cannot be resolved (`—`). A few weather names in
-  `nodes_fishing.json` (`Lightning`, `Overcast`, `Umbral *`, `Thunderstorms` where the zone yields
-  `Thunder`) never occur in any zone.
-- `resolveWeather` falls back to Dawntrail rate tables for zones the `eorzea-weather` library rejects,
-  and remembers the failure so a forward sweep doesn't throw and log per lookup.
+- **Never look weather up by `area.mapcode`.** Only zone-level rows from the original data carry one;
+  every sub-area row (fishing hole, gathering point) has `mapcode: ""`, and **no Endwalker or Dawntrail
+  area has a mapcode at all**. Use `zoneWeatherCode(area)` from `modules/weatherForecast.ts`, which
+  falls back to deriving the code from the zone name (`"Radz-at-Han"` → `radzAtHan`). Reading
+  `.mapcode` directly is what left every EW/DT fishing hole with no window.
+- **Data gaps are expected, not bugs.** 7 fishing areas — the Diadem cloudtops and `Open Sirensong Sea`
+  — are absent from `areas.json` and keep `area` as a bare string, so they have no zone to resolve
+  weather from (`—`). A few weather names in `nodes_fishing.json` (`Lightning`, `Overcast`,
+  `Thunderstorms` where the zone yields `Thunder`, and Ultima Thule's `Clear Skies`) never occur in
+  their zone. `src/hooks/fishWindows.test.ts` pins the Endwalker list at exactly one such row.
+- `resolveWeather` falls back to the Endwalker/Dawntrail rate tables in `modules/weatherRates.ts` for
+  zones the `eorzea-weather` library rejects (it stops at Shadowbringers), and remembers the failure so
+  a forward sweep doesn't throw and log per lookup. Those tables are transcribed from the game's own
+  `WeatherRate` sheet via xivapi v2 (`TerritoryType` → `WeatherRate`); the shared target algorithm is
+  verified against the library on zones it does know.
+- `getWeatherForecast` invents a deterministic weather cycle for zones `resolveWeather` can't answer.
+  Nothing real hits that path any more (only The Gold Saucer, which the page excludes) — if a whole
+  expansion's forecast ever looks plausible but wrong, that fallback is why.
 
 
 ## Test Requirements

@@ -1,6 +1,6 @@
 import { ref, onMounted, onUnmounted } from 'vue'
 import type { Ref } from 'vue'
-import { resolveWeather } from '../modules/weatherForecast'
+import { resolveWeather, zoneWeatherCode } from '../modules/weatherForecast'
 
 // One clock for every countdown in the app. Components that each ran their own
 // interval drifted up to a second apart, so the same node could read "43m 4s" on
@@ -257,7 +257,9 @@ function weatherRule(
     chainKeys: string[],
     now: number,
 ): WeatherRule {
-    const mapcode = node.area?.mapcode
+    // Not node.area.mapcode: sub-area rows carry an empty one, and no Endwalker or
+    // Dawntrail area has a mapcode at all, so those zones resolve by name instead.
+    const mapcode = zoneWeatherCode(node.area)
     return {
         required: requiredKeys.map(k => node[k]).filter(Boolean),
         chain: chainKeys.map(k => node[k]).filter(Boolean),

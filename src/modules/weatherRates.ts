@@ -1,9 +1,21 @@
-// Weather-rate tables and forecast algorithm for the 8 Dawntrail zones that the
-// eorzea-weather package (last updated 2022) predates and cannot cover. Each
-// entry is an ordered [weatherName, cumulativeUpperBound] pair: a 0-99 forecast
-// target resolves to the first entry whose upperBound exceeds it. Rates come from
-// Asvel/ffxiv-weather; weather-type sets were cross-checked against community wikis.
+// Weather-rate tables and forecast algorithm for the zones the eorzea-weather
+// package (last updated 2022) predates and cannot cover: the 8 Endwalker zones
+// and the 8 Dawntrail ones. Each entry is an ordered [weatherName, cumulativeUpperBound]
+// pair: a 0-99 forecast target resolves to the first entry whose upperBound exceeds it.
+// Rates are transcribed from the game's own WeatherRate sheet (via xivapi v2
+// TerritoryType -> WeatherRate), so both the rates and the names match the game.
 type WeatherRateEntry = [name: string, upperBound: number]
+
+const ENDWALKER_WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
+    oldSharlayan: [['Clear Skies', 10], ['Fair Skies', 50], ['Clouds', 70], ['Fog', 85], ['Snow', 100]],
+    radzAtHan: [['Fog', 10], ['Rain', 25], ['Clear Skies', 40], ['Fair Skies', 80], ['Clouds', 100]],
+    labyrinthos: [['Clear Skies', 15], ['Fair Skies', 60], ['Clouds', 85], ['Rain', 100]],
+    thavnair: [['Fog', 10], ['Rain', 20], ['Showers', 25], ['Clear Skies', 40], ['Fair Skies', 80], ['Clouds', 100]],
+    garlemald: [['Snow', 45], ['Thunder', 50], ['Rain', 55], ['Fog', 60], ['Clouds', 85], ['Fair Skies', 95], ['Clear Skies', 100]],
+    mareLamentorum: [['Umbral Wind', 15], ['Moon Dust', 30], ['Fair Skies', 100]],
+    elpis: [['Clouds', 25], ['Umbral Wind', 40], ['Fair Skies', 85], ['Clear Skies', 100]],
+    ultimaThule: [['Astromagnetic Storms', 15], ['Fair Skies', 85], ['Umbral Wind', 100]],
+}
 
 const DAWNTRAIL_WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
     tuliyollal: [['Clear Skies', 40], ['Fair Skies', 80], ['Clouds', 85], ['Fog', 95], ['Rain', 100]],
@@ -16,7 +28,10 @@ const DAWNTRAIL_WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
     livingMemory: [['Rain', 10], ['Fog', 20], ['Clouds', 40], ['Fair Skies', 100]],
 }
 
-export const DAWNTRAIL_ZONE_CODES: string[] = Object.keys(DAWNTRAIL_WEATHER_RATES)
+const WEATHER_RATES: Record<string, WeatherRateEntry[]> = {
+    ...ENDWALKER_WEATHER_RATES,
+    ...DAWNTRAIL_WEATHER_RATES,
+}
 
 // Standard Eorzea weather-target algorithm: hashes real-world time into a 0-99
 // value the rate tables resolve to a weather name. The target only changes once
@@ -32,10 +47,10 @@ function calcWeatherTarget(date: Date): number {
     return step2 % 100
 }
 
-// Dawntrail weather name for a zone at a given time, or null when the zone isn't
-// one of the 8 covered here.
-export function getDawntrailWeather(zoneMapCode: string, date: Date): string | null {
-    const rates = DAWNTRAIL_WEATHER_RATES[zoneMapCode]
+// Weather name for a zone at a given time, or null when the zone isn't one of the
+// 16 covered here — callers fall back to the eorzea-weather library for those.
+export function getRateTableWeather(zoneMapCode: string, date: Date): string | null {
+    const rates = WEATHER_RATES[zoneMapCode]
     if (!rates) return null
 
     const target = calcWeatherTarget(date)
