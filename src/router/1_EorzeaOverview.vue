@@ -87,7 +87,7 @@
                             type="checkbox"
                             :checked="filters[t.key] && counts[t.key] > 0"
                             :disabled="counts[t.key] == 0"
-                            @change="toggleType(t.key)" />
+                            @change="toggleType(t.key, ($event.target as HTMLInputElement).checked)" />
                         <span class="eorzeaOverview_checkbox-box"></span>
                         <span class="eorzeaOverview_checkbox-label">{{ t.label }}</span>
                         <span class="eorzeaOverview_checkbox-count">{{ counts[t.key] }}</span>
@@ -713,9 +713,14 @@ function classifyMarker(iconId: number, name: string, markerType: number): IconT
     return 'misc'
 }
 
-function toggleType(key: IconType) {
+// Driven by the checkbox's own checked state rather than by negating `filters`:
+// the input is bound with a one-way :checked, so the DOM is the authority on what
+// the user just did. Writing `filters` back is what makes the box survive the next
+// re-render — without it the layer never moved and the tick silently reverted.
+function toggleType(key: IconType, checked: boolean) {
+    filters[key] = checked
     if (!map) return
-    if (filters[key]) typeLayers[key].addTo(map)
+    if (checked) typeLayers[key].addTo(map)
     else typeLayers[key].remove()
 }
 

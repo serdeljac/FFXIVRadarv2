@@ -100,13 +100,13 @@ describe('fishing windows in zones with no mapcode', () => {
         expect(fishTimer(impossible, timerList as any[], weatherList, NOW)).toBe('—')
     })
 
-    it('leaves at most one Endwalker hole without a window', () => {
-        // The remaining one is a data error: Limne 18's Sophos Deka-okto asks for
-        // Clear Skies, which Ultima Thule never rolls.
+    it('leaves no Endwalker hole without a window', () => {
+        // '—' means no spawn inside the ~8-day lookahead, which for Endwalker only
+        // ever happened because a hole asked for weather its zone cannot roll.
         const stuck = nodesOf('Endwalker')
             .filter((n) => fishTimer(n, timerList as any[], weatherList, NOW) === '—')
             .map((n) => n.name)
 
-        expect(stuck).toEqual(['Sophos Deka-okto'])
+        expect(stuck).toEqual([])
     })
 })

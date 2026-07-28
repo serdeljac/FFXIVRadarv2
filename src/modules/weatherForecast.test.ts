@@ -14,9 +14,16 @@ describe('zoneWeatherCode', () => {
         expect(zoneWeatherCode({ zone: 'Central Thanalan', mapcode: 'centralThanalan' })).toBe('centralThanalan')
     })
 
+    it('falls back to the zone name when the stored mapcode is not a real code', () => {
+        // areas.json is hand-maintained: it shipped "radzatHan" for Radz-at-Han,
+        // which no weather source knows. Trusting it blindly cost the zone its
+        // weather entirely, so an unrecognised mapcode has to lose to the zone name.
+        expect(zoneWeatherCode({ zone: 'Radz-at-Han', mapcode: 'radzatHan' })).toBe('radzAtHan')
+        expect(zoneWeatherCode({ zone: 'Thavnair', mapcode: 'not-a-zone' })).toBe('thavnair')
+    })
+
     it('derives the code from the zone name when the mapcode is blank', () => {
-        // Sub-area rows (fishing holes, gathering points) carry mapcode: "", and no
-        // Endwalker or Dawntrail area row has one at all.
+        // Sub-area rows (fishing holes, gathering points) carry mapcode: "".
         expect(zoneWeatherCode({ zone: 'Thavnair', mapcode: '' })).toBe('thavnair')
         expect(zoneWeatherCode({ zone: 'Radz-at-Han', mapcode: '' })).toBe('radzAtHan')
         expect(zoneWeatherCode({ zone: 'Old Sharlayan', mapcode: '' })).toBe('oldSharlayan')

@@ -33,9 +33,7 @@ export function resolveWeather(zoneMapCode: string, date: Date = new Date()): st
 
 // Derives a zone's weather code from its display name (e.g. "Radz-at-Han" ->
 // "radzAtHan"), dropping apostrophes to match the mapcode conventions used by
-// areas.json and the eorzea-weather library. Endwalker and Dawntrail zones carry
-// no mapcode in areas.json at all, so for those this derivation is the only way
-// to reach a weather table — see zoneWeatherCode for the resolution order.
+// areas.json and the eorzea-weather library.
 function mapCodeFromZoneName(zoneName: string): string {
     return zoneName
         .toLowerCase()
@@ -45,16 +43,36 @@ function mapCodeFromZoneName(zoneName: string): string {
         .join('')
 }
 
+// Whether any weather source recognises a code. Memoised: this decides the branch
+// in zoneWeatherCode, which runs for every node on every tick.
+const codeIsKnown = new Map<string, boolean>()
+
+function isKnownWeatherCode(code: string): boolean {
+    if (!code) return false
+    const hit = codeIsKnown.get(code)
+    if (hit !== undefined) return hit
+    const known = resolveWeather(code, new Date()) !== null
+    codeIsKnown.set(code, known)
+    return known
+}
+
 // The weather code to look a zone up by, given whatever `area` row a node carries.
-// Sub-area rows (fishing holes, gathering points) only ever fill in `mapcode` for
-// zones the original data covered, so the zone name is the reliable fallback.
-// Returns '' when there is nothing to go on — an unmatched node whose `area` is
-// still the raw name string has no zone to derive from.
+// The stored mapcode wins, but only if a weather source actually knows it: it is
+// hand-maintained and a single character of drift (areas.json shipped "radzatHan"
+// for "radzAtHan") would otherwise silently cost a zone its weather for good.
+// Deriving from the zone name is the fallback, which also covers the sub-area rows
+// that leave mapcode blank. Returns '' when there is nothing to go on — an
+// unmatched node whose `area` is still the raw name string has no zone to derive.
 export function zoneWeatherCode(area: any): string {
-    if (!area) return ''
-    if (typeof area === 'string') return ''
-    if (area.mapcode) return area.mapcode
-    return area.zone ? mapCodeFromZoneName(area.zone) : ''
+    if (!area || typeof area === 'string') return ''
+
+    const mapcode: string = area.mapcode || ''
+    if (mapcode && isKnownWeatherCode(mapcode)) return mapcode
+
+    const derived = area.zone ? mapCodeFromZoneName(area.zone) : ''
+    if (derived && isKnownWeatherCode(derived)) return derived
+
+    return mapcode || derived
 }
 
 // Four-slot forecast (previous/current/next1/next2) at 8-hour steps. When a zone
