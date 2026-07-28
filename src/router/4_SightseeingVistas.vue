@@ -7,7 +7,7 @@
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
-                <toggleFilterBtn
+                <ToggleFilter
                     v-for="(d, index) in filters"
                     :key="d.name"
                     :name="d.name"
@@ -62,18 +62,15 @@
                 >
                     <!-- TRACKER -->
                     <div class="rdrTable_row-tracking" role="cell">
-                        <toggleTrackingBtn
+                        <ToggleTracking
                             v-if="d.time"
                             :trackingEnabled="d.tracked"
                             :label="d.tracked ? `Untrack ${d.name}` : `Track ${d.name}`"
-                            class="hasContext"
-                            data-context="Track Node"
+                            :remove="d.tracked"
                             @click="$emit('changeTracked', d)"
                         />
-                        <toggleDetailsBtn
+                        <ToggleDetails
                             :label="`View details for ${d.name}`"
-                            class="hasContext"
-                            data-context="View Details"
                             @click="$emit('openDetails', d)"
                         />
                     </div>
@@ -85,12 +82,12 @@
 
                     <!-- NAME -->
                     <div class="rdrTable_row-name" role="cell">
-                        <displayItemName :item="d.name" :node="d"/>
+                        <DisplayItemName :item="d.name" :node="d"/>
                     </div>
 
                     <!-- TIMER -->
                     <div class="rdrTable_row-time" role="cell">
-                        <displayTime :node="d"/>
+                        <DisplayTime :node="d"/>
                     </div>
 
                     <!-- WEATHER -->
@@ -101,13 +98,12 @@
 
                     <!-- EMOTE -->
                     <div class="rdrTable_row-emote" role="cell">
-                        <iconImgAPI :name="d.emote.toLowerCase()"/>
-                        <p>{{ d.emote }}</p>
+                        <DisplayEmote :node="d"/>
                     </div>
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area" role="cell">
-                        <areaDisplay :node="d" />
+                        <DisplayArea :node="d" />
                     </div>
                 </li>
             </ul>
@@ -118,13 +114,17 @@
 
 <script lang="ts" setup>
 import { ref, computed } from 'vue'
-import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
-import toggleTrackingBtn from '../components/buttons/ToggleTracking.vue'
-import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
-import areaDisplay from '../components/display/DisplayArea.vue'
+import ToggleFilter from '../components/buttons/ToggleFilter.vue'
+import ToggleTracking from '../components/buttons/ToggleTracking.vue'
+import ToggleDetails from '../components/buttons/ToggleDetails.vue'
+import DisplayItemName from '../components/display/DisplayItemName.vue'
+import DisplayTime from '../components/display/DisplayTime.vue'
+import DisplayEmote from '../components/display/DisplayEmote.vue'
+import DisplayArea from '../components/display/DisplayArea.vue'
+
 import iconImgAPI from '../modules/FetchIconImage.vue'
-import displayItemName from '../components/display/DisplayItemName.vue'
-import displayTime from '../components/display/DisplayTime.vue'
+
+
 import PageHeader from '../components/PageHeader.vue'
 import { isSightseeActive, useNow } from '../hooks/hooks.ts'
 

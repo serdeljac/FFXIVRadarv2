@@ -6,7 +6,7 @@
         <!-- Filter Bar -->
         <div class="body_content-group filterbar">
             <div class="wrapper">
-                <toggleFilterBtn
+                <ToggleFilter
                     v-for="([, name, disabled], index) in filters"
                     :key="name"
                     :name="name"
@@ -42,8 +42,8 @@
                     :class="['rdrTable_row', d.specialClass]"
                 >
                     <!-- ICON (desktop only) -->
-                    <div v-if="isDesktop" class="rdrTable_row-tracking" role="cell">
-                        <toggleDetailsBtn
+                    <div class="rdrTable_row-tracking" role="cell">
+                        <ToggleDetails
                             :label="`View details for ${d.name || `Aether Current #${d.no}`}`"
                             class="hasContext"
                             data-context="View Details"
@@ -53,26 +53,26 @@
 
                     <!-- QUEST NAME -->
                     <div class="rdrTable_row-quest" role="cell">
-                        <toggleDetailsBtn
+                        <ToggleDetails
                             v-if="!isDesktop"
                             :label="`View details for ${d.name || `Aether Current #${d.no}`}`"
                             class="hasContext"
                             data-context="View Details"
                             @click="$emit('openDetails', d)"
                         />
-                        <iconImgAPI v-if="d.name" :name="`quest_${d.name_type}`"/>
-                        <p>{{ d.name ? `${d.name} - Lv.${d.name_level}` : `Aether Current #${d.no}` }}</p>
+                        <DisplayQuest :node="d" :requested="d.name ? 'name' : ''" />
                     </div>
 
                     <!-- UNLOCK CONDITION -->
-                    <div v-if="!isMobile || d.unlock" class="rdrTable_row-unlock" role="cell">
-                        <iconImgAPI v-if="d.unlock" :name="`quest_${d.unlock_type}`"/>
-                        <p v-if="d.unlock">{{ `${d.unlock} - Lv.${d.unlock_level}` }}</p>
+                    <div v-if="d.unlock" class="rdrTable_row-unlock" role="cell">
+                        <DisplayQuest :node="d" :requested="'unlock'" />
                     </div>
+
+                    <div v-else></div>
 
                     <!-- AREA -->
                     <div class="rdrTable_row-area" role="cell">
-                        <areaDisplay :node="d" />
+                        <DisplayArea :node="d" />
                     </div>
                 </li>
             </ul>
@@ -88,15 +88,14 @@
     const pageTagLine = "Aether Currents must be attuned before you can fly in each zone introduced from Heavensward onward. Each zone has a set of currents to collect — some are rewards from specific quests, while others are hidden out in the open world at fixed coordinates. This tracker lists every aether current quest and field current for each expansion zone, with the unlock requirements and location so you can get airborne as quickly as possible."
 
     import { ref, computed } from 'vue'
-    import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
-    import toggleDetailsBtn from '../components/buttons/ToggleDetails.vue'
-    import areaDisplay from '../components/display/DisplayArea.vue'
-    import iconImgAPI from '../modules/FetchIconImage.vue'
+    import ToggleFilter from '../components/buttons/ToggleFilter.vue'
+    import ToggleDetails from '../components/buttons/ToggleDetails.vue'
+    import DisplayQuest from '../components/display/DisplayQuest.vue'
+    import DisplayArea from '../components/display/DisplayArea.vue'
 
     const filters = ref<[string, string, boolean][]>([])
     const filterSelected = ref('')
 
-    const isMobile = computed(() => props.windowWidth === 'mobile')
     const isDesktop = computed(() => props.windowWidth !== 'mobile' && props.windowWidth !== 'tablet')
 
     const allAetherNodes = computed<Record<string, any[]>>(() => {

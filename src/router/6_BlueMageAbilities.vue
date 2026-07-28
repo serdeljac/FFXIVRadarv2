@@ -59,7 +59,7 @@
                     <!-- AREA -->
                     <div class="rdrTable_row-area" role="cell">
                         <template v-for="e in d.location" :key="e[1]">
-                            <areaDisplayBM v-if="isVisibleEntry(e[0])" :bmData="e" />
+                            <DisplayArea v-if="isVisibleEntry(e[0])" :node="e" />
                         </template>
                     </div>
                 </li>
@@ -74,8 +74,8 @@
     const pageTagLine = "Blue Mage is FFXIV's Limited Job that learns spells by witnessing enemies use them in battle. With over 100 actions to collect, tracking down the right enemy in the right zone can be a challenge. This reference table lists every Blue Magic spell with the enemy or NPC to learn it from, the minimum Blue Mage level required to enter that area, and the exact zone and location. Filter by spell category or scroll through the full list to plan your learning route."
 
     import { ref } from 'vue'
-    import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
-    import areaDisplayBM from '../components/display/displayAreaForBm.vue'
+    import toggleFilterBtn from '../components/buttons/ToggleFilter.vue'
+    import DisplayArea from '../components/display/DisplayArea.vue'
 
     const filters = ref<[string, string, boolean][]>([])
     const filterSelected = ref('All')

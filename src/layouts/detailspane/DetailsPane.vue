@@ -161,7 +161,7 @@
                         </li>
                         <li>
                             <p>Emote:</p>
-                            <DisplayEmote :text="node.emote" :iconName="node.emote" />
+                            <DisplayEmote :node="node" />
                         </li>
                     </ul>
                 </div>
@@ -176,19 +176,17 @@
                 </div>
             </template>
 
-            <!-- ── Aether Currents ─────────────────────────────────── -->
+            <!-- Aether Currents -->
             <template v-else-if="node.job === 'aethercurrents'">
-
                 <div class="details_panel" v-if="node.name">
                     <h3>Acquired from quest</h3>
-                    <iconAndText :icon="`quest_${node.name_type}`" :text="`${node.name} – Lv.${node.name_level}`" />
+                    <DisplayQuest :node="node" :requested="'name'" />
                 </div>
 
                 <div class="details_panel" v-if="node.unlock">
                     <h3>Must complete</h3>
-                    <iconAndText :icon="`quest_${node.unlock_type}`" :text="`${node.unlock} – Lv.${node.unlock_level}`" />
+                    <DisplayQuest :node="node" :requested="'unlock'" />
                 </div>
-
             </template>
 
         </div>
@@ -205,22 +203,13 @@
     import DisplayExp from '../../components/display/DisplayExp.vue'
     import DisplayEmote from '../../components/display/DisplayEmote.vue'
     import FetchVistaImage from '../../modules/FetchVistaImage.vue'
-    import { formatStars, formatTug, formatAreaLabel, isNodeWindowActive, nodeCountdown, useNow, aetherCurrentName } from '../../hooks/hooks.ts'
+    import DisplayQuest from '../../components/display/DisplayQuest.vue'
+    import { formatStars, formatTug, isNodeWindowActive, nodeCountdown, useNow, aetherCurrentName } from '../../hooks/hooks.ts'
 
     import { ref, computed, watch, nextTick, onMounted, onBeforeUnmount } from 'vue'
     import L from 'leaflet'
     import 'leaflet/dist/leaflet.css'
 
-
-
-// import displayItemName from '../components/display/DisplayItemName.vue'
-
-
-
-
-// On mobile the pane covers the whole screen, so it behaves like a modal: focus
-// moves into it on open and the page behind it must not scroll. On larger
-// screens it sits beside the content and neither applies.
 const paneEl = ref<HTMLElement | null>(null)
 const isFullScreen = computed(() => props.windowWidth === 'mobile')
 
@@ -229,24 +218,10 @@ const stars = formatStars
 const isGathering = computed(() => props.node.job === 'miner' || props.node.job === 'botany')
 const isFishing = computed(() => props.node.job === 'fishing')
 
-const areaLabel = computed(() => formatAreaLabel(props.node.area))
-
 // False for fishing holes absent from areas.json, which have no zone to map.
 const hasMap = computed(() => !!props.node?.area?.zone)
 
 const baitLabel = computed(() => (props.node.bait === 'mooch' ? 'Mooch' : props.node.bait))
-
-const TUG_LABELS: Record<number, string> = { 1: '! (light)', 2: '!! (medium)', 3: '!!! (heavy)' }
-const tugLabel = computed(() => TUG_LABELS[props.node.bite] ?? props.node.bite)
-
-// Ordered catch chain: starting bait (unless it's a mooch), each mooch step, then
-// the target fish; empty when the fish uses no mooch.
-const moochChain = computed<string[]>(() => {
-    const { bait, mooch_name1, mooch_name2, mooch_name3, name } = props.node
-    if (!mooch_name1) return []
-    const start = bait && bait !== 'mooch' ? [bait] : []
-    return [...start, mooch_name1, mooch_name2, mooch_name3, name].filter(Boolean)
-})
 
 const requiredWeather = computed<string[]>(() =>
     [props.node.weather1, props.node.weather2, props.node.weather3].filter(Boolean)

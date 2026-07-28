@@ -1,11 +1,19 @@
 <template>
-    <div class="displayArea">
+    <div class="displayArea" v-if="!node.job">
+        <iconImgAPI :name="`sq_${node[0]}`"/>
+        <p>{{ node[2][0] }}
+            <span v-if="node[2][1]" class="cord">{{ `(x${node[2][1]}, y${node[2][2]})` }}</span>
+        </p>
+    </div>
+
+    <div class="displayArea" v-else>
         <iconImgAPI v-if="areaIcon" :name="areaIcon"/>
         <p>
             {{ areaLabel }}
             <span class="cord">{{ `(x${node.x}, y${node.y})` }}</span>
         </p>
     </div>
+
 </template>
 
 <script lang="ts" setup>

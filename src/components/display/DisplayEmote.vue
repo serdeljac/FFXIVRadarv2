@@ -1,12 +1,12 @@
 <template>
     <div :class="[`iconAndText`]">
-        <iconImgAPI :name="iconName.toLowerCase()"/>
-        <p v-if="text">{{ text }}</p>
+        <iconImgAPI :name="`emote_${node.emote.toLowerCase()}`"/>
+        <p>{{ node.emote }}</p>
     </div>
 </template>
 
 <script lang="ts" setup>
-    const props = defineProps(['iconName', 'text'])
+    const props = defineProps(['node'])
     import iconImgAPI from '../../modules/FetchIconImage.vue'
 </script>
 

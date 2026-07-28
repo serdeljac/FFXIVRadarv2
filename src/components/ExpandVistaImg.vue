@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import { ref, onMounted, onBeforeUnmount } from 'vue'
-import vistaSmallAPI from '../modules/FetchVistaImage.vue/index.js'
+import vistaSmallAPI from '../modules/FetchVistaImage.vue'
 
 defineProps(['node'])
 const emit = defineEmits(['close'])

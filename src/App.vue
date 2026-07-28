@@ -469,6 +469,7 @@ export default {
           name:     abilities[0].name,
           level:    abilities[0].level,
           stars:    abilities[0].stars,
+          job:      'bluemage',
           category: types,
           location: groupData(types, typesSub, abilities, true),
           npc:      groupData(types, typesSub, abilities.map((o) => o.npc)),

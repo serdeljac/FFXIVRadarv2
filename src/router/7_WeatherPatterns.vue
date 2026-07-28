@@ -73,7 +73,7 @@
   import PageHeader from '../components/PageHeader.vue'
   const pageTagLine = 'View weather patterns for zones across Eorzea.'
 
-  import toggleFilterBtn from '../components/buttons/toggleFilter.vue'
+  import toggleFilterBtn from '../components/buttons/ToggleFilter.vue'
 
   import { ref, computed, watch } from 'vue'
   import { getWeatherForecast } from '../modules/weatherForecast'
